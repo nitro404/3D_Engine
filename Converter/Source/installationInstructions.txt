@@ -1,0 +1,72 @@
+
+Additional instructions for compiling the
+universal converter... since it needs Microsoft's 
+DirectX  which is a pretty big file..
+There are 2 solutions:
+
+
+Solution 1:
+
+Comment out the code that DOES NOT
+COMPILE...; e,g, code that refers to
+"DDSURFACEDESC2" or to textures of type ".DDS" 
+which is a microsoft direct X format. You will never
+need to have textures of that type... So for you
+it will not matter...
+
+Do it in such a way that you can add it
+back later if you get the download for
+solution 2 to work..; e.g., use a comment like
+
+    /* Comment out .DDS code
+        ...
+    *./
+
+
+
+Solution 2: Go to the microsoft site
+and download the Microsoft DirectX SDK.
+When you install it, it will want you to install it
+in "Program Files" and will look like 
+"Program Files\Microsoft Direct X SDK" but
+the name will be slightly different.
+
+Once installed, go to your C++ editor and open
+menu "Tools" submenu "Options" and then 
+click on the "Directories" tab...
+
+You will find that there are 4 menus entries,
+two of which you should make some additions to,
+namely "Include files" and "library files"...
+
+For "include files", you need to ADD TWO lines like
+	C:\Program Files\Microsoft Visual Studio\VC98\INCLUDE
+	C:\Program files\XXXX\INCLUDE
+
+The firstline is so that system .h files can be found.
+The second line is so that directX .h files can be found.
+Repeat: I wrote XXXX above because I don't know the actual name.
+It will be something like "Microsoft Direct X SDK". You 
+will be able to look in the "Program Files" folder to
+find out what the actual name is AFTER YOU HAVE INSTALLED
+DIRECTX.
+
+Also, if you are using a .NET version of the editor, then
+even the name of the first INCLUDE folder will be different.
+So look then BOTH up...
+
+For "library files", you need to ADD one line like
+	C:\Program Files\Microsoft Visual Studio\VC98\LIB
+
+This addition is so that .lib files can be found... Again,
+look it up to find the actual name..
+
+
+Then compilation should work...
+
+
+Let me know how you do...
+
+
+ Wilf
+ 

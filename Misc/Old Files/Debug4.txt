@@ -1,0 +1,69 @@
+
+usage: builder [-options] [-fmap_name.uni] [-dpath_to_maps]
+  -w         :: wireframe
+  -f         :: file name; e.g., -fC:\Test\Maps\room.uni
+  -d         :: directory (containing .uni files); e.g., -d..\Project\Mapsa
+GETLINE TEMP: "Texture Directory: Textures"
+LEN TEMP2: "28"
+TEMP2: "Texture Directory: Textures"
+xNULL=0
+xLEN=27
+xDATA=Texture Directory: Textures
+xINDEX=17
+xSEP_CHAR=:
+xSTART1=0
+xEND1=16
+xSTART2=0
+xEND2=16
+xSIZE0=17
+xVAL0="Texture Directory"
+xSTART3=18
+xEND3=26
+xSTART4=19
+xEND4=26
+xSIZE1=8
+xVAL1="Textures"
+1
+CHK1(2): "0"
+CHK3(2): "13"
+CHK1: "0"
+CHK3: "13"
+1-1
+CHK1(2): "0"
+CHK3(2): "13"
+CHK1: "0"
+CHK3: "13"
+1-2
+1-3
+1-4
+CHK1(2): "0"
+CHK3(2): "13"
+CHK1: "0"
+CHK3: "13"
+CHK1(2): "0"
+CHK3(2): "13"
+CHK1: "0"
+CHK3: "13"
+1-5
+CRASH NEXT:
+CRASH NEXT:
+CHK1(2): "0"
+CHK3(2): "13"
+CHK1: "
+STR WUT="..\"
+LOLWUT
+CHK1(2): "0"
+CHK3(2): "13"
+WHAT IS THIS I DON'T EVEN
+CHK1(2): "0"
+CHK3(2): "17"
+kk
+uhh
+HI IM A VALUE:"12"
+i don't get it
+so...
+[..\Textures]
+there is my string
+is this okay too?
+guess so. let's try a hard value
+

@@ -1,0 +1,207 @@
+
+//*****************************************************************************************//
+//                                      Includes                                           //
+//*****************************************************************************************//
+
+#pragma warning (disable: 4786 4305 4715)
+
+#define UsingVisualStudioNet 0
+//#define UsingVisualStudioNet 1  
+//#include "stdafx.h"  
+#include "afxwin.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>    
+#if UsingVisualStudioNet
+	#include <iostream> 
+	#include <fstream>
+#else
+	#include <iostream.h> 
+	#include <fstream.h>
+#endif
+#include <direct.h>    
+#include <float.h>
+#include <string.h>
+#include "..\glut.h"
+#include "logging.h"
+#include "fileDialog.h"
+#include "vector"
+#include "map"
+#include "string"
+using namespace std;
+
+//Note: The following declares a type, e.g., declareCollection (Face);
+//Elsewhere we may now define either
+//
+//	FaceCollection faces1; /* Typical usage */
+//  FaceCollection *faces2 = new FaceCollection; /* Unusual usage */
+
+//When done, execute
+//	deleteFaceCollectionEntries (faces1); /* Typical usage */
+//	deleteFaceCollection (faces2); /* Unusual usage */
+
+#define NEW_WAY_COLLECTION 0
+//#define NEW_WAY_COLLECTION 1
+
+#if (NEW_WAY_COLLECTION == 0)
+#define preDeclareCollection(type) \
+	class type; \
+	typedef vector <type *> type##Collection;
+
+#define declareCollection(type) \
+	typedef vector <type *> type##Collection; \
+	typedef vector <type *>::iterator type##CollectionIterator; \
+		\
+	inline void delete##type##CollectionEntries (type##Collection &collection) { \
+		for (long index = 0; index < collection.size (); index++) { \
+			delete collection [index]; \
+		} \
+	} \
+	inline void delete##type##Collection (type##Collection *collection) { \
+		delete##type##CollectionEntries (*collection); \
+		delete collection; \
+	}
+
+#define loopMap(variable,map,type) {for (type##Iterator variable = (map).begin (); variable != (map).end (); ++variable) {
+#define loopVector(variable,vector) {for (long variable = 0; variable < (vector).size (); variable++) {
+#define rawLoopVector(variable,vector) {for (long variable = 0; variable < (vector).size (); variable++) {
+#define endloop }}
+
+#else
+
+extern const bool OwnsElements;
+
+#define preDeclareCollection(type) \
+	class type; \
+	typedef vector <type *> type##CollectionVector; \
+	class type##Collection; 
+
+#define declareCollection(type) \
+	class type##Collection { \
+	public: \
+		typedef vector <type *> type##CollectionVector; \
+		typedef vector <type *>::iterator type##CollectionIterator; \
+		type##CollectionVector vectorObject; bool ownsElements; \
+			\
+		type##Collection (bool ownsElements = false) { \
+			this->ownsElements = ownsElements; \
+		} \
+		~type##Collection () { \
+			if (!ownsElements) return; \
+			for (long index = 0; index < vectorObject.size (); index++) { \
+				delete vectorObject [index]; \
+			} \
+		} \
+		inline void push_back (type *element) {vectorObject.push_back (element);} \
+		inline void pop_back () {vectorObject.pop_back ();} \
+		inline long size () {return vectorObject.size ();} \
+		inline type *operator [] (const long index) const {return vectorObject [index];} \
+		inline type *&operator [] (const long index) {return vectorObject [index];} \
+		inline void clear () {vectorObject.clear ();} \
+		inline bool empty () {return vectorObject.empty ();} \
+	}; \
+	inline void delete##type##CollectionEntries (type##Collection &collection) { \
+	} \
+	inline void delete##type##Collection (type##Collection *collection) { \
+		delete collection; \
+	} 
+
+#define loopMap(variable,map,type) {for (type##Iterator variable = (map).begin (); variable != (map).end (); ++variable) {
+#define loopVector(variable,vector) {for (long variable = 0; variable < (vector).vectorObject.size (); variable++) {
+#define rawLoopVector(variable,vector) {for (long variable = 0; variable < (vector).size (); variable++) {
+#define endloop }}
+
+#endif //NEW_WAY_COLLECTION
+
+
+
+
+
+
+//Macro "declareDictionary" below declares a type of map, e.g., declareDictionary (Face)
+//creates a map that associates strings with Face pointers.
+
+//There are two ways to use such a collection
+
+//	1. Typical way of using a dictionary:
+//
+//			FaceDictionary faces; 
+//			Face *face1 = ...; put (faces, "name1", face1); //Storing
+//			Face *face2 = ...; put (faces, "name2", face2); 
+//				...
+//			Face *face = get (faces, "name1"); //Retrieving: get 0 if not found...
+//			loopDictionary (face, faces, Face)
+//				... face .... //face is locally declared by the loop macro to be type Face * and initialized...
+//			endloop
+//			deleteFaceDictionaryEntries (faces); //faces is deleted when the object containing it is deleted...
+
+//	2. More unusual way (using a pointer to a collection):
+//
+//			FaceDictionary *faces = new FaceDictionary; 
+//			As above but use "faces->" instead of "faces." or *faces instead of faces.
+//			deleteFaceDictionary (faces); //deletes the entries and also faces itself...
+
+#define loopDictionary(key,value,valueType,map) \
+	{for (valueType##DictionaryIterator iterator = (map).begin (); iterator != (map).end (); ++iterator) { \
+		const char *key = iterator->first.c_str (); \
+		valueType *value = iterator->second;
+
+#define preDeclareDictionary(type) \
+	class type; \
+	typedef map <string, type *> type##Dictionary; 
+
+#define declareDictionary(type) \
+	typedef map <string, type *> type##Dictionary; \
+	typedef type##Dictionary::iterator type##DictionaryIterator; \
+		\
+	inline void delete##type##DictionaryEntries (type##Dictionary &collection) { \
+		loopDictionary (key, value, type, collection) \
+			delete value; \
+		endloop \
+	} \
+	inline void delete##type##Dictionary (type##Dictionary *collection) { \
+		delete##type##DictionaryEntries (*collection); \
+		delete collection; \
+	} \
+		\
+	inline type *get (type##Dictionary &collection, char *key) { \
+		type##DictionaryIterator result = collection.find (key); \
+		if (result == collection.end ()) return NULL; /*Key not there.*/ \
+		return result->second; \
+	} \
+	inline void put (type##Dictionary &collection, char *key, type *value) { \
+		/*collection.insert (type##Dictionary::value_type (key, value));*/ \
+		collection [key] = value; \
+	} \
+	inline void removeKey (type##Dictionary &collection, char *key) { \
+		/*collection.erase (key);*/ collection.erase (collection.find (key)); \
+	}
+
+
+#define choose if (false) {  
+#define when(condition) } else if (condition) {
+#define otherwise } else {
+#define endchoose }
+
+//#include <afx.h>
+#include "extensionManager.h"
+#include "points.h"
+#include "transformations.h"
+#include "camera.h"
+#include "plane.h"  
+#include "texture.h"
+#include "propertyDictionary.h"
+#include "boundingBox.h"
+//#include "rhinoModelProperties.h"
+#include "rhinoReader.h"
+#include "universalObject.h"
+//#include "face.h"
+//#include "world.h"
+#include "game.h"
+#include "worldcraftReader.h"
+
+
+#include "softimageReader.h"
+#include "worldcraftFGDReader.h"
+#include <fstream.h>

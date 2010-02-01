@@ -1,0 +1,71 @@
+//
+// HalfLife game definition file (.fgd)
+//
+
+@baseclass size(-16 -16 -36, 16 16 36) color(0 255 0) = PlayerClass []
+
+@PointClass base(PlayerClass) = info_player_start : "Player 1 start" []
+
+//------------------------------- Student Additions ---------------------------
+
+// Sample object entity
+@SolidClass = Vehicle [
+    targetname(string) : "Name"
+    style (choices) : "Style" : 0 =
+    [
+        0 : "Car"
+        1 : "Bike"
+        2 : "Tank"
+    ]
+]
+
+// Sample point entity
+@PointClass = Environment [
+    ambientlight(color255) : "Ambient Light" : "230 230 230"
+    surrounds(choices) : "Surroundings" : 0 =
+    [
+        0 : "Use Sky Color"
+        1 : "Use Sky Box"
+    ]
+    skycolor(color255) : "Sky Color" : "0 0 230"
+    skyboxname (string) : "Skybox Name" : ""
+    cloudlayers(choices) : "Cloud Layers" : 0 =
+    [
+        0 : "No Clouds"
+        1 : "One Cloud Layer"
+        2 : "Two Cloud Layers"
+        3 : "Three Cloud Layers"
+    ]
+]
+
+// Rotator
+@SolidClass = Rotator [
+    targetname(string) : "Name"
+    axis(string) : "Axis" : "0 1 0"
+    rateInDegreesPersecond(string) : "Rate" : "90"
+]
+
+// Translator
+@SolidClass = Translator [
+    targetname(string) : "Name"
+    offset(string) : "Offset" : "0.0 1.0 0.0"
+    rateInMetersPerSecond(string) : "Rate" : "1"
+]
+
+// Sprite
+@SolidClass = Sprite [
+    targetname(string) : "Name"
+    picture(string) : "Picture"
+    waypoint(string) : "Waypoint" : "0 0 0"
+]
+
+// Waypoint
+@PointClass = Waypoint [
+    targetname(string) : "Name"
+    neighbours(string) : "Neighbours" : "p1, p2, p3"
+]
+
+// Pool
+@SolidClass = Pool [
+    targetname(string) : "Name"
+]

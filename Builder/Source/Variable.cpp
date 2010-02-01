@@ -1,0 +1,177 @@
+//Created: September 18, 2008
+//Revised: January 15, 2009
+
+#include "Variable.h"
+
+Variable::Variable(const char * _id, const char * _value) {
+	if(_id == NULL) {
+		this->_id = new char[1];
+		this->_id[0] = '\0';
+	}
+	else {
+		this->_id = new char[strlen(_id) + 1];
+		strcpy(this->_id, _id);
+	}
+	
+	if(_value == NULL) {
+		this->_value = new char[1];
+		this->_value[0] = '\0';
+	}
+	else {
+		this->_value = new char[strlen(_value) + 1];
+		strcpy(this->_value, _value);
+	}
+}
+
+Variable::Variable(const Variable & x) {
+	this->_id = new char[strlen(x._id) + 1];
+	strcpy(this->_id, x._id);
+	
+	this->_value = new char[strlen(x._value) + 1];
+	strcpy(this->_value, x._value);
+}
+
+Variable & Variable::operator = (const Variable & x) {
+	delete [] this->_id;
+	delete [] this->_value;
+
+	this->_id = new char[strlen(x._id) + 1];
+	strcpy(this->_id, x._id);
+
+	this->_value = new char[strlen(x._value) + 1];
+	strcpy(this->_value, x._value);
+
+	return *this;
+}
+
+Variable::~Variable(void) {
+	delete [] this->_id;
+	delete [] this->_value;
+}
+
+void Variable::id(const char * _id) {
+	delete [] this->_id;
+	
+	if(_id == NULL) {
+		this->_id = new char[1];
+		this->_id[0] = '\0';
+	}
+	else {
+		this->_id = new char[strlen(_id) + 1];
+		strcpy(this->_id, _id);
+	}
+}
+
+void Variable::value(const char * _value) {
+	delete [] this->_value;
+	
+	if(_value == NULL) {
+		this->_value = new char[1];
+		this->_value[0] = '\0';
+	}
+	else {
+		this->_value = new char[strlen(_value) + 1];
+		strcpy(this->_value, _value);
+	}
+}
+
+char * Variable::id() const  { return this->_id; }
+char * Variable::value() const  { return this->_value; }
+
+bool Variable::parseFrom(const char * _data) {
+	if(_data == NULL || strlen(_data) < 1) {
+		return false;
+	}
+	
+	Variable * v = NULL;
+	int separatorIndex = -1;
+	char separatorChar = ':';
+	int i;
+	int start = -1;
+	int end = -1;
+	char * id = NULL;
+	char * value = NULL;
+	
+	for(i=0;i<strlen(_data);i++) {
+		if(_data[i] == separatorChar) {
+			separatorIndex = i;
+			break;
+		}
+	}
+	
+	if(separatorIndex == -1) {
+		return NULL;
+	}
+	
+	start = 0;
+	end = separatorIndex - 1;
+	for(i=start;i<end-1;i++) {
+		start = i;
+		if(_data[i] != ' ' && _data[i] != '\t') {
+			break;
+		}
+	}
+	for(i=end;i>=start;i--) {
+		end = i;
+		if(_data[i] != ' ' && _data[i] != '\t') {
+			break;
+		}
+	}
+	if(start >= end) {
+		return false;
+	}
+	id = new char[end - start + 1];
+	id = strsub(_data, start, end);
+	
+	start = separatorIndex + 1;
+	end = strlen(_data) - 1;
+	for(i=start;i<end-1;i++) {
+		start = i;
+		if(_data[i] != ' ' && _data[i] != '\t') {
+			break;
+		}
+	}
+	for(i=end;i>=start;i--) {
+		end = i;
+		if(_data[i] != ' ' && _data[i] != '\t') {
+			break;
+		}
+	}
+	if(start >= end) {
+		delete [] id;
+		return false;
+	}
+	value = new char[end - start + 1];
+	value = strsub(_data, start, end);
+	
+	if(this->_id != NULL) { delete [] this->_id; }
+	if(this->_value != NULL) { delete [] this->_value; }
+	
+	this->_id = new char[strlen(id) + 1];
+	strcpy(this->_id, id);
+	
+	this->_value = new char[strlen(value) + 1];
+	strcpy(this->_value, value);
+	
+	delete [] id;
+	delete [] value;
+
+	return true;
+}
+
+bool Variable::operator == (const Variable & x) const {
+	return strcasecmp(this->_id, x._id) == 0;
+}
+
+bool Variable::operator != (const Variable & x) const {
+	return !operator == (x);
+}
+
+void Variable::printOn(ostream & o) const {
+	o << this->_id << ": " << this->_value;
+}
+
+ostream & operator << (ostream & o, const Variable & x) {
+	x.printOn(o);
+	return o;
+}

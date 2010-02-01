@@ -1,0 +1,9 @@
+# Microsoft Developer Studio Generated Dependency File, included by game.mak
+
+.\Source\points.cpp : \
+	"..\..\..\program files\devstudio6\vc98\include\basetsd.h"\
+	".\glut.h"\
+	".\Source\logging.h"\
+	".\Source\points.h"\
+	".\Source\transformations.h"\
+	
