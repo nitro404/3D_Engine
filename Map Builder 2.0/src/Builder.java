@@ -16,9 +16,9 @@ public class Builder {
 		if(args == null || args.length == 0) {
 			// print instructions on how to use program parameters
 			System.out.println("Builds maps for a 3D Engine. Currently supports the following file extensions:");
-			System.out.println(" - Worldcraft (.map) files (read only)");
-			System.out.println(" - Universal Format Files (.uni) (read and write)");
-			System.out.println(" - 3D Engine World Files (.wrl) (write only)");
+			System.out.println(" - Worldcraft (.map) Files (read only)");
+			System.out.println(" - Universal Format (.uni) Files (read and write)");
+			System.out.println(" - 3D Engine World (.wrl) Files (write only)");
 			System.out.println("");
 			System.out.println("usage: java Builder -f\"mapname.ext\" [-m\"path_to_new_maps\"] -oext [-s]");
 			System.out.println("                    -d\"path_to_maps\" [-m\"path_to_new_maps\"] -iext -oext [-s]");
@@ -137,7 +137,7 @@ public class Builder {
 				}
 				
 				// convert map file
-				Converter.convertFile(file, outDirectory, outExtension, subdirectories);
+				Converter.convertFile(file, outDirectory, inExtension, outExtension, subdirectories);
 			}
 			
 			// verify that the right parameters were specified for converting a directory containing files
