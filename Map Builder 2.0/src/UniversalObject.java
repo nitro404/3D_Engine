@@ -3,11 +3,13 @@ import java.io.*;
 
 public class UniversalObject {
 	
-	int objectIndex;
+	public int objectIndex;
 	public Transformation normal;
 	public Transformation inverse;
 	public Vector<Property> properties;
 	public Vector<Face> faces;
+	
+	public UniversalObject() { }
 	
 	public UniversalObject(BufferedReader in) {
 		try {
@@ -26,6 +28,16 @@ public class UniversalObject {
 			}
 		}
 		return null;
+	}
+	
+	public boolean removeProperty(String key) {
+		for(int i=0;i<this.properties.size();i++) {
+			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
+				this.properties.remove(i);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void readFrom(BufferedReader in) throws Exception {

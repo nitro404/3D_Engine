@@ -3,8 +3,7 @@ import java.util.Vector;
 
 public class UniversalMap implements Map3D {
 	
-	Point3D startPosition;
-	Vector<UniversalObject> objects;
+	public Vector<UniversalObject> objects;
 	
 	public UniversalMap(File file) {
 		try {
@@ -49,20 +48,20 @@ public class UniversalMap implements Map3D {
 		int numberOfObjects = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
 		this.objects = new Vector<UniversalObject>();
 		UniversalObject newObject = null;
+		String type;
 		for(int i=0;i<numberOfObjects;i++) {
 			newObject = new UniversalObject(in);
+			type = newObject.getPropertyValue("type");
 			
-			if(newObject.getPropertyValue("type").equalsIgnoreCase("info_player_start")) {
-				this.startPosition = newObject.normal.getPosition();
-			}
-			else if(newObject.getPropertyValue("type").equalsIgnoreCase("static geometry") ||
-					newObject.getPropertyValue("type").equalsIgnoreCase("environment") ||
-					newObject.getPropertyValue("type").equalsIgnoreCase("vehicle") ||
-					newObject.getPropertyValue("type").equalsIgnoreCase("rotator") ||
-					newObject.getPropertyValue("type").equalsIgnoreCase("translator") ||
-					newObject.getPropertyValue("type").equalsIgnoreCase("sprite") ||
-					newObject.getPropertyValue("type").equalsIgnoreCase("waypoint") ||
-					newObject.getPropertyValue("type").equalsIgnoreCase("pool")) {
+			if(type.equalsIgnoreCase("info_player_start") ||
+			   type.equalsIgnoreCase("static geometry") ||
+			   type.equalsIgnoreCase("environment") ||
+			   type.equalsIgnoreCase("vehicle") ||
+			   type.equalsIgnoreCase("rotator") ||
+			   type.equalsIgnoreCase("translator") ||
+			   type.equalsIgnoreCase("sprite") ||
+			   type.equalsIgnoreCase("waypoint") ||
+			   type.equalsIgnoreCase("pool")) {
 				this.objects.add(newObject);
 			}
 			else {
