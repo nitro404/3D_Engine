@@ -39,4 +39,16 @@ public class Transformation {
 		}
 	}
 	
+	public void writeTo(PrintWriter out) throws Exception {
+		// output all of the points in the transformation
+		for(int i=0;i<4;i++) {
+			for(int j=0;j<4;j++) {
+				out.print(transformation[i][j]);
+				if(!(i == 3 && j == 3)) {
+					out.print(", ");
+				}
+			}
+		}
+	}
+	
 }

@@ -5,6 +5,7 @@ public class Builder {
 	// output directory is always the root of the search, this may be an issue if it is not specified
 	public static void main(String[] args) {
 		parseParameters(args);
+		// -dMaps -iuni -owrl -mMaps
 		// -d"Maps" -iuni -owrl
 		// -f"Maps/test.uni" -owrl
 		// -d"../Map Stuff (Duplicate)/Maps/" -iuni -owrl -m"Maps"

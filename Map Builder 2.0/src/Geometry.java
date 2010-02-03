@@ -1,19 +1,10 @@
-import java.util.Vector;
-
 public class Geometry extends UniversalObject {
 	
-	public int objectIndex;
-	public Transformation normal;
-	public Transformation inverse;
-	public Vector<Property> properties;
-	public Vector<Face> faces;
+	public int textureIndex;
 	
-	public Geometry(UniversalObject object) {
-		this.objectIndex = object.objectIndex;
-		this.normal = object.normal;
-		this.inverse = object.inverse;
-		this.properties = object.properties;
-		this.faces = object.faces;
+	public Geometry(UniversalObject object, int textureIndex) {
+		super(object.objectIndex, object.normal, object.inverse, null, object.faces);
+		this.textureIndex = textureIndex;
 	}
 	
 }

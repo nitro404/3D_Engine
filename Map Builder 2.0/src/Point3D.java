@@ -37,6 +37,8 @@ public class Point3D {
 			System.out.println("ERROR: Invalid point parsed with " + st.countTokens() + ", expected 3.");
 			System.exit(1);
 		}
+		
+		// parse the points and store them
 		this.x = Double.valueOf(st.nextToken().trim());
 		this.y = Double.valueOf(st.nextToken().trim());
 		this.z = Double.valueOf(st.nextToken().trim());
@@ -49,9 +51,16 @@ public class Point3D {
 			System.out.println("ERROR: Invalid point parsed with " + st.countTokens() + ", expected 3.");
 			System.exit(1);
 		}
+		
+		// parse the points and store them
 		this.x = Double.valueOf(st.nextToken().trim());
 		this.y = Double.valueOf(st.nextToken().trim());
 		this.z = Double.valueOf(st.nextToken().trim());
+	}
+	
+	public void writeTo(PrintWriter out) throws Exception {
+		// output the points
+		out.print(x + ", " + y + ", " + z);
 	}
 	
 }

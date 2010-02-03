@@ -13,21 +13,27 @@ public class WorldcraftMap implements Map3D {
 	}
 
 	public WorldcraftMap(Map3D map) {
-		this.convertFrom(map);
+		try {
+			this.convertFrom(map);
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: Error converting map.");
+			System.exit(1);
+		}
 	}
 	
-	public void convertFrom(Map3D map) {
+	public void convertFrom(Map3D map) throws Exception {
 		System.out.println("ERROR: Conversion to the Worldcraft Map format is not currently supported.");
 		System.exit(1);
 	}
 	
-	public void readFrom(File file) {
+	public void readFrom(File file) throws Exception {
 		// TODO Auto-generated method stub
 		
 		System.out.println("TODO: Implement WorldcraftMap.readFrom(File file).");
 	}
 	
-	public void writeTo(File file) {
+	public void writeTo(File file) throws Exception {
 		System.out.println("ERROR: Writing of the Worldcraft Map format to file is not currently supported.");
 		System.exit(1);
 	}

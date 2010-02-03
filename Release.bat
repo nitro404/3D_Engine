@@ -27,7 +27,7 @@ ECHO Copying Game Executable...
 XCOPY "Engine\Release\game.exe"  %RELEASE% /I /Y
 REN "%RELEASE%\game.exe" "Game.exe"
 
-DEL log
+IF EXIST log DEL log
 
 ECHO.
 ECHO Done!

@@ -16,10 +16,16 @@ public class UniversalMap implements Map3D {
 	}
 	
 	public UniversalMap(Map3D map) {
-		this.convertFrom(map);
+		try {
+			this.convertFrom(map);
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: Error converting map.");
+			System.exit(1);
+		}
 	}
 	
-	public void convertFrom(Map3D map) {
+	public void convertFrom(Map3D map) throws Exception {
 		// TODO Auto-generated method stub
 		
 		System.out.println("TODO: Implement UniversalMap.convertFrom(Map3D map).");
@@ -68,9 +74,11 @@ public class UniversalMap implements Map3D {
 				System.out.println("WARNING: Ignoring unexpected object of type \"" + newObject.getPropertyValue("type") + "\".");
 			}
 		}
+		
+		if(in != null) { in.close(); }
 	}
 	
-	public void writeTo(File file) {
+	public void writeTo(File file) throws Exception {
 		// TODO Auto-generated method stub
 		
 		System.out.println("TODO: Implement UniversalMap.writeTo(File file).");

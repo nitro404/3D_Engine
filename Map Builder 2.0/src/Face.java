@@ -17,6 +17,38 @@ public class Face {
 		}
 	}
 	
+	public String getPropertyValue(String key) {
+		// search for a property based on a key and return its value if it is present
+		for(int i=0;i<this.properties.size();i++) {
+			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
+				return this.properties.elementAt(i).value;
+			}
+		}
+		return null;
+	}
+	
+	public boolean setPropertyValue(String key, String newValue) {
+		// search for a property based on a key and change its value if it is present
+		for(int i=0;i<this.properties.size();i++) {
+			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
+				this.properties.elementAt(i).value = newValue;
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean removeProperty(String key) {
+		// search for a property based on a key and remove it if it is present
+		for(int i=0;i<this.properties.size();i++) {
+			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
+				this.properties.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void readFrom(BufferedReader in) throws Exception {
 		String input;
 		
@@ -65,6 +97,24 @@ public class Face {
 			this.points.add(new GamePoint3D(in));
 		}
 		
+	}
+	
+	public void writeTo(PrintWriter out) throws Exception {
+		if(properties != null) {
+			// output the properties header, followed by all the properties
+			out.println("\t\tProperties: " + this.properties.size() + ";");
+			for(int i=0;i<this.properties.size();i++) {
+				out.println("\t\t\t\"" + this.properties.elementAt(i).key + "\" => \"" + this.properties.elementAt(i).value + "\"");
+			}
+			
+			// output the points header, followed by all the points
+			out.println("\t\tPoints: " + this.points.size() + "; //x, y, z, nx, ny, nz, tx, ty");
+			for(int i=0;i<this.points.size();i++) {
+				out.print("\t\t\t");
+				this.points.elementAt(i).writeTo(out);
+				out.println(";");
+			}
+		}
 	}
 	
 }

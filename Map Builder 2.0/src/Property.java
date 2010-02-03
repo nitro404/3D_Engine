@@ -23,29 +23,15 @@ public class Property {
 	public void readFrom(BufferedReader in) throws Exception {
 		String input;
 		
+		// parse the key and store it
 		input = in.readLine().trim();
 		this.key = input.substring(input.indexOf('\"') + 1, input.indexOf('\"', input.indexOf('\"') + 1)).trim();
 		if(this.key.length() == 0) {
 			System.out.println("ERROR: Empty property key in map file.");
 			System.exit(1);
 		}
+		// parse the value and store it
 		this.value = input.substring(input.lastIndexOf('\"', input.lastIndexOf('\"') - 1) + 1, input.lastIndexOf('\"')).trim();
 	}
-	
-	/*public void readFrom(BufferedReader in) throws Exception {
-		String input;
-		
-		StringTokenizer st;
-		input = in.readLine().trim();
-		st = new StringTokenizer(input, "\"", false);
-		if(st.countTokens() != 3) {
-			System.out.println("WARNING: Ignoring invalid object property: " + input + "\".");
-		}
-		else {
-			this.key = st.nextToken().trim();
-			st.nextToken();
-			this.value = st.nextToken().trim();
-		}
-	}*/
 	
 }
