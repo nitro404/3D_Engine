@@ -1,0 +1,10 @@
+ENGINE
+ + translator does not account for negative translations
+ + rotator does not work for multiple axis
+
+BUILDER
+ + Implement Worldcraft *.map reading
+
+GENERAL
+ + implement deleteTextureCollectionEntries (textures); for other collections
+ + delete local variables

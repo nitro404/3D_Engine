@@ -25,7 +25,7 @@ void Waypoint::draw () {
 	
 }
 
-void Waypoint::import (ifstream &input, TextureCollection & textures) {
+void Waypoint::import (ifstream &input, vector<char *> & neighbourValues) {
 	char line [256];
 	
 	//Input the transformation.
@@ -92,7 +92,8 @@ void Waypoint::import (ifstream &input, TextureCollection & textures) {
 			name = string;
 		}
 		else if(stricmp(key, "neighbours") == 0) {
-			neighbours = string;
+			//neighbours = string;
+			neighbourValues.push_back(string);
 		}
 	}
 	

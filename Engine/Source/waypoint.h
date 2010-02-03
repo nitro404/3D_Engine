@@ -7,6 +7,7 @@
 
 class Waypoint : public Object {
 public:
+	
 	Waypoint();
 	~Waypoint();
 
@@ -19,7 +20,7 @@ public:
 	
 private:
 	char * name;
-	char * neighbours;
+	vector<Waypoint *> neighbours;
 };
 
 declareCollection(Waypoint);

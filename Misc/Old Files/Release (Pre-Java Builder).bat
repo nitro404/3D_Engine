@@ -5,11 +5,10 @@ SET RELEASE=Game
 
 ECHO Creating new release of Game in folder "%RELEASE%"...
 
-ECHO.
-ECHO Building Maps...
-CD Builder 2.0/bin
-java Builder -d../../Maps -iuni -owrl -m../../Maps
-CD ../../
+REM ECHO.
+REM ECHO Building Maps...
+REM Builder\Release\builder.exe -dMaps
+REM ECHO Done Building!
 
 ECHO.
 ECHO Copying Maps...
