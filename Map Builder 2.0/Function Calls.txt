@@ -1,0 +1,5 @@
+UniversalObject *universalObject = UniversalObject::read (inputFileName);
+ + UniversalObject *UniversalObject::readMapFile (char *filename) {
+
+
+universalObject->dump (outputFileName);
