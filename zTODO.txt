@@ -1,10 +1,20 @@
 ENGINE
+ + add fullscreen option (main.cpp)
+   - if (fullscreen) /*glutEnterGameMode ()*/; else {glutCreateWindow ("game engine"); createMenus ();}
+ + disable opengl stealing mouse control when not focused
  + translator does not account for negative translations
  + rotator does not work for multiple axis
+ + create config files w/ controls
+ + implement console
+ + optimize text drawing
+ + make game tick with loop (no speeding up/slowing down)
+ + crashes when you try to load a second map
+ + implement menu
 
 BUILDER
  + Implement Worldcraft *.map reading
 
 GENERAL
+ + re-optimize builder/engine with new map format (possibly slightly tweaked wrl)
  + implement deleteTextureCollectionEntries (textures); for other collections
  + delete local variables

@@ -9,7 +9,8 @@
 //                                     InputManager                                        //
 //*****************************************************************************************//
 
-const double InputManager::translationSpeed = 2.0; //meters per second.
+const double InputManager::translationSpeed = 12.0; //meters per second.
+//const double InputManager::translationSpeed = 2.0; //meters per second.
 const double InputManager::rotationSpeed = 40.0; //degrees per second
 
 InputManager *inputManager = NULL;

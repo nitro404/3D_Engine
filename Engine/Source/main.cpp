@@ -11,6 +11,9 @@
 //                                        Main                                             //
 //*****************************************************************************************//
 
+char * gameName = "3D Engine";
+int mouseSensitivity = 5;
+
 enum MenuItem {DifficultyEasy, DifficultyChallenging, DifficultyImpossible,
 	DisplayModeWireframe, DisplayModeTextured, RunWorld, Quit};
 
@@ -57,8 +60,10 @@ void displayWindow () {
 void idle () {
 	computeDT ();
 	game->tick ();
-	//::log ("\nSet mouse to %d@%d", screenWidth >> 1, screenHeight >> 1); 
-	SetCursorPos (screenWidth >> 1, screenHeight >> 1); //Re-center the mouse...
+	prompt("%d", GetFocus());
+	if(true) {
+		SetCursorPos (screenWidth >> 1, screenHeight >> 1); //Re-center the mouse...
+	}
 	glutPostRedisplay ();
 }
 
@@ -92,10 +97,6 @@ void specialKeyPressed (int character, int x, int y) {
 			break;
 		case GLUT_KEY_PAGE_DOWN:
 			break;
-		default: 
-			//The log allows you to figure out what key something actually is!!!
-//			::log ("\nPressed special key consisting of character '%c' decimal %d hex %x.", character, character, character);
-			break;
 	}
 	glutPostRedisplay ();
 }
@@ -103,10 +104,6 @@ void specialKeyPressed (int character, int x, int y) {
 void specialKeyReleased (int character, int x, int y) {
 	switch (character) {
 		case GLUT_KEY_F1:
-			break;
-		default: 
-			//The log allows you to figure out what key something actually is!!!
-//			::log ("\nReleased special key consisting of character '%c' decimal %d hex %x.", character, character, character);
 			break;
 	}
 	glutPostRedisplay ();
@@ -119,70 +116,36 @@ void normalKeyPressed (unsigned char character, int x, int y) {
 	//Handle the key and then force a redisplay.
 	switch (character) {
 		case escapeCharacter:
-			Game::wrapup (); exit (0);
-		case ' ': case enterCharacter:
-			//Open door perhaps?
-			break;
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9': {
-			//Run some tests perhaps?
-			long code = character - '0';
-			break;}
-
-		//Translate w/s for forward/back, a/d for left/right, e/q for up/down.
-		//Rotate z/c for left/right, r/v for up/down.
+			Game::wrapup ();
+			exit (0);
+			
 		case 'w':
 		case 'W':
 			inputManager->translateAhead = true;
 			break;
+			
 		case 's':
 		case 'S':
 			inputManager->translateBack = true;
 			break;
-
+			
 		case 'a':
 		case 'A':
 			inputManager->translateLeft = true;
 			break;
+			
 		case 'd':
 		case 'D':
 			inputManager->translateRight = true;
 			break;
-
-		case 'e':
-		case 'E':
+			
+		case ' ':
 			inputManager->translateUp = true;
 			break;
-		case 'q':
-		case 'Q':
-			inputManager->translateDown = true;
-			break;
-
+			
 		case 'z':
 		case 'Z':
-			inputManager->rotateLeft = true;
-			break;
-
-		case 'c':
-		case 'C':
-			inputManager->rotateRight = true;
-			break;
-
-		case 'r':
-		case 'R':
-			inputManager->rotateUp = true;
-			break;
-		case 'v':
-		case 'V':
-			inputManager->rotateDown = true;
+			inputManager->translateDown = true;
 			break;
 
 		case 't':
@@ -190,13 +153,9 @@ void normalKeyPressed (unsigned char character, int x, int y) {
 			wireframe = !wireframe;
 			glPolygonMode (GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
 			break;
+			
 		case '?':
 			game->displayHelp = !game->displayHelp;
-			break;
-
-		default:
-			//The log allows you to figure out what key something actually is!!!
-//			::log ("\nPressed normal key consisting of character '%c' decimal %d hex %x.", character, character, character);
 			break;
 	}
 
@@ -209,85 +168,64 @@ void normalKeyReleased (unsigned char character, int x, int y) {
 		case escapeCharacter:
 			Game::wrapup (); exit (0);
 
-		//Translate w/s for forward/back, a/d for left/right, e/q for up/down.
-		//Rotate z/c for left/right, r/v for up/down.
 		case 'w':
 		case 'W':
 			inputManager->translateAhead = false;
 			break;
+			
 		case 's':
 		case 'S':
 			inputManager->translateBack = false;
 			break;
-
+			
 		case 'a':
 		case 'A':
 			inputManager->translateLeft = false;
 			break;
+			
 		case 'd':
 		case 'D':
 			inputManager->translateRight = false;
 			break;
 
-		case 'e':
-		case 'E':
+		case ' ':
 			inputManager->translateUp = false;
-			break;
-		case 'q':
-		case 'Q':
-			inputManager->translateDown = false;
 			break;
 
 		case 'z':
 		case 'Z':
-			inputManager->rotateLeft = false;
-			break;
-
-		case 'c':
-		case 'C':
-			inputManager->rotateRight = false;
-			break;
-
-		case 'r':
-		case 'R':
-			inputManager->rotateUp = false;
-			break;
-		case 'v':
-		case 'V':
-			inputManager->rotateDown = false;
-			break;
-
-		default: 
-			//The log allows you to figure out what key something actually is!!!
-//			::log ("\nReleased normal key consisting of character '%c' decimal %d hex %x.", character, character, character);
+			inputManager->translateDown = false;
 			break;
 	}
 
 	glutPostRedisplay ();
 }
 
-void mousePressed (int button, int state, int x, int y) {
-	if (button == GLUT_LEFT_BUTTON) {
-		if (state == GLUT_DOWN) {
-			//Start something at mouse coordinates x and y.
-		} else {//state == GLUT_UP
-			//End something at mouse coordinates x and y.
+void mousePressed(int button, int state, int x, int y) {
+	if(button == GLUT_LEFT_BUTTON) {
+		if(state == GLUT_DOWN) {
+			
 		}
-	} else if (button == GLUT_MIDDLE_BUTTON) {
-		if (state == GLUT_DOWN) {
-			//Start something at mouse coordinates x and y.
-		} else {//state == GLUT_UP
-			//End something at mouse coordinates x and y.
-		}
-	} else {//button == GLUT_RIGHT_BUTTON
-		if (state == GLUT_DOWN) {
-			//Start something at mouse coordinates x and y.
-		} else {//state == GLUT_UP
-			//End something at mouse coordinates x and y.
+		else {
+			
 		}
 	}
-//	::log ("\nPressed %s mouse button at %d@%d.", button == GLUT_LEFT_BUTTON ? "LEFT" : 
-//		(button == GLUT_MIDDLE_BUTTON ? "MIDDLE" : "RIGHT"), x, y);
+	else if(button == GLUT_RIGHT_BUTTON) {
+		if (state == GLUT_DOWN) {
+			
+		}
+		else {
+			
+		}
+	}
+	else if(button == GLUT_MIDDLE_BUTTON) {
+		if (state == GLUT_DOWN) {
+			
+		}
+		else {
+			
+		}
+	}
 }
 
 void mouseMoved (int x, int y) {
@@ -313,42 +251,13 @@ void mouseMoved (int x, int y) {
 	Point point (screenPOINT.x, screenPOINT.y, 0.0);
 	Point center (screenWidth >> 1, screenHeight >> 1, 0.0);
 
-	double sensitivity = 0.1;
-	Point difference = (point - center) * sensitivity;
+	Point difference = (point - center) * (mouseSensitivity / 10.0);
 	Point rotation (-difference.y, -difference.x, 0.0);
 
 	inputManager->rotateBy (rotation * (InputManager::rotationSpeed * DT)); //degrees = degrees per second * second
 }
 
 #define matches(a,b) strlen (b) >= strlen (a) && memcmp (a,b,strlen (a)) == 0
-
-void parseParameters (int parametersSize, char **parameters) {
-	bool optionFound = false;
-	for (long i = 1; i < parametersSize; i++) {//Skip program name.
-//		::log ("\n%d: Consider \"%s\".", i, parameters [i]);
-		if (matches ("-w", parameters [i])) {
-//			::log ("\nMatched -w");
-			wireframe = true; optionFound = true;
-		} else if (matches ("-f", parameters [i])) {
-//			::log ("\nMatched \"-f\", extracting from \"%s\".", parameters [i]);
-//			::log ("\nAssigning into filename [0]");
-			filename [0] = 20;
-//			::log (" WORKED...");
-			strcpy (filename, parameters [i]+2);
-//			::log (" COPY WORKED TOO...");
-//			::log ("\nRead filename \"%s\".", filename);
-			optionFound = true;
-		}
-//		else 
-//			::log ("\nFailed to match.");
-	}
-	if (!optionFound) {
-		printf ("\nusage: builder [-options] -fFilename");
-		printf ("\n  -w         :: wireframe");
-		printf ("\n  -f         :: file name; e.g., -fc:\\test\\data");
-		exit (1);
-	}
-}
 
 void genericMenuHandler (int item) {
 	switch (item) {
@@ -361,75 +270,35 @@ void genericMenuHandler (int item) {
 			game->world->read();
 			if (game->world != NULL) player->reset (game->world->startPosition);
 			break;
-		case Quit:
-			Game::wrapup (); exit (0);
-			break;
-//		default:
-//			::log ("\nUnknown generic menu selection %d (%x).", item, item);
+//		case Quit:
+//			Game::wrapup (); exit (0);
+//			break;
 	}
-}
-
-void difficultyMenuHandler (int item) {
-	switch (item) {
-		case DifficultyEasy:
-		case DifficultyChallenging:
-		case DifficultyImpossible:
-			difficulty = (MenuItem) item; 
-			break;
-//		default:
-//			::log ("\nUnknown difficulty %d (%x).", item, item);
-	}
-}
-
-void displayModeMenuHandler (int item) {
-	switch (item) {
-		case DisplayModeWireframe:
-			wireframe = true;
-			glPolygonMode (GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
-			break;
-		case DisplayModeTextured:
-			wireframe = false;
-			glPolygonMode (GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
-			break;
-//		default:
-//			::log ("\nUnknown display mode %d (%x).", item, item);
-	}
-    glutPostRedisplay ();
 }
 
 void createMenus () {
-  int difficultyMenu = glutCreateMenu (difficultyMenuHandler);
-  glutAddMenuEntry ("Easy", DifficultyEasy);
-  glutAddMenuEntry ("Hard", DifficultyChallenging);
-  glutAddMenuEntry ("Impossible", DifficultyImpossible);
-
-  int displayModeMenu = glutCreateMenu (displayModeMenuHandler);
-  glutAddMenuEntry ("Wireframe", DisplayModeWireframe);
-  glutAddMenuEntry ("Textured", DisplayModeTextured);
-
   int genericMenu = glutCreateMenu (genericMenuHandler);
-  glutAddSubMenu ("Difficulty...", difficultyMenu);
-  glutAddSubMenu ("Mode...", displayModeMenu);
   glutAddMenuEntry ("Run World", RunWorld);
-  glutAddMenuEntry ("Quit", Quit);
+//  glutAddMenuEntry ("Quit", Quit);
 
   glutAttachMenu (GLUT_RIGHT_BUTTON);
 }
 
 int main (int parametersSize, char **parameters) {
-	//Welcome...
-//	clearLog (); ::log ("\n\nStarting game...");
-
-	//Process the command line (if any)...
-	//parseParameters (parametersSize, parameters); //Better to prompt from a menu...
 
 	//Setup general facilities.
 	glutInitDisplayMode (GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_STENCIL | GLUT_MULTISAMPLE);
 	glutInitWindowSize (800, 600);
 	glutInit (&parametersSize, parameters);
-	if (fullscreen) /*glutEnterGameMode ()*/; else {glutCreateWindow ("game engine"); createMenus ();}
+	if (fullscreen) { 
+		glutEnterGameMode ();
+	}
+	else {
+		glutCreateWindow(gameName);
+		createMenus();
+	}
     glutIgnoreKeyRepeat (GLUT_KEY_REPEAT_ON);
-    glutSetCursor (GLUT_CURSOR_NONE);
+	glutSetCursor (GLUT_CURSOR_NONE);
 
 	//Specify function handlers.
 	glutDisplayFunc (displayWindow); glutReshapeFunc (resizeWindow); glutKeyboardFunc (normalKeyPressed);
