@@ -8,7 +8,7 @@
 char textureDirectory [_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
 //char textureDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','T','E','X','T','U','R','E','S','\0'};
 
-bool printObjects = true;
+bool printObjects = false;
 
 //*****************************************************************************************//
 //                                       World                                             //
@@ -34,25 +34,6 @@ void World::draw () {
 	for(int i=0;i<objects.size();i++) {
 		objects.at(i)->draw();
 	}
-}
-
-void World::log () {
-	//For debugging, it might be useful to output the entire world into the log file.
-
-	//The simple stuff first.
-	::log ("\n\nWorld...\nStart position [%3.2f,%3.2f,%3.2f]", startPosition.x, startPosition.y, startPosition.z);
-
-	//The objects: A version WITH loop macros.
-	loopVector (objectIndex, objects)
-		Object &object = *(objects [objectIndex]);
-//		object.log ();
-	endloop
-	
-	//The objects: A version WITHOUT loop macros.
-	//for (long objectIndex = 0; objectIndex < objects.size (); objectIndex++) {
-	//	Object &object = *(objects [objectIndex]);
-	//	object.log ();
-	//}
 }
 
 void World::read () {
@@ -145,6 +126,7 @@ void World::import (ifstream &input) {
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON;
 	long objectsSize = atoi (line);
+	vector<Waypoint *> waypoints;
 	for (long objectIndex = 0; objectIndex < objectsSize; objectIndex++) {
 		//Input the header.
 		SKIP_TO_COLON;
@@ -167,9 +149,8 @@ void World::import (ifstream &input) {
 			geometry->import(input, textures);
 			objects.push_back(geometry);
 		}
-		else if (stricmp (type, "environment") == 0) {
-//TODO: Create environment object??????
-		}
+//		else if (stricmp (type, "environment") == 0) {
+//		}
 		else if (stricmp (type, "vehicle") == 0) {
 			Vehicle * vehicle = new Vehicle;
 			vehicle->import(input, textures);
@@ -191,9 +172,9 @@ void World::import (ifstream &input) {
 			objects.push_back(sprite);
 		}
 		else if (stricmp (type, "waypoint") == 0) {
-//create waypoint structures
 			Waypoint * waypoint = new Waypoint;
-			waypoint->import(input, textures);
+			waypoint->import(input);
+			objects.push_back(waypoint);
 			waypoints.push_back(waypoint);
 		}
 		else if (stricmp (type, "pool") == 0) {
@@ -205,8 +186,64 @@ void World::import (ifstream &input) {
 		delete [] type;
 	}
 	
+	// collect waypoints and add neighbouring waypoints to each waypoint object, then collect the waypoints in the main object collection
+	char * separator;
+	char * head;
+	char * start;
+	char * end;
+	bool valid;
+	bool endOfString;
+	for(i=0;i<waypoints.size();i++) {
+		// parse through the string of neighbour waypoint values
+		head = waypoints.at(i)->neighbourValues;
+		do {
+			// trim whitespace
+			valid = true;
+			endOfString = false;
+			separator = strchr(head, ',');
+			if(separator == NULL) {
+				separator = head + ((strlen(head) - 1) * sizeof(char) + sizeof(char));
+				endOfString = true;
+			}
+			else {
+				*separator = '\0';
+			}
+			start = head;
+			end = separator - sizeof(char);
+			// trim the front of the string
+			while(*start == ' ' || *start == '\t') {
+				*start = '\0';
+				start += sizeof(char);
+			}
+			// trim the end of the string
+			while(*end == ' ' || *end == '\t') {
+				*end = '\0';
+				end -= sizeof(char);
+			}
+			if(start > end) {
+				valid = false;
+			}
+			head = start;
+			
+			// set each waypoint as a neighbour of the other
+			if(valid) {
+				for(j=0;j<waypoints.size();j++) {
+					if(stricmp(head, waypoints.at(j)->name) == 0 ){// && stricmp(waypoints.at(i)->name, waypoints.at(j)->name) != 0) {
+						waypoints.at(i)->addNeighbour(waypoints.at(j));
+						waypoints.at(j)->addNeighbour(waypoints.at(i));
+					}
+				}
+
+			}
+			
+			// iterate to the next element in the string
+			head = separator + sizeof(char);
+		} while(!endOfString);
+	}
+	
+	// print the objects to the screen (for debugging purposes)
 	if(printObjects) {
-		for(int i=0;i<objects.size();i++) {
+		for(i=0;i<objects.size();i++) {
 			cout << *(objects.at(i)) << endl;
 		}
 	}

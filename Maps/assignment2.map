@@ -789,7 +789,7 @@
 {
 "classname" "Waypoint"
 "targetname" "p2"
-"neighbours" "p1, p3"
+"neighbours" "p1, p3, p4"
 "origin" "-606 706 0"
 }
 {

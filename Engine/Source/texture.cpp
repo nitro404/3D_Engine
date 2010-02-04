@@ -104,7 +104,7 @@ Texture *readBMPTexture (char *fullPathName) {
 	//Get Microsoft to read it (they must know how).
     HBITMAP bitmapHandle = (HBITMAP) LoadImage (NULL, fullPathName, 
     	IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	
-	if (bitmapHandle == NULL) {log ("\nFile \"%s\" not found...", fullPathName); return NULL;}
+//	if (bitmapHandle == NULL) {log ("\nFile \"%s\" not found...", fullPathName); return NULL;}
 
     //Find out how big it is.
 	BITMAP bitmap; GetObject (bitmapHandle, sizeof (bitmap), &bitmap);
@@ -118,7 +118,7 @@ Texture *readBMPTexture (char *fullPathName) {
 	if (!isPowerOf2 (width) || !isPowerOf2 (height)) {
 		//OpenGL needs a power of 2 (it is possible to force OpenGL to resize it but that's slow).
 		prompt ("\nBitmap \"%s\" is not a power of 2; width %d, height %d.", fullPathName, width, height);
-		log ("\nBitmap \"%s\" is not a power of 2; width %d, height %d.", fullPathName, width, height);
+//		log ("\nBitmap \"%s\" is not a power of 2; width %d, height %d.", fullPathName, width, height);
 	}
 
 	//Allocate space for RGBA format.
@@ -176,7 +176,7 @@ Texture *readBMPTexture (char *fullPathName) {
     	} 
 	} else {
 		//We only handle 8 and 24 bits so far...
-		log ("\nRead texture can only handle 8 and 24 bit textures, not %d.", pixelSize); 
+//		log ("\nRead texture can only handle 8 and 24 bit textures, not %d.", pixelSize); 
 		delete texture; DeleteObject (bitmapHandle); return NULL;
 	}
 
@@ -190,7 +190,10 @@ Texture *readTGATexture (char *fullPathName) {
 	//contains alpha bits... 24 bit TGA textures have not been tested...
 
 	FILE *file = fopen (fullPathName, "rb");
-	if (file == NULL) {::log ("\nUnable to open texture %s", fullPathName); return NULL;}
+	if (file == NULL) {
+//		::log ("\nUnable to open texture %s", fullPathName);
+		return NULL;
+	}
 
 	#define logError(message) {log (message, fullPathName); fclose (file); return NULL;}
 	struct TGAHeader {
@@ -201,14 +204,15 @@ Texture *readTGATexture (char *fullPathName) {
 
 	TGAHeader header;
 	if (fread (&header, 1, sizeof (header), file) != sizeof (header))
-		logError ("\nTGA file \"%s\" appears to be truncated.");
+{} //		logError ("\nTGA file \"%s\" appears to be truncated.");
 	if (header.colorMapType != 0) //1=>has color map, 0=>does not have color map.
-		logError ("\nCan't read \"%s\" since it's paletted.");
+{} //		logError ("\nCan't read \"%s\" since it's paletted.");
 	if (header.imageType != 2) //0..11; 2=>uncompressed true-color
-		logError ("\nCan't read \"%s\" since it's compressed or not true color.");
+{} //		logError ("\nCan't read \"%s\" since it's compressed or not true color.");
 	if (header.pixelDepth != 32 && header.pixelDepth != 24) {
-		log ("\nFile \"%s\" is a %d bit .TGA file, need 24 or 32.", fullPathName, header.pixelDepth); 
-		fclose (file); return NULL;
+//		log ("\nFile \"%s\" is a %d bit .TGA file, need 24 or 32.", fullPathName, header.pixelDepth); 
+//		fclose (file);
+		return NULL;
 	}
 
 	bool hasAlpha = header.pixelDepth == 32;
@@ -217,7 +221,7 @@ Texture *readTGATexture (char *fullPathName) {
 	//Allocate space for RGBA format.
 	const long width = header.imageWidth; const long height = header.imageHeight; 
 	Texture *texture = new Texture (width, height, useAlpha ? RGBAType : RGBType);
-	if (texture == NULL) logError ("\nFailed to create textures for \"%s\".");
+//	if (texture == NULL) logError ("\nFailed to create textures for \"%s\".");
 
 	//Prepare to copy the bits from the file.
 	long numberOfPixels = width * height;
@@ -225,7 +229,7 @@ Texture *readTGATexture (char *fullPathName) {
 	BYTE *localBytes = (BYTE *) texture->bytes; BYTE *destination = (BYTE *) localBytes;
  
 	long bytesRead = fread (localBytes, sizeof (BYTE), bytesSize, file);
-	if (bytesRead == 0) {delete texture; logError ("\nUnable to read all the bytes in file \"%s\".");}
+	if (bytesRead == 0) {delete texture; }//logError ("\nUnable to read all the bytes in file \"%s\".");}
 	fclose (file); //From here on, no longer have "close the file" as a pending action...
 
 	//TGA is stored as BGR(A). Swizzle bits into RGB(A) format
@@ -275,7 +279,10 @@ bool readRGBTextureExtent (char *fullPathName, long &width, long &height) {
 	//Get Microsoft to read it (they must know how).
     HBITMAP bitmapHandle = (HBITMAP) LoadImage (NULL, fullPathName, 
     	IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	
-	if (bitmapHandle == NULL) {log ("\nFile \"%s\" not found...", fullPathName); return false;}
+	if (bitmapHandle == NULL) {
+//		log ("\nFile \"%s\" not found...", fullPathName);
+		return false;
+	}
 
     //Find out how big it is.
 	BITMAP bitmap; GetObject (bitmapHandle, sizeof (bitmap), &bitmap);
@@ -289,7 +296,10 @@ bool readTGATextureExtent (char *fullPathName, long &width, long &height) {
 	//Returns true if successful; false otherwise.
 
 	FILE *file = fopen (fullPathName, "rb");
-	if (file == NULL) {::log ("\nUnable to open texture %s", fullPathName); return false;}
+	if (file == NULL) {
+//		::log ("\nUnable to open texture %s", fullPathName);
+		return false;
+	}
 
 	struct TGAHeader {
 		byte idLength, colorMapType, imageType, colorMapSpecification [5];
@@ -299,7 +309,8 @@ bool readTGATextureExtent (char *fullPathName, long &width, long &height) {
 
 	TGAHeader header;
 	if (fread (&header, 1, sizeof (header), file) != sizeof (header)) {
-		log ("\nTGA file \"%s\" appears to be truncated."); return false;
+//		log ("\nTGA file \"%s\" appears to be truncated.");
+		return false;
 	}
 	fclose (file); width = header.imageWidth; height = header.imageHeight; 
 	return true;
@@ -341,7 +352,7 @@ void Texture::load (bool mipmapping, bool forceClamp) {
 	//Give the texture to the game card.
 	textureLoaded = true; //It will be loaded shortly...
 	if (textureHandle == -1 || bytes == NULL) {
-		log ("\nTexture handle is %d (-1 means not set), bytes %x (null means not read)...", textureHandle, bytes);
+//		log ("\nTexture handle is %d (-1 means not set), bytes %x (null means not read)...", textureHandle, bytes);
 		return;
 	}
 	static long alignment [2] = {4, 1};

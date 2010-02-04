@@ -224,13 +224,13 @@ public:
 	
 	Point position () {return Point (m41, m42, m43);}
 
-	void log (long tabs = 0) {
+	/*void log (long tabs = 0) {
 		char *tabbing = indentation (tabs);
 		::log ("\n%s%3.3f, %3.3f, %3.3f, %3.3f" "\n%s%3.3f, %3.3f, %3.3f, %3.3f" 
 			"\n%s%3.3f, %3.3f, %3.3f, %3.3f" "\n%s%3.3f, %3.3f, %3.3f, %3.3f", 
 			tabbing, m11, m12, m13, m14, tabbing, m21, m22, m23, m24, 
 			tabbing, m31, m32, m33, m34, tabbing, m41, m42, m43, m44);
-	}
+	}*/
 };
 
 declareCollection (Transformation);
@@ -325,11 +325,12 @@ public:
 	
 	Point position () {return this->normal ().position ();}
 
+	/*
 	void log (long tabs = 0) {
 		char *tabbing = indentation (tabs);
 		::log ("\n%sNormal:", tabbing); normal ().log (tabs+1); 
 		::log ("\n%sInverse:", tabbing); inverse.log (tabs+1);
-	}
+	}*/
 };
 
 #endif //transformationsModule

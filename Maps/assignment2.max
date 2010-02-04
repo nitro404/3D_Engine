@@ -780,3 +780,27 @@
 ( -831 1094 146 ) ( -885 1094 146 ) ( -885 1094 188 ) WOOD1 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1 
 }
 }
+{
+"classname" "Waypoint"
+"targetname" "p1"
+"neighbours" "p2"
+"origin" "-1152 704 0"
+}
+{
+"classname" "Waypoint"
+"targetname" "p2"
+"neighbours" "p1, p2, p3"
+"origin" "-606 706 0"
+}
+{
+"classname" "Waypoint"
+"targetname" "p3"
+"neighbours" "p2"
+"origin" "-606 1117 3"
+}
+{
+"classname" "Waypoint"
+"targetname" "p4"
+"neighbours" "p2"
+"origin" "766 704 72"
+}

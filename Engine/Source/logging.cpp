@@ -42,10 +42,12 @@ float randomUpTo (float limit) {
 //*****************************************************************************************//
 
 void clearLog () { 
+	/*
 	static char logFileName [255] = "";
 	if (*((char *) &logFileName) == '\0') _fullpath ((char *) &logFileName, ".\\log", sizeof (logFileName));
 	FILE *file = fopen ((char *) &logFileName, "w"); if (file == NULL) return;
-	fclose (file);					 
+	fclose (file);	
+	*/
 }
 
 #define setupStaticBuffer() \
@@ -54,7 +56,8 @@ void clearLog () {
 	vsprintf (buffer, message, parameters); \
 	va_end (parameters) 
 
-void log (char *message, ...) { 
+void log (char *message, ...) {
+	/*
 	//Example use: log ("\nInteger %d float %4.2f hex %8.8x.", 10, 1.2, 16);
 	setupStaticBuffer ();
 	static char logFileName [255] = "";
@@ -64,7 +67,8 @@ void log (char *message, ...) {
 	FILE *file = fopen ((char *) &logFileName, "a");
 	if (file == NULL) return;
 	fprintf (file, "%s", buffer);
-	fclose (file);					 
+	fclose (file);
+	*/
 }
 
 void prompt (char *message, ...) { 
@@ -76,7 +80,7 @@ void prompt (char *message, ...) {
 void quit (char *message, ...) { 
 	//Use like log.
 	setupStaticBuffer ();
-	::log ("\n%s", buffer);
+//	::log ("\n%s", buffer);
 	MessageBox (/*GetActiveWindow ()*/ NULL, buffer, "      Message      ", MB_OK);
 	exit (0);
 }

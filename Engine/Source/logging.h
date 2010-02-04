@@ -17,7 +17,7 @@
 
 void clearLog ();
 double timeNow ();
-void log (char *message, ...);
+//void log (char *message, ...);
 void prompt (char *message, ...);
 void quit (char *message, ...);
 #define halt quit

@@ -94,7 +94,7 @@ void specialKeyPressed (int character, int x, int y) {
 			break;
 		default: 
 			//The log allows you to figure out what key something actually is!!!
-			::log ("\nPressed special key consisting of character '%c' decimal %d hex %x.", character, character, character);
+//			::log ("\nPressed special key consisting of character '%c' decimal %d hex %x.", character, character, character);
 			break;
 	}
 	glutPostRedisplay ();
@@ -106,7 +106,7 @@ void specialKeyReleased (int character, int x, int y) {
 			break;
 		default: 
 			//The log allows you to figure out what key something actually is!!!
-			::log ("\nReleased special key consisting of character '%c' decimal %d hex %x.", character, character, character);
+//			::log ("\nReleased special key consisting of character '%c' decimal %d hex %x.", character, character, character);
 			break;
 	}
 	glutPostRedisplay ();
@@ -196,7 +196,7 @@ void normalKeyPressed (unsigned char character, int x, int y) {
 
 		default:
 			//The log allows you to figure out what key something actually is!!!
-			::log ("\nPressed normal key consisting of character '%c' decimal %d hex %x.", character, character, character);
+//			::log ("\nPressed normal key consisting of character '%c' decimal %d hex %x.", character, character, character);
 			break;
 	}
 
@@ -259,7 +259,7 @@ void normalKeyReleased (unsigned char character, int x, int y) {
 
 		default: 
 			//The log allows you to figure out what key something actually is!!!
-			::log ("\nReleased normal key consisting of character '%c' decimal %d hex %x.", character, character, character);
+//			::log ("\nReleased normal key consisting of character '%c' decimal %d hex %x.", character, character, character);
 			break;
 	}
 
@@ -286,8 +286,8 @@ void mousePressed (int button, int state, int x, int y) {
 			//End something at mouse coordinates x and y.
 		}
 	}
-	::log ("\nPressed %s mouse button at %d@%d.", button == GLUT_LEFT_BUTTON ? "LEFT" : 
-		(button == GLUT_MIDDLE_BUTTON ? "MIDDLE" : "RIGHT"), x, y);
+//	::log ("\nPressed %s mouse button at %d@%d.", button == GLUT_LEFT_BUTTON ? "LEFT" : 
+//		(button == GLUT_MIDDLE_BUTTON ? "MIDDLE" : "RIGHT"), x, y);
 }
 
 void mouseMoved (int x, int y) {
@@ -325,21 +325,22 @@ void mouseMoved (int x, int y) {
 void parseParameters (int parametersSize, char **parameters) {
 	bool optionFound = false;
 	for (long i = 1; i < parametersSize; i++) {//Skip program name.
-		::log ("\n%d: Consider \"%s\".", i, parameters [i]);
+//		::log ("\n%d: Consider \"%s\".", i, parameters [i]);
 		if (matches ("-w", parameters [i])) {
-			::log ("\nMatched -w");
+//			::log ("\nMatched -w");
 			wireframe = true; optionFound = true;
 		} else if (matches ("-f", parameters [i])) {
-			::log ("\nMatched \"-f\", extracting from \"%s\".", parameters [i]);
-			::log ("\nAssigning into filename [0]");
+//			::log ("\nMatched \"-f\", extracting from \"%s\".", parameters [i]);
+//			::log ("\nAssigning into filename [0]");
 			filename [0] = 20;
-			::log (" WORKED...");
+//			::log (" WORKED...");
 			strcpy (filename, parameters [i]+2);
-			::log (" COPY WORKED TOO...");
-			::log ("\nRead filename \"%s\".", filename);
+//			::log (" COPY WORKED TOO...");
+//			::log ("\nRead filename \"%s\".", filename);
 			optionFound = true;
-		} else 
-			::log ("\nFailed to match.");
+		}
+//		else 
+//			::log ("\nFailed to match.");
 	}
 	if (!optionFound) {
 		printf ("\nusage: builder [-options] -fFilename");
@@ -363,8 +364,8 @@ void genericMenuHandler (int item) {
 		case Quit:
 			Game::wrapup (); exit (0);
 			break;
-		default:
-			::log ("\nUnknown generic menu selection %d (%x).", item, item);
+//		default:
+//			::log ("\nUnknown generic menu selection %d (%x).", item, item);
 	}
 }
 
@@ -375,8 +376,8 @@ void difficultyMenuHandler (int item) {
 		case DifficultyImpossible:
 			difficulty = (MenuItem) item; 
 			break;
-		default:
-			::log ("\nUnknown difficulty %d (%x).", item, item);
+//		default:
+//			::log ("\nUnknown difficulty %d (%x).", item, item);
 	}
 }
 
@@ -390,8 +391,8 @@ void displayModeMenuHandler (int item) {
 			wireframe = false;
 			glPolygonMode (GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
 			break;
-		default:
-			::log ("\nUnknown display mode %d (%x).", item, item);
+//		default:
+//			::log ("\nUnknown display mode %d (%x).", item, item);
 	}
     glutPostRedisplay ();
 }
@@ -417,7 +418,7 @@ void createMenus () {
 
 int main (int parametersSize, char **parameters) {
 	//Welcome...
-	clearLog (); ::log ("\n\nStarting game...");
+//	clearLog (); ::log ("\n\nStarting game...");
 
 	//Process the command line (if any)...
 	//parseParameters (parametersSize, parameters); //Better to prompt from a menu...

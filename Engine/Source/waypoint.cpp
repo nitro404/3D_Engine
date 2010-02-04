@@ -17,6 +17,22 @@ Waypoint::~Waypoint() {
 	
 }
 
+void Waypoint::addNeighbour(Waypoint * w) {
+	if(w == NULL) { return; }
+	
+	bool valid = true;
+
+	for(int i=0;i<this->neighbours.size();i++) {
+		if(stricmp(this->neighbours.at(i)->name, w->name) == 0 || stricmp(this->name, w->name) == 0) {
+			valid = false;
+		}
+	}
+	
+	if(valid) {
+		this->neighbours.push_back(w);
+	}
+}
+
 void Waypoint::tick () {
 
 }
@@ -25,7 +41,7 @@ void Waypoint::draw () {
 	
 }
 
-void Waypoint::import (ifstream &input, vector<char *> & neighbourValues) {
+void Waypoint::import (ifstream &input) {
 	char line [256];
 	
 	//Input the transformation.
@@ -92,18 +108,20 @@ void Waypoint::import (ifstream &input, vector<char *> & neighbourValues) {
 			name = string;
 		}
 		else if(stricmp(key, "neighbours") == 0) {
-			//neighbours = string;
-			neighbourValues.push_back(string);
+			neighbourValues = string;
 		}
 	}
-	
-	//Throw away the faces header.
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
+
 }
 
 void Waypoint::printOn(ostream & o) const {
-	o << "Waypoint";
+	o << "Waypoint " << name << ": ";
+	for(int i=0;i<neighbours.size();i++) {
+		o << neighbours.at(i)->name;
+		if(i < neighbours.size() - 1) {
+			o << ", ";
+		}
+	}
 }
 
 ostream & operator << (ostream & o, const Waypoint & x) {

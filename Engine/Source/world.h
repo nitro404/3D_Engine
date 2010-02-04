@@ -24,7 +24,6 @@ public:
 
 	void tick ();
 	void draw ();
-	void log ();
 
 	void read (); //Prompts for a file name to read a ".wrl" file from and reads it into a new world...
 	void import (char * fileName);

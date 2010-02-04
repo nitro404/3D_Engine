@@ -5284,7 +5284,7 @@ Object: 69;
 		1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 15.3923997879028, 0, 17.9323997497559, 1; //Inverse...
 	Properties: 3;
 		"name" => "p2"
-		"neighbours" => "p1, p3"
+		"neighbours" => "p1, p2, p3"
 		"type" => "waypoint"
 	Faces: 0;
 	Sub-objects: 0;

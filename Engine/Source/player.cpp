@@ -42,16 +42,16 @@ void Player::endCamera () {
 void Player::moveBy (Point &translation) {
 	const bool logging = false;
 	if (logging) {
-		::log ("\nPlayer told to translate by "); translation.log ();
-		::log ("\nTransformation before:"); playerMatrix.normal ().log (1);
+//		::log ("\nPlayer told to translate by "); translation.log ();
+//		::log ("\nTransformation before:"); playerMatrix.normal ().log (1);
 	}
 	playerMatrix.translateBy (translation);
-	if (logging) {::log ("\nTransformation after:"); playerMatrix.normal ().log (1);}
+//	if (logging) {::log ("\nTransformation after:"); playerMatrix.normal ().log (1);}
 }
 
 void Player::rotateBy (Point &rotation) {
 	const bool logging = false;
-	if (logging) {::log ("\nPlayer told to rotate by "); rotation.log ();}
+//	if (logging) {::log ("\nPlayer told to rotate by "); rotation.log ();}
 	playerMatrix.rotateBy (rotation);
 }
 

@@ -4962,7 +4962,7 @@ Object: 68;
 		1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 15.3923997879028, 0.0, 17.9323997497559, 1.0; //Inverse...
 	Properties: 2;
 		"name" => "p2"
-		"neighbours" => "p1, p3"
+		"neighbours" => "p1, p2, p3"
 Object: 69;
 	"type" => "waypoint"
 	Transformation: //m11 m12 m13 m14 m21 m22 ... m44

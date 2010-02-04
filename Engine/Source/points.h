@@ -72,7 +72,7 @@ public:
 
 	Point operator * (const Transformation &transformation) const;
 
-	void log () {::log ("[%3.2f,%3.2f,%3.2f]", x, y, z);}
+	//void log () {::log ("[%3.2f,%3.2f,%3.2f]", x, y, z);}
 };
 
 extern Point Zero;
