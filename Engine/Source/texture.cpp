@@ -104,7 +104,10 @@ Texture *readBMPTexture (char *fullPathName) {
 	//Get Microsoft to read it (they must know how).
     HBITMAP bitmapHandle = (HBITMAP) LoadImage (NULL, fullPathName, 
     	IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	
-//	if (bitmapHandle == NULL) {log ("\nFile \"%s\" not found...", fullPathName); return NULL;}
+	if (bitmapHandle == NULL) {
+//		log ("\nFile \"%s\" not found...", fullPathName);
+		return NULL;
+	}
 
     //Find out how big it is.
 	BITMAP bitmap; GetObject (bitmapHandle, sizeof (bitmap), &bitmap);
