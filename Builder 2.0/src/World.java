@@ -6,6 +6,7 @@ public class World implements Map3D {
 	public Point3D startPosition;
 	public Vector<String> textureNames;
 	public Vector<UniversalObject> objects;
+	public Vector<Waypoint> waypoints;
 	
 	public World(File file) {
 		try {
@@ -13,6 +14,7 @@ public class World implements Map3D {
 		}
 		catch (Exception e) {
 			System.out.println("ERROR: Error reading from map file " + file.getName() + ".");
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}
@@ -23,6 +25,7 @@ public class World implements Map3D {
 		}
 		catch (Exception e) {
 			System.out.println("ERROR: Error converting map.");
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}
@@ -38,23 +41,24 @@ public class World implements Map3D {
 			UniversalObject object;
 			this.startPosition = null;
 			objects = new Vector<UniversalObject>();
+			waypoints = new Vector<Waypoint>();
 			
 			// collect a list of all the texture names in the map
 			// and assign index pointers in place of where the texture name used to be 
 			textureNames = new Vector<String>();
+			String type;
 			for(int i=0;i<universalMap.objects.size();i++) {
 				object = universalMap.objects.elementAt(i);
-				String type = object.getPropertyValue("type");
+				type = object.getPropertyValue("type");
 				object.removeProperty("type");
 				
 				boolean duplicateTextureName;
 				Face face;
 				String textureName;
 				int textureIndex = 0;
-				for(int j=0;j<object.faces.size();j++) {
-					face = object.faces.elementAt(j);
+				if(type.equalsIgnoreCase("sprite")) {
+					textureName = object.getPropertyValue("picture");
 					duplicateTextureName = false;
-					textureName = face.getPropertyValue("texture");
 					for(int k=0;k<textureNames.size();k++) {
 						if(textureNames.elementAt(k).equalsIgnoreCase(textureName)) {
 							duplicateTextureName = true;
@@ -62,13 +66,32 @@ public class World implements Map3D {
 							break;
 						}
 					}
-					
 					if(!duplicateTextureName) {
 						textureNames.add(textureName);
 						textureIndex = textureNames.size() - 1;
 					}
-					face.setPropertyValue("texture", Integer.toString(textureIndex));
-				}				
+					object.setPropertyValue("picture", Integer.toString(textureIndex));
+				}
+				else {
+					for(int j=0;j<object.faces.size();j++) {
+						face = object.faces.elementAt(j);
+						duplicateTextureName = false;
+						textureName = face.getPropertyValue("texture");
+						for(int k=0;k<textureNames.size();k++) {
+							if(textureNames.elementAt(k).equalsIgnoreCase(textureName)) {
+								duplicateTextureName = true;
+								textureIndex = k;
+								break;
+							}
+						}
+						
+						if(!duplicateTextureName) {
+							textureNames.add(textureName);
+							textureIndex = textureNames.size() - 1;
+						}
+						face.setPropertyValue("texture", Integer.toString(textureIndex));
+					}
+				}
 				
 				// add the appropriate subclass of UniversalObject based on the object type to a collection of objects
 				if(type == null) {
@@ -97,7 +120,7 @@ public class World implements Map3D {
 					objects.add(new Sprite(object, textureIndex));
 				}
 				else if(type.equalsIgnoreCase("waypoint")) {
-					objects.add(new Waypoint(object));
+					waypoints.add(new Waypoint(object));
 				}
 				else if(type.equalsIgnoreCase("pool")) {
 					objects.add(new Pool(object, textureIndex));
@@ -133,10 +156,17 @@ public class World implements Map3D {
 		this.startPosition.writeTo(out);
 		out.println(";");
 		
-		//print the textures header, followed by the textures
+		// print the textures header, followed by the textures
 		out.println("Textures: " + this.textureNames.size() + ";");
 		for(int i=0;i<this.textureNames.size();i++) {
 			out.println("\t" + this.textureNames.elementAt(i));
+		}
+		
+		// print the waypoints header, followed by the waypoints
+		out.println("Waypoints: " + this.waypoints.size() + ";");
+		for(int i=0;i<this.waypoints.size();i++) {
+			out.println("Waypoint: " + i + ";");
+			this.waypoints.elementAt(i).writeTo(out);
 		}
 		
 		// print the objects header, followed by the objects

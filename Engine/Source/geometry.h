@@ -7,8 +7,13 @@
 
 class Geometry : public Object {
 public:
-	Geometry();
-	~Geometry();
+	DualTransformation transformation;
+	FaceCollection faces;
+	
+	Geometry() { }
+	~Geometry() {
+		deleteFaceCollectionEntries(faces);
+	}
 
 	void tick();
 	void draw();

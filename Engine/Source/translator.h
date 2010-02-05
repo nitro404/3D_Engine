@@ -7,9 +7,20 @@
 
 class Translator : public Object {
 public:
-	Translator();
-	~Translator();
+	DualTransformation transformation;
+	FaceCollection faces;
 
+	Translator() {
+		forwardDirectionX = true;
+		forwardDirectionY = true;
+		forwardDirectionZ = true;
+	}
+
+	~Translator() {
+		delete [] name;
+		deleteFaceCollectionEntries(faces);
+	}
+	
 	void tick();
 	void draw();
 

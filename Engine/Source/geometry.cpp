@@ -9,14 +9,6 @@
 //                                       Static Geometry                                   //
 //*****************************************************************************************//
 
-Geometry::Geometry() {
-	
-}
-
-Geometry::~Geometry() {
-	
-}
-
 void Geometry::tick () {
 	//This could make an object rotate or change size or do nothing.
 }

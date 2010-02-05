@@ -76,6 +76,7 @@ public class Converter {
 		}
 		catch(Exception e) {
 			System.out.println("ERROR: Error writing to map file " + outputFile.getName() + ".");
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}

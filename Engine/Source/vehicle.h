@@ -7,8 +7,15 @@
 
 class Vehicle : public Object {
 public:
-	Vehicle();
-	~Vehicle();
+	DualTransformation transformation;
+	FaceCollection faces;
+	
+	Vehicle() { }
+
+	~Vehicle() {
+		delete [] name;
+		deleteFaceCollectionEntries(faces);
+	}
 
 	void tick();
 	void draw();
@@ -26,4 +33,4 @@ declareCollection(Vehicle);
 
 ostream & operator << (ostream & o, const Vehicle & x);
 
-#endif //vehicleModule
+#endif

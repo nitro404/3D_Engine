@@ -9,20 +9,11 @@
 //                                       Pool                                              //
 //*****************************************************************************************//
 
-Pool::Pool() {
-	
-}
-
-Pool::~Pool() {
-	
-}
-
 void Pool::tick () {
-	//This could make an object rotate or change size or do nothing.
+	
 }
 
 void Pool::draw () {
-	//Draw the faces in this object.
 	glPushMatrix ();
 	Transformation & normal = transformation.normal();
 	glMultMatrixd(normal);

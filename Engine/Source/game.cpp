@@ -78,30 +78,32 @@ void setupOpenGL () {
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
-void Game::setup () {
-	setupOpenGL ();
-	setupFont ();
-	game = new Game ();
-	Player::setup ();
-	Camera::setup ();
-	InputManager::setup ();
-	World::setup ();
+void Game::setup() {
+	setupOpenGL();
+	setupFont();
+	game = new Game();
+	Player::setup();
+	Camera::setup();
+	InputManager::setup();
+	World::setup();
 }
 
 void Game::wrapup () {
-	wrapupFont ();
+	wrapupFont();
 	delete game;
-	Player::wrapup ();
-	Camera::wrapup ();
-	InputManager::wrapup ();
-	World::wrapup ();
+	Player::wrapup();
+	Camera::wrapup();
+	InputManager::wrapup();
+	World::wrapup();
 }
 
-void Game::tick () {
-	inputManager->tick ();
-	camera->tick ();
-	player->tick ();
-	if (world != NULL) world->tick ();
+void Game::tick() {
+	inputManager->tick();
+	camera->tick();
+	player->tick();
+	if(world != NULL) {
+		world->tick ();
+	}
 }
 
 void Game::draw () {
@@ -110,13 +112,17 @@ void Game::draw () {
 	const bool logging = false;
 	
 	camera->beginCamera ();
-	if(world != NULL) world->draw();
+	if(world != NULL) {
+		world->draw();
+	}
+	else {
+		drawMessage(125, screenHeight-20, "Right-click to load a map.");
+	}
 	player->draw ();
 	camera->endCamera ();
-//	if(displayHelp) drawFrameRate();
-	drawFrameRate();
-	if(displayHelp) {
-		drawMessage (1, screenHeight-52, "Use WSAD to move around, QE to move up/down and Escape to exit.");
+	if(displayHelp || world == NULL) {
+		drawFrameRate();
+		drawMessage(1, screenHeight-52, "Use WSAD to move around, QE to move up/down and Escape to exit.");
 	}
 }
 

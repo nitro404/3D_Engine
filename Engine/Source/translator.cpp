@@ -9,30 +9,21 @@
 //                                       Translator                                        //
 //*****************************************************************************************//
 
-Translator::Translator() {
-	forwardDirectionX = true;
-	forwardDirectionY = true;
-	forwardDirectionZ = true;
-}
-
-Translator::~Translator() {
-	delete [] name;
-}
-
 void Translator::tick () {
 	//This could make an object rotate or change size or do nothing.
 	if(offset.x != 0) {
-		if(forwardDirectionX) { currentLocation.x += rateInMetersPerSecond; }
-		else				  { currentLocation.x -= rateInMetersPerSecond; }
+		if(forwardDirectionX) { currentLocation.x += rateInMetersPerSecond * DT; }
+		else				  { currentLocation.x -= rateInMetersPerSecond * DT; }
 	}
 	if(offset.y != 0) {
-		if(forwardDirectionY) { currentLocation.y += rateInMetersPerSecond; }
-		else				  { currentLocation.y -= rateInMetersPerSecond; }
+		if(forwardDirectionY) { currentLocation.y += rateInMetersPerSecond * DT; }
+		else				  { currentLocation.y -= rateInMetersPerSecond * DT; }
 	}
 	if(offset.z != 0) {
-		if(forwardDirectionZ) { currentLocation.z += rateInMetersPerSecond; }
-		else				  { currentLocation.z -= rateInMetersPerSecond; }
+		if(forwardDirectionZ) { currentLocation.z += rateInMetersPerSecond * DT; }
+		else				  { currentLocation.z -= rateInMetersPerSecond * DT; }
 	}
+	
 	//Reverse
 	if(currentLocation.x > origin.x + offset.x) {
 		currentLocation.x = origin.x + offset.x;

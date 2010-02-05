@@ -9,24 +9,14 @@
 //                                       Rotator                                           //
 //*****************************************************************************************//
 
-Rotator::Rotator() {
-	angleInDegrees = 0;
-}
-
-Rotator::~Rotator() {
-	delete [] name;
-}
-
 void Rotator::tick () {
-	//This could make an object rotate or change size or do nothing.
-	angleInDegrees += rateInDegreesPersecond;
+	angleInDegrees += rateInDegreesPersecond * DT;
 	if(angleInDegrees >= 360 || angleInDegrees <= -360) {
 		angleInDegrees = 0;
 	}
 }
 
 void Rotator::draw () {
-	//Draw the faces in this object.
 	Point p = transformation.position();
 	glPushMatrix(); 
 	glTranslated(p.x, p.y, p.z);

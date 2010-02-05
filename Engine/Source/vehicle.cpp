@@ -9,20 +9,11 @@
 //                                       Vehicle                                           //
 //*****************************************************************************************//
 
-Vehicle::Vehicle() {
+void Vehicle::tick () {
 	
 }
 
-Vehicle::~Vehicle() {
-	delete [] name;
-}
-
-void Vehicle::tick () {
-	//This could make an object rotate or change size or do nothing.
-}
-
 void Vehicle::draw () {
-	//Draw the faces in this object.
 	if(faces.size() > 0) {
 		glPushMatrix ();
 		Transformation & normal = transformation.normal();

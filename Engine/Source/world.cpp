@@ -15,24 +15,27 @@ bool printObjects = false;
 //*****************************************************************************************//
 
 void World::setup () {
-	//Nothing to do so far.
+	
 }
 
 void World::wrapup () {
 }
 
 void World::tick () {
-	//Tick all the objects in the world such as doors, sun, weather...
 	for(int i=0;i<objects.size();i++) {
 		objects.at(i)->tick();
+	}
+	for(i=0;i<sprites.size();i++) {
+		sprites.at(i)->tick();
 	}
 }
 
 void World::draw () {
-	//Draw all the objects in the world such as terrain, buildings, etc.
-	
 	for(int i=0;i<objects.size();i++) {
 		objects.at(i)->draw();
+	}
+	for(i=0;i<sprites.size();i++) {
+		sprites.at(i)->draw();
 	}
 }
 
@@ -122,70 +125,23 @@ void World::import (ifstream &input) {
 		delete [] textureName;
 	}
 	
-	//Input the objects.
+	//Input the waypoints
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON;
-	long objectsSize = atoi (line);
-	vector<Waypoint *> waypoints;
-	for (long objectIndex = 0; objectIndex < objectsSize; objectIndex++) {
+	long waypointsSize = atoi (line);
+	for (long waypointIndex = 0; waypointIndex < waypointsSize; waypointIndex++) {
 		//Input the header.
 		SKIP_TO_COLON;
 		SKIP_TO_SEMICOLON;
-		long objectIndex = atoi (line); //Only useful for debugging or browsing.
+		long waypointIndex = atoi (line); //Only useful for debugging or browsing.
 		CLEAR_THE_LINE;
 		
-		//Input the object type
-		SKIP_TO_ENDLINE;
-		char obj_key [256];
-		char obj_value [256];
-		obj_value [0] = '\0';
-		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", obj_key, obj_value);
-		char * type = new char [strlen (obj_value) + 1];
-		strcpy(type, obj_value);
-		
 		//Create the corresponding objects
-		if (stricmp (type, "static geometry") == 0) {
-			Geometry * geometry = new Geometry;
-			geometry->import(input, textures);
-			objects.push_back(geometry);
-		}
-//		else if (stricmp (type, "environment") == 0) {
-//		}
-		else if (stricmp (type, "vehicle") == 0) {
-			Vehicle * vehicle = new Vehicle;
-			vehicle->import(input, textures);
-			objects.push_back (vehicle);
-		}
-		else if (stricmp (type, "rotator") == 0) {
-			Rotator * rotator = new Rotator;
-			rotator->import(input, textures);
-			objects.push_back(rotator);
-		}
-		else if (stricmp (type, "translator") == 0) {
-			Translator * translator = new Translator;
-			translator->import(input, textures);
-			objects.push_back(translator);
-		}
-		else if (stricmp (type, "sprite") == 0) {
-			Sprite * sprite = new Sprite;
-			sprite->import(input, textures);
-			objects.push_back(sprite);
-		}
-		else if (stricmp (type, "waypoint") == 0) {
-			Waypoint * waypoint = new Waypoint;
-			waypoint->import(input);
-			objects.push_back(waypoint);
-			waypoints.push_back(waypoint);
-		}
-		else if (stricmp (type, "pool") == 0) {
-			Pool * pool = new Pool;
-			pool->import(input, textures);
-			objects.push_back(pool);
-		}
-		
-		delete [] type;
+		Waypoint * waypoint = new Waypoint;
+		waypoint->import(input);
+		waypoints.push_back(waypoint);
 	}
-	
+
 	// collect waypoints and add neighbouring waypoints to each waypoint object, then collect the waypoints in the main object collection
 	char * separator;
 	char * head;
@@ -228,7 +184,7 @@ void World::import (ifstream &input) {
 			// set each waypoint as a neighbour of the other
 			if(valid) {
 				for(j=0;j<waypoints.size();j++) {
-					if(stricmp(head, waypoints.at(j)->name) == 0 ){// && stricmp(waypoints.at(i)->name, waypoints.at(j)->name) != 0) {
+					if(stricmp(head, waypoints.at(j)->name) == 0 ){
 						waypoints.at(i)->addNeighbour(waypoints.at(j));
 						waypoints.at(j)->addNeighbour(waypoints.at(i));
 					}
@@ -241,8 +197,68 @@ void World::import (ifstream &input) {
 		} while(!endOfString);
 	}
 	
+	//Input the objects.
+	SKIP_TO_COLON;
+	SKIP_TO_SEMICOLON;
+	long objectsSize = atoi (line);
+	for (long objectIndex = 0; objectIndex < objectsSize; objectIndex++) {
+		//Input the header.
+		SKIP_TO_COLON;
+		SKIP_TO_SEMICOLON;
+		long objectIndex = atoi (line); //Only useful for debugging or browsing.
+		CLEAR_THE_LINE;
+		
+		//Input the object type
+		SKIP_TO_ENDLINE;
+		char obj_key [256];
+		char obj_value [256];
+		obj_value [0] = '\0';
+		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", obj_key, obj_value);
+		char * type = new char [strlen (obj_value) + 1];
+		strcpy(type, obj_value);
+		
+		//Create the corresponding objects
+		if (stricmp (type, "static geometry") == 0) {
+			Geometry * geometry = new Geometry;
+			geometry->import(input, textures);
+			objects.push_back(geometry);
+		}
+//		else if (stricmp (type, "environment") == 0) {
+//		}
+		else if (stricmp (type, "vehicle") == 0) {
+			Vehicle * vehicle = new Vehicle;
+			vehicle->import(input, textures);
+			objects.push_back (vehicle);
+		}
+		else if (stricmp (type, "rotator") == 0) {
+			Rotator * rotator = new Rotator;
+			rotator->import(input, textures);
+			objects.push_back(rotator);
+		}
+		else if (stricmp (type, "translator") == 0) {
+			Translator * translator = new Translator;
+			translator->import(input, textures);
+			objects.push_back(translator);
+		}
+		else if (stricmp (type, "sprite") == 0) {
+			Sprite * sprite = new Sprite;
+			sprite->import(input, textures, waypoints);
+			objects.push_back(sprite);
+		}
+		else if (stricmp (type, "pool") == 0) {
+			Pool * pool = new Pool;
+			pool->import(input, textures);
+			objects.push_back(pool);
+		}
+		
+		delete [] type;
+	}
+	
 	// print the objects to the screen (for debugging purposes)
 	if(printObjects) {
+		for(i=0;i<waypoints.size();i++) {
+			cout << *(waypoints.at(i)) << endl;
+		}
 		for(i=0;i<objects.size();i++) {
 			cout << *(objects.at(i)) << endl;
 		}

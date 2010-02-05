@@ -9,14 +9,19 @@ declareDictionary (Texture);
 
 class World {
 public:
-	ObjectCollection objects;
 	Point startPosition;
+	ObjectCollection objects;
+	SpriteCollection sprites;
+	WaypointCollection waypoints;
 	TextureCollection textures; //This is necessary if the world is to own the texture objects.
 
 	World () {};
 	~World () {
-		deleteObjectCollectionEntries (objects); 
-		deleteTextureCollectionEntries (textures);
+		deleteObjectCollectionEntries(objects); 
+		deleteSpriteCollectionEntries(sprites);
+		deleteWaypointCollectionEntries(waypoints);
+		deleteTextureCollectionEntries(textures);
+		
 	}
 
 	static void setup ();

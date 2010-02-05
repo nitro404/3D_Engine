@@ -117,4 +117,24 @@ public class Face {
 		}
 	}
 	
+	public void writeTo(PrintWriter out, boolean writeProperties) throws Exception {
+		if(properties != null) {
+			// output the properties header, followed by all the properties
+			if(writeProperties) {
+				out.println("\t\tProperties: " + this.properties.size() + ";");
+				for(int i=0;i<this.properties.size();i++) {
+					out.println("\t\t\t\"" + this.properties.elementAt(i).key + "\" => \"" + this.properties.elementAt(i).value + "\"");
+				}
+			}
+			
+			// output the points header, followed by all the points
+			out.println("\t\tPoints: " + this.points.size() + "; //x, y, z, nx, ny, nz, tx, ty");
+			for(int i=0;i<this.points.size();i++) {
+				out.print("\t\t\t");
+				this.points.elementAt(i).writeTo(out);
+				out.println(";");
+			}
+		}
+	}
+	
 }

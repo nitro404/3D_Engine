@@ -7,8 +7,17 @@
 
 class Pool : public Object {
 public:
-	Pool();
-	~Pool();
+	DualTransformation transformation;
+	FaceCollection faces;
+	
+	Pool() {
+		delete [] name;
+		deleteFaceCollectionEntries(faces);
+	}
+
+	~Pool() {
+		deleteFaceCollectionEntries(faces);
+	}
 
 	void tick();
 	void draw();

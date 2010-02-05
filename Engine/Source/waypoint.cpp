@@ -9,14 +9,6 @@
 //                                       Waypoint                                          //
 //*****************************************************************************************//
 
-Waypoint::Waypoint() {
-	
-}
-
-Waypoint::~Waypoint() {
-	
-}
-
 void Waypoint::addNeighbour(Waypoint * w) {
 	if(w == NULL) { return; }
 	
@@ -31,6 +23,11 @@ void Waypoint::addNeighbour(Waypoint * w) {
 	if(valid) {
 		this->neighbours.push_back(w);
 	}
+}
+
+Waypoint * Waypoint::getRandomNeighbour() {
+	srand((unsigned int) time(NULL));
+	return this->neighbours.at((rand() % this->neighbours.size()));
 }
 
 void Waypoint::tick () {

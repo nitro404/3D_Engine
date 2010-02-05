@@ -11,6 +11,7 @@ public class UniversalMap implements Map3D {
 		}
 		catch (Exception e) {
 			System.out.println("ERROR: Error reading from map file " + file.getName() + ".");
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}
@@ -21,6 +22,7 @@ public class UniversalMap implements Map3D {
 		}
 		catch (Exception e) {
 			System.out.println("ERROR: Error converting map.");
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}

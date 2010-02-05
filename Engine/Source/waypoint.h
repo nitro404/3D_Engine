@@ -7,15 +7,24 @@
 
 class Waypoint : public Object {
 public:
-	
-	Waypoint();
-	~Waypoint();
+	DualTransformation transformation;
+
+	Waypoint() { }
+
+	~Waypoint() {
+		delete [] name;
+		delete [] neighbourValues;
+		for(int i=0;i<this->neighbours.size();i++) {
+			delete this->neighbours.at(i);
+		}
+	}
 	
 	void addNeighbour(Waypoint * w);
-
+	Waypoint * getRandomNeighbour();
+	
 	void tick();
 	void draw();
-
+	
 	void import (ifstream &input);
 	
 	void printOn(ostream & o) const;

@@ -7,17 +7,14 @@
 
 class Object {
 public:
-	DualTransformation transformation;
-	FaceCollection faces;
+	Object () { }
+	~Object () { }
 
-	Object () { };
-	~Object () { deleteFaceCollectionEntries (faces); }
+	virtual void tick () {}
+	virtual void draw () {}
+	virtual void import (ifstream &input, TextureCollection & textures) {}
 
-	virtual void tick () {};
-	virtual void draw () {};
-	virtual void import (ifstream &input, TextureCollection & textures) {};
-
-	virtual void printOn(ostream & o) const {};
+	virtual void printOn(ostream & o) const {}
 };
 
 declareCollection (Object);

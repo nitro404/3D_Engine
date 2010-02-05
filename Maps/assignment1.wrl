@@ -10,6 +10,7 @@ Textures: 9;
 	OCEAN_V2
 	WALL1
 	METAL1
+Waypoints: 0;
 Objects: 67;
 Object: 0;
 	"type" => "static geometry"

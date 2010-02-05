@@ -8,6 +8,7 @@ Textures: 7;
 	WALL1
 	BRICK3
 	METAL1
+Waypoints: 0;
 Objects: 11;
 Object: 0;
 	"type" => "static geometry"

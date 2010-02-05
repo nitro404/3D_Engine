@@ -7,8 +7,17 @@
 
 class Rotator : public Object {
 public:
-	Rotator();
-	~Rotator();
+	DualTransformation transformation;
+	FaceCollection faces;
+
+	Rotator() {
+		angleInDegrees = 0;
+	}
+	
+	~Rotator() {
+		delete [] name;
+		deleteFaceCollectionEntries(faces);
+	}
 
 	void tick();
 	void draw();

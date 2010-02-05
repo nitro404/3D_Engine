@@ -21,12 +21,18 @@ public:
 	Texture *texture;
 	GamePointCollection points;
 
-	Face () {texture = NULL;}
-	~Face () {deleteGamePointCollectionEntries (points);};
+	Face () {
+		texture = NULL;
+	}
+
+	~Face () {
+		deleteGamePointCollectionEntries (points);
+	}
 
 	void tick ();
 	void draw ();
 	void import (ifstream &input, TextureCollection & textures);
+	void import (ifstream &input);
 };
 
 

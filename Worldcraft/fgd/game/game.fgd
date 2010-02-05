@@ -56,7 +56,7 @@
 @SolidClass = Sprite [
     targetname(string) : "Name"
     picture(string) : "Picture"
-    waypoint(string) : "Waypoint" : "0 0 0"
+    waypoint(string) : "Waypoint"
 ]
 
 // Waypoint

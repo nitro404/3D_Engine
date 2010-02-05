@@ -138,7 +138,7 @@ public class UniversalObject {
 		else if(this instanceof Rotator)	{ out.println("\t\"type\" => \"rotator\""); }
 		else if(this instanceof Translator)	{ out.println("\t\"type\" => \"translator\""); }
 		else if(this instanceof Sprite)		{ out.println("\t\"type\" => \"sprite\""); }
-		else if(this instanceof Waypoint)	{ out.println("\t\"type\" => \"waypoint\""); }
+		else if(this instanceof Waypoint)	{ }
 		else if(this instanceof Pool)		{ out.println("\t\"type\" => \"pool\""); }
 		else   								{ System.out.println("WARNING: Ignoring unexpected object of type \"" + this.getPropertyValue("type") + "\"."); }
 		
@@ -164,7 +164,7 @@ public class UniversalObject {
 			out.println("\tFaces: " + this.faces.size() + ";");
 			for(int i=0;i<this.faces.size();i++) {
 				out.println("\tFace: " + i + ";");
-				this.faces.elementAt(i).writeTo(out);
+				this.faces.elementAt(i).writeTo(out, !(this instanceof Sprite));
 			}
 		}
 	}
