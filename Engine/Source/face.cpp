@@ -16,26 +16,24 @@ void Face::tick () {
 void Face::draw () {
 	//Draw this face... (see Game::draw () in the builder for an example).
 	//Permit blending if it's a texture with alpha...
-	if(texture != NULL) {
-		if (texture->type == RGBAType) {
-			glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glEnable (GL_BLEND);
-		} else {
-			glDisable (GL_BLEND);
-		}
-		
-		//Activate the texture to be drawn.
-		texture->activate();
-		
-		//Setup one polygon to be drawn and draw it.
-		glBegin (GL_POLYGON);
-		for (long pointIndex = 0; pointIndex < points.size(); pointIndex++) {
-			GamePoint &point = *points.at(pointIndex);
-			glTexCoord2d (point.tx, point.ty);
-			glVertex3d (point.x, point.y, point.z); //Must be last.
-		}
-		glEnd ();
+	if (texture->type == RGBAType) {
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable (GL_BLEND);
+	} else {
+		glDisable (GL_BLEND);
 	}
+	
+	//Activate the texture to be drawn.
+	texture->activate();
+	
+	//Setup one polygon to be drawn and draw it.
+	glBegin (GL_POLYGON);
+	for (long pointIndex = 0; pointIndex < points.size(); pointIndex++) {
+		GamePoint &point = *points.at(pointIndex);
+		glTexCoord2d (point.tx, point.ty);
+		glVertex3d (point.x, point.y, point.z); //Must be last.
+	}
+	glEnd ();
 }
 
 void Face::import (ifstream &input, TextureCollection & textures) {

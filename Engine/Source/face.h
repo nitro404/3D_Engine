@@ -29,10 +29,10 @@ public:
 		deleteGamePointCollectionEntries (points);
 	}
 
-	void tick ();
-	void draw ();
-	void import (ifstream &input, TextureCollection & textures);
-	void import (ifstream &input);
+	void tick();
+	void draw();
+	void import(ifstream &input, TextureCollection & textures);
+	void import(ifstream &input);
 };
 
 

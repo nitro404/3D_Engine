@@ -7,14 +7,12 @@
 
 class Sprite : public Object {
 public:
-	DualTransformation transformation;
-	FaceCollection faces;
-
-	Sprite() { }
-
-	~Sprite() {
-		deleteFaceCollectionEntries(faces);
+	Sprite() {
+		picture = NULL;
+		waypoint = NULL;
 	}
+
+	~Sprite() { }
 
 	void tick();
 	void draw();
@@ -25,7 +23,10 @@ public:
 	
 private:
 	char * name;
-//	Point location;
+	Point position;
+	Point center;
+	Point bottomCenter;
+	Point extent;
 	Texture * picture;
 	Waypoint * waypoint;
 };

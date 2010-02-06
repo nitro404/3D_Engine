@@ -18,35 +18,45 @@ void Sprite::tick () {
 void Sprite::draw () {
 	Transformation cameraMatrix;
 	glGetMatrixd(cameraMatrix);
-	Point newSpritePoint = (transformation.normal().position()) * cameraMatrix;
+	Point newPosition = position * cameraMatrix;
 	
 	if (picture->type == RGBAType) {
-		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable (GL_BLEND);
-	} else {
-		glDisable (GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+	}
+	else {
+		glDisable(GL_BLEND);
 	}
 	
-	//Activate the texture to be drawn.
 	picture->activate();
 	
-	//Setup one polygon to be drawn and draw it.
 	glPushIdentity();
-	/*
+
+	glTranslated(newPosition.x, newPosition.y + (extent.y/2), newPosition.z);
+	glScaled(extent.x, extent.y, extent.z);
+
 	glBegin(GL_POLYGON);
-//GamePointCollection & points = faces.at(0)->points;
-	for(long pointIndex = 0; pointIndex < points.size(); pointIndex++) {
-		GamePoint &point = *points.at(pointIndex);
-		glTexCoord2d (point.tx, point.ty);
-		glVertex3d (point.x, point.y, point.z); //Must be last.
-	}
+
+	glNormal3d (0, 0, 1);
+	glTexCoord2d (0, 1);
+	glVertex3d (-0.5, 0.5, 0);
+
+	glNormal3d (0, 0, 1);
+	glTexCoord2d (0, 0);
+	glVertex3d (-0.5, -0.5, 0);
+
+	glNormal3d (0, 0, 1);
+	glTexCoord2d (1, 0);
+	glVertex3d (0.5, -0.5, 0);
+
+	glNormal3d (0, 0, 1);
+	glTexCoord2d (1, 1);
+	glVertex3d (0.5, 0.5, 0);
+	
 	glEnd ();
-	*/
-for(int i=0;i<faces.size();i++) {
-faces.at(i)->texture = picture;
-faces.at(i)->draw();
-}
+
 	glPopMatrix();
+	
 }
 
 void Sprite::import (ifstream &input, TextureCollection & textures, WaypointCollection & waypoints) {
@@ -55,7 +65,7 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 	//Input the transformation.
 	SKIP_TO_COLON; CLEAR_THE_LINE;
 
-	/*//Input the position
+	//Input the position
 	for(int i=0;i<12;i++) {
 		SKIP_TO_COMMA;
 	}
@@ -64,57 +74,8 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 	int y = atof(line);
 	SKIP_TO_COMMA;
 	int z = atof(line);
-	location = Point(x, y, z);
+	position = Point(x, y, z);
 	CLEAR_THE_LINE;
-	CLEAR_THE_LINE;*/
-
-	//Input the transformation.
-	SKIP_TO_COLON; CLEAR_THE_LINE;
-	
-	//The standard transformation matrix elements...
-	Transformation &normal = transformation.normal ();
-	SKIP_TO_COMMA; normal.m11 = atof (line);
-	SKIP_TO_COMMA; normal.m12 = atof (line);
-	SKIP_TO_COMMA; normal.m13 = atof (line);
-	SKIP_TO_COMMA; normal.m14 = atof (line);
-	
-	SKIP_TO_COMMA; normal.m21 = atof (line);
-	SKIP_TO_COMMA; normal.m22 = atof (line);
-	SKIP_TO_COMMA; normal.m23 = atof (line);
-	SKIP_TO_COMMA; normal.m24 = atof (line);
-	
-	SKIP_TO_COMMA; normal.m31 = atof (line);
-	SKIP_TO_COMMA; normal.m32 = atof (line);
-	SKIP_TO_COMMA; normal.m33 = atof (line);
-	SKIP_TO_COMMA; normal.m34 = atof (line);
-	
-	SKIP_TO_COMMA; normal.m41 = atof (line);
-	SKIP_TO_COMMA; normal.m42 = atof (line);
-	SKIP_TO_COMMA; normal.m43 = atof (line);
-	SKIP_TO_SEMICOLON; normal.m44 = atof (line);
-	CLEAR_THE_LINE;
-
-	//The inverse transformation matrix elements...
-	Transformation &inverse = transformation.inverse;
-	SKIP_TO_COMMA; inverse.m11 = atof (line);
-	SKIP_TO_COMMA; inverse.m12 = atof (line);
-	SKIP_TO_COMMA; inverse.m13 = atof (line);
-	SKIP_TO_COMMA; inverse.m14 = atof (line);
-	
-	SKIP_TO_COMMA; inverse.m21 = atof (line);
-	SKIP_TO_COMMA; inverse.m22 = atof (line);
-	SKIP_TO_COMMA; inverse.m23 = atof (line);
-	SKIP_TO_COMMA; inverse.m24 = atof (line);
-	
-	SKIP_TO_COMMA; inverse.m31 = atof (line);
-	SKIP_TO_COMMA; inverse.m32 = atof (line);
-	SKIP_TO_COMMA; inverse.m33 = atof (line);
-	SKIP_TO_COMMA; inverse.m34 = atof (line);
-	
-	SKIP_TO_COMMA; inverse.m41 = atof (line);
-	SKIP_TO_COMMA; inverse.m42 = atof (line);
-	SKIP_TO_COMMA; inverse.m43 = atof (line);
-	SKIP_TO_SEMICOLON; inverse.m44 = atof (line);
 	CLEAR_THE_LINE;
 	
 	//Input the properties
@@ -126,7 +87,7 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		convertToLowercase (key);
 		char *string = new char [strlen (value) + 1]; strcpy (string, value);
-		
+
 		//Parse properties to local variables
 		if(stricmp(key, "name") == 0) {
 			name = string;
@@ -147,6 +108,7 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 	}
 
 	//Input the faces.
+	FaceCollection faces;
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON; long facesSize = atoi (line);
 	for (long faceIndex = 0; faceIndex < facesSize; faceIndex++) {
@@ -154,6 +116,45 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 		face->import(input);
 		faces.push_back(face);
 	}
+
+	Point max, min;
+	double tx, ty;
+	for(i=0;i<faces.size();i++) {
+		for(int j=0;j<faces.at(i)->points.size();j++) {
+			GamePoint & p = *faces.at(i)->points.at(j);
+			if(i==0 && j==0) {
+				max.x = p.x; max.y = p.y; max.z = p.z;
+				min.x = p.x; min.y = p.y; min.z = p.z;
+				tx = p.tx; ty = p.tx;
+			}
+			else {
+				if(p.x > max.x) { max.x = p.x; }
+				if(p.y > max.y) { max.y = p.y; }
+				if(p.z > max.z) { max.z = p.z; }
+				if(p.x < min.x) { min.x = p.x; }
+				if(p.y < min.y) { min.y = p.y; }
+				if(p.z < min.z) { min.z = p.z; }
+			}
+		}
+	}
+
+	center.x = (max.x + min.x) / 2;
+	center.y = (max.y + min.y) / 2;
+	center.z = (max.z + min.z) / 2;
+
+	bottomCenter.x = (max.x + min.x) / 2;
+	bottomCenter.y = (max.y + min.y) / 2;
+	bottomCenter.z = min.z;
+
+	extent.x = max.x - min.x;
+	extent.y = max.y - min.y;
+	extent.z = max.z - min.z;
+	
+	if(waypoint != NULL) {
+		position = waypoint->transformation.normal().position();
+	}
+	
+	deleteFaceCollectionEntries(faces);
 }
 
 void Sprite::printOn(ostream & o) const {
