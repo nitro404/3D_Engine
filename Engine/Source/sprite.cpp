@@ -62,20 +62,15 @@ void Sprite::draw () {
 void Sprite::import (ifstream &input, TextureCollection & textures, WaypointCollection & waypoints) {
 	char line [256];
 	
-	//Input the transformation.
-	SKIP_TO_COLON; CLEAR_THE_LINE;
-
 	//Input the position
-	for(int i=0;i<12;i++) {
-		SKIP_TO_COMMA;
-	}
-	int x = atof(line);
+	double x, y, z;
+	SKIP_TO_COLON; SKIP_TO_COMMA;
+	x = atof(line);
 	SKIP_TO_COMMA;
-	int y = atof(line);
-	SKIP_TO_COMMA;
-	int z = atof(line);
+	y = atof(line);
+	SKIP_TO_SEMICOLON;
+	z = atof(line);
 	position = Point(x, y, z);
-	CLEAR_THE_LINE;
 	CLEAR_THE_LINE;
 	
 	//Input the properties
@@ -107,45 +102,40 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 		}
 	}
 
-	//Input the faces.
-	FaceCollection faces;
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long facesSize = atoi (line);
-	for (long faceIndex = 0; faceIndex < facesSize; faceIndex++) {
-		Face *face = new Face;
-		face->import(input);
-		faces.push_back(face);
-	}
-
+	//Input the bounding box
 	Point max, min;
-	double tx, ty;
-	for(i=0;i<faces.size();i++) {
-		for(int j=0;j<faces.at(i)->points.size();j++) {
-			GamePoint & p = *faces.at(i)->points.at(j);
-			if(i==0 && j==0) {
-				max.x = p.x; max.y = p.y; max.z = p.z;
-				min.x = p.x; min.y = p.y; min.z = p.z;
-				tx = p.tx; ty = p.tx;
-			}
-			else {
-				if(p.x > max.x) { max.x = p.x; }
-				if(p.y > max.y) { max.y = p.y; }
-				if(p.z > max.z) { max.z = p.z; }
-				if(p.x < min.x) { min.x = p.x; }
-				if(p.y < min.y) { min.y = p.y; }
-				if(p.z < min.z) { min.z = p.z; }
-			}
-		}
-	}
 
+	// Input the maximum
+	SKIP_TO_COLON; SKIP_TO_COMMA;
+	x = atof(line);
+	SKIP_TO_COMMA;
+	y = atof(line);
+	SKIP_TO_SEMICOLON;
+	z = atof(line);
+	max = Point(x, y, z);
+	CLEAR_THE_LINE;
+
+	// Input the minimum
+	SKIP_TO_COLON; SKIP_TO_COMMA;
+	x = atof(line);
+	SKIP_TO_COMMA;
+	y = atof(line);
+	SKIP_TO_SEMICOLON;
+	z = atof(line);
+	min = Point(x, y, z);
+	CLEAR_THE_LINE;
+	
+	// Calculate the center of the sprite
 	center.x = (max.x + min.x) / 2;
 	center.y = (max.y + min.y) / 2;
 	center.z = (max.z + min.z) / 2;
-
+	
+	// Calculate the bottom center of the sprite
 	bottomCenter.x = (max.x + min.x) / 2;
 	bottomCenter.y = (max.y + min.y) / 2;
 	bottomCenter.z = min.z;
-
+	
+	// Calculate the size of the sprite
 	extent.x = max.x - min.x;
 	extent.y = max.y - min.y;
 	extent.z = max.z - min.z;
@@ -153,8 +143,6 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 	if(waypoint != NULL) {
 		position = waypoint->transformation.normal().position();
 	}
-	
-	deleteFaceCollectionEntries(faces);
 }
 
 void Sprite::printOn(ostream & o) const {
