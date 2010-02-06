@@ -10,6 +10,7 @@ public:
 	Sprite() {
 		picture = NULL;
 		waypoint = NULL;
+		movementSpeed = 0;
 	}
 
 	~Sprite() { }
@@ -18,9 +19,6 @@ public:
 	void draw();
 
 	void import (ifstream &input, TextureCollection & textures, WaypointCollection & waypoints);
-	
-	void printOn(ostream & o) const;
-	
 private:
 	char * name;
 	Point position;
@@ -29,10 +27,9 @@ private:
 	Point extent;
 	Texture * picture;
 	Waypoint * waypoint;
+	double movementSpeed;
 };
 
 declareCollection(Sprite);
-
-ostream & operator << (ostream & o, const Sprite & x);
 
 #endif //spriteModule

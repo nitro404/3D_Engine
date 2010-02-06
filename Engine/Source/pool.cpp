@@ -14,13 +14,13 @@ void Pool::tick () {
 }
 
 void Pool::draw () {
-	glPushMatrix ();
+	glPushMatrix();
 	Transformation & normal = transformation.normal();
 	glMultMatrixd(normal);
 	for(int i=0;i<faces.size();i++) {
 		faces.at(i)->draw();
 	}
-	glPopMatrix (); 
+	glPopMatrix(); 
 }
 
 void Pool::import (ifstream &input, TextureCollection & textures) {
@@ -99,13 +99,4 @@ void Pool::import (ifstream &input, TextureCollection & textures) {
 		face->import (input, textures);
 		faces.push_back (face);
 	}
-}
-
-void Pool::printOn(ostream & o) const {
-	o << "Pool";
-}
-
-ostream & operator << (ostream & o, const Pool & x) {
-	x.printOn(o);
-	return o;
 }

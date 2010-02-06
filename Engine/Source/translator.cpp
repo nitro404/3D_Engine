@@ -162,12 +162,3 @@ void Translator::import (ifstream &input, TextureCollection & textures) {
 	origin = transformation.position();
 	currentLocation = origin;
 }
-
-void Translator::printOn(ostream & o) const {
-	o << "Translator: NAME=\"" << this->name << "\" OFFSET=\"(" << this->offset.x << ", " << this->offset.y << ", " << this->offset.z << ")\" RATE=\"" << rateInMetersPerSecond << "\"";
-}
-
-ostream & operator << (ostream & o, const Translator & x) {
-	x.printOn(o);
-	return o;
-}

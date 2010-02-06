@@ -145,11 +145,3 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 	}
 }
 
-void Sprite::printOn(ostream & o) const {
-	o << "Sprite";
-}
-
-ostream & operator << (ostream & o, const Sprite & x) {
-	x.printOn(o);
-	return o;
-}

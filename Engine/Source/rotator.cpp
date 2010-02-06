@@ -122,12 +122,3 @@ void Rotator::import (ifstream &input, TextureCollection & textures) {
 		faces.push_back (face);
 	}
 }
-
-void Rotator::printOn(ostream & o) const {
-	o << "Rotator: NAME=\"" << this->name << "\" AXIS=\"(" << this->axis.x << ", " << this->axis.y << ", " << this->axis.z << ")\" RATE=\"" << rateInDegreesPersecond << "\"";
-}
-
-ostream & operator << (ostream & o, const Rotator & x) {
-	x.printOn(o);
-	return o;
-}

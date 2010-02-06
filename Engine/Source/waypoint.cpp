@@ -110,18 +110,3 @@ void Waypoint::import (ifstream &input) {
 	}
 
 }
-
-void Waypoint::printOn(ostream & o) const {
-	o << "Waypoint " << name << ": ";
-	for(int i=0;i<neighbours.size();i++) {
-		o << neighbours.at(i)->name;
-		if(i < neighbours.size() - 1) {
-			o << ", ";
-		}
-	}
-}
-
-ostream & operator << (ostream & o, const Waypoint & x) {
-	x.printOn(o);
-	return o;
-}

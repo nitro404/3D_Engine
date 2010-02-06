@@ -25,9 +25,6 @@ public:
 	void draw();
 
 	void import (ifstream &input, TextureCollection & textures);
-	
-	void printOn(ostream & o) const;
-	
 private:
 	char * name;
 	Point origin;
@@ -40,7 +37,5 @@ private:
 };
 
 declareCollection(Translator);
-
-ostream & operator << (ostream & o, const Translator & x);
 
 #endif //translatorModule

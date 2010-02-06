@@ -105,12 +105,3 @@ void Vehicle::import (ifstream &input, TextureCollection & textures) {
 		faces.push_back (face);
 	}
 }
-
-void Vehicle::printOn(ostream & o) const {
-	o << "Vehicle: NAME=\"" << this->name << "\" STYLE=\"" << this->style << "\"";
-}
-
-ostream & operator << (ostream & o, const Vehicle & x) {
-	x.printOn(o);
-	return o;
-}

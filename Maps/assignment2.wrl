@@ -4981,7 +4981,8 @@ Object: 66;
 Object: 67;
 	"type" => "sprite"
 	Position: 3.25119996070862, 1.62559998035431, -25.1968002319336;
-	Properties: 3;
+	Properties: 4;
+		"movementspeed" => "1"
 		"name" => "sprite"
 		"picture" => "9"
 		"waypoint" => "p1"
@@ -4990,7 +4991,8 @@ Object: 67;
 Object: 68;
 	"type" => "sprite"
 	Position: 1.21920001506805, 4.06400012969971, -27.6352005004883;
-	Properties: 3;
+	Properties: 4;
+		"movementspeed" => "3"
 		"name" => "sprite2"
 		"picture" => "10"
 		"waypoint" => "p2"

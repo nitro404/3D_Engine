@@ -5312,7 +5312,8 @@ Object: 72;
 	Transformation: //m11 m12 m13 m14 m21 m22 ... m44
 		1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 3.25119996070862, 1.62559998035431, -25.1968002319336, 1; //Standard...
 		1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -3.25119996070862, -1.62559998035431, 25.1968002319336, 1; //Inverse...
-	Properties: 4;
+	Properties: 5;
+		"movementspeed" => "1"
 		"name" => "sprite"
 		"picture" => "cliff1"
 		"type" => "sprite"
@@ -5371,7 +5372,8 @@ Object: 73;
 	Transformation: //m11 m12 m13 m14 m21 m22 ... m44
 		1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1.21920001506805, 4.06400012969971, -27.6352005004883, 1; //Standard...
 		1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -1.21920001506805, -4.06400012969971, 27.6352005004883, 1; //Inverse...
-	Properties: 4;
+	Properties: 5;
+		"movementspeed" => "3"
 		"name" => "sprite2"
 		"picture" => "marble1"
 		"type" => "sprite"

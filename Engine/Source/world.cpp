@@ -8,8 +8,6 @@
 char textureDirectory [_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
 //char textureDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','T','E','X','T','U','R','E','S','\0'};
 
-bool printObjects = false;
-
 //*****************************************************************************************//
 //                                       World                                             //
 //*****************************************************************************************//
@@ -252,16 +250,6 @@ void World::import (ifstream &input) {
 		}
 		
 		delete [] type;
-	}
-	
-	// print the objects to the screen (for debugging purposes)
-	if(printObjects) {
-		for(i=0;i<waypoints.size();i++) {
-			cout << *(waypoints.at(i)) << endl;
-		}
-		for(i=0;i<objects.size();i++) {
-			cout << *(objects.at(i)) << endl;
-		}
 	}
 }
 

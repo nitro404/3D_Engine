@@ -809,6 +809,7 @@
 "targetname" "sprite"
 "picture" "cliff1"
 "waypoint" "p1"
+"movementspeed" "1"
 {
 ( 0 960 192 ) ( 0 1024 192 ) ( 256 1024 192 ) CLIFF1 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
 ( 0 1024 -64 ) ( 0 960 -64 ) ( 256 960 -64 ) CLIFF1 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
@@ -823,6 +824,7 @@
 "targetname" "sprite2"
 "picture" "marble1"
 "waypoint" "p2"
+"movementspeed" "3"
 {
 ( 0 1056 320 ) ( 0 1120 320 ) ( 96 1120 320 ) CLIFF1 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
 ( 0 1120 0 ) ( 0 1056 0 ) ( 96 1056 0 ) CLIFF1 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 

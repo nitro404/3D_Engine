@@ -6,26 +6,13 @@
 --------------------Configuration: convert - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP691.tmp" with contents
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP1D5.tmp" with contents
 [
 /nologo /MTd /Gm /GX /ZI /Od /I "XSIFTK_3.6.2\export\h\FTK" /I "XSIFTK_3.6.2\export\h\Core" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "__XSI_APPLICATION_" /FR"Debug/" /Fp"Debug/convert.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\boundingBox.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\camera.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\extensionManager.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\fileDialog.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\game.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\main.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\plane.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\points.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\propertyDictionary.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\softimageReader.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\texture.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\universalObject.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\worldcraftFGDReader.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\worldcraftReader.cpp"
 ]
-Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP691.tmp" 
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP692.tmp" with contents
+Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP1D5.tmp" 
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP1D6.tmp" with contents
 [
 "XSIFTK_3.6.2\export\lib\XSIFtkd.lib" opennurbs_vc60.lib vfw32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/convert.pdb" /debug /machine:I386 /nodefaultlib:"libc.lib" /out:"Debug/convert.exe" /pdbtype:sept 
 ".\Debug\boundingBox.obj"
@@ -45,47 +32,11 @@ Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP692.tmp" with con
 ".\Debug\worldcraftFGDReader.obj"
 ".\Debug\worldcraftReader.obj"
 ]
-Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP692.tmp"
+Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP1D6.tmp"
 <h3>Output Window</h3>
 Compiling...
-boundingBox.cpp
-Skipping... (no relevant changes detected)
-camera.cpp
-extensionManager.cpp
-fileDialog.cpp
-game.cpp
 main.cpp
-plane.cpp
-points.cpp
-propertyDictionary.cpp
-softimageReader.cpp
-texture.cpp
-universalObject.cpp
-worldcraftFGDReader.cpp
-worldcraftReader.cpp
 Linking...
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP694.tmp" with contents
-[
-/nologo /o"Debug/convert.bsc" 
-".\Debug\boundingBox.sbr"
-".\Debug\camera.sbr"
-".\Debug\extensionManager.sbr"
-".\Debug\fileDialog.sbr"
-".\Debug\game.sbr"
-".\Debug\logging.sbr"
-".\Debug\main.sbr"
-".\Debug\plane.sbr"
-".\Debug\points.sbr"
-".\Debug\propertyDictionary.sbr"
-".\Debug\rhinoReader.sbr"
-".\Debug\softimageReader.sbr"
-".\Debug\texture.sbr"
-".\Debug\universalObject.sbr"
-".\Debug\worldcraftFGDReader.sbr"
-".\Debug\worldcraftReader.sbr"]
-Creating command line "bscmake.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP694.tmp"
-Creating browse info file...
-<h3>Output Window</h3>
 
 
 

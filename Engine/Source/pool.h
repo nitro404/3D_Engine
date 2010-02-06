@@ -23,15 +23,10 @@ public:
 	void draw();
 
 	void import (ifstream &input, TextureCollection & textures);
-	
-	void printOn(ostream & o) const;
-	
 private:
 	char * name;
 };
 
 declareCollection(Pool);
-
-ostream & operator << (ostream & o, const Pool & x);
 
 #endif //poolModule

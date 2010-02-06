@@ -23,9 +23,6 @@ public:
 	void draw();
 
 	void import (ifstream &input, TextureCollection & textures);
-	
-	void printOn(ostream & o) const;
-	
 private:
 	char * name;
 	Point axis;
@@ -34,7 +31,5 @@ private:
 };
 
 declareCollection(Rotator);
-
-ostream & operator << (ostream & o, const Rotator & x);
 
 #endif //rotatorModule

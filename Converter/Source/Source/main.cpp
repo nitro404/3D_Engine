@@ -249,7 +249,7 @@ void idle () {
 	computeDT ();
 	game->tick ();
 	//::log ("\nSet mouse to %d@%d", screenWidth >> 1, screenHeight >> 1); 
-	SetCursorPos (screenWidth >> 1, screenHeight >> 1); 
+	//SetCursorPos (screenWidth >> 1, screenHeight >> 1); 
 	glutPostRedisplay ();
 }
 
@@ -628,7 +628,7 @@ int main (int parametersSize, char **parameters) {
 	glutInit (&parametersSize, parameters);
 	if (fullscreen) /*glutEnterGameMode ()*/; else {glutCreateWindow ("Universal 3D file converter"); createMenus ();}
     glutIgnoreKeyRepeat (GLUT_KEY_REPEAT_ON);
-    glutSetCursor (GLUT_CURSOR_NONE);
+    //glutSetCursor (GLUT_CURSOR_NONE);
 
 	//Specify function handlers.
 	glutDisplayFunc (displayWindow); glutReshapeFunc (resizeWindow); glutKeyboardFunc (normalKeyPressed);

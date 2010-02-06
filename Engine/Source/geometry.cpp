@@ -15,13 +15,13 @@ void Geometry::tick () {
 
 void Geometry::draw () {
 	//Draw the faces in this object.
-	glPushMatrix ();
+	glPushMatrix();
 	Transformation & normal = transformation.normal();
 	glMultMatrixd(normal);
 	for(int i=0;i<faces.size();i++) {
 		faces.at(i)->draw();
 	}
-	glPopMatrix (); 
+	glPopMatrix(); 
 }
 
 void Geometry::import (ifstream &input, TextureCollection & textures) {
@@ -84,13 +84,4 @@ void Geometry::import (ifstream &input, TextureCollection & textures) {
 		face->import (input, textures);
 		faces.push_back (face);
 	}
-}
-
-void Geometry::printOn(ostream & o) const {
-	o << "Geometry";
-}
-
-ostream & operator << (ostream & o, const Geometry & x) {
-	x.printOn(o);
-	return o;
 }

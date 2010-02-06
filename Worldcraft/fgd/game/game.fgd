@@ -8,7 +8,7 @@
 
 //------------------------------- Student Additions ---------------------------
 
-// Sample object entity
+// Vehicle
 @SolidClass = Vehicle [
     targetname(string) : "Name"
     style (choices) : "Style" : 0 =
@@ -19,7 +19,7 @@
     ]
 ]
 
-// Sample point entity
+// Environment
 @PointClass = Environment [
     ambientlight(color255) : "Ambient Light" : "230 230 230"
     surrounds(choices) : "Surroundings" : 0 =
@@ -57,6 +57,7 @@
     targetname(string) : "Name"
     picture(string) : "Picture"
     waypoint(string) : "Waypoint"
+    movementspeed(string) : "Speed" : "0"
 ]
 
 // Waypoint
