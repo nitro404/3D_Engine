@@ -133,7 +133,7 @@ public class UniversalObject {
 	public void writeTo(PrintWriter out) throws Exception {
 		// output the object type based on which subclass of UniversalObject it is
 			 if(this instanceof Geometry)	{ out.println("\t\"type\" => \"static geometry\""); }
-//		else if(this instanceof Environment){ out.println("\t\"type\" => \"environment\""); }
+		else if(this instanceof Environment){ out.println("\t\"type\" => \"environment\""); }
 		else if(this instanceof Vehicle)	{ out.println("\t\"type\" => \"vehicle\""); }
 		else if(this instanceof Rotator)	{ out.println("\t\"type\" => \"rotator\""); }
 		else if(this instanceof Translator)	{ out.println("\t\"type\" => \"translator\""); }

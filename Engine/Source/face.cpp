@@ -36,6 +36,27 @@ void Face::draw () {
 	glEnd ();
 }
 
+void Face::draw (double red, double green, double blue, double alpha) {
+	//Activate the texture to be drawn.
+	texture->activate();
+	
+	//Setup one polygon to be drawn and draw it.
+	glDisable(GL_CULL_FACE);
+	glBegin(GL_POLYGON);
+	glColor4d(red, green, blue, alpha);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
+	for (long pointIndex = 0; pointIndex < points.size(); pointIndex++) {
+		GamePoint &point = *points.at(pointIndex);
+		glTexCoord2d (point.tx, point.ty);
+		glVertex3d (point.x, point.y, point.z); //Must be last.
+	}
+	glColor4d(1, 1, 1, 1);
+	glDisable(GL_BLEND);
+	glEnd();
+	glEnable(GL_CULL_FACE);
+}
+
 void Face::import (ifstream &input, TextureCollection & textures) {
 	char line [256]; //Working variable...
 

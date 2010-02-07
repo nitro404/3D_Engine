@@ -6,7 +6,25 @@ ENGINE
  + optimize text drawing
  + crashes when you try to load a second map
  + implement menu
- + trim whitespace on sprite waypoint pointer name
+ + combine sprites and objects?
+ + WATER ANIMATION
+   - builder takes base texture name, and automatically finds all other textures
+   - AnimatedTexture class
+   - tick texture
+   - how about having the base texture name, and the number of textures as a property
+ + WAYPOINTS
+   - trim whitespace on sprite waypoint pointer name (in builder)
+   - move waypoint pointer trimming to builder as well
+ + TRANSPARENCY
+   - revise draw order based on distance from camera
+   - loop through, calculate distances, then run a qsort
+
+int compareDistance(const void * x, const void * y) {
+	return *((int *) x) - *((int *) y);
+}
+
+qsort(students, numberOfStudents, sizeof(student), compareStudentName);
 
 BUILDER 2.0
+ + optimize builder for pre-calculating waypoint indexes
  + Implement Worldcraft *.map reading

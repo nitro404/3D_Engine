@@ -17,6 +17,7 @@ void World::setup () {
 }
 
 void World::wrapup () {
+
 }
 
 void World::tick () {
@@ -221,8 +222,9 @@ void World::import (ifstream &input) {
 			geometry->import(input, textures);
 			objects.push_back(geometry);
 		}
-//		else if (stricmp (type, "environment") == 0) {
-//		}
+		else if (stricmp (type, "environment") == 0) {
+
+		}
 		else if (stricmp (type, "vehicle") == 0) {
 			Vehicle * vehicle = new Vehicle;
 			vehicle->import(input, textures);

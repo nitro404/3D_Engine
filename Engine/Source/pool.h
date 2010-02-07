@@ -25,6 +25,10 @@ public:
 	void import (ifstream &input, TextureCollection & textures);
 private:
 	char * name;
+	double red;
+	double green;
+	double blue;
+	double alpha;
 };
 
 declareCollection(Pool);

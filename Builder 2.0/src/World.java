@@ -104,9 +104,9 @@ public class World implements Map3D {
 				else if(type.equalsIgnoreCase("static geometry")) {
 					objects.add(new Geometry(object, textureIndex));
 				}
-//				else if(type.equalsIgnoreCase("environment")) {
-//					objects.add(object);
-//				}
+				else if(type.equalsIgnoreCase("environment")) {
+					objects.add(new Environment(object));
+				}
 				else if(type.equalsIgnoreCase("vehicle")) {
 					objects.add(new Vehicle(object, textureIndex));
 				}

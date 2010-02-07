@@ -31,6 +31,7 @@ public:
 
 	void tick();
 	void draw();
+	void draw (double red, double green, double blue, double alpha);
 	void import(ifstream &input, TextureCollection & textures);
 	void import(ifstream &input);
 };
