@@ -39,7 +39,9 @@ public:
 	inline Vector operator - (const Vector &p) const {return Vector (x-p.x, y-p.y, z-p.z);}
     inline void operator -= (const Vector &p) {x-=p.x; y-=p.y; z-=p.z;}
     inline void operator -= (const double &d) {x-=d; y-=d; z-=d;}
-	inline Vector operator - () const {return Point (-x, -y, -z);}; //unary
+	inline Vector operator - () const {return Point (-x, -y, -z);} //unary
+	inline bool operator == (const Vector &p) { return x == p.x && y == p.y && z == p.z; }
+	inline bool operator != (const Vector &p) { return *this != p; }
 	inline double squaredLength () {return x*x + y*y + z*z;}
 	inline double length () {return sqrt (squaredLength ());}
 	inline double dot (Vector &p) {return x*p.x + y*p.y + z*p.z;}

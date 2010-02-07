@@ -11,9 +11,7 @@ public:
 	FaceCollection faces;
 
 	Translator() {
-		forwardDirectionX = true;
-		forwardDirectionY = true;
-		forwardDirectionZ = true;
+		forward = true;
 	}
 
 	~Translator() {
@@ -28,12 +26,14 @@ public:
 private:
 	char * name;
 	Point origin;
-	Point currentLocation;
+	Point position;
 	Point offset;
+	Point destination;
+	Vector unitVector;
 	double rateInMetersPerSecond;
-	bool forwardDirectionX;
-	bool forwardDirectionY;
-	bool forwardDirectionZ;
+	bool forward;
+	double distanceTravelled;
+	double distanceToTravel;
 };
 
 declareCollection(Translator);

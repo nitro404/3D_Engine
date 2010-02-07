@@ -9,10 +9,23 @@
 //                                       Sprite                                            //
 //*****************************************************************************************//
 
-
+void Sprite::switchDestinations() {
+	position = destination->getPosition();
+	lastWaypoint = destination;
+	destination = lastWaypoint->getRandomNeighbour();
+	distanceToTravel = sqrt(pow(destination->getPosition().x - lastWaypoint->getPosition().x, 2) + pow(destination->getPosition().y - lastWaypoint->getPosition().y, 2) + pow(destination->getPosition().z - lastWaypoint->getPosition().z, 2));
+	unitVector = Vector((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
+	distanceTravelled = 0;
+}
 
 void Sprite::tick () {
-
+	if(origin != NULL) {
+		position += unitVector * (movementSpeed * DT);
+		distanceTravelled = sqrt(pow(position.x - lastWaypoint->getPosition().x, 2) + pow(position.y - lastWaypoint->getPosition().y, 2) + pow(position.z - lastWaypoint->getPosition().z, 2));
+		if(distanceTravelled >= distanceToTravel) {
+			switchDestinations();
+		}
+	}
 }
 
 void Sprite::draw () {
@@ -56,7 +69,6 @@ void Sprite::draw () {
 	glEnd ();
 
 	glPopMatrix();
-	
 }
 
 void Sprite::import (ifstream &input, TextureCollection & textures, WaypointCollection & waypoints) {
@@ -94,10 +106,14 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 		else if(stricmp(key, "waypoint") == 0) {
 			for(int i=0;i<waypoints.size();i++) {
 				if(stricmp(waypoints.at(i)->name, string) == 0) {
-					waypoint = waypoints.at(i);
+					origin = waypoints.at(i);
 					break;
 				}
 			}
+			delete [] string;
+		}
+		else if(stricmp(key, "movementSpeed") == 0) {
+			movementSpeed = atoi(string);
 			delete [] string;
 		}
 	}
@@ -140,8 +156,13 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 	extent.y = max.y - min.y;
 	extent.z = max.z - min.z;
 	
-	if(waypoint != NULL) {
-		position = waypoint->transformation.normal().position();
+	if(origin != NULL) {
+		lastWaypoint = origin;
+		position = origin->getPosition();
+		destination = lastWaypoint->getRandomNeighbour();
+		distanceToTravel = sqrt(pow(destination->getPosition().x - lastWaypoint->getPosition().x, 2) + pow(destination->getPosition().y - lastWaypoint->getPosition().y, 2) + pow(destination->getPosition().z - lastWaypoint->getPosition().z, 2));
+		unitVector = Vector((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
+		distanceTravelled = 0;
 	}
 }
 

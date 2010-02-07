@@ -8,6 +8,7 @@
 class Waypoint : public Object {
 public:
 	DualTransformation transformation;
+	Point position;
 
 	Waypoint() { }
 
@@ -21,6 +22,7 @@ public:
 	
 	void addNeighbour(Waypoint * w);
 	Waypoint * getRandomNeighbour();
+	Point & getPosition();
 	
 	void tick();
 	void draw();

@@ -30,6 +30,10 @@ Waypoint * Waypoint::getRandomNeighbour() {
 	return this->neighbours.at((rand() % this->neighbours.size()));
 }
 
+Point & Waypoint::getPosition() {
+	return position;
+}
+
 void Waypoint::tick () {
 
 }
@@ -108,5 +112,6 @@ void Waypoint::import (ifstream &input) {
 			neighbourValues = string;
 		}
 	}
-
+	
+	this->position = this->transformation.normal().position();
 }

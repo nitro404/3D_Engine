@@ -57,7 +57,7 @@
     targetname(string) : "Name"
     picture(string) : "Picture"
     waypoint(string) : "Waypoint"
-    movementspeed(string) : "Speed" : "0"
+    movementSpeed(string) : "Speed" : "0"
 ]
 
 // Waypoint

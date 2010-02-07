@@ -10,46 +10,16 @@
 //*****************************************************************************************//
 
 void Translator::tick () {
-	//This could make an object rotate or change size or do nothing.
-	if(offset.x != 0) {
-		if(forwardDirectionX) { currentLocation.x += rateInMetersPerSecond * DT; }
-		else				  { currentLocation.x -= rateInMetersPerSecond * DT; }
+	if(forward) {
+		position += unitVector * (rateInMetersPerSecond * DT);
+		distanceTravelled = sqrt(pow(position.x - origin.x, 2) + pow(position.y - origin.y, 2) + pow(position.z - origin.z, 2));
 	}
-	if(offset.y != 0) {
-		if(forwardDirectionY) { currentLocation.y += rateInMetersPerSecond * DT; }
-		else				  { currentLocation.y -= rateInMetersPerSecond * DT; }
+	else {
+		position -= unitVector * (rateInMetersPerSecond * DT);
+		distanceTravelled = sqrt(pow(destination.x - position.x, 2) + pow(destination.y - position.y, 2) + pow(destination.z - position.z, 2));
 	}
-	if(offset.z != 0) {
-		if(forwardDirectionZ) { currentLocation.z += rateInMetersPerSecond * DT; }
-		else				  { currentLocation.z -= rateInMetersPerSecond * DT; }
-	}
-	
-	//Reverse
-	if(currentLocation.x > origin.x + offset.x) {
-		currentLocation.x = origin.x + offset.x;
-		forwardDirectionX = false;
-	}
-	if(currentLocation.y > origin.y + offset.y) {
-		currentLocation.y = origin.y + offset.y;
-		forwardDirectionY = false;
-	}
-	if(currentLocation.z > origin.z + offset.z) {
-		currentLocation.z = origin.z + offset.z;
-		forwardDirectionZ = false;
-	}
-	
-	//Forwards
-	if(currentLocation.x < origin.x) {
-		currentLocation.x = origin.x;
-		forwardDirectionX = true;
-	}
-	if(currentLocation.y < origin.y) {
-		currentLocation.y = origin.y;
-		forwardDirectionY = true;
-	}
-	if(currentLocation.z < origin.z) {
-		currentLocation.z = origin.z;
-		forwardDirectionZ = true;
+	if(distanceTravelled >= distanceToTravel) {
+		forward = !forward;
 	}
 }
 
@@ -57,7 +27,7 @@ void Translator::draw () {
 	//Draw the faces in this object.
 	Point p = transformation.position();
 	glPushMatrix();
-	glTranslated(currentLocation.x, currentLocation.y, currentLocation.z);
+	glTranslated(position.x, position.y, position.z);
 	for(int i=0;i<faces.size();i++) {
 		faces.at(i)->draw();
 	}
@@ -160,5 +130,9 @@ void Translator::import (ifstream &input, TextureCollection & textures) {
 	}
 
 	origin = transformation.position();
-	currentLocation = origin;
+	position = origin;
+	destination = origin + offset;
+	distanceToTravel = sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2) + pow(destination.z - origin.z, 2));
+	unitVector = Vector((destination.x - origin.x) / distanceToTravel, (destination.y - origin.y) / distanceToTravel, (destination.z - origin.z) / distanceToTravel);
+	distanceTravelled = 0;
 }
