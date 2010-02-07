@@ -1,6 +1,6 @@
 World
 Start position: 0.0, 0.0, 0.0;
-Textures: 11;
+Textures: 12;
 	WOOD1
 	BRICK3
 	BRICK71_7
@@ -10,8 +10,9 @@ Textures: 11;
 	OCEAN_V2
 	WALL1
 	METAL1
-	cliff1
-	marble1
+	grate2
+	grate1
+	tree
 Waypoints: 4;
 Waypoint: 0;
 	Transformation:
@@ -41,7 +42,7 @@ Waypoint: 3;
 	Properties: 2;
 		"name" => "p4"
 		"neighbours" => "p2"
-Objects: 69;
+Objects: 70;
 Object: 0;
 	"type" => "static geometry"
 	Transformation:
@@ -4998,3 +4999,13 @@ Object: 68;
 		"waypoint" => "p2"
 	Maximum: 1.21932190493195, 4.06440627030029, 0.812881780488286;
 	Minimum: -1.21932193506805, -4.06440652969971, -0.812880779511719;
+Object: 69;
+	"type" => "sprite"
+	Position: 2.43840003013611, 2.43840003013611, -30.073600769043;
+	Properties: 4;
+		"movementspeed" => "0.5"
+		"name" => "tree"
+		"picture" => "11"
+		"waypoint" => "p4"
+	Maximum: 4.06440636986389, 4.06440636986389, 0.812882049042972;
+	Minimum: -4.06440643013611, -4.06440643013611, -0.812880510957033;
