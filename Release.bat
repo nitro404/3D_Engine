@@ -4,6 +4,7 @@ CLS
 SET RELEASE=Game
 SET BUILDER=Compiled
 
+IF NOT EXIST "Builder 2.0/bin" MKDIR "Builder 2.0/bin"
 IF NOT EXIST "Builder 2.0/bin/Builder.class" 		SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Converter.class" 		SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Face.class" 		SET BUILDER=Not Compiled
