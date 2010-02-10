@@ -1,0 +1,82 @@
+bool insideOf(Point & p) const;
+double maxX, maxY, maxZ;
+double minX, minY, minZ;
+
+bool Pool::insideOf(Point & p) const {
+	return p.x >= minX && p.x <= maxX &&
+		   p.y >= minY && p.y <= maxY &&
+		   p.z >= minZ && p.z <= maxZ;
+}
+
+
+	GamePoint * p;
+	
+	for(int i=0;i<faces.size();i++) {
+		for(int j=0;j<faces.at(i)->points.size();j++) {
+			p = faces.at(i)->points.at(j);
+			if(i==0 && j==0) {
+				maxX = p->x; minX = p->x;
+				maxY = p->y; minY = p->y;
+				maxZ = p->z; minZ = p->z;
+			}
+			else {
+				if(p->x > maxX) { maxX = p->x; }
+				if(p->y > maxY) { maxY = p->y; }
+				if(p->z > maxZ) { maxZ = p->z; }
+				if(p->x < minX) { minX = p->x; }
+				if(p->y < minY) { minY = p->y; }
+				if(p->z < minZ) { minZ = p->z; }
+			}
+		}
+	}
+	printf("max: (%f, %f, %f)\n", maxX, maxY, maxZ);
+	printf("min: (%f, %f, %f)\n", minX, minY, minZ);
+
+
+// left side
+			glBegin(GL_POLYGON);
+			drawPoint(-0.5,0.5, 0.5, 1-width, width);
+			drawPoint(-0.5,0.5, -0.5, width, width);
+			drawPoint(-0.5,-0.5, -0.5, width, 1-width);
+			drawPoint(-0.5,-0.5, 0.5, 1-width, 1-width);
+			glEnd();
+			
+			// right side
+			glBegin(GL_POLYGON);
+			drawPoint(0.5,0.5, -0.5, 1-width, width);
+			drawPoint(0.5,0.5, 0.5, width, width);
+			drawPoint(0.5,-0.5, 0.5, width, 1-width);
+			drawPoint(0.5,-0.5, -0.5, 1-width, 1-width);
+			glEnd();
+
+			// front side
+			glBegin(GL_POLYGON);
+			drawPoint(-0.5,0.5, -0.5, 1-width, width);
+			drawPoint(0.5,0.5, -0.5, width, width);
+			drawPoint(0.5,-0.5, -0.5, width, 1-width);
+			drawPoint(-0.5,-0.5, -0.5, 1-width, 1-width);
+			glEnd();
+
+			// back side
+			glBegin(GL_POLYGON);
+			drawPoint(0.5,0.5, 0.5, 1-width, width);
+			drawPoint(-0.5,0.5, 0.5, width, width);
+			drawPoint(-0.5,-0.5, 0.5, width, 1-width);
+			drawPoint(0.5,-0.5, 0.5, 1-width, 1-width);
+			glEnd();
+
+			// top side
+			glBegin(GL_POLYGON);
+			drawPoint(-0.5,0.5, 0.5, 1-width, width);
+			drawPoint(0.5,0.5, 0.5, width, width);
+			drawPoint(0.5,0.5, -0.5, width, 1-width);
+			drawPoint(-0.5,0.5, -0.5, 1-width, 1-width);
+			glEnd();
+
+			// bottom side
+			glBegin(GL_POLYGON);
+			drawPoint(-0.5,-0.5, -0.5, 1-width, width);
+			drawPoint(0.5,-0.5, -0.5, width, width);
+			drawPoint(0.5,-0.5, 0.5, width, 1-width);
+			drawPoint(-0.5,-0.5, 0.5, 1-width, 1-width);
+			glEnd();

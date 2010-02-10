@@ -39,6 +39,7 @@ ENGINE
    - implement colour object
    - divide by 255 for proper colour
    - temporarily deleting skybox textures in environment destructor
+   - skybox SRT
 
 BUILDER 2.0
  + optimize builder for pre-calculating waypoint indexes

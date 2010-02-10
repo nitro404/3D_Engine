@@ -174,9 +174,6 @@ void normalKeyPressed (unsigned char character, int x, int y) {
 
 void normalKeyReleased (unsigned char character, int x, int y) {
 	switch (character) {
-		case escapeCharacter:
-			Game::wrapup (); exit (0);
-
 		case 'w':
 		case 'W':
 			inputManager->translateAhead = false;
