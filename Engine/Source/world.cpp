@@ -12,6 +12,8 @@ char textureDirectory [_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
 //                                       World                                             //
 //*****************************************************************************************//
 
+Point World::playerPosition = Point(0, 0, 0);
+
 void World::setup () {
 	
 }
@@ -21,20 +23,119 @@ void World::wrapup () {
 }
 
 void World::tick () {
+	Transformation cameraMatrix;
+	glGetMatrixd(cameraMatrix);
+	playerPosition = cameraMatrix.position() * player->playerMatrix;
+	
+	underWater = checkUnderWater();
+	
+	if(skybox != NULL) {
+		skybox->tick();
+	}
 	for(int i=0;i<objects.size();i++) {
 		objects.at(i)->tick();
+	}
+	for(i=0;i<water.size();i++) {
+		water.at(i)->tick();
 	}
 	for(i=0;i<sprites.size();i++) {
 		sprites.at(i)->tick();
 	}
 }
 
-void World::draw () {
+bool World::compareDistance(const Object & x, const Object & y) {
+	return x.distanceFrom(playerPosition) < y.distanceFrom(playerPosition);
+}
+
+void World::sortObjects() {
+	Object * temp;
 	for(int i=0;i<objects.size();i++) {
-		objects.at(i)->draw();
+		for(int j=i;j<objects.size();j++) {
+			if(compareDistance(*sortedObjects[i], *sortedObjects[j])) {
+				temp = sortedObjects[i];
+				sortedObjects[i] = sortedObjects[j];
+				sortedObjects[j] = temp;
+			}
+		}
 	}
-	for(i=0;i<sprites.size();i++) {
-		sprites.at(i)->draw();
+}
+
+void World::sortWater() {
+	Pool * temp;
+	for(int i=0;i<water.size();i++) {
+		for(int j=i;j<water.size();j++) {
+			if(compareDistance(*sortedWater[i], *sortedWater[j])) {
+				temp = sortedWater[i];
+				sortedWater[i] = sortedWater[j];
+				sortedWater[j] = temp;
+			}
+		}
+	}
+}
+
+void World::sortSprites() {
+	Sprite * temp;
+	for(int i=0;i<sprites.size();i++) {
+		for(int j=i;j<sprites.size();j++) {
+			if(compareDistance(*sortedSprites[i], *sortedSprites[j])) {
+				temp = sortedSprites[i];
+				sortedSprites[i] = sortedSprites[j];
+				sortedSprites[j] = temp;
+			}
+		}
+	}
+}
+
+bool World::checkUnderWater() const {
+	for(int i=0;i<water.size();i++) {
+		if(water.at(i)->insideOf(playerPosition)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void World::draw () {
+	sortObjects();
+	sortWater();
+	sortSprites();
+	
+	if(skybox != NULL) {
+		skybox->draw();
+	}
+	for(int i=0;i<objects.size();i++) {
+		sortedObjects[i]->draw();
+	}
+	for(i=0;i<water.size();i++) {
+		if(!underWater) {
+			for(int j=0;j<sprites.size();j++) {
+				if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
+					sortedSprites[j]->draw();
+				}
+			}
+		}
+		else {
+			for(int j=0;j<sprites.size();j++) {
+				if(!sortedWater[i]->insideOf(sortedSprites[j]->position)) {
+					sortedSprites[j]->draw();
+				}
+			}
+		}
+		sortedWater[i]->draw();
+		if(underWater) {
+			for(int j=0;j<sprites.size();j++) {
+				if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
+					sortedSprites[j]->draw();
+				}
+			}
+		}
+		else {
+			for(int j=0;j<sprites.size();j++) {
+				if(!sortedWater[i]->insideOf(sortedSprites[j]->position)) {
+					sortedSprites[j]->draw();
+				}
+			}
+		}
 	}
 }
 
@@ -223,7 +324,8 @@ void World::import (ifstream &input) {
 			objects.push_back(geometry);
 		}
 		else if (stricmp (type, "environment") == 0) {
-
+			skybox = new Environment;
+			skybox->import(input, textures);
 		}
 		else if (stricmp (type, "vehicle") == 0) {
 			Vehicle * vehicle = new Vehicle;
@@ -243,15 +345,27 @@ void World::import (ifstream &input) {
 		else if (stricmp (type, "sprite") == 0) {
 			Sprite * sprite = new Sprite;
 			sprite->import(input, textures, waypoints);
-			objects.push_back(sprite);
+			sprites.push_back(sprite);
 		}
 		else if (stricmp (type, "pool") == 0) {
 			Pool * pool = new Pool;
 			pool->import(input, textures);
-			objects.push_back(pool);
+			water.push_back(pool);
 		}
 		
 		delete [] type;
+	}
+	sortedObjects = new Object*[objects.size()];
+	for(i=0;i<objects.size();i++) {
+		sortedObjects[i] = objects.at(i);
+	}
+	sortedWater = new Pool*[water.size()];
+	for(i=0;i<water.size();i++) {
+		sortedWater[i] = water.at(i);
+	}
+	sortedSprites = new Sprite*[sprites.size()];
+	for(i=0;i<sprites.size();i++) {
+		sortedSprites[i] = sprites.at(i);
 	}
 }
 

@@ -143,16 +143,18 @@ public class UniversalObject {
 		else   								{ System.out.println("WARNING: Ignoring unexpected object of type \"" + this.getPropertyValue("type") + "\"."); }
 		
 		// output the transformations
-//		out.println("\tTransformation: //m11 m12 m13 m14 m21 m22 ... m44");
-		out.println("\tTransformation:");
-		out.print("\t\t");
-		this.normal.writeTo(out);
-//		out.println("; //Standard...");
-		out.println(";");
-		out.print("\t\t");
-		this.inverse.writeTo(out);
-//		out.println("; //Inverse...");
-		out.println(";");
+		if(this.normal != null && this.inverse != null) {
+//			out.println("\tTransformation: //m11 m12 m13 m14 m21 m22 ... m44");
+			out.println("\tTransformation:");
+			out.print("\t\t");
+			this.normal.writeTo(out);
+//			out.println("; //Standard...");
+			out.println(";");
+			out.print("\t\t");
+			this.inverse.writeTo(out);
+//			out.println("; //Inverse...");
+			out.println(";");
+		}
 		
 		// output the properties
 		if(this.properties != null) {

@@ -18,7 +18,7 @@ public:
 	//A face owns it's points and therefore deletes them on its own.
 	//It does not own it's texture because other faces will refer to the same texture...
 	//The world should own the texture...
-	Texture *texture;
+	Texture * texture;
 	GamePointCollection points;
 
 	Face () {
@@ -29,13 +29,12 @@ public:
 		deleteGamePointCollectionEntries (points);
 	}
 
-	void tick();
-	void draw();
-	void draw (double red, double green, double blue, double alpha);
-	void import(ifstream &input, TextureCollection & textures);
-	void import(ifstream &input);
+	virtual void tick();
+	virtual void draw();
+	virtual void draw (double red, double green, double blue, double alpha);
+	virtual void import(ifstream &input, TextureCollection & textures);
+	virtual void import(ifstream &input);
 };
-
 
 declareCollection (Face);
 

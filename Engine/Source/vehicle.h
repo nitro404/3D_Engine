@@ -17,6 +17,8 @@ public:
 		deleteFaceCollectionEntries(faces);
 	}
 
+	double distanceFrom(Point & p) const;
+
 	void tick();
 	void draw();
 

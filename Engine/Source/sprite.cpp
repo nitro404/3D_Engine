@@ -9,6 +9,10 @@
 //                                       Sprite                                            //
 //*****************************************************************************************//
 
+double Sprite::distanceFrom(Point & p) const {
+	return sqrt( pow(p.x - position.x, 2) + pow(p.y - position.y, 2) + pow(p.z - position.z, 2) );
+}
+
 void Sprite::switchDestinations() {
 	position = destination->getPosition();
 	lastWaypoint = destination;
@@ -93,28 +97,28 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 		char key [256]; char value [256]; value [0] = '\0';
 		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		convertToLowercase (key);
-		char *string = new char [strlen (value) + 1]; strcpy (string, value);
+		char *str = new char [strlen (value) + 1]; strcpy (str, value);
 
 		//Parse properties to local variables
 		if(stricmp(key, "name") == 0) {
-			name = string;
+			name = str;
 		}
 		else if(stricmp(key, "picture") == 0) {
-			picture = textures.at(atoi(string));
-			delete [] string;
+			picture = textures.at(atoi(str));
+			delete [] str;
 		}
 		else if(stricmp(key, "waypoint") == 0) {
 			for(int i=0;i<waypoints.size();i++) {
-				if(stricmp(waypoints.at(i)->name, string) == 0) {
+				if(stricmp(waypoints.at(i)->name, str) == 0) {
 					origin = waypoints.at(i);
 					break;
 				}
 			}
-			delete [] string;
+			delete [] str;
 		}
 		else if(stricmp(key, "movementSpeed") == 0) {
-			movementSpeed = atoi(string);
-			delete [] string;
+			movementSpeed = atoi(str);
+			delete [] str;
 		}
 	}
 

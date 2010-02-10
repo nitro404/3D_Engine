@@ -7,6 +7,9 @@
 
 class Sprite : public Object {
 public:
+	Point position;
+	Texture * picture;
+
 	Sprite() {
 		picture = NULL;
 		origin = NULL;
@@ -16,6 +19,8 @@ public:
 	}
 	
 	~Sprite() { }
+
+	double distanceFrom(Point & p) const;
 	
 	void tick();
 	void draw();
@@ -23,13 +28,10 @@ public:
 	void import (ifstream &input, TextureCollection & textures, WaypointCollection & waypoints);
 private:
 	void switchDestinations();
-	
 	char * name;
-	Point position;
 	Point center;
 	Point bottomCenter;
 	Point extent;
-	Texture * picture;
 	Waypoint * origin;
 	Waypoint * lastWaypoint;
 	Waypoint * destination;

@@ -9,6 +9,10 @@
 //                                       Vehicle                                           //
 //*****************************************************************************************//
 
+double Vehicle::distanceFrom(Point & p) const {
+	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
+}
+
 void Vehicle::tick () {
 	
 }
@@ -85,14 +89,15 @@ void Vehicle::import (ifstream &input, TextureCollection & textures) {
 		char key [256]; char value [256]; value [0] = '\0';
 		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		convertToLowercase (key);
-		char *string = new char [strlen (value) + 1]; strcpy (string, value);
+		char *str = new char [strlen (value) + 1]; strcpy (str, value);
 
 		//Parse properties to local variables
 		if(stricmp(key, "name") == 0) {
-			name = string;
+			name = str;
 		}
 		else if(stricmp(key, "style") == 0) {
-			style = atoi(string);
+			style = atoi(str);
+			delete [] str;
 		}
 	}
 	

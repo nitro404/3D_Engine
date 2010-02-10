@@ -1,12 +1,14 @@
 ENGINE
- + add fullscreen option (main.cpp)
-   - if (fullscreen) /*glutEnterGameMode ()*/; else {glutCreateWindow ("game engine"); createMenus ();}
- + create config files w/ controls
- + implement console
- + optimize text drawing
- + crashes when you try to load a second map
- + implement menu
- + combine sprites and objects?
+ + MAIN
+   - add fullscreen option (main.cpp)
+     - if (fullscreen) /*glutEnterGameMode ()*/; else {glutCreateWindow ("game engine"); createMenus ();}
+   - create config files w/ controls
+   - implement console
+   - optimize text drawing
+   - crashes when you try to load a second map
+   - implement menu
+ + WORLD
+   - use readUnknownTexture instead to load all textures
  + WATER ANIMATION
    - builder takes base texture name, and automatically finds all other textures
    - AnimatedTexture class
@@ -16,14 +18,27 @@ ENGINE
    - trim whitespace on sprite waypoint pointer name (in builder)
    - move waypoint pointer trimming to builder as well
  + TRANSPARENCY
-   - revise draw order based on distance from camera
-   - loop through, calculate distances, then run a qsort
-
-int compareDistance(const void * x, const void * y) {
-	return *((int *) x) - *((int *) y);
-}
-
-qsort(students, numberOfStudents, sizeof(student), compareStudentName);
+   - fix draw order based on transluscent geometry
+ + ANIMATED FACES
+   - make separate list of textures / animated textures with attributes, then read that list when map loads (read from builder too)
+   - make animated textures dynamic
+   - fix pool to not import 6 different animated textures plz
+   - being temp deleted in animated face deconstructor
+   - animate based on DT
+ + POOL
+   - temporarily added insideOf() for proper draw order
+   - implement drawBack() function for face
+   - add tinting transluscent sprite using ray method if inside water
+ + DRAW ORDER
+   - implement ray function
+ + SKYBOX
+   - 1/(W-1) for pixel offset
+ + GEOMETRY
+   - add transparency option
+ + ENVIRONMENT
+   - implement colour object
+   - divide by 255 for proper colour
+   - temporarily deleting skybox textures in environment destructor
 
 BUILDER 2.0
  + optimize builder for pre-calculating waypoint indexes

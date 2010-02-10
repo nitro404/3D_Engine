@@ -9,6 +9,10 @@
 //                                       Translator                                        //
 //*****************************************************************************************//
 
+double Translator::distanceFrom(Point & p) const {
+	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
+}
+
 void Translator::tick () {
 	if(forward) {
 		position += unitVector * (rateInMetersPerSecond * DT);
@@ -94,17 +98,17 @@ void Translator::import (ifstream &input, TextureCollection & textures) {
 		char key [256]; char value [256]; value [0] = '\0';
 		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		convertToLowercase (key);
-		char *string = new char [strlen (value) + 1]; strcpy (string, value);
+		char *str = new char [strlen (value) + 1]; strcpy (str, value);
 		
 		//Parse properties to local variables
 		if(stricmp(key, "name") == 0) {
-			name = string;
+			name = str;
 		}
 		else if(stricmp(key, "offset") == 0) {
 			double xPos, yPos, zPos;
-			char * temp = strchr(string + sizeof(char), ' ');
+			char * temp = strchr(str + sizeof(char), ' ');
 			*temp = '\0';
-			xPos = atof(string);
+			xPos = atof(str);
 			temp += sizeof(char);
 			char * temp2 = strchr(temp, ' ');
 			*temp2 = '\0';
@@ -112,11 +116,11 @@ void Translator::import (ifstream &input, TextureCollection & textures) {
 			temp2 += sizeof(char);
 			zPos = atof(temp2);
 			offset = Point(xPos, yPos, zPos);
-			delete [] string;
+			delete [] str;
 		}
 		else if(stricmp(key, "rateInMetersPerSecond") == 0) {
-			rateInMetersPerSecond = atof(string);
-			delete [] string;
+			rateInMetersPerSecond = atof(str);
+			delete [] str;
 		}
 	}
 	

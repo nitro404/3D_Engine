@@ -326,7 +326,7 @@ Texture *Texture::readUnknownTexture (char *shortTextureName, const bool haltIfN
 	//fails, either returns NULL or gives an error message depending on "haltIfNotFound". 
 	
 	//Basic idea: tga files are preferred over bmp files...
-	const long maximumSuffixes = 3;
+	const long maximumSuffixes = 2;
 	static char *suffixes [] = {".tga", ".bmp"};
 	static char fileName [500]; 
 	

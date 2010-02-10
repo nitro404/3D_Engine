@@ -87,7 +87,15 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\Source\animatedface.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Source\camera.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\environment.cpp
 # End Source File
 # Begin Source File
 
@@ -179,7 +187,15 @@ SOURCE=.\Source\world.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=.\Source\animatedface.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Source\camera.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\environment.h
 # End Source File
 # Begin Source File
 

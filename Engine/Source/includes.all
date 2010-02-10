@@ -5,6 +5,51 @@
 //                                      Includes                                           //
 //*****************************************************************************************//
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <math.h>    
+#include <iostream> 
+#include <fstream>
+#include <time.h>
+#include "GLUT/glut.h"
+#include "logging.h"
+#include "fileDialog.h"
+#include <vector>
+#include <map>
+
+using namespace std;
+
+//#pragma warning (disable: 4786)
+#include "utilities.h"
+#include "points.h"
+#include "transformations.h"
+#include "player.h"
+#include "camera.h"
+#include "inputManager.h"
+#include "plane.h"  
+#include "texture.h"
+#include "face.h"
+#include "animatedface.h"
+
+#include "object.h"
+#include "environment.h"
+#include "geometry.h"
+#include "vehicle.h"
+#include "rotator.h"
+#include "translator.h"
+#include "waypoint.h"
+#include "sprite.h"
+#include "pool.h"
+
+#include "world.h"
+#include "game.h"
+
+
+
+
+
+
 /*
 #define UsingVisualStudioNet 0
 //#define UsingVisualStudioNet 1
@@ -28,43 +73,5 @@
 #include "string"
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
-#include <math.h>    
-#include <iostream> 
-#include <fstream>
-#include <time.h>
-#include "GLUT/glut.h"
-#include "logging.h"
-#include "fileDialog.h"
-#include <vector>
-#include <map>
-#include <string>
-
-using namespace std;
-
-//#pragma warning (disable: 4786)
-#include "utilities.h"
-#include "points.h"
-#include "transformations.h"
-#include "player.h"
-#include "camera.h"
-#include "inputManager.h"
-#include "plane.h"  
-#include "texture.h"
-#include "face.h"
-
-#include "object.h"
-#include "geometry.h"
-#include "vehicle.h"
-#include "rotator.h"
-#include "translator.h"
-#include "waypoint.h"
-#include "sprite.h"
-#include "pool.h"
-
-#include "world.h"
-#include "game.h"
-
 #endif
+

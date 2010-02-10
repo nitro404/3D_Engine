@@ -8,11 +8,17 @@
 class Camera {
 public:
 	Camera () {
-		xRotation = 0.0; target = player; offset = Point (0.0, 1.0, 1.0); //Above and behind...
+		xRotation = 0;
+		yRotation = 0;
+		target = player;
+		offset = Point (0.0, 1.0, 1.0); //Above and behind...
 	};
 	~Camera () {};
 
-	Player *target; Point offset; double xRotation;
+	Player *target;
+	Point offset;
+	double xRotation;
+	double yRotation;
 
 	static void setup ();
 	static void wrapup ();
@@ -35,6 +41,7 @@ public:
 		const bool logging = false;
 //		if (logging) {::log ("\nCamera told to rotate by "); rotation.log ();}
 		xRotation += rotation.x;
+		yRotation += rotation.y;
 //		if (logging) {
 //			::log ("\nX rotation %3.2f recorded to get %3.2f; y rotation %3.2f passed to player.", rotation.x, xRotation, rotation.y);
 //			::log ("\nOffset is "); offset.log ();

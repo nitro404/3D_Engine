@@ -9,6 +9,10 @@
 //                                       Waypoint                                          //
 //*****************************************************************************************//
 
+double Waypoint::distanceFrom(Point & p) const {
+	return sqrt( pow(p.x - position.x, 2) + pow(p.y - position.y, 2) + pow(p.z - position.z, 2) );
+}
+
 void Waypoint::addNeighbour(Waypoint * w) {
 	if(w == NULL) { return; }
 	
@@ -102,14 +106,14 @@ void Waypoint::import (ifstream &input) {
 		char key [256]; char value [256]; value [0] = '\0';
 		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		convertToLowercase (key);
-		char *string = new char [strlen (value) + 1]; strcpy (string, value);
+		char *str = new char [strlen (value) + 1]; strcpy (str, value);
 		
 		//Parse properties to local variables
 		if(stricmp(key, "name") == 0) {
-			name = string;
+			name = str;
 		}
 		else if(stricmp(key, "neighbours") == 0) {
-			neighbourValues = string;
+			neighbourValues = str;
 		}
 	}
 	

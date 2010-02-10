@@ -21,6 +21,7 @@
 
 // Environment
 @PointClass = Environment [
+    targetname(string) : "Name"
     ambientlight(color255) : "Ambient Light" : "230 230 230"
     surrounds(choices) : "Surroundings" : 0 =
     [
@@ -28,7 +29,7 @@
         1 : "Use Sky Box"
     ]
     skycolor(color255) : "Sky Color" : "0 0 230"
-    skyboxname (string) : "Skybox Name" : ""
+    skyboxtexture(string) : "Texture" : ""
     cloudlayers(choices) : "Cloud Layers" : 0 =
     [
         0 : "No Clouds"

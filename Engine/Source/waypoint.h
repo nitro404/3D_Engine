@@ -19,6 +19,8 @@ public:
 			delete this->neighbours.at(i);
 		}
 	}
+
+	double distanceFrom(Point & p) const;
 	
 	void addNeighbour(Waypoint * w);
 	Waypoint * getRandomNeighbour();
