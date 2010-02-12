@@ -24,11 +24,9 @@ void prompt(char * message, ...) {
 }
 
 void quit(char * message, ...) {
-	if(message == NULL) {
-		throw &"\0";
-	}
-	else {
+	if(message != NULL) {
 		setupStaticBuffer();
-		throw &buffer[0];
+		printf("Terimating: %s", buffer);
 	}
+	exit(0);
 }

@@ -5,6 +5,7 @@ char textureDirectory [_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
 Point World::playerPosition = Point(0, 0, 0);
 
 void World::tick () {
+	int i;
 	playerPosition = player->playerMatrix.position();
 	
 	underWater = checkUnderWater();
@@ -12,13 +13,13 @@ void World::tick () {
 	if(skybox != NULL) {
 		skybox->tick();
 	}
-	for(int i=0;i<objects.size();i++) {
+	for(i=0;i<objects.size();i++) {
 		objects.at(i)->tick();
 	}
-	for(int i=0;i<water.size();i++) {
+	for(i=0;i<water.size();i++) {
 		water.at(i)->tick();
 	}
-	for(int i=0;i<sprites.size();i++) {
+	for(i=0;i<sprites.size();i++) {
 		sprites.at(i)->tick();
 	}
 }
@@ -76,6 +77,7 @@ bool World::checkUnderWater() const {
 }
 
 void World::draw() {
+	int i;
 	sortObjects();
 	sortWater();
 	sortSprites();
@@ -83,10 +85,10 @@ void World::draw() {
 	if(skybox != NULL) {
 		skybox->draw();
 	}
-	for(int i=0;i<objects.size();i++) {
+	for(i=0;i<objects.size();i++) {
 		sortedObjects[i]->draw();
 	}
-	for(int i=0;i<water.size();i++) {
+	for(i=0;i<water.size();i++) {
 		if(!underWater) {
 			for(int j=0;j<sprites.size();j++) {
 				if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
@@ -203,7 +205,7 @@ void World::import(char * fileName) {
 		//Input the header.
 		SKIP_TO_COLON;
 		SKIP_TO_SEMICOLON;
-		long waypointInd = atoi (line); //Only useful for debugging or browsing.
+		int currentIndex = atoi (line);
 		CLEAR_THE_LINE;
 		
 		//Create the corresponding objects
@@ -275,7 +277,7 @@ void World::import(char * fileName) {
 		//Input the header.
 		SKIP_TO_COLON;
 		SKIP_TO_SEMICOLON;
-		long objectInd = atoi (line); //Only useful for debugging or browsing.
+		int currentIndex = atoi (line);
 		CLEAR_THE_LINE;
 		
 		//Input the object type

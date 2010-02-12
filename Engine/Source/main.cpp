@@ -17,6 +17,8 @@ bool fullscreen = false;
 long initialScreenWidth = 1200;
 long initialScreenHeight = 720;
 
+void exitGame();
+
 enum MenuItem {DifficultyEasy, DifficultyChallenging, DifficultyImpossible,
 	DisplayModeWireframe, DisplayModeTextured, RunWorld, Quit};
 
@@ -242,7 +244,7 @@ void normalKeyPressed (unsigned char character, int x, int y) {
 //			break;
 	}
 
-	glutPostRedisplay ();
+	glutPostRedisplay();
 }
 
 void normalKeyReleased (unsigned char character, int x, int y) {
@@ -277,7 +279,7 @@ void normalKeyReleased (unsigned char character, int x, int y) {
 			break;
 	}
 
-	glutPostRedisplay ();
+	glutPostRedisplay();
 }
 
 void mousePressed(int button, int state, int x, int y) {
@@ -390,19 +392,17 @@ int main(int parametersSize, char ** parameters) {
 	camera = new Camera;
 	inputManager = new InputManager;
 	
-	try {
-		glutMainLoop();
-	}
-	catch(const char * msg) {
-		if(msg[0] != '\0') {
-			printf("Terminating: %s\n", msg);
-		}
-	}
+	atexit(exitGame);
+	
+	glutMainLoop();
+	
+	return 0;
+}
+
+void exitGame() {
 	Game::wrapupFont();
 	if(game != NULL) { delete game; }
 	if(player != NULL) { delete player; }
 	if(camera != NULL) { delete camera; }
 	if(inputManager != NULL) { delete inputManager; }
-	
-	return 0;
 }
