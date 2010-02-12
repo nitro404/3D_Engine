@@ -25,7 +25,7 @@ public:
 		texture = NULL;
 	}
 
-	~Face () {
+	virtual ~Face () {
 		deleteGamePointCollectionEntries (points);
 	}
 

@@ -4,7 +4,7 @@
 class Object {
 public:
 	Object() { }
-	~Object() { }
+	virtual ~Object() { }
 	
 	virtual double distanceFrom(Point & p) const { return 0; }
 	
