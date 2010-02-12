@@ -15,10 +15,10 @@ void World::tick () {
 	for(int i=0;i<objects.size();i++) {
 		objects.at(i)->tick();
 	}
-	for(i=0;i<water.size();i++) {
+	for(int i=0;i<water.size();i++) {
 		water.at(i)->tick();
 	}
-	for(i=0;i<sprites.size();i++) {
+	for(int i=0;i<sprites.size();i++) {
 		sprites.at(i)->tick();
 	}
 }
@@ -86,7 +86,7 @@ void World::draw() {
 	for(int i=0;i<objects.size();i++) {
 		sortedObjects[i]->draw();
 	}
-	for(i=0;i<water.size();i++) {
+	for(int i=0;i<water.size();i++) {
 		if(!underWater) {
 			for(int j=0;j<sprites.size();j++) {
 				if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
@@ -203,7 +203,7 @@ void World::import(char * fileName) {
 		//Input the header.
 		SKIP_TO_COLON;
 		SKIP_TO_SEMICOLON;
-		long waypointIndex = atoi (line); //Only useful for debugging or browsing.
+		long waypointInd = atoi (line); //Only useful for debugging or browsing.
 		CLEAR_THE_LINE;
 		
 		//Create the corresponding objects
@@ -275,7 +275,7 @@ void World::import(char * fileName) {
 		//Input the header.
 		SKIP_TO_COLON;
 		SKIP_TO_SEMICOLON;
-		long objectIndex = atoi (line); //Only useful for debugging or browsing.
+		long objectInd = atoi (line); //Only useful for debugging or browsing.
 		CLEAR_THE_LINE;
 		
 		//Input the object type
