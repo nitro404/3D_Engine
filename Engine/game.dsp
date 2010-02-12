@@ -91,6 +91,10 @@ SOURCE=.\Source\animatedface.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Source\animatedtexture.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Source\camera.cpp
 # End Source File
 # Begin Source File
@@ -184,6 +188,10 @@ SOURCE=.\Source\world.cpp
 # Begin Source File
 
 SOURCE=.\Source\animatedface.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\animatedtexture.h
 # End Source File
 # Begin Source File
 

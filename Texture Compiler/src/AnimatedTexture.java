@@ -7,7 +7,7 @@ public class AnimatedTexture {
 	public String name;
 	public int firstTextureIndex;
 	public int frames;
-	public int speed;
+	public double speed;
 	
 	public AnimatedTexture() { }
 	

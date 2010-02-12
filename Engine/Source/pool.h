@@ -27,7 +27,7 @@ public:
 	void tick();
 	void draw();
 
-	void import (ifstream &input, TextureCollection & textures);
+	void import (ifstream &input, AnimatedTextureCollection & animatedTextures);
 };
 
 declareCollection(Pool);

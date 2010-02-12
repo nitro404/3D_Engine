@@ -197,17 +197,23 @@ void World::import(char * fileName) {
 		delete [] textureName;
 	}
 	
+	//Input the animated textures 
+	SKIP_TO_COLON;
+	SKIP_TO_SEMICOLON;
+	long animatedTexturesSize = atoi(line);
+	CLEAR_THE_LINE;
+	for(int atIndex=0;atIndex<animatedTexturesSize;atIndex++) {
+		//Create the corresponding animated textures
+		AnimatedTexture * animatedTexture = new AnimatedTexture;
+		animatedTexture->import(input, textures);
+		animatedTextures.push_back(animatedTexture);
+	}
+	
 	//Input the waypoints
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON;
 	long waypointsSize = atoi (line);
 	for (long waypointIndex = 0; waypointIndex < waypointsSize; waypointIndex++) {
-		//Input the header.
-		SKIP_TO_COLON;
-		SKIP_TO_SEMICOLON;
-		int currentIndex = atoi (line);
-		CLEAR_THE_LINE;
-		
 		//Create the corresponding objects
 		Waypoint * waypoint = new Waypoint;
 		waypoint->import(input);
@@ -321,7 +327,7 @@ void World::import(char * fileName) {
 		}
 		else if (stricmp (type, "pool") == 0) {
 			Pool * pool = new Pool;
-			pool->import(input, textures);
+			pool->import(input, animatedTextures);
 			water.push_back(pool);
 		}
 		

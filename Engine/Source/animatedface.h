@@ -1,44 +1,28 @@
-//*****************************************************************************************//
-//                                   AnimatedFace                                          //
-//*****************************************************************************************//
-
-#ifndef animatedFaceModule
-#define animatedFaceModule 
+#ifndef _ANIMATEDFACE_H
+#define _ANIMATEDFACE_H 
 
 class AnimatedFace : public Face {
 private:
 	double textureIndex;
-	static double animationSpeed;
 public:
-	//A face owns it's points and therefore deletes them on its own.
-	//It does not own it's texture because other faces will refer to the same texture...
-	//The world should own the texture...
-//	Texture * texture;
-	Texture ** textures;
-//	GamePointCollection points;
+	AnimatedTexture * animatedTexture;
+	double animationSpeed;
 
 	AnimatedFace() {
 		textureIndex = 0;
-//		texture = NULL;
-		textures = NULL;
+		animatedTexture = NULL;
+		animationSpeed = -1;
 	}
 
-	~AnimatedFace() {
-for(int i=0;i<32;i++){
-delete textures[i];
-}
-delete [] textures;
-//		deleteGamePointCollectionEntries(points);
-	}
+	~AnimatedFace() { }
 
 	void tick();
 	void draw();
-	void draw (double red, double green, double blue, double alpha);
-	void import(ifstream &input, TextureCollection & textures);
-	void import(ifstream &input);
+	void draw(double red, double green, double blue, double alpha);
+	void import(ifstream &input, AnimatedTextureCollection & animatedTextures);
 };
 
 
 declareCollection(AnimatedFace);
 
-#endif //animatedFaceModule
+#endif

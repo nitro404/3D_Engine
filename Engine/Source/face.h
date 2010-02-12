@@ -21,11 +21,11 @@ public:
 	Texture * texture;
 	GamePointCollection points;
 
-	Face () {
+	Face() {
 		texture = NULL;
 	}
 
-	virtual ~Face () {
+	virtual ~Face() {
 		deleteGamePointCollectionEntries (points);
 	}
 

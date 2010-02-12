@@ -26,7 +26,7 @@ void Pool::draw () {
 	glPopMatrix(); 
 }
 
-void Pool::import (ifstream &input, TextureCollection & textures) {
+void Pool::import (ifstream &input, AnimatedTextureCollection & animatedTextures) {
 	char line [256];
 	
 	//Input the transformation.
@@ -114,7 +114,7 @@ void Pool::import (ifstream &input, TextureCollection & textures) {
 	SKIP_TO_SEMICOLON; long facesSize = atoi (line);
 	for (long faceIndex = 0; faceIndex < facesSize; faceIndex++) {
 		AnimatedFace *face = new AnimatedFace;
-		face->import (input, textures);
+		face->import(input, animatedTextures);
 		faces.push_back (face);
 	}
 

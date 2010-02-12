@@ -13,9 +13,9 @@ public class AnimatedTexture {
 	public String name;
 	public int firstTextureIndex;
 	public int frames;
-	public int speed;
+	public double speed;
 	
-	public AnimatedTexture(int index, String name, String firstTextureName, int frames, int speed, Vector<String> textureNames) {
+	public AnimatedTexture(int index, String name, String firstTextureName, int frames, double speed, Vector<String> textureNames) {
 		this.index = index;
 		this.name = name;
 		this.frames = frames;
@@ -73,7 +73,7 @@ public class AnimatedTexture {
 				this.frames = Integer.valueOf(newProperty.value);
 			}
 			else if(newProperty.key.equalsIgnoreCase("speed")) {
-				this.speed = Integer.valueOf(newProperty.value);
+				this.speed = Double.valueOf(newProperty.value);
 			}
 		}
 	}

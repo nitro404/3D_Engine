@@ -40,6 +40,12 @@ void Waypoint::draw () {
 void Waypoint::import (ifstream &input) {
 	char line [256];
 	
+	//Input the header.
+	SKIP_TO_COLON;
+	SKIP_TO_SEMICOLON;
+	int currentIndex = atoi (line);
+	CLEAR_THE_LINE;
+	
 	//Input the transformation.
 	SKIP_TO_COLON; CLEAR_THE_LINE;
 	

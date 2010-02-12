@@ -152,10 +152,10 @@ public class TextureCompiler {
 					}
 				}
 				else if(newProperty.key.equalsIgnoreCase("frames")) {
-					newAnimatedTexture.frames = Integer.parseInt(newProperty.value);
+					newAnimatedTexture.frames = Integer.valueOf(newProperty.value);
 				}
 				else if(newProperty.key.equalsIgnoreCase("speed")) {
-					newAnimatedTexture.speed = Integer.parseInt(newProperty.value);
+					newAnimatedTexture.speed = Double.valueOf(newProperty.value);
 				}
 			}
 			

@@ -23,8 +23,10 @@ using namespace std;
 #include "player.h"
 #include "camera.h"
 #include "inputManager.h"
-#include "plane.h"  
+#include "plane.h"
+
 #include "texture.h"
+#include "animatedtexture.h"
 #include "face.h"
 #include "animatedface.h"
 
@@ -70,4 +72,3 @@ using namespace std;
 */
 
 #endif
-

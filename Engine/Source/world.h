@@ -24,6 +24,7 @@ public:
 	SpriteCollection sprites;
 	WaypointCollection waypoints;
 	TextureCollection textures;
+	AnimatedTextureCollection animatedTextures;
 
 	World() {
 		skybox = NULL;
@@ -39,6 +40,9 @@ public:
 		deleteSpriteCollectionEntries(sprites);
 		deleteWaypointCollectionEntries(waypoints);
 		deleteTextureCollectionEntries(textures);
+		deleteAnimatedTextureCollectionEntries(animatedTextures);
+
+
 	}
 	
 	void tick();
