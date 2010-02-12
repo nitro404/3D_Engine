@@ -1,13 +1,4 @@
-
-//*****************************************************************************************//
-//                                      Includes                                           //
-//*****************************************************************************************//
-
 #include "includes.all"
-
-//*****************************************************************************************//
-//                                       Pool                                              //
-//*****************************************************************************************//
 
 double Pool::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
@@ -118,15 +109,6 @@ void Pool::import (ifstream &input, TextureCollection & textures) {
 			delete [] str;
 		}
 	}
-	
-	//Input the faces.
-	/*SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long facesSize = atoi (line);
-	for (long faceIndex = 0; faceIndex < facesSize; faceIndex++) {
-		Face *face = new Face;
-		face->import (input, textures);
-		faces.push_back (face);
-	}*/
 	
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON; long facesSize = atoi (line);

@@ -1,13 +1,4 @@
-
-//*****************************************************************************************//
-//                                      Includes                                           //
-//*****************************************************************************************//
-
 #include "includes.all"
-
-//*****************************************************************************************//
-//                                        Faces                                            //
-//*****************************************************************************************//
 
 void Face::tick () {
 	//This could change textures dynamically or change texture coordinates or do nothing.
@@ -66,16 +57,19 @@ void Face::import (ifstream &input, TextureCollection & textures) {
 
 	//Input the properties (either the texture property or nothing at all; not actually storing in a dictionary)...
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long propertiesSize = atoi (line); CLEAR_THE_LINE;
+	SKIP_TO_SEMICOLON;
+	long propertiesSize = atoi (line);
+	CLEAR_THE_LINE;
+	if(propertiesSize != 1) {
+		quit("Face cannot have more than one property.");
+	}
 	char * textureIndex;
-//	for (long propertiesIndex = 0; propertiesIndex < propertiesSize; propertiesIndex++) {
-		SKIP_TO_ENDLINE;
-		char key [256]; char value [256]; value [0] = '\0';
-		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
-		textureIndex = new char [strlen (value) + 1];
-		strcpy (textureIndex, value);
-//		break; //propertiesSize should be 1 but just in case it's not...
-//	}
+	SKIP_TO_ENDLINE;
+	char key [256]; char value [256]; value [0] = '\0';
+	sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+	textureIndex = new char [strlen (value) + 1];
+	strcpy (textureIndex, value);
+
 	texture = textures.at(atoi(textureIndex));
 	delete [] textureIndex;
 

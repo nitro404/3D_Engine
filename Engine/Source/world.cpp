@@ -1,31 +1,11 @@
-
-//*****************************************************************************************//
-//                                      Includes                                           //
-//*****************************************************************************************//
-
 #include "includes.all"
 
 char textureDirectory [_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
-//char textureDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','T','E','X','T','U','R','E','S','\0'};
-
-//*****************************************************************************************//
-//                                       World                                             //
-//*****************************************************************************************//
 
 Point World::playerPosition = Point(0, 0, 0);
 
-void World::setup () {
-	
-}
-
-void World::wrapup () {
-
-}
-
 void World::tick () {
-	Transformation cameraMatrix;
-	glGetMatrixd(cameraMatrix);
-	playerPosition = cameraMatrix.position() * player->playerMatrix;
+	playerPosition = player->playerMatrix.position();
 	
 	underWater = checkUnderWater();
 	
@@ -95,7 +75,7 @@ bool World::checkUnderWater() const {
 	return false;
 }
 
-void World::draw () {
+void World::draw() {
 	sortObjects();
 	sortWater();
 	sortSprites();
@@ -139,24 +119,14 @@ void World::draw () {
 	}
 }
 
-void World::read () {
-	char *filename = promptForWorldRead ();
-	import(filename);
-}
-
-void World::import (char * fileName) {
+void World::import(char * fileName) {
+	char line [256];
+	
 	ifstream input;
-	input.open (fileName); 
-	if (input.bad ()) {
-		prompt ("Unable to open input file \"%s\".", fileName);
-		exit(1);
+	input.open(fileName); 
+	if(input.bad()) {
+		quit("Unable to open world file \"%s\".", fileName);
 	}
-	import (input);
-	input.close ();
-}
-
-void World::import (ifstream &input) {
-	char line [256]; //Working variable...
 	
 	//Input the header.
 	CLEAR_THE_LINE;
@@ -367,13 +337,6 @@ void World::import (ifstream &input) {
 	for(i=0;i<sprites.size();i++) {
 		sortedSprites[i] = sprites.at(i);
 	}
-}
-
-void World::unload () {
-	//Unload all of the textures prior to deleting the world... If you don't, you will
-	//reach a point where you will run in slow motion as the card thrashes around trying
-	//to allow you to run in the memory it has left... Rebooting will fix it...
-	for(int i=0;i<textures.size();i++) {
-		delete textures.at(i);
-	}
+	
+	input.close();
 }

@@ -1,3 +1,7 @@
+IMPORTANT
+ + Crashes on exit
+ + Insane memory leaks
+
 ENGINE
  + MAIN
    - add fullscreen option (main.cpp)
@@ -44,3 +48,4 @@ ENGINE
 BUILDER 2.0
  + optimize builder for pre-calculating waypoint indexes
  + Implement Worldcraft *.map reading
+ + Fix output directory structure being non-existant

@@ -75,8 +75,8 @@ public:
 	double m31, m32, m33, m34; //efficient compiler-generated
 	double m41, m42, m43, m44; //code.
 
-	inline Transformation () {setToIdentity ();}
-	inline Transformation (double a11, double a12, double a13, double a14, 
+	inline Transformation() { setToIdentity (); }
+	inline Transformation(double a11, double a12, double a13, double a14, 
 		double a21, double a22, double a23, double a24, 
 		double a31, double a32, double a33, double a34, 
 		double a41, double a42, double a43, double a44) {
@@ -85,9 +85,9 @@ public:
 		m31 = a31; m32 = a32; m33 = a33; m34 = a34;
 		m41 = a41; m42 = a42; m43 = a43; m44 = a44;
 	}
-	inline ~Transformation () {};
+	inline ~Transformation() { }
 
-	inline void set (double a11, double a12, double a13, double a14, double a21, double a22, double a23, double a24, 
+	inline void set(double a11, double a12, double a13, double a14, double a21, double a22, double a23, double a24, 
 		double a31, double a32, double a33, double a34, double a41, double a42, double a43, double a44) {
 		m11 = a11; m12 = a12; m13 = a13; m14 = a14;
 		m21 = a21; m22 = a22; m23 = a23; m24 = a24;
@@ -95,7 +95,7 @@ public:
 		m41 = a41; m42 = a42; m43 = a43; m44 = a44;
 	}
 
-	inline void setToIdentity () {
+	inline void setToIdentity() {
 		m11 = 1.0; m12 = 0.0; m13 = 0.0; m14 = 0.0;
 		m21 = 0.0; m22 = 1.0; m23 = 0.0; m24 = 0.0;
 		m31 = 0.0; m32 = 0.0; m33 = 1.0; m34 = 0.0;
@@ -260,13 +260,13 @@ public:
 		double a21, double a22, double a23, double a24, 
 		double a31, double a32, double a33, double a34, 
 		double a41, double a42, double a43, double a44) {
-		halt ("Illegal since inverse elements too expensive to compute.");
+		quit("Illegal since inverse elements too expensive to compute.");
 	}
 	inline ~DualTransformation () {};
 
 	inline void set (double a11, double a12, double a13, double a14, double a21, double a22, double a23, double a24, 
 		double a31, double a32, double a33, double a34, double a41, double a42, double a43, double a44) {
-		halt ("Illegal since inverse elements too expensive to compute.");
+		quit("Illegal since inverse elements too expensive to compute.");
 	}
 
 	inline void setToIdentity () {
@@ -306,7 +306,7 @@ public:
 	inline void rotateBy (double degrees, Point &axis) {preRotateBy (degrees, axis);}
 
 	void multiply (Transformation &a, Transformation &b) {
-		halt ("Illegal since inverse elements too expensive to compute.");
+		quit("Illegal since inverse elements too expensive to compute.");
 	}
 
 	inline void multiply (DualTransformation &a, DualTransformation &b) {
@@ -315,7 +315,7 @@ public:
 	}
 
 	void multiply (Transformation &a) {
-		halt ("Illegal since inverse elements too expensive to compute.");
+		quit("Illegal since inverse elements too expensive to compute.");
 	}
 
 	inline void multiply (DualTransformation &a) {
@@ -323,14 +323,9 @@ public:
 		this->inverse.Transformation::multiply (a.inverse);
 	}
 	
-	Point position () {return this->normal ().position ();}
-
-	/*
-	void log (long tabs = 0) {
-		char *tabbing = indentation (tabs);
-		::log ("\n%sNormal:", tabbing); normal ().log (tabs+1); 
-		::log ("\n%sInverse:", tabbing); inverse.log (tabs+1);
-	}*/
+	Point position() {
+		return this->normal().position();
+	}
 };
 
-#endif //transformationsModule
+#endif

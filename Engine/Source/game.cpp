@@ -1,101 +1,13 @@
-
-//*****************************************************************************************//
-//                                      Includes                                           //
-//*****************************************************************************************//
-
 #include "includes.all"
-
-//*****************************************************************************************//
-//                                        Game                                             //
-//*****************************************************************************************//
 
 extern long screenWidth, screenHeight;
 
-Game *game = NULL;
+Game * game = NULL;
+
 double DT; 
 
-HDC Game::deviceContext; GLuint Game::fontBase; 
-
-void setupOpenGL () {
-	glEnable (GL_CULL_FACE); glEnable (GL_DEPTH_TEST); glEnable (GL_TEXTURE_2D);
-	glLineWidth (3.0);
-
-	glMatrixMode (GL_PROJECTION);
-	glLoadIdentity ();
-	gluPerspective (40.0, 1.0, 1.0, 100.0); //See resizeWindow for parameter explanation.
-	glMatrixMode (GL_MODELVIEW);
-	glLoadIdentity ();
-
-	GLfloat lightColor [] = {1.0f, 1.0f, 1.0f, 1.0f}; //white
-	glLightModeli (GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
-	glLightfv (GL_LIGHT0, GL_DIFFUSE, lightColor);
-	glLightf (GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1f);
-	glLightf (GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05f);
-	glEnable (GL_LIGHT0); glEnable (GL_LIGHTING);
-	glDisable (GL_LIGHTING); //We can deal with our own lighting.
-	glEnable (GL_COLOR_MATERIAL); //Track color.
-
-	glClearColor (0.0, 0.0, 0.0, 1.0); //black
-	glClearDepth (1.0); //Far
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glDrawBuffer (GL_BACK); glReadBuffer (GL_BACK);
-	glEnable (GL_DEPTH_TEST); glDepthMask (GL_TRUE); glDepthFunc (GL_LEQUAL);
-	glShadeModel (GL_SMOOTH);	
-
-	glFrontFace (GL_CCW); glCullFace (GL_BACK); glEnable (GL_CULL_FACE);
-
-	glHint (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); 
-	glDisable (GL_ALPHA_TEST);
-	glPolygonOffset (0.0, -3.0);
-
-	//Setup materials.
-	GLfloat	frontMaterialDiffuse [4] = {0.2f, 0.2f, 0.2f, 1.0f};
-	glMaterialfv (GL_FRONT, GL_DIFFUSE, frontMaterialDiffuse);
-	GLfloat	frontMaterialAmbient [4] = {0.8f, 0.8f, 0.8f, 1.0f};
-	glMaterialfv (GL_FRONT, GL_AMBIENT, frontMaterialAmbient);
-	GLfloat frontMaterialSpecular [4] = {0.1f, 0.1f, 0.1f, 1.0f};
-	glMaterialfv (GL_FRONT, GL_SPECULAR, frontMaterialSpecular);
-	GLfloat	frontMaterialShininess [] = {70.0f};
-	glMaterialfv (GL_FRONT, GL_SHININESS, frontMaterialShininess);
-	GLfloat	frontMaterialEmission [4] = {0.0f, 0.0f, 0.0f, 1.0f};
-	glMaterialfv (GL_FRONT, GL_EMISSION, frontMaterialEmission);
-
-	GLfloat	backMaterialDiffuse [4] = {0.0f, 0.0f, 0.0f, 1.0f};
-	glMaterialfv (GL_BACK, GL_DIFFUSE, backMaterialDiffuse);
-	GLfloat	backMaterialAmbient [4] = {0.0f, 0.0f, 0.0f, 1.0f};
-	glMaterialfv (GL_BACK, GL_AMBIENT, backMaterialAmbient);
-	GLfloat	backMaterialSpecular [4] = {0.0f, 0.0f, 0.0f, 1.0f};
-	glMaterialfv (GL_BACK, GL_SPECULAR, backMaterialSpecular);
-	GLfloat	backMaterialShininess [] = {0.0f};
-	glMaterialfv (GL_BACK, GL_SHININESS, backMaterialShininess);
-	GLfloat	backMaterialEmission [4] = {0.0f, 0.0f, 0.0f, 1.0f};
-	glMaterialfv (GL_BACK, GL_EMISSION, backMaterialEmission);
-
-	glColorMaterial (GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-
-	//Use a global default texture environment mode.
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-}
-
-void Game::setup() {
-	setupOpenGL();
-	setupFont();
-	game = new Game();
-	Player::setup();
-	Camera::setup();
-	InputManager::setup();
-	World::setup();
-}
-
-void Game::wrapup () {
-	wrapupFont();
-	delete game;
-	Player::wrapup();
-	Camera::wrapup();
-	InputManager::wrapup();
-	World::wrapup();
-}
+HDC Game::deviceContext;
+GLuint Game::fontBase; 
 
 void Game::tick() {
 	inputManager->tick();
@@ -227,4 +139,15 @@ void Game::drawNote (const char *message, ...) {
 	va_end (parameters);
 
 	drawMessage (1, screenHeight-52, "%s", text);
+}
+
+void Game::import() {
+	if(world != NULL) {
+		delete world;
+	}
+	char * fileName = promptForWorldRead();
+	if(fileName != NULL) {
+		world = new World;
+		world->import(fileName);
+	}
 }

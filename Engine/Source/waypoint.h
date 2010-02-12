@@ -15,9 +15,6 @@ public:
 	~Waypoint() {
 		delete [] name;
 		delete [] neighbourValues;
-		for(int i=0;i<this->neighbours.size();i++) {
-			delete this->neighbours.at(i);
-		}
 	}
 
 	double distanceFrom(Point & p) const;

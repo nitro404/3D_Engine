@@ -11,15 +11,18 @@
 //                                        Main                                             //
 //*****************************************************************************************//
 
-char * gameName = "3D Engine";
+char * gameName = "3D Game Engine";
 int mouseSensitivity = 5;
+bool fullscreen = false;
+long initialScreenWidth = 1200;
+long initialScreenHeight = 720;
 
 enum MenuItem {DifficultyEasy, DifficultyChallenging, DifficultyImpossible,
 	DisplayModeWireframe, DisplayModeTextured, RunWorld, Quit};
 
 MenuItem difficulty; MenuItem displayMode;
+
 bool wireframe = false;
-bool fullscreen = false;
 long screenWidth;
 long screenHeight;
 char filename [256];
@@ -32,10 +35,80 @@ char filename [256];
 
 inline bool keyIsDown (long key) {return (GetAsyncKeyState (key) & 0x8000) != 0;}
 
+void setupOpenGL() {
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
+	glLineWidth(3.0);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(40.0, 1.0, 1.0, 100.0); //See resizeWindow for parameter explanation.
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	GLfloat lightColor [] = {1.0f, 1.0f, 1.0f, 1.0f}; //white
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
+	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1f);
+	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05f);
+	glEnable(GL_LIGHT0); glEnable (GL_LIGHTING);
+	glDisable(GL_LIGHTING); //We can deal with our own lighting.
+	glEnable(GL_COLOR_MATERIAL); //Track color.
+
+	glClearColor(0.0, 0.0, 0.0, 1.0); //black
+	glClearDepth(1.0); //Far
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glDrawBuffer(GL_BACK);
+	glReadBuffer(GL_BACK);
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LEQUAL);
+	glShadeModel(GL_SMOOTH);	
+
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); 
+	glDisable(GL_ALPHA_TEST);
+	glPolygonOffset(0.0, -3.0);
+
+	//Setup materials.
+	GLfloat	frontMaterialDiffuse [4] = {0.2f, 0.2f, 0.2f, 1.0f};
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, frontMaterialDiffuse);
+	GLfloat	frontMaterialAmbient [4] = {0.8f, 0.8f, 0.8f, 1.0f};
+	glMaterialfv(GL_FRONT, GL_AMBIENT, frontMaterialAmbient);
+	GLfloat frontMaterialSpecular [4] = {0.1f, 0.1f, 0.1f, 1.0f};
+	glMaterialfv(GL_FRONT, GL_SPECULAR, frontMaterialSpecular);
+	GLfloat	frontMaterialShininess [] = {70.0f};
+	glMaterialfv(GL_FRONT, GL_SHININESS, frontMaterialShininess);
+	GLfloat	frontMaterialEmission [4] = {0.0f, 0.0f, 0.0f, 1.0f};
+	glMaterialfv(GL_FRONT, GL_EMISSION, frontMaterialEmission);
+
+	GLfloat	backMaterialDiffuse [4] = {0.0f, 0.0f, 0.0f, 1.0f};
+	glMaterialfv(GL_BACK, GL_DIFFUSE, backMaterialDiffuse);
+	GLfloat	backMaterialAmbient [4] = {0.0f, 0.0f, 0.0f, 1.0f};
+	glMaterialfv(GL_BACK, GL_AMBIENT, backMaterialAmbient);
+	GLfloat	backMaterialSpecular [4] = {0.0f, 0.0f, 0.0f, 1.0f};
+	glMaterialfv(GL_BACK, GL_SPECULAR, backMaterialSpecular);
+	GLfloat	backMaterialShininess [] = {0.0f};
+	glMaterialfv(GL_BACK, GL_SHININESS, backMaterialShininess);
+	GLfloat	backMaterialEmission [4] = {0.0f, 0.0f, 0.0f, 1.0f};
+	glMaterialfv(GL_BACK, GL_EMISSION, backMaterialEmission);
+
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+
+	//Use a global default texture environment mode.
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+}
+
 void resizeWindow(int width, int height) {
 	//Setup a new viewport.
 	glViewport(0, 0, width, height);
-	screenWidth = width; screenHeight = height;
+	screenWidth = width;
+	screenHeight = height;
 
 	//Setup a new perspective matrix.
 	GLdouble verticalFieldOfViewInDegrees = 40;
@@ -114,8 +187,8 @@ void specialKeyReleased (int character, int x, int y) {
 void normalKeyPressed (unsigned char character, int x, int y) {
 	switch(character) {
 		case escapeCharacter:
-			Game::wrapup ();
-			exit (0);
+			quit(0);
+			break;
 		
 		case 'w':
 		case 'W':
@@ -217,7 +290,7 @@ void mousePressed(int button, int state, int x, int y) {
 		}
 	}
 	else if(button == GLUT_RIGHT_BUTTON) {
-		if (state == GLUT_DOWN) {
+		if(state == GLUT_DOWN) {
 			
 		}
 		else {
@@ -225,7 +298,7 @@ void mousePressed(int button, int state, int x, int y) {
 		}
 	}
 	else if(button == GLUT_MIDDLE_BUTTON) {
-		if (state == GLUT_DOWN) {
+		if(state == GLUT_DOWN) {
 			
 		}
 		else {
@@ -234,7 +307,7 @@ void mousePressed(int button, int state, int x, int y) {
 	}
 }
 
-void mouseMoved (int x, int y) {
+void mouseMoved(int x, int y) {
 	//Note: Because we are re-centering the mouse on each tick (see function "idle ()"), here
 	//we are determining how far the mouse was moved from the center point and we use this
 	//to determine both (1) x-rotation amounts (using the vertical displacement) which we store
@@ -263,57 +336,73 @@ void mouseMoved (int x, int y) {
 	inputManager->rotateBy (rotation * (InputManager::rotationSpeed * DT)); //degrees = degrees per second * second
 }
 
-void genericMenuHandler (int item) {
-	switch (item) {
-		case RunWorld: 
-			if (game->world != NULL) {
-				game->world->unload();
-				delete game->world;
-			}
-			game->world = new World();
-			game->world->read();
-			if (game->world != NULL) {
-				player->reset(game->world->startPosition);
-			}
+void genericMenuHandler(int item) {
+	switch(item) {
+		case RunWorld:
+			game->import();
+//			game->world = new World();
+//			game->world->import();
+//				player->reset(game->world->startPosition);
 			break;
 	}
 }
 
 void createMenus () {
-  int genericMenu = glutCreateMenu (genericMenuHandler);
-  glutAddMenuEntry ("Run World", RunWorld);
-  glutAttachMenu (GLUT_RIGHT_BUTTON);
+	int genericMenu = glutCreateMenu (genericMenuHandler);
+	glutAddMenuEntry ("Run World", RunWorld);
+	glutAttachMenu (GLUT_RIGHT_BUTTON);
 }
 
-int main (int parametersSize, char **parameters) {
+int main(int parametersSize, char ** parameters) {
 
 	//Setup general facilities.
-	glutInitDisplayMode (GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_STENCIL | GLUT_MULTISAMPLE);
-	glutInitWindowSize (1200, 720);
-	glutInit (&parametersSize, parameters);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_STENCIL | GLUT_MULTISAMPLE);
+	glutInitWindowSize(initialScreenWidth, initialScreenHeight);
+	glutInit(&parametersSize, parameters);
 	
-	if (fullscreen) { 
+	if(fullscreen) {
 		glutEnterGameMode();
 	}
 	else {
 		glutCreateWindow(gameName);
 		createMenus();
 	}
-
-    glutIgnoreKeyRepeat (GLUT_KEY_REPEAT_ON);
-	glutSetCursor (GLUT_CURSOR_NONE);
+	
+    glutIgnoreKeyRepeat(GLUT_KEY_REPEAT_ON);
+	glutSetCursor(GLUT_CURSOR_NONE);
 
 	//Specify function handlers.
-	glutDisplayFunc (displayWindow); glutReshapeFunc (resizeWindow); glutKeyboardFunc (normalKeyPressed);
-	glutSpecialFunc (specialKeyPressed); glutMouseFunc (mousePressed); glutMotionFunc (mouseMoved);
-	glutVisibilityFunc (visibilityChanged);
-    glutPassiveMotionFunc (mouseMoved); 
-    glutSpecialUpFunc (specialKeyReleased);
-    glutKeyboardUpFunc (normalKeyReleased);
-    
-	Game::setup ();
-	glutMainLoop ();
-	Game::wrapup ();
-
+	glutDisplayFunc(displayWindow);
+	glutReshapeFunc(resizeWindow);
+	glutKeyboardFunc (normalKeyPressed);
+	glutSpecialFunc(specialKeyPressed);
+	glutMouseFunc(mousePressed);
+	glutMotionFunc (mouseMoved);
+	glutVisibilityFunc(visibilityChanged);
+    glutPassiveMotionFunc(mouseMoved); 
+    glutSpecialUpFunc(specialKeyReleased);
+    glutKeyboardUpFunc(normalKeyReleased);
+	
+	setupOpenGL();
+	Game::setupFont();
+	game = new Game;
+	player = new Player;
+	camera = new Camera;
+	inputManager = new InputManager;
+	
+	try {
+		glutMainLoop();
+	}
+	catch(const char * msg) {
+		if(msg[0] != '\0') {
+			printf("Terminating: %s\n", msg);
+		}
+	}
+	Game::wrapupFont();
+	if(game != NULL) { delete game; }
+	if(player != NULL) { delete player; }
+	if(camera != NULL) { delete camera; }
+	if(inputManager != NULL) { delete inputManager; }
+	
 	return 0;
 }

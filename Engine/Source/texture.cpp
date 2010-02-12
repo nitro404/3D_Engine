@@ -1,8 +1,3 @@
-
-//*****************************************************************************************//
-//                                      Includes                                           //
-//*****************************************************************************************//
-
 #include "includes.all"
 
 //*****************************************************************************************//
@@ -93,7 +88,7 @@ Texture *Texture::readTexture (char *fullPathName) {
 	Texture *readTGATexture (char *fullPathName); //Forward reference.
 	if (strcmp (suffix, ".BMP") == 0) return readBMPTexture (fullPathName);
 	if (strcmp (suffix, ".TGA") == 0) return readTGATexture (fullPathName);
-	halt ("\nUnknown texture type requested for \"%s\"...", fullPathName); 
+	printf("Unknown texture type requested for \"%s\"...\n", fullPathName);
 	return NULL;
 }	
 
@@ -105,7 +100,6 @@ Texture *readBMPTexture (char *fullPathName) {
     HBITMAP bitmapHandle = (HBITMAP) LoadImage (NULL, fullPathName, 
     	IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	
 	if (bitmapHandle == NULL) {
-//		log ("\nFile \"%s\" not found...", fullPathName);
 		return NULL;
 	}
 
@@ -121,7 +115,6 @@ Texture *readBMPTexture (char *fullPathName) {
 	if (!isPowerOf2 (width) || !isPowerOf2 (height)) {
 		//OpenGL needs a power of 2 (it is possible to force OpenGL to resize it but that's slow).
 		prompt ("\nBitmap \"%s\" is not a power of 2; width %d, height %d.", fullPathName, width, height);
-//		log ("\nBitmap \"%s\" is not a power of 2; width %d, height %d.", fullPathName, width, height);
 	}
 
 	//Allocate space for RGBA format.
@@ -179,7 +172,6 @@ Texture *readBMPTexture (char *fullPathName) {
     	} 
 	} else {
 		//We only handle 8 and 24 bits so far...
-//		log ("\nRead texture can only handle 8 and 24 bit textures, not %d.", pixelSize); 
 		delete texture; DeleteObject (bitmapHandle); return NULL;
 	}
 
@@ -194,7 +186,6 @@ Texture *readTGATexture (char *fullPathName) {
 
 	FILE *file = fopen (fullPathName, "rb");
 	if (file == NULL) {
-//		::log ("\nUnable to open texture %s", fullPathName);
 		return NULL;
 	}
 
@@ -206,15 +197,18 @@ Texture *readTGATexture (char *fullPathName) {
 	};
 
 	TGAHeader header;
-	if (fread (&header, 1, sizeof (header), file) != sizeof (header))
-{} //		logError ("\nTGA file \"%s\" appears to be truncated.");
-	if (header.colorMapType != 0) //1=>has color map, 0=>does not have color map.
-{} //		logError ("\nCan't read \"%s\" since it's paletted.");
-	if (header.imageType != 2) //0..11; 2=>uncompressed true-color
-{} //		logError ("\nCan't read \"%s\" since it's compressed or not true color.");
+	if (fread (&header, 1, sizeof (header), file) != sizeof (header)) {
+		printf("TGA file \"%s\" appears to be truncated.\n", fullPathName);
+	}
+	if (header.colorMapType != 0) { //1=>has color map, 0=>does not have color map.
+		printf("Can't read \"%s\" since it's paletted.\n", fullPathName);
+	}
+	if (header.imageType != 2) { //0..11; 2=>uncompressed true-color
+		printf("Can't read \"%s\" since it's compressed or not true color.", fullPathName);
+	}
 	if (header.pixelDepth != 32 && header.pixelDepth != 24) {
-//		log ("\nFile \"%s\" is a %d bit .TGA file, need 24 or 32.", fullPathName, header.pixelDepth); 
-//		fclose (file);
+		printf("File \"%s\" is a %d bit .TGA file, need 24 or 32.\n", fullPathName, header.pixelDepth); 
+		fclose(file);
 		return NULL;
 	}
 
@@ -224,7 +218,9 @@ Texture *readTGATexture (char *fullPathName) {
 	//Allocate space for RGBA format.
 	const long width = header.imageWidth; const long height = header.imageHeight; 
 	Texture *texture = new Texture (width, height, useAlpha ? RGBAType : RGBType);
-//	if (texture == NULL) logError ("\nFailed to create textures for \"%s\".");
+	if (texture == NULL) {
+		printf("Failed to create textures for \"%s\".\n");
+	}
 
 	//Prepare to copy the bits from the file.
 	long numberOfPixels = width * height;
@@ -272,7 +268,8 @@ bool Texture::readTextureExtent (char *fullPathName, long &width, long &height) 
 	bool readTGATextureExtent (char *fullPathName, long &width, long &height); //Forward reference.
 	if (strcmp (suffix, ".BMP") == 0) return readRGBTextureExtent (fullPathName, width, height);
 	if (strcmp (suffix, ".TGA") == 0) return readTGATextureExtent (fullPathName, width, height);
-	halt ("\nUnknown texture type requested for \"%s\"...", fullPathName); return false;
+	printf("Unknown texture type requested for \"%s\"...\n", fullPathName);
+	return false;
 }
 
 bool readRGBTextureExtent (char *fullPathName, long &width, long &height) {
@@ -283,7 +280,7 @@ bool readRGBTextureExtent (char *fullPathName, long &width, long &height) {
     HBITMAP bitmapHandle = (HBITMAP) LoadImage (NULL, fullPathName, 
     	IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	
 	if (bitmapHandle == NULL) {
-//		log ("\nFile \"%s\" not found...", fullPathName);
+		printf("File \"%s\" not found...\n", fullPathName);
 		return false;
 	}
 
@@ -300,7 +297,7 @@ bool readTGATextureExtent (char *fullPathName, long &width, long &height) {
 
 	FILE *file = fopen (fullPathName, "rb");
 	if (file == NULL) {
-//		::log ("\nUnable to open texture %s", fullPathName);
+		printf("Unable to open texture %s\n", fullPathName);
 		return false;
 	}
 
@@ -312,10 +309,12 @@ bool readTGATextureExtent (char *fullPathName, long &width, long &height) {
 
 	TGAHeader header;
 	if (fread (&header, 1, sizeof (header), file) != sizeof (header)) {
-//		log ("\nTGA file \"%s\" appears to be truncated.");
+		printf("TGA file \"%s\" appears to be truncated.\n", fullPathName);
 		return false;
 	}
-	fclose (file); width = header.imageWidth; height = header.imageHeight; 
+	fclose (file);
+	width = header.imageWidth;
+	height = header.imageHeight; 
 	return true;
 }
 
@@ -340,12 +339,16 @@ Texture *Texture::readUnknownTexture (char *shortTextureName, const bool haltIfN
 	}
 	
 	//If we get to here, it's because none of the suffixes worked.
-	if (haltIfNotFound) halt ("\nQuitting... Could not find texture \"%s\" in the textures directory...", shortTextureName);
+	if(haltIfNotFound) {
+		printf("Could not find texture \"%s\" in the textures directory...\n", shortTextureName);
+	}
 	return NULL; //Can't be found...
 }
 
 void Texture::activate () {
-	if (!textureLoaded) {halt ("\nYou forgot to LOAD texture \"%s\" onto the card...", textureName);}
+	if (!textureLoaded) {
+		quit("Texture: \"%s\" not loaded onto video card.", textureName);
+	}
 	if (textureHandle == -1) {glDisable (GL_TEXTURE_2D); return;}
 	glEnable (GL_TEXTURE_2D);  //Turn on texturing.
 	glBindTexture (GL_TEXTURE_2D, textureHandle); //Bind the current texture.
@@ -355,7 +358,6 @@ void Texture::load (bool mipmapping, bool forceClamp) {
 	//Give the texture to the game card.
 	textureLoaded = true; //It will be loaded shortly...
 	if (textureHandle == -1 || bytes == NULL) {
-//		log ("\nTexture handle is %d (-1 means not set), bytes %x (null means not read)...", textureHandle, bytes);
 		return;
 	}
 	static long alignment [2] = {4, 1};
@@ -377,11 +379,12 @@ void Texture::load (bool mipmapping, bool forceClamp) {
 	else
 		glTexImage2D (GL_TEXTURE_2D, 0, components [type], width, height, 0,
 			format [type], GL_UNSIGNED_BYTE, bytes);
-	//log ("\nLoad \"%s\", handle %d.", textureName, textureHandle);
 }
 
 void Texture::unload () {
-	//log ("\nUnload \"%s\", handle %d.", textureName, textureHandle);
-	if (textureHandle != -1) glDeleteTextures (1, &textureHandle);
-	textureHandle = -1; textureLoaded = false;
+	if (textureHandle != -1) {
+		glDeleteTextures (1, &textureHandle);
+	}
+	textureHandle = -1;
+	textureLoaded = false;
 }

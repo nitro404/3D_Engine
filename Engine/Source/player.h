@@ -1,32 +1,25 @@
-//*****************************************************************************************//
-//                                       Player                                            //
-//*****************************************************************************************//
-
-#ifndef playerModule
-#define playerModule 
+#ifndef _PLAYER_H
+#define _PLAYER_H
 
 class Player {
 public:
-	Player () {};
-	~Player () {};
-
 	DualTransformation playerMatrix;
 
-	static void setup ();
-	static void wrapup ();
-
-	void tick ();
-	void draw ();
-
-	void beginCamera ();
-	void endCamera ();
+	Player() { }
+	~Player() { }
 	
-	void moveBy (Point &translation);
-	void rotateBy (Point &rotation);
+	void tick();
+	void draw();
 
-	void reset (Point &worldPosition);
+	void beginCamera();
+	void endCamera();
+	
+	void moveBy(Point & translation);
+	void rotateBy(Point & rotation);
+
+	void reset(Point & worldPosition);
 };
 
-extern Player *player;
+extern Player * player;
 
-#endif //playerModule
+#endif

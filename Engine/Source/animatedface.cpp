@@ -1,13 +1,4 @@
-
-//*****************************************************************************************//
-//                                      Includes                                           //
-//*****************************************************************************************//
-
 #include "includes.all"
-
-//*****************************************************************************************//
-//                                    AnimatedFace                                         //
-//*****************************************************************************************//
 
 char textureDirectory2 [_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
 
@@ -22,7 +13,6 @@ void AnimatedFace::tick () {
 }
 
 void AnimatedFace::draw () {
-	prompt("draw");
 	//Draw this face... (see Game::draw () in the builder for an example).
 	//Permit blending if it's a texture with alpha...
 	if (texture->type == RGBAType) {
@@ -31,10 +21,10 @@ void AnimatedFace::draw () {
 	} else {
 		glDisable (GL_BLEND);
 	}
-	prompt("drawin");
+	
 	//Activate the texture to be drawn.
 	texture->activate();
-	prompt("drawing");
+	
 	//Setup one polygon to be drawn and draw it.
 	glBegin (GL_POLYGON);
 	for (long pointIndex = 0; pointIndex < points.size(); pointIndex++) {
@@ -42,7 +32,7 @@ void AnimatedFace::draw () {
 		glTexCoord2d (point.tx, point.ty);
 		glVertex3d (point.x, point.y, point.z); //Must be last.
 	}
-	glEnd ();
+	glEnd();
 }
 
 void AnimatedFace::draw (double red, double green, double blue, double alpha) {
@@ -71,22 +61,19 @@ void AnimatedFace::import (ifstream &input, TextureCollection & worldTextures) {
 
 	//Input the header.
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long faceIndex = atoi (line); //Only useful for debugging or browsing.
+	SKIP_TO_SEMICOLON;
+	long faceIndex = atoi (line);
 
 	//Input the properties (either the texture property or nothing at all; not actually storing in a dictionary)...
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long propertiesSize = atoi (line); CLEAR_THE_LINE;
-//	char * textureIndex;
-//	for (long propertiesIndex = 0; propertiesIndex < propertiesSize; propertiesIndex++) {
-		SKIP_TO_ENDLINE;
-		char key [256]; char value [256]; value [0] = '\0';
-		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
-//		textureIndex = new char [strlen (value) + 1];
-//		strcpy (textureIndex, value);
-//		break; //propertiesSize should be 1 but just in case it's not...
-//	}
-//	texture = worldTextures.at(atoi(textureIndex));
-//	delete [] textureIndex;
+	SKIP_TO_SEMICOLON;
+	long propertiesSize = atoi (line); CLEAR_THE_LINE;
+	if(propertiesSize != 1) {
+		quit("AnimatedFace cannot have more than one property.");
+	}
+	SKIP_TO_ENDLINE;
+	char key [256]; char value [256]; value [0] = '\0';
+	sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 	
 	textures = new Texture*[32];
 	string texturePath;
@@ -106,10 +93,6 @@ void AnimatedFace::import (ifstream &input, TextureCollection & worldTextures) {
 		texturePath.erase();
 	}
 	texture = textures[0];
-
-	//Input the texture.
-	//Only if this code is in the game rather than the builder...
-	//texture = textureName == NULL ? NULL : world->textureFor (textureName);
 
 	//Input the points.
 	SKIP_TO_COLON;

@@ -127,10 +127,6 @@ SOURCE=.\Source\main.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\object.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\Source\plane.cpp
 # End Source File
 # Begin Source File

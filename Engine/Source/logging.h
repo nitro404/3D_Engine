@@ -1,26 +1,13 @@
-
-#ifndef loggingModule
-#define loggingModule 
-
-//*****************************************************************************************//
-//                                      Includes                                           //
-//*****************************************************************************************//
+#ifndef _LOGGING_H
+#define _LOGGING_H
 
 #include <stdio.h> //For file manipulation.
 #include <windows.h> //For va_start, ShowCursor.
 #include <stdlib.h> //For _fullpath.
 #include <mmsystem.h> //For time
 
-//*****************************************************************************************//
-//                                      Externals                                          //
-//*****************************************************************************************//
+double timeNow();
+void prompt(char *message, ...);
+void quit(char *message, ...);
 
-void clearLog ();
-double timeNow ();
-//void log (char *message, ...);
-void prompt (char *message, ...);
-void quit (char *message, ...);
-#define halt quit
-char *asString (char *message, ...);
-
-#endif //loggingModule
+#endif

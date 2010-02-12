@@ -1026,5 +1026,7 @@
 "surrounds" "1"
 "skycolor" "0 0 230"
 "skyboxname" "redSky"
+"targetname" "skybox1"
+"skyboxtexture" "redSky"
 "origin" "0 0 64"
 }

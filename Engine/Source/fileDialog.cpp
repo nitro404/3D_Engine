@@ -1,8 +1,3 @@
-
-//*****************************************************************************************//
-//                                      Includes                                           //
-//*****************************************************************************************//
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,35 +7,12 @@
 #include <direct.h>
 #include "fileDialog.h"
 
-//*****************************************************************************************//
-//                                     File Dialogs                                        //
-//*****************************************************************************************//
+char lastMapDirectory[_MAX_DIR] = {'M','A','P','S','\0'};
+char lastWorldDirectory[_MAX_DIR] = {'M','A','P','S','\0'};
+char lastTextureDirectory[_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
+char lastDirectory[_MAX_DIR] = {'\0'};
 
-
-//*****************************************************************************************//
-//                                       Private                                           //
-//*****************************************************************************************//
-
-/*
-char lastMapDirectory [_MAX_DIR] = {'.','.','\\','M','A','P','S','\0'};
-char lastWorldDirectory [_MAX_DIR] = {'.','.','\\','W','O','R','L','D','S','\0'};
-char lastTextureDirectory [_MAX_DIR] = {'.','.','\\','T','E','X','T','U','R','E','S','\0'};
-char lastDirectory [_MAX_DIR] = {'.','.','\\','M','A','P','S','\0'};
-*/
-
-/*
-char lastMapDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','M','A','P','S','\0'};
-char lastWorldDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','M','A','P','S','\0'};
-char lastTextureDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','T','E','X','T','U','R','E','S','\0'};
-char lastDirectory [_MAX_DIR] = {'\0'};
-*/
-
-char lastMapDirectory [_MAX_DIR] = {'M','A','P','S','\0'};
-char lastWorldDirectory [_MAX_DIR] = {'M','A','P','S','\0'};
-char lastTextureDirectory [_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
-char lastDirectory [_MAX_DIR] = {'\0'};
-
-char *directories [4] = {lastMapDirectory, lastWorldDirectory, lastTextureDirectory, lastDirectory};
+char * directories [4] = {lastMapDirectory, lastWorldDirectory, lastTextureDirectory, lastDirectory};
 char lastFilename [MAX_PATH]; 
 
 void setupInternalFilter (char *internalFilter, char *userFilter) {
@@ -75,7 +47,7 @@ void setupQueryStructure (OPENFILENAME &queryStructure, char *filter, char *init
 	queryStructure.lpstrDefExt = NULL;     
 	queryStructure.lCustData = 0;     
 	queryStructure.lpfnHook = NULL;     
-	queryStructure.lpTemplateName = NULL;     
+	queryStructure.lpTemplateName = NULL;
 }
 
 char *promptForReadFile (DirectoryChoice choice, char *filter, char *initialFileName = "") {

@@ -18,7 +18,9 @@ public:
 		movementSpeed = 0;
 	}
 	
-	~Sprite() { }
+	~Sprite() {
+		delete [] name;
+	}
 
 	double distanceFrom(Point & p) const;
 	

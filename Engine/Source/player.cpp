@@ -1,23 +1,6 @@
-
-//*****************************************************************************************//
-//                                      Includes                                           //
-//*****************************************************************************************//
-
 #include "includes.all"
 
-//*****************************************************************************************//
-//                                       Player                                            //
-//*****************************************************************************************//
-
-Player *player = NULL;
-
-void Player::setup () {
-	player = new Player;
-}
-
-void Player::wrapup () {
-	delete player;
-} 
+Player * player = NULL;
 
 void Player::tick () {
 	//Once collision detection is added, will need to deal with movement operations as requests
@@ -40,18 +23,10 @@ void Player::endCamera () {
 }
 
 void Player::moveBy (Point &translation) {
-	const bool logging = false;
-	if (logging) {
-//		::log ("\nPlayer told to translate by "); translation.log ();
-//		::log ("\nTransformation before:"); playerMatrix.normal ().log (1);
-	}
 	playerMatrix.translateBy (translation);
-//	if (logging) {::log ("\nTransformation after:"); playerMatrix.normal ().log (1);}
 }
 
 void Player::rotateBy (Point &rotation) {
-	const bool logging = false;
-//	if (logging) {::log ("\nPlayer told to rotate by "); rotation.log ();}
 	playerMatrix.rotateBy (rotation);
 }
 

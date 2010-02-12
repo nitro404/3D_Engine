@@ -22,4 +22,4 @@ char *promptForTextureWrite ();
 char *promptForAnyRead ();
 char *promptForAnyWrite ();
 
-#endif //fileDialogModule
+#endif

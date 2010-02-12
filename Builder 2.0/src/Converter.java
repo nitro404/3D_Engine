@@ -1,3 +1,9 @@
+// =================================== //
+// COMP 4002A Universal World Builder  //
+// Author: Kevin Scroggins             //
+// E-Mail: nitro404@hotmail.com        //
+// =================================== //
+
 import java.io.*;
 
 public class Converter {
@@ -8,20 +14,27 @@ public class Converter {
 		File[] subFiles = null;
 		String fileExtension;
 		
+		// iterate over all the files in the current directory
 		for(int i=0;i<files.length;i++) {
+			// ignore 0-length folder / file names (such as .svn folders if you use an SVN repository)
 			if(files[i].isDirectory() && subdirectories && files[i].getName().charAt(0) != '.') {
+				// iterate over all of the items in each subdirectory (if appropriate)
 				subFiles = files[i].listFiles();
 				for(int j=0;j<subFiles.length;j++) {
+					// once again, ignore 0-length folder / file names
 					if(subFiles[j].getName().charAt(0) != '.') {
+						// recurse if the current file is a directory
 						if(subFiles[j].isDirectory() && subdirectories && subFiles[j].getName().charAt(0) != '.') {
 							convertFiles(subFiles[j], outDirectory, inExtension, outExtension, subdirectories);
 						}
+						// otherwise convert the selected file
 						else if(subFiles[j].isFile()) {
 							convertFile(subFiles[j], outDirectory, inExtension, outExtension, subdirectories);
 						}
 					}
 				}
 			}
+			// convert the selected file between two specified formats
 			else if(files[i].isFile()) {
 				fileExtension = files[i].getName().substring(files[i].getName().lastIndexOf('.') + 1, files[i].getName().length());
 				if(inExtension.equalsIgnoreCase(fileExtension)) {

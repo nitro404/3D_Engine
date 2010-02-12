@@ -1,3 +1,9 @@
+// =================================== //
+// COMP 4002A Universal World Builder  //
+// Author: Kevin Scroggins             //
+// E-Mail: nitro404@hotmail.com        //
+// =================================== //
+
 import java.util.Vector;
 import java.io.*;
 
@@ -144,15 +150,12 @@ public class UniversalObject {
 		
 		// output the transformations
 		if(this.normal != null && this.inverse != null) {
-//			out.println("\tTransformation: //m11 m12 m13 m14 m21 m22 ... m44");
 			out.println("\tTransformation:");
 			out.print("\t\t");
 			this.normal.writeTo(out);
-//			out.println("; //Standard...");
 			out.println(";");
 			out.print("\t\t");
 			this.inverse.writeTo(out);
-//			out.println("; //Inverse...");
 			out.println(";");
 		}
 		

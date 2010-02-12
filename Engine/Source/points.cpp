@@ -1,15 +1,6 @@
-
-//*****************************************************************************************//
-//                                      Includes                                           //
-//*****************************************************************************************//
-
 #include "includes.all"
 
-//*****************************************************************************************//
-//                                   Points/Vectors                                       //
-//*****************************************************************************************//
-
-Point Point::operator * (const Transformation &t) const {
+Point Point::operator * (const Transformation & t) const {
 	//or Vector = Vector * transformation.
 	Point result (
 		x*t.m11 + y*t.m21 + z*t.m31 + t.m41, 
@@ -22,5 +13,4 @@ Point Point::operator * (const Transformation &t) const {
 	return result * (1.0 / w); //the complicated case.
 }
 
-
-Point Zero = Point (0.0, 0.0, 0.0);
+Point Zero = Point(0.0, 0.0, 0.0);

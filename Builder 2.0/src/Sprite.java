@@ -1,3 +1,9 @@
+// =================================== //
+// COMP 4002A Universal World Builder  //
+// Author: Kevin Scroggins             //
+// E-Mail: nitro404@hotmail.com        //
+// =================================== //
+
 import java.io.PrintWriter;
 
 public class Sprite extends UniversalObject {
@@ -6,7 +12,8 @@ public class Sprite extends UniversalObject {
 	public Point3D position;
 	public Point3D max;
 	public Point3D min;
-
+	
+	// create the Sprite subclass (throw away the transformations and faces)
 	public Sprite(UniversalObject object, int textureIndex) {
 		super(object.objectIndex, null, null, object.properties, null);
 		
@@ -16,7 +23,7 @@ public class Sprite extends UniversalObject {
 		// get the position associated with the normal transformation and store that instead
 		this.position = object.normal.getPosition();
 		
-		// calculate the max and min x, y, z values of the faces and store them instead
+		// calculate the max and min x, y, z values of the faces and store them instead (bounding box)
 		for(int i=0;i<object.faces.size();i++) {
 			for(int j=0;j<object.faces.elementAt(i).points.size();j++) {
 				Point3D p = object.faces.elementAt(i).points.elementAt(j);

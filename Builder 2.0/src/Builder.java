@@ -1,3 +1,9 @@
+// =================================== //
+// COMP 4002A Universal World Builder  //
+// Author: Kevin Scroggins             //
+// E-Mail: nitro404@hotmail.com        //
+// =================================== //
+
 import java.io.File;
 
 public class Builder {
@@ -5,6 +11,7 @@ public class Builder {
 	// output directory is always the root of the search, this may be an issue if it is not specified
 	public static void main(String[] args) {
 		parseParameters(args);
+		// sample program calls:
 		// -dMaps -iuni -owrl -mMaps
 		// -d"Maps" -iuni -owrl
 		// -f"Maps/test.uni" -owrl

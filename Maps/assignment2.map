@@ -480,7 +480,7 @@
 }
 {
 "classname" "info_player_start"
-"origin" "0 0 0"
+"origin" "0 0 704"
 }
 {
 "classname" "Translator"
