@@ -11,6 +11,7 @@ IF NOT EXIST "Texture Compiler/bin/Property.class" 		SET TEXTURECOMPILER=Not Com
 IF NOT EXIST "Texture Compiler/bin/TextureCompiler.class" 	SET TEXTURECOMPILER=Not Compiled
 
 IF NOT EXIST "Builder 2.0/bin" MKDIR "Builder 2.0/bin"
+IF NOT EXIST "Builder 2.0/bin/AnimatedTexture.class" 	SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Builder.class" 		SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Converter.class" 		SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Face.class" 		SET BUILDER=Not Compiled
@@ -50,7 +51,6 @@ CD "../../"
 ECHO.
 ECHO Copying Texture List...
 XCOPY "Texture Compiler\textures.ini" "Builder 2.0" /I /Y
-XCOPY "Texture Compiler\textures.ini" "%RELEASE%" /I /Y
 
 ECHO.
 CD "Builder 2.0"
@@ -62,7 +62,7 @@ ECHO.
 :BUILDER_COMPILED
 CD bin
 ECHO Building Maps...
-java Builder -d../../Maps -iuni -owrl -m../../Maps
+java Builder -d../../Maps -iuni -owrl -m../../Maps -t../textures.ini
 ECHO Done Building Maps!
 CD "../../"
 

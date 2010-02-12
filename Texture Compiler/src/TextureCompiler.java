@@ -24,8 +24,10 @@ public class TextureCompiler {
 			out.println("Textures: " + textureNames.size() + ";");
 			
 			for(String s : textureNames) {
-				out.println(s);
+				out.println("\t" + s);
 			}
+			
+			out.println("AnimatedTextures: " + animatedTextures.size() + ";");
 			
 			for(AnimatedTexture t : animatedTextures) {
 				t.writeTo(out);
@@ -47,17 +49,20 @@ public class TextureCompiler {
 		}
 		
 		File[] contents = aFolder.listFiles();
+		String fileName;
 		
 		for(int i=0;i<contents.length;i++) {
 			if(contents[i].isFile() && !contents[i].getName().equals("Thumbs.db")) {
-//				data.add(removeExtensionFrom(contents[i].getName()));
-				data.add(contents[i].getName());
+				fileName = removeExtensionFrom(contents[i].getName());
+				if(!data.contains(fileName)) {
+					data.add(fileName);
+				}
 			}
 			
 		}
 	}
 	
-	/*private static String removeExtensionFrom(String fileName) {
+	private static String removeExtensionFrom(String fileName) {
 		if(fileName == null || fileName.length() == 0) return null;
 		
 		int index = fileName.length();
@@ -69,7 +74,7 @@ public class TextureCompiler {
 		}
 		
 		return fileName.substring(0, index);
-	}*/
+	}
 	
 	private static void sortData(Vector<String> data) {
 		if(data == null || data.size() <= 1) return;

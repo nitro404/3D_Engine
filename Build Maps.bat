@@ -4,6 +4,7 @@ CLS
 SET BUILDER=Compiled
 
 IF NOT EXIST "Builder 2.0/bin" MKDIR "Builder 2.0/bin"
+IF NOT EXIST "Builder 2.0/bin/AnimatedTexture.class" 	SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Builder.class" 		SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Converter.class" 		SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Face.class" 		SET BUILDER=Not Compiled
@@ -33,7 +34,7 @@ ECHO.
 :BUILDER_COMPILED
 CD bin
 ECHO Building Maps...
-java Builder -d../../Maps -iuni -owrl -m../../Maps
+java Builder -d../../Maps -iuni -owrl -m../../Maps -t../textures.ini
 ECHO Done Building Maps!
 CD "../../"
 PAUSE

@@ -4,12 +4,13 @@
 // E-Mail: nitro404@hotmail.com        //
 // =================================== //
 
+import java.util.Vector;
 import java.io.*;
 
 public class Converter {
 	
 	// convert a set of files between two formats
-	public static void convertFiles(File fileDirectory, File outDirectory, String inExtension, String outExtension, boolean subdirectories) {
+	public static void convertFiles(File fileDirectory, File outDirectory, String inExtension, String outExtension, boolean subdirectories, File textureDataFile) {
 		File[] files = fileDirectory.listFiles();
 		File[] subFiles = null;
 		String fileExtension;
@@ -25,11 +26,11 @@ public class Converter {
 					if(subFiles[j].getName().charAt(0) != '.') {
 						// recurse if the current file is a directory
 						if(subFiles[j].isDirectory() && subdirectories && subFiles[j].getName().charAt(0) != '.') {
-							convertFiles(subFiles[j], outDirectory, inExtension, outExtension, subdirectories);
+							convertFiles(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, textureDataFile);
 						}
 						// otherwise convert the selected file
 						else if(subFiles[j].isFile()) {
-							convertFile(subFiles[j], outDirectory, inExtension, outExtension, subdirectories);
+							convertFile(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, textureDataFile);
 						}
 					}
 				}
@@ -38,14 +39,14 @@ public class Converter {
 			else if(files[i].isFile()) {
 				fileExtension = files[i].getName().substring(files[i].getName().lastIndexOf('.') + 1, files[i].getName().length());
 				if(inExtension.equalsIgnoreCase(fileExtension)) {
-					convertFile(files[i], outDirectory, inExtension, outExtension, subdirectories);
+					convertFile(files[i], outDirectory, inExtension, outExtension, subdirectories, textureDataFile);
 				}
 			}
 		}
 	}
 	
 	// convert a file between two formats
-	public static void convertFile(File file, File outDirectory, String inExtension, String outExtension, boolean subdirectories) {
+	public static void convertFile(File file, File outDirectory, String inExtension, String outExtension, boolean subdirectories, File textureDataFile) {
 		Map3D originalMap = null;
 		Map3D convertedMap = null;
 		File outputFile = null;
@@ -74,12 +75,33 @@ public class Converter {
 			originalMap = new UniversalMap(file);
 		}
 		
+		// input the texture data (if appropriate)
+		Vector<String> textureNames = null;
+		Vector<AnimatedTexture> animatedTextures = null;
+		if(textureDataFile != null) {
+			textureNames = new Vector<String>();
+			animatedTextures = new Vector<AnimatedTexture>();
+			try {
+				BufferedReader in = new BufferedReader(new FileReader(textureDataFile));
+				readTextureData(in, textureNames, animatedTextures);
+			}
+			catch(Exception e) {
+				System.out.println("ERROR: Error reading texture data file " + textureDataFile.getName() + ".");
+				System.exit(1);
+			}
+		}
+		
 		// output the converted map
 		if(outExtension.equalsIgnoreCase("uni")) {
 			convertedMap = new UniversalMap(originalMap);
 		}
 		else if(outExtension.equalsIgnoreCase("wrl")) {
-			convertedMap = new World(originalMap);
+			if(textureDataFile == null) {
+				convertedMap = new World(originalMap);
+			}
+			else {
+				convertedMap = new World(originalMap, textureNames, animatedTextures);
+			}
 		}
 		
 		// write the converted map to file
@@ -94,4 +116,47 @@ public class Converter {
 		}
 	}
 	
+	private static void readTextureData(BufferedReader in, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures) throws Exception {
+		String input;
+		
+		// input the textures header
+		input = in.readLine().trim();
+		String texturesHeader = input.substring(0, input.lastIndexOf(':')).trim();
+		if(!texturesHeader.equalsIgnoreCase("Textures")) {
+			System.out.println("ERROR: Invalid texture data file format. Expected header \"Textures\", found \"" + texturesHeader + "\".");
+			System.exit(1);
+		}
+		
+		// input the number of textures
+		int numberOfTextures = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+		if(numberOfTextures < 0) {
+			System.out.println("ERROR: Texture count is negative in texture data file.");
+			System.exit(1);
+		}
+		
+		// input the list of textures
+		for(int i=0;i<numberOfTextures;i++) {
+			textureNames.add(in.readLine().trim());
+		}
+		
+		// input the textures header
+		input = in.readLine().trim();
+		String animatedTexturesHeader = input.substring(0, input.lastIndexOf(':')).trim();
+		if(!animatedTexturesHeader.equalsIgnoreCase("AnimatedTextures")) {
+			System.out.println("ERROR: Invalid texture data file format. Expected header \"AnimatedTextures\", found \"" + animatedTexturesHeader + "\".");
+			System.exit(1);
+		}
+		
+		// input the number of textures
+		int numberOfAnimatedTextures = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+		if(numberOfAnimatedTextures < 0) {
+			System.out.println("ERROR: Animated texture count is negative in texture data file.");
+			System.exit(1);
+		}
+		
+		// input the list of animated textures
+		for(int i=0;i<numberOfAnimatedTextures;i++) {
+			animatedTextures.add(new AnimatedTexture(in));
+		}
+	}
 }

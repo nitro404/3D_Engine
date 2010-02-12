@@ -25,12 +25,12 @@ public class AnimatedTexture {
 	}
 	
 	public void writeTo(PrintWriter out) throws Exception {
-		out.println("AnimatedTexture: " + index + ";");
-		out.println("\tProperties: 4;");
-		out.println("\t\t\"name\" => \"" + name + "\"");
-		out.println("\t\t\"firsttexture\" => \"" + firstTextureIndex + "\"");
-		out.println("\t\t\"frames\" => \"" + frames + "\"");
-		out.println("\t\t\"speed\" => \"" + speed + "\"");
+		out.println("\tAnimatedTexture: " + index + ";");
+		out.println("\t\tProperties: 4;");
+		out.println("\t\t\t\"name\" => \"" + name + "\"");
+		out.println("\t\t\t\"firsttexture\" => \"" + firstTextureIndex + "\"");
+		out.println("\t\t\t\"frames\" => \"" + frames + "\"");
+		out.println("\t\t\t\"speed\" => \"" + speed + "\"");
 	}
 	
 }

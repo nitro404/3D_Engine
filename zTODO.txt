@@ -49,3 +49,5 @@ BUILDER 2.0
  + optimize builder for pre-calculating waypoint indexes
  + Implement Worldcraft *.map reading
  + Fix output directory structure being non-existant
+ + Make builder determine texture extension before outputting them to the file - why the hell is the engine doing this?
+ + Possibly allow textures mid-animation to be selected

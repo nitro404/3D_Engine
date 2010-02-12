@@ -11,8 +11,10 @@ public class World implements Map3D {
 	
 	public Point3D startPosition;
 	public Vector<String> textureNames;
+	public Vector<AnimatedTexture> animatedTextures;
 	public Vector<UniversalObject> objects;
 	public Vector<Waypoint> waypoints;
+	public boolean externalTextureData;
 	
 	public World(File file) {
 		try {
@@ -36,6 +38,19 @@ public class World implements Map3D {
 		}
 	}
 	
+	public World(Map3D map, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures) {
+		this.textureNames = textureNames;
+		this.animatedTextures = animatedTextures;
+		try {
+			this.convertFrom(map);
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: Error converting map.");
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+	
 	public void convertFrom(Map3D map) throws Exception {
 		// convert the map based on what map type it is an instance of
 		if(map instanceof WorldcraftMap) {
@@ -48,10 +63,11 @@ public class World implements Map3D {
 			this.startPosition = null;
 			objects = new Vector<UniversalObject>();
 			waypoints = new Vector<Waypoint>();
+			externalTextureData = textureNames != null && animatedTextures != null;
 			
 			// collect a list of all the texture names in the map
-			// and assign index pointers in place of where the texture name used to be 
-			textureNames = new Vector<String>();
+			// and assign index pointers in place of where the texture name used to be
+			if(!externalTextureData) { textureNames = new Vector<String>(); }
 			String type;
 			for(int i=0;i<universalMap.objects.size();i++) {
 				object = universalMap.objects.elementAt(i);
@@ -61,28 +77,68 @@ public class World implements Map3D {
 				boolean duplicateTextureName;
 				Face face;
 				String textureName;
-				int textureIndex = 0;
-				if(type.equalsIgnoreCase("sprite")) {
-					textureName = object.getPropertyValue("picture");
-					duplicateTextureName = false;
-					for(int k=0;k<textureNames.size();k++) {
-						if(textureNames.elementAt(k).equalsIgnoreCase(textureName)) {
-							duplicateTextureName = true;
-							textureIndex = k;
-							break;
+				int textureIndex = -1;
+				
+				// get textures from data read from external texture file
+				if(externalTextureData) {
+					// get texture from regular texture list
+					if(type.equalsIgnoreCase("sprite")) {
+						textureName = object.getPropertyValue("picture");
+						
+/*						// get texture from animated texture list
+						if(type.equalsIgnoreCase("animatedsprite")) {
+							for(int k=0;k<animatedTextures.size();k++) {
+								if(textureNames.elementAt(animatedTextures.elementAt(k).firstTextureIndex).equalsIgnoreCase(textureName)) {
+									textureIndex = k;
+									break;
+								}
+							}
+						}
+						// get texture from static texture list
+						else {
+*/							for(int k=0;k<textureNames.size();k++) {
+								if(textureNames.elementAt(k).equalsIgnoreCase(textureName)) {
+									textureIndex = k;
+									break;
+								}
+							}
+//						}
+						
+						object.setPropertyValue("picture", Integer.toString(textureIndex));
+					}
+					else {						
+						for(int j=0;j<object.faces.size();j++) {
+							face = object.faces.elementAt(j);
+							textureName = face.getPropertyValue("texture");
+							
+							// get texture from animated texture list
+							if(type.equalsIgnoreCase("pool")) {
+								for(int k=0;k<animatedTextures.size();k++) {
+									if(textureNames.elementAt(animatedTextures.elementAt(k).firstTextureIndex).equalsIgnoreCase(textureName)) {
+										textureIndex = k;
+										break;
+									}
+								}
+							}
+							// get texture from static texture list
+							else {
+								for(int k=0;k<textureNames.size();k++) {
+									if(textureNames.elementAt(k).equalsIgnoreCase(textureName)) {
+										textureIndex = k;
+										break;
+									}
+								}
+							}
+							
+							face.setPropertyValue("texture", Integer.toString(textureIndex));
 						}
 					}
-					if(!duplicateTextureName) {
-						textureNames.add(textureName);
-						textureIndex = textureNames.size() - 1;
-					}
-					object.setPropertyValue("picture", Integer.toString(textureIndex));
 				}
+				// collect textures from universal map file
 				else {
-					for(int j=0;j<object.faces.size();j++) {
-						face = object.faces.elementAt(j);
+					if(type.equalsIgnoreCase("sprite")) {
+						textureName = object.getPropertyValue("picture");
 						duplicateTextureName = false;
-						textureName = face.getPropertyValue("texture");
 						for(int k=0;k<textureNames.size();k++) {
 							if(textureNames.elementAt(k).equalsIgnoreCase(textureName)) {
 								duplicateTextureName = true;
@@ -90,12 +146,33 @@ public class World implements Map3D {
 								break;
 							}
 						}
-						
 						if(!duplicateTextureName) {
 							textureNames.add(textureName);
 							textureIndex = textureNames.size() - 1;
 						}
-						face.setPropertyValue("texture", Integer.toString(textureIndex));
+						
+						object.setPropertyValue("picture", Integer.toString(textureIndex));
+					}
+					else {
+						for(int j=0;j<object.faces.size();j++) {
+							face = object.faces.elementAt(j);
+							duplicateTextureName = false;
+							textureName = face.getPropertyValue("texture");
+							for(int k=0;k<textureNames.size();k++) {
+								if(textureNames.elementAt(k).equalsIgnoreCase(textureName)) {
+									duplicateTextureName = true;
+									textureIndex = k;
+									break;
+								}
+							}
+							
+							if(!duplicateTextureName) {
+								textureNames.add(textureName);
+								textureIndex = textureNames.size() - 1;
+							}
+							
+							face.setPropertyValue("texture", Integer.toString(textureIndex));
+						}
 					}
 				}
 				
@@ -166,6 +243,17 @@ public class World implements Map3D {
 		out.println("Textures: " + this.textureNames.size() + ";");
 		for(int i=0;i<this.textureNames.size();i++) {
 			out.println("\t" + this.textureNames.elementAt(i));
+		}
+		
+		// print the animated textures header, followed by the animated texture data (if appropriate)
+		if(externalTextureData) {
+			out.println("AnimatedTextures: " + this.animatedTextures.size() + ";");
+			for(int i=0;i<this.animatedTextures.size();i++) {
+				this.animatedTextures.elementAt(i).writeTo(out);
+			}
+		}
+		else {
+			out.println("AnimatedTextures: 0;");
 		}
 		
 		// print the waypoints header, followed by the waypoints
