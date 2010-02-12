@@ -130,15 +130,16 @@ void Game::drawFrameRate () {
 }
 
 void Game::drawNote (const char *message, ...) {
-	char text [1000]; va_list parameters;									
+	char text[1000];
+	va_list parameters;									
 	if (message == NULL) return;
-
+	
 	//Extract variable length parameters and copy into text as in printf.
-	va_start (parameters, message);					
-	    vsprintf (text, message, parameters);		
-	va_end (parameters);
+	va_start(parameters, message);					
+	    vsprintf(text, message, parameters);		
+	va_end(parameters);
 
-	drawMessage (1, screenHeight-52, "%s", text);
+	drawMessage(1, screenHeight-52, "%s", text);
 }
 
 void Game::import() {
@@ -149,5 +150,6 @@ void Game::import() {
 	if(fileName != NULL) {
 		world = new World;
 		world->import(fileName);
+		player->reset(world->startPosition);
 	}
 }

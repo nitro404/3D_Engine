@@ -342,9 +342,6 @@ void genericMenuHandler(int item) {
 	switch(item) {
 		case RunWorld:
 			game->import();
-//			game->world = new World();
-//			game->world->import();
-//				player->reset(game->world->startPosition);
 			break;
 	}
 }
