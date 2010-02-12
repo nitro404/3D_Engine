@@ -24,7 +24,6 @@ public:
 	}
 
 	~AnimatedFace() {
-printf("OK");
 for(int i=0;i<32;i++){
 delete textures[i];
 }

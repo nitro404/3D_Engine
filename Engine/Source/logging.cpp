@@ -26,7 +26,7 @@ void prompt(char * message, ...) {
 void quit(char * message, ...) {
 	if(message != NULL) {
 		setupStaticBuffer();
-		printf("Terimating: %s", buffer);
+		MessageBox(NULL, buffer, "Terminating", MB_OK);
 	}
 	exit(0);
 }
