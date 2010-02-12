@@ -51,3 +51,7 @@ BUILDER 2.0
  + Fix output directory structure being non-existant
  + Make builder determine texture extension before outputting them to the file - why the hell is the engine doing this?
  + Possibly allow textures mid-animation to be selected
+
+TEXTURE COMPILER
+ + Actually implement parameter interface - most of it is currently hard coded
+ + Fix up batch files to use parameter interface
