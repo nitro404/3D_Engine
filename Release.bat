@@ -44,8 +44,7 @@ ECHO.
 :TEXTURECOMPILER_COMPILED
 CD bin
 ECHO Compiling Texture List...
-java TextureCompiler
-REM java TextureCompiler -i"../animations.ini" -o"../textures.ini"
+java TextureCompiler -d"../../textures/" -i"../animations.ini" -o"../textures.ini" -r
 ECHO Done Compiling Texture List!
 CD "../../"
 ECHO.

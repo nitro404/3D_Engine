@@ -34,11 +34,11 @@ public class Builder {
 			System.out.println("");
 			System.out.println(" -f :: file name; e.g., -f\"C:\\Test\\Maps\\room.map\"");
 			System.out.println(" -d :: directory (containing map files to convert); e.g., -d\"..\\Project\\Maps\"");
-			System.out.println(" -m :: output directory (optional), e.g., -m\"C:\\Project\\Maps\\Converted\\");
-			System.out.println(" -i :: file extension to read (only required if -d specified), e.g., -imap");
-			System.out.println(" -o :: file extension to output, e.g., -ouni");
+			System.out.println(" -m :: output directory (optional); e.g., -m\"C:\\Project\\Maps\\Converted\\");
+			System.out.println(" -i :: file extension to read (only required if -d specified); e.g., -imap");
+			System.out.println(" -o :: file extension to output; e.g., -ouni");
 			System.out.println(" -s :: recurse to subdirectories (only if present)");
-			System.out.println(" -t :: read texture data from alternate file (optional) e.g., -t\"textures.ini\"");
+			System.out.println(" -t :: read texture data from alternate file (optional); e.g., -t\"textures.ini\"");
 		}
 		else {
 			String fileName = null;
@@ -56,26 +56,28 @@ public class Builder {
 			
 			// parse through parameters
 			for(int i=0;i<args.length;i++) {
-				if(args[i].substring(0, 2).equalsIgnoreCase("-f")) {
-					fileName = args[i].substring(2, args[i].length());
-				}
-				else if(args[i].substring(0, 2).equalsIgnoreCase("-d")) {
-					fileDirectoryName = args[i].substring(2, args[i].length());
-				}
-				else if(args[i].substring(0, 2).equalsIgnoreCase("-m")) {
-					outDirectoryName = args[i].substring(2, args[i].length());
-				}
-				else if(args[i].substring(0, 2).equalsIgnoreCase("-i")) {
-					inExtension = args[i].substring(2, args[i].length());
-				}
-				else if(args[i].substring(0, 2).equalsIgnoreCase("-o")) {
-					outExtension = args[i].substring(2, args[i].length());
-				}
-				else if(args[i].substring(0, 2).equalsIgnoreCase("-s")) {
-					subdirectories = true;
-				}
-				else if(args[i].substring(0, 2).equalsIgnoreCase("-t")) {
-					textureDataFileName = args[i].substring(2, args[i].length());
+				if(args[i].length() >= 2) {
+					if(args[i].substring(0, 2).equalsIgnoreCase("-f")) {
+						fileName = args[i].substring(2, args[i].length());
+					}
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-d")) {
+						fileDirectoryName = args[i].substring(2, args[i].length());
+					}
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-m")) {
+						outDirectoryName = args[i].substring(2, args[i].length());
+					}
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-i")) {
+						inExtension = args[i].substring(2, args[i].length());
+					}
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-o")) {
+						outExtension = args[i].substring(2, args[i].length());
+					}
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-s")) {
+						subdirectories = true;
+					}
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-t")) {
+						textureDataFileName = args[i].substring(2, args[i].length());
+					}
 				}
 			}
 			
