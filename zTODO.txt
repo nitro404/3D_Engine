@@ -13,7 +13,7 @@ ENGINE
    - possibly make textures ONLY stored in external file instead of directly with map file?
  + POOL
    - temporarily added insideOf() for proper draw order
-   - implement ray function
+   - implement ray function: http://erich.realtimerendering.com/ptinpoly/
    - add tinting transluscent sprite using ray method if inside water
  + SKYBOX
    - fix implementation
