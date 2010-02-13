@@ -55,3 +55,6 @@ BUILDER 2.0
 TEXTURE COMPILER
  + Actually implement parameter interface - most of it is currently hard coded
  + Fix up batch files to use parameter interface
+
+FACE CLASS
+ + Should only have one property - so get rid of the property list...

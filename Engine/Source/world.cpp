@@ -219,8 +219,8 @@ void World::import(char * fileName) {
 		waypoint->import(input);
 		waypoints.push_back(waypoint);
 	}
-
-	// collect waypoints and add neighbouring waypoints to each waypoint object, then collect the waypoints in the main object collection
+	
+	// collect waypoints and add neighbouring waypoints to each waypoint
 	char * separator;
 	char * head;
 	char * start;
@@ -261,13 +261,7 @@ void World::import(char * fileName) {
 			
 			// set each waypoint as a neighbour of the other
 			if(valid) {
-				for(j=0;j<waypoints.size();j++) {
-					if(stricmp(head, waypoints.at(j)->name) == 0 ){
-						waypoints.at(i)->addNeighbour(waypoints.at(j));
-						waypoints.at(j)->addNeighbour(waypoints.at(i));
-					}
-				}
-
+				waypoints.at(i)->addNeighbour(waypoints.at(atoi(head)));
 			}
 			
 			// iterate to the next element in the string

@@ -7,17 +7,7 @@ double Waypoint::distanceFrom(Point & p) const {
 void Waypoint::addNeighbour(Waypoint * w) {
 	if(w == NULL) { return; }
 	
-	bool valid = true;
-
-	for(int i=0;i<this->neighbours.size();i++) {
-		if(stricmp(this->neighbours.at(i)->name, w->name) == 0 || stricmp(this->name, w->name) == 0) {
-			valid = false;
-		}
-	}
-	
-	if(valid) {
-		this->neighbours.push_back(w);
-	}
+	this->neighbours.push_back(w);
 }
 
 Waypoint * Waypoint::getRandomNeighbour() {

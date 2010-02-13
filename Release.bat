@@ -87,6 +87,6 @@ IF EXIST log DEL log
 
 ECHO.
 ECHO Done!
-ECHO.
 
+ECHO.
 PAUSE

@@ -12,7 +12,7 @@ public class Builder {
 	public static void main(String[] args) {
 		parseParameters(args);
 		// sample program calls:
-		// -dMaps -iuni -owrl -mMaps -ttextures.ini
+		// -d../Maps -iuni -owrl -m../Maps -ttextures.ini
 		// -dMaps -iuni -owrl -mMaps
 		// -d"Maps" -iuni -owrl
 		// -f"Maps/test.uni" -owrl

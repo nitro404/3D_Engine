@@ -4,6 +4,7 @@
 // E-Mail: nitro404@hotmail.com        //
 // =================================== //
 
+import java.util.StringTokenizer;
 import java.util.Vector;
 import java.io.*;
 
@@ -63,6 +64,7 @@ public class World implements Map3D {
 			this.startPosition = null;
 			objects = new Vector<UniversalObject>();
 			waypoints = new Vector<Waypoint>();
+			Vector<Sprite> sprites = new Vector<Sprite>();
 			externalTextureData = textureNames != null && animatedTextures != null;
 			
 			// collect a list of all the texture names in the map
@@ -200,7 +202,9 @@ public class World implements Map3D {
 					objects.add(new Translator(object, textureIndex));
 				}
 				else if(type.equalsIgnoreCase("sprite")) {
-					objects.add(new Sprite(object, textureIndex));
+					Sprite newSprite = new Sprite(object, textureIndex);
+					objects.add(newSprite);
+					sprites.add(newSprite);
 				}
 				else if(type.equalsIgnoreCase("waypoint")) {
 					waypoints.add(new Waypoint(object));
@@ -211,6 +215,64 @@ public class World implements Map3D {
 				else {
 					System.out.println("WARNING: Ignoring unexpected object of type \"" + type + "\".");
 				}
+			}
+			
+			// replace waypoint neighbour names with pointers to the index in the array of each corresponding waypoint
+			StringTokenizer tokenizer;
+			String token;
+			Integer waypointIndexObject;
+			Vector<Integer> waypointIndexes;
+			String neighbourReferences;
+			for(int i=0;i<waypoints.size();i++) {
+				tokenizer = new StringTokenizer(waypoints.elementAt(i).getPropertyValue("neighbours").trim(), ", ", false);
+				waypointIndexes = new Vector<Integer>();
+				while(tokenizer.hasMoreTokens()) {
+					waypointIndexObject = null;
+					token = tokenizer.nextToken().trim();
+					for(int j=0;j<waypoints.size();j++) {
+						if(waypoints.elementAt(j).getPropertyValue("name").equalsIgnoreCase(token)) {
+							waypointIndexObject = new Integer(j);
+							break;
+						}
+					}
+					if(waypointIndexObject == null) {
+						System.out.println("ERROR: Invalid waypoint neighbour \"" + token + "\" found on waypoint \"" + waypoints.elementAt(i).getPropertyValue("name") + "\".");
+						System.exit(1);
+					}
+					if(!waypointIndexes.contains(waypointIndexObject)) {
+						waypointIndexes.add(waypointIndexObject);
+					}
+				}
+				
+				neighbourReferences = "";
+				for(int j=0;j<waypointIndexes.size();j++) {
+					neighbourReferences += waypointIndexes.elementAt(j);
+					if(j < waypointIndexes.size() - 1) {
+						neighbourReferences += ", ";
+					}
+				}
+				
+				waypoints.elementAt(i).setPropertyValue("neighbours", neighbourReferences);
+			}
+			
+			// replace the sprite waypoint reference names with actual pointers to the index of the same waypoint in the waypoint list
+			String waypointName;
+			int waypointIndex;
+			for(int i=0;i<sprites.size();i++) {
+				waypointName = sprites.elementAt(i).getPropertyValue("waypoint");
+				waypointIndex = -1;
+				for(int j=0;j<waypoints.size();j++) {
+					if(waypoints.elementAt(j).getPropertyValue("name").equalsIgnoreCase(waypointName)) {
+						waypointIndex = j;
+						break;
+					}
+				}
+				if(waypointIndex == -1) {
+					System.out.println("ERROR: Invalid waypoint reference on sprite \"" + sprites.elementAt(i).getPropertyValue("name") + "\": \"" + waypointName + "\".");
+					System.exit(1);
+				}
+				
+				sprites.elementAt(i).setPropertyValue("waypoint", Integer.toString(waypointIndex));
 			}
 			
 		}

@@ -80,3 +80,91 @@ bool Pool::insideOf(Point & p) const {
 			drawPoint(0.5,-0.5, 0.5, width, 1-width);
 			drawPoint(-0.5,-0.5, 0.5, 1-width, 1-width);
 			glEnd();
+
+
+	// collect waypoints and add neighbouring waypoints to each waypoint object, then collect the waypoints in the main object collection
+	char * separator;
+	char * head;
+	char * start;
+	char * end;
+	bool valid;
+	bool endOfString;
+	for(i=0;i<waypoints.size();i++) {
+		// parse through the string of neighbour waypoint values
+		head = waypoints.at(i)->neighbourValues;
+		do {
+			// trim whitespace
+			valid = true;
+			endOfString = false;
+			separator = strchr(head, ',');
+			if(separator == NULL) {
+				separator = head + ((strlen(head) - 1) * sizeof(char) + sizeof(char));
+				endOfString = true;
+			}
+			else {
+				*separator = '\0';
+			}
+			start = head;
+			end = separator - sizeof(char);
+			// trim the front of the string
+			while(*start == ' ' || *start == '\t') {
+				*start = '\0';
+				start += sizeof(char);
+			}
+			// trim the end of the string
+			while(*end == ' ' || *end == '\t') {
+				*end = '\0';
+				end -= sizeof(char);
+			}
+			if(start > end) {
+				valid = false;
+			}
+			head = start;
+			
+			// set each waypoint as a neighbour of the other
+			if(valid) {
+				for(j=0;j<waypoints.size();j++) {
+					if(stricmp(head, waypoints.at(j)->name) == 0 ){
+						waypoints.at(i)->addNeighbour(waypoints.at(j));
+						waypoints.at(j)->addNeighbour(waypoints.at(i));
+					}
+				}
+
+			}
+			
+			// iterate to the next element in the string
+			head = separator + sizeof(char);
+		} while(!endOfString);
+	}
+
+
+
+void Waypoint::addNeighbour(Waypoint * w) {
+	if(w == NULL) { return; }
+	
+	bool valid = true;
+
+	for(int i=0;i<this->neighbours.size();i++) {
+		if(stricmp(this->neighbours.at(i)->name, w->name) == 0 || stricmp(this->name, w->name) == 0) {
+			valid = false;
+		}
+	}
+	
+	if(valid) {
+		this->neighbours.push_back(w);
+	}
+}
+
+
+
+		else if(stricmp(key, "waypoint") == 0) {
+			for(int i=0;i<waypoints.size();i++) {
+				if(stricmp(waypoints.at(i)->name, str) == 0) {
+					origin = waypoints.at(i);
+					break;
+				}
+			}
+			delete [] str;
+		}
+
+

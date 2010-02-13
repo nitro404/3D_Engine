@@ -40,7 +40,12 @@ void Sprite::draw () {
 	
 	glPushIdentity();
 
-	glTranslated(newPosition.x, newPosition.y + (extent.y/2), newPosition.z);
+	if(origin == NULL) {
+		glTranslated(newPosition.x, newPosition.y, newPosition.z);
+	}
+	else {
+		glTranslated(newPosition.x, newPosition.y + (extent.y/2), newPosition.z);
+	}
 	glScaled(extent.x, extent.y, extent.z);
 
 	glBegin(GL_POLYGON);
@@ -99,12 +104,7 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 			delete [] str;
 		}
 		else if(stricmp(key, "waypoint") == 0) {
-			for(int i=0;i<waypoints.size();i++) {
-				if(stricmp(waypoints.at(i)->name, str) == 0) {
-					origin = waypoints.at(i);
-					break;
-				}
-			}
+			origin = waypoints.at(atoi(str));
 			delete [] str;
 		}
 		else if(stricmp(key, "movementSpeed") == 0) {
