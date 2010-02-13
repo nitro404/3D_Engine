@@ -1,7 +1,3 @@
-IMPORTANT
- + Crashes on exit
- + Insane memory leaks
-
 ENGINE
  + MAIN
    - add fullscreen option (main.cpp)
@@ -13,40 +9,24 @@ ENGINE
    - implement menu
  + WORLD
    - use readUnknownTexture instead to load all textures
- + WATER ANIMATION
-   - builder takes base texture name, and automatically finds all other textures
-   - AnimatedTexture class
-   - tick texture
-   - how about having the base texture name, and the number of textures as a property
- + WAYPOINTS
-   - trim whitespace on sprite waypoint pointer name (in builder)
-   - move waypoint pointer trimming to builder as well
- + TRANSPARENCY
-   - fix draw order based on transluscent geometry
- + ANIMATED FACES
-   - make separate list of textures / animated textures with attributes, then read that list when map loads (read from builder too)
-   - make animated textures dynamic
-   - fix pool to not import 6 different animated textures plz
-   - being temp deleted in animated face deconstructor
-   - animate based on DT
+ + TEXTURES
+   - possibly make textures ONLY stored in external file instead of directly with map file?
  + POOL
    - temporarily added insideOf() for proper draw order
-   - implement drawBack() function for face
-   - add tinting transluscent sprite using ray method if inside water
- + DRAW ORDER
    - implement ray function
+   - add tinting transluscent sprite using ray method if inside water
  + SKYBOX
-   - 1/(W-1) for pixel offset
- + GEOMETRY
-   - add transparency option
+   - fix implementation
+ + POSITION
+   - get Ian's getPosition code
  + ENVIRONMENT
    - implement colour object
-   - divide by 255 for proper colour
-   - temporarily deleting skybox textures in environment destructor
-   - skybox SRT
+   - divide by 255 for proper colour (create colour class)
+
+FACE CLASS
+ + Should only have one property - so get rid of the property list...
 
 BUILDER 2.0
- + optimize builder for pre-calculating waypoint indexes
  + Implement Worldcraft *.map reading
  + Fix output directory structure being non-existant
  + Make builder determine texture extension before outputting them to the file - why the hell is the engine doing this?
@@ -55,6 +35,3 @@ BUILDER 2.0
 TEXTURE COMPILER
  + Actually implement parameter interface - most of it is currently hard coded
  + Fix up batch files to use parameter interface
-
-FACE CLASS
- + Should only have one property - so get rid of the property list...
