@@ -8,15 +8,19 @@
 #include <iostream> 
 #include <fstream>
 #include <time.h>
-#include "GLUT/glut.h"
-#include "logging.h"
-#include "fileDialog.h"
 #include <vector>
 #include <map>
 
 using namespace std;
 
 //#pragma warning (disable: 4786)
+
+#include "Variable.h"
+#include "Variables.h"
+
+#include "GLUT/glut.h"
+#include "logging.h"
+
 #include "utilities.h"
 #include "points.h"
 #include "transformations.h"

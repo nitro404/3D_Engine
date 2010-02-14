@@ -1,12 +1,10 @@
-//95.4002 Wilf LaLonde: Student game engine.
-
 #include "includes.all"
 
 char * gameName = "3D Game Engine";
 int mouseSensitivity = 5;
 bool fullscreen = false;
-long initialScreenWidth = 1200;
-long initialScreenHeight = 720;
+int initialScreenWidth = 1200;
+int initialScreenHeight = 720;
 
 void exitGame();
 
@@ -16,8 +14,8 @@ enum MenuItem {DifficultyEasy, DifficultyChallenging, DifficultyImpossible,
 MenuItem difficulty; MenuItem displayMode;
 
 bool wireframe = false;
-long screenWidth;
-long screenHeight;
+int screenWidth;
+int screenHeight;
 char filename [256];
 
 #define escapeCharacter 27

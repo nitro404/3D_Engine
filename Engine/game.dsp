@@ -99,23 +99,11 @@ SOURCE=.\Source\camera.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\environment.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\Source\face.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\fileDialog.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\Source\game.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\geometry.cpp
 # End Source File
 # Begin Source File
 
@@ -143,19 +131,7 @@ SOURCE=.\Source\points.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\pool.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\rotator.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\Source\sound.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\sprite.cpp
 # End Source File
 # Begin Source File
 
@@ -163,19 +139,7 @@ SOURCE=.\Source\texture.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\translator.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\Source\utilities.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\vehicle.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\waypoint.cpp
 # End Source File
 # Begin Source File
 
@@ -199,23 +163,11 @@ SOURCE=.\Source\camera.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\environment.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Source\face.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\fileDialog.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Source\game.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\geometry.h
 # End Source File
 # Begin Source File
 
@@ -231,10 +183,6 @@ SOURCE=.\Source\logging.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\object.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Source\plane.h
 # End Source File
 # Begin Source File
@@ -247,19 +195,7 @@ SOURCE=.\Source\points.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\pool.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\rotator.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Source\sound.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\sprite.h
 # End Source File
 # Begin Source File
 
@@ -271,11 +207,87 @@ SOURCE=.\Source\transformations.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Source\utilities.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\world.h
+# End Source File
+# End Group
+# Begin Group "GLUT"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Source\GLUT\GL.H
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\GLUT\GLU.H
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\GLUT\glut.h
+# End Source File
+# End Group
+# Begin Group "Objects"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Source\environment.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\environment.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\geometry.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\geometry.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\object.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\pool.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\pool.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\rotator.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\rotator.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\sprite.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\sprite.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\translator.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Source\translator.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\utilities.h
+SOURCE=.\Source\vehicle.cpp
 # End Source File
 # Begin Source File
 
@@ -283,20 +295,12 @@ SOURCE=.\Source\vehicle.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\waypoint.h
+SOURCE=.\Source\waypoint.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\world.h
+SOURCE=.\Source\waypoint.h
 # End Source File
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# End Group
-# Begin Group "others"
-
-# PROP Default_Filter ""
 # End Group
 # End Target
 # End Project

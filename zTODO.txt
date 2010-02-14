@@ -2,11 +2,10 @@ ENGINE
  + MAIN
    - add fullscreen option (main.cpp)
      - if (fullscreen) /*glutEnterGameMode ()*/; else {glutCreateWindow ("game engine"); createMenus ();}
-   - create config files w/ controls
-   - implement console
-   - optimize text drawing
-   - crashes when you try to load a second map
-   - implement menu
+   - Implement Configuration Files
+   - Implement Menu
+   - Implement Console
+   - Optimize Text Drawing
  + TEXTURES
    - possibly make textures ONLY stored in external file instead of directly with map file?
  + POOL
@@ -15,8 +14,7 @@ ENGINE
  + SKYBOX
    - fix implementation (get Ian's getPosition code)
  + ENVIRONMENT
-   - implement colour object
-   - divide by 255 for proper colour (create colour class)
+   - implement colour object and divide by 255 for proper colour
 
 BUILDER 2.0
  + Implement Worldcraft *.map reading

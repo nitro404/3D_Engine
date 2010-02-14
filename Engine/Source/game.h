@@ -12,10 +12,14 @@ class Game {
 public:
 	Game() {
 		world = NULL;
+		mapDirectory = "Maps";
+		worldFileFilter = "World File (*.wrl)||*.wrl";
 		displayHelp = false;
 	}
 	
 	~Game() {
+		if(mapDirectory != NULL) { delete [] mapDirectory; }
+		if(worldFileFilter != NULL) { delete [] worldFileFilter; }
 		if(world != NULL) { delete world; }
 	}
 	
@@ -37,6 +41,9 @@ public:
 	World * world;
 	bool displayHelp;
 private:
+	char * mapDirectory;
+	char * worldFileFilter;
+
 	void drawText(const char * message, ...);
 	void begin2DDrawing();
 	void end2DDrawing(); 

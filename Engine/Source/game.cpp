@@ -1,6 +1,6 @@
 #include "includes.all"
 
-extern long screenWidth, screenHeight;
+extern int screenWidth, screenHeight;
 
 Game * game = NULL;
 
@@ -125,8 +125,8 @@ void Game::drawFrameRate () {
 	static double stableRate = frameRate; //This initializes only the first time...
 	static double oldFrameRate = frameRate;
 	//If it changed by more than 2 per cent of the stable value, use the new value; otherwise use the stable one...
-	if (absolute (frameRate - stableRate) > 2.0) stableRate  = frameRate; 
-	drawMessage (1, screenHeight-20, "FPS: %3.1f", stableRate);
+	if(absolute(frameRate - stableRate) > 2.0) stableRate  = frameRate; 
+	drawMessage(1, screenHeight-20, "FPS: %3.1f", stableRate);
 }
 
 void Game::drawNote (const char *message, ...) {
@@ -145,11 +145,47 @@ void Game::drawNote (const char *message, ...) {
 void Game::import() {
 	if(world != NULL) {
 		delete world;
+		world = NULL;
 	}
-	char * fileName = promptForWorldRead();
-	if(fileName != NULL) {
-		world = new World;
-		world->import(fileName);
-		player->reset(world->startPosition);
+	
+	char * fileName = NULL;
+	char * filenameBuffer = new char[MAX_PATH];
+	filenameBuffer[0] = '\0';
+	
+	OPENFILENAME query;
+	query.lStructSize = sizeof(OPENFILENAME);
+	query.hwndOwner = NULL;
+	query.hInstance = GetModuleHandle(NULL);
+	query.lpstrFilter = worldFileFilter;
+	query.lpstrCustomFilter = NULL;
+	query.nMaxCustFilter = 0;
+	query.nFilterIndex = 0;
+	query.lpstrFile = filenameBuffer;
+	query.nMaxFile = MAX_PATH;
+	query.lpstrFileTitle = NULL;
+	query.nMaxFileTitle = MAX_PATH;
+	query.lpstrInitialDir = mapDirectory;
+	query.lpstrTitle = NULL;
+	query.Flags = OFN_NOCHANGEDIR;
+	query.nFileOffset = 0;
+	query.nFileExtension = 0;
+	query.lpstrDefExt = NULL;
+	query.lCustData = 0;
+	query.lpfnHook = NULL;
+	query.lpTemplateName = NULL;
+	
+	if(GetOpenFileName(&query)) {
+		fileName = new char[strlen(query.lpstrFile) + 1];
+		strcpy(fileName, query.lpstrFile);
+		
+		if(strlen(fileName) > 0) {
+			world = new World;
+			world->import(fileName);
+			player->reset(world->startPosition);
+		}
+		
+		delete [] fileName;
 	}
+	
+	delete[] filenameBuffer;
 }

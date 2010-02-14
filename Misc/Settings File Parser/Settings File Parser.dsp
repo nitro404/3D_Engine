@@ -92,14 +92,6 @@ SOURCE=.\Source\Main.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\Methods.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\Strcasecmp.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\Source\Variable.cpp
 # End Source File
 # Begin Source File
@@ -110,14 +102,6 @@ SOURCE=.\Source\Variables.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\Source\Methods.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\Strcasecmp.h
-# End Source File
 # Begin Source File
 
 SOURCE=.\Source\Variable.h
