@@ -1,9 +1,5 @@
-//*****************************************************************************************//
-//                                        Vehicle                                          //
-//*****************************************************************************************//
-
-#ifndef vehicleModule
-#define vehicleModule 
+#ifndef _VEHICLE_H
+#define _VEHICLE_H 
 
 class Vehicle : public Object {
 public:

@@ -9,7 +9,6 @@ void Geometry::tick () {
 }
 
 void Geometry::draw () {
-	//Draw the faces in this object.
 	glPushMatrix();
 	Transformation & normal = transformation.normal();
 	glMultMatrixd(normal);
@@ -20,7 +19,8 @@ void Geometry::draw () {
 }
 
 void Geometry::import (ifstream &input, TextureCollection & textures) {
-	char line [256];
+	char * line;
+	line = new char[256];
 	
 	//Input the transformation.
 	SKIP_TO_COLON; CLEAR_THE_LINE;
@@ -73,10 +73,13 @@ void Geometry::import (ifstream &input, TextureCollection & textures) {
 	
 	//Input the faces.
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long facesSize = atoi (line);
-	for(long faceIndex = 0; faceIndex < facesSize; faceIndex++) {
-		Face *face = new Face;
+	SKIP_TO_SEMICOLON;
+	int numberOfFaces = atoi(line);
+	for(int faceIndex=0;faceIndex<numberOfFaces;faceIndex++) {
+		Face * face = new Face;
 		face->import(input, textures);
 		faces.push_back(face);
 	}
+	
+	delete [] line;
 }

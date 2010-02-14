@@ -87,34 +87,50 @@ public class World implements Map3D {
 					// get texture from regular texture list
 					if(type.equalsIgnoreCase("sprite")) {
 						textureName = object.getPropertyValue("picture");
+						textureIndex = -1;
 						
-/*						// get texture from animated texture list
-						if(type.equalsIgnoreCase("animatedsprite")) {
-							for(int k=0;k<animatedTextures.size();k++) {
-								textureNameNoExtension = Texture.removeTextureExtension(textureNames.elementAt(animatedTextures.elementAt(k).firstTextureIndex));
-								if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
-									textureIndex = k;
-									break;
-								}
+						for(int k=0;k<textureNames.size();k++) {
+							textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
+							if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
+								textureIndex = k;
+								break;
 							}
 						}
-						// get texture from static texture list
-						else {
-*/							for(int k=0;k<textureNames.size();k++) {
-								textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
-								if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
-									textureIndex = k;
-									break;
-								}
-							}
-//						}
+						
+						if(textureIndex == -1) {
+							System.out.println("ERROR: Sprite missing texture: \"" + textureName + "\".");
+							System.exit(1);
+						}
 						
 						object.setPropertyValue("picture", Integer.toString(textureIndex));
 					}
-					else {						
+					else if(type.equalsIgnoreCase("environment")) {
+						String baseTextureName = object.getPropertyValue("skyboxtexture");
+						textureIndex = -1;
+						object.removeProperty("skyboxtexture");
+						
+						for(int l=0;l<Environment.skyboxTextureExtensions.length;l++) {
+							for(int k=0;k<textureNames.size();k++) {
+								textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
+								if(textureNameNoExtension.equalsIgnoreCase(baseTextureName + Environment.skyboxTextureExtensions[l])) {
+									textureIndex = k;
+									break;
+								}
+							}
+							
+							if(textureIndex == -1) {
+								System.out.println("ERROR: Environment skybox missing texture: \"" + baseTextureName + Environment.skyboxTextureExtensions[l] + "\".");
+								System.exit(1);
+							}
+							
+							object.addProperty("skyboxtexture" + Environment.skyboxTextureExtensions[l], Integer.toString(textureIndex));
+						}
+					}
+					else {
 						for(int j=0;j<object.faces.size();j++) {
 							face = object.faces.elementAt(j);
 							textureName = face.getPropertyValue("texture");
+							textureIndex = -1;
 							
 							// get texture from animated texture list
 							if(type.equalsIgnoreCase("pool")) {
@@ -125,6 +141,11 @@ public class World implements Map3D {
 										break;
 									}
 								}
+								
+								if(textureIndex == -1) {
+									System.out.println("ERROR: Pool missing animated texture: \"" + textureName + "\".");
+									System.exit(1);
+								}
 							}
 							// get texture from static texture list
 							else {
@@ -134,6 +155,11 @@ public class World implements Map3D {
 										textureIndex = k;
 										break;
 									}
+								}
+								
+								if(textureIndex == -1) {
+									System.out.println("ERROR: Object missing texture: \"" + textureName + "\".");
+									System.exit(1);
 								}
 							}
 							

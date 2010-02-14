@@ -13,7 +13,7 @@ void Sprite::switchDestinations() {
 	distanceTravelled = 0;
 }
 
-void Sprite::tick () {
+void Sprite::tick() {
 	if(origin != NULL) {
 		position += unitVector * (movementSpeed * DT);
 		distanceTravelled = sqrt(pow(position.x - lastWaypoint->getPosition().x, 2) + pow(position.y - lastWaypoint->getPosition().y, 2) + pow(position.z - lastWaypoint->getPosition().z, 2));
@@ -23,7 +23,7 @@ void Sprite::tick () {
 	}
 }
 
-void Sprite::draw () {
+void Sprite::draw() {
 	Transformation cameraMatrix;
 	glGetMatrixd(cameraMatrix);
 	Point newPosition = position * cameraMatrix;
@@ -71,12 +71,19 @@ void Sprite::draw () {
 	glPopMatrix();
 }
 
-void Sprite::import (ifstream &input, TextureCollection & textures, WaypointCollection & waypoints) {
-	char line [256];
+void Sprite::import(ifstream &input, TextureCollection & textures, WaypointCollection & waypoints) {
+	char * line;
+	char * key;
+	char * value;
+	char * str;
+	line = new char[256];
+	key = new char[256];
+	value = new char[256];
 	
 	//Input the position
 	double x, y, z;
-	SKIP_TO_COLON; SKIP_TO_COMMA;
+	SKIP_TO_COLON;
+	SKIP_TO_COMMA;
 	x = atof(line);
 	SKIP_TO_COMMA;
 	y = atof(line);
@@ -87,13 +94,16 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 	
 	//Input the properties
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long propertiesSize = atoi (line); CLEAR_THE_LINE;
-	for (long propertiesIndex = 0; propertiesIndex < propertiesSize; propertiesIndex++) {
+	SKIP_TO_SEMICOLON;
+	int numberOfProperties = atoi(line);
+	CLEAR_THE_LINE;
+	for(int propertyIndex=0;propertyIndex<numberOfProperties;propertyIndex++) {
 		SKIP_TO_ENDLINE;
-		char key [256]; char value [256]; value [0] = '\0';
-		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
-		convertToLowercase (key);
-		char *str = new char [strlen (value) + 1]; strcpy (str, value);
+		value[0] = '\0';
+		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+		convertToLowercase(key);
+		str = new char[strlen(value) + 1];
+		strcpy(str, value);
 
 		//Parse properties to local variables
 		if(stricmp(key, "name") == 0) {
@@ -112,12 +122,13 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 			delete [] str;
 		}
 	}
-
+	
 	//Input the bounding box
 	Point max, min;
-
+	
 	// Input the maximum
-	SKIP_TO_COLON; SKIP_TO_COMMA;
+	SKIP_TO_COLON;
+	SKIP_TO_COMMA;
 	x = atof(line);
 	SKIP_TO_COMMA;
 	y = atof(line);
@@ -125,9 +136,10 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 	z = atof(line);
 	max = Point(x, y, z);
 	CLEAR_THE_LINE;
-
+	
 	// Input the minimum
-	SKIP_TO_COLON; SKIP_TO_COMMA;
+	SKIP_TO_COLON;
+	SKIP_TO_COMMA;
 	x = atof(line);
 	SKIP_TO_COMMA;
 	y = atof(line);
@@ -159,5 +171,9 @@ void Sprite::import (ifstream &input, TextureCollection & textures, WaypointColl
 		unitVector = Vector((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
 		distanceTravelled = 0;
 	}
+	
+	delete [] line;
+	delete [] key;
+	delete [] value;
 }
 

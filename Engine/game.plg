@@ -6,7 +6,7 @@
 --------------------Configuration: game - Win32 Release--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP460.tmp" with contents
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP513.tmp" with contents
 [
 /nologo /ML /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Release/game.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\animatedface.cpp"
@@ -35,8 +35,8 @@ Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP460.tmp" with con
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\vehicle.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\waypoint.cpp"
 ]
-Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP460.tmp" 
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP461.tmp" with contents
+Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP513.tmp" 
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP514.tmp" with contents
 [
 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:no /pdb:"Release/game.pdb" /machine:I386 /out:"Release/game.exe" 
 ".\Release\animatedface.obj"
@@ -65,7 +65,7 @@ kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32
 ".\Release\vehicle.obj"
 ".\Release\waypoint.obj"
 ]
-Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP461.tmp"
+Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP514.tmp"
 <h3>Output Window</h3>
 Compiling...
 animatedface.cpp
@@ -104,7 +104,7 @@ game.exe - 0 error(s), 1 warning(s)
 --------------------Configuration: game - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP463.tmp" with contents
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP516.tmp" with contents
 [
 /nologo /MLd /w /W0 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\animatedface.cpp"
@@ -133,8 +133,8 @@ Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP463.tmp" with con
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\vehicle.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\waypoint.cpp"
 ]
-Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP463.tmp" 
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP464.tmp" with contents
+Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP516.tmp" 
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP517.tmp" with contents
 [
 glut32.lib glu32.lib opengl32.lib winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/game.pdb" /debug /machine:I386 /out:"Debug/game.exe" /pdbtype:sept 
 ".\Debug\animatedface.obj"
@@ -163,7 +163,7 @@ glut32.lib glu32.lib opengl32.lib winmm.lib kernel32.lib user32.lib gdi32.lib wi
 ".\Debug\vehicle.obj"
 ".\Debug\waypoint.obj"
 ]
-Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP464.tmp"
+Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP517.tmp"
 <h3>Output Window</h3>
 Compiling...
 animatedface.cpp

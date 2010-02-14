@@ -1,9 +1,5 @@
-//*****************************************************************************************//
-//                                        Static Geometry                                  //
-//*****************************************************************************************//
-
-#ifndef geometryModule
-#define geometryModule 
+#ifndef _GEOMETRY_H
+#define _GEOMETRY_H 
 
 class Geometry : public Object {
 public:
@@ -11,6 +7,7 @@ public:
 	FaceCollection faces;
 	
 	Geometry() { }
+
 	~Geometry() {
 		deleteFaceCollectionEntries(faces);
 	}
@@ -21,10 +18,8 @@ public:
 	void draw();
 
 	void import (ifstream &input, TextureCollection & textures);
-private:
-	
 };
 
 declareCollection(Geometry);
 
-#endif //geometryModule
+#endif

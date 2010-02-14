@@ -1,22 +1,20 @@
-//*****************************************************************************************//
-//                                        Waypoint                                         //
-//*****************************************************************************************//
-
-#ifndef waypointModule
-#define waypointModule 
+#ifndef _WAYPOINT_H
+#define _WAYPOINT_H 
 
 class Waypoint : public Object {
 public:
 	DualTransformation transformation;
 	Point position;
-
+	char * name;
+	char * neighbourValues;
+	
 	Waypoint() { }
-
+	
 	~Waypoint() {
 		delete [] name;
 		delete [] neighbourValues;
 	}
-
+	
 	double distanceFrom(Point & p) const;
 	
 	void addNeighbour(Waypoint * w);
@@ -27,13 +25,11 @@ public:
 	void draw();
 	
 	void import (ifstream &input);
-
-	char * name;
-	char * neighbourValues;
+	
 private:
 	vector<Waypoint *> neighbours;
 };
 
 declareCollection(Waypoint);
 
-#endif //waypointModule
+#endif

@@ -2,20 +2,12 @@
 #define _POOL_H
 
 class Pool : public Object {
-private:
-	double maxX, maxY, maxZ;
-	double minX, minY, minZ;
-	char * name;
-	double red;
-	double green;
-	double blue;
-	double alpha;
 public:
 	DualTransformation transformation;
 	FaceCollection faces;
-	
-	Pool() { }
 
+	Pool() { }
+	
 	~Pool() {
 		delete [] name;
 		deleteFaceCollectionEntries(faces);
@@ -26,8 +18,17 @@ public:
 	
 	void tick();
 	void draw();
-
+	
 	void import (ifstream &input, AnimatedTextureCollection & animatedTextures);
+	
+private:
+	double maxX, maxY, maxZ;
+	double minX, minY, minZ;
+	char * name;
+	double red;
+	double green;
+	double blue;
+	double alpha;
 };
 
 declareCollection(Pool);

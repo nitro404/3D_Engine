@@ -4552,11 +4552,16 @@ Object: 72;
 	Minimum: -1.62576287433105, -1.62576252070862, -0.812881066376953;
 Object: 73;
 	"type" => "environment"
-	Properties: 7;
+	Properties: 12;
 		"ambientlight" => "230 230 230"
 		"cloudlayers" => "0"
 		"name" => "skybox1"
 		"skyboxname" => "redSky"
-		"skyboxtexture" => "redSky"
 		"skycolor" => "0 0 230"
 		"surrounds" => "1"
+		"skyboxtexture-left" => "58"
+		"skyboxtexture-right" => "59"
+		"skyboxtexture-front" => "57"
+		"skyboxtexture-back" => "55"
+		"skyboxtexture-up" => "60"
+		"skyboxtexture-down" => "56"

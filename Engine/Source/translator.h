@@ -1,15 +1,11 @@
-//*****************************************************************************************//
-//                                        Translator                                       //
-//*****************************************************************************************//
-
-#ifndef translatorModule
-#define translatorModule 
+#ifndef _TRANSLATOR_H
+#define _TRANSLATOR_H 
 
 class Translator : public Object {
 public:
 	DualTransformation transformation;
 	FaceCollection faces;
-
+	
 	Translator() {
 		forward = true;
 	}
@@ -24,7 +20,8 @@ public:
 	void tick();
 	void draw();
 
-	void import (ifstream &input, TextureCollection & textures);
+	void import(ifstream &input, TextureCollection & textures);
+
 private:
 	char * name;
 	Point origin;
@@ -40,4 +37,4 @@ private:
 
 declareCollection(Translator);
 
-#endif //translatorModule
+#endif

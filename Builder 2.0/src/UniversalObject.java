@@ -35,6 +35,16 @@ public class UniversalObject {
 		}
 	}
 	
+	public void addProperty(String key, String value) {
+		this.addProperty(new Property(key, value));
+	}
+	
+	public void addProperty(Property property) {
+		if(!this.properties.contains(property)) {
+			this.properties.add(property);
+		}
+	}
+	
 	public String getPropertyValue(String key) {
 		// search for a property based on a key and return its value if it is present
 		for(int i=0;i<this.properties.size();i++) {

@@ -10,13 +10,13 @@ bool Pool::insideOf(Point & p) const {
 		   p.z >= minZ && p.z <= maxZ;
 }
 
-void Pool::tick () {
+void Pool::tick() {
 	for(int i=0;i<faces.size();i++) {
 		faces.at(i)->tick();
 	}
 }
 
-void Pool::draw () {
+void Pool::draw() {
 	glPushMatrix();
 	Transformation & normal = transformation.normal();
 	glMultMatrixd(normal);
@@ -26,8 +26,15 @@ void Pool::draw () {
 	glPopMatrix(); 
 }
 
-void Pool::import (ifstream &input, AnimatedTextureCollection & animatedTextures) {
-	char line [256];
+void Pool::import(ifstream &input, AnimatedTextureCollection & animatedTextures) {
+	int i, j;
+	char * line;
+	char * key;
+	char * value;
+	char * str;
+	line = new char[256];
+	key = new char[256];
+	value = new char[256];
 	
 	//Input the transformation.
 	SKIP_TO_COLON; CLEAR_THE_LINE;
@@ -80,13 +87,16 @@ void Pool::import (ifstream &input, AnimatedTextureCollection & animatedTextures
 	
 	//Input the properties
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long propertiesSize = atoi (line); CLEAR_THE_LINE;
-	for (long propertiesIndex = 0; propertiesIndex < propertiesSize; propertiesIndex++) {
+	SKIP_TO_SEMICOLON;
+	int numberOfProperties = atoi(line);
+	CLEAR_THE_LINE;
+	for(int propertyIndex=0;propertyIndex<numberOfProperties;propertyIndex++) {
 		SKIP_TO_ENDLINE;
-		char key [256]; char value [256]; value [0] = '\0';
-		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
-		convertToLowercase (key);
-		char *str = new char [strlen (value) + 1]; strcpy (str, value);
+		value[0] = '\0';
+		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+		convertToLowercase(key);
+		str = new char[strlen(value) + 1];
+		strcpy(str, value);
 		
 		//Parse properties to local variables
 		if(stricmp(key, "name") == 0) {
@@ -111,17 +121,18 @@ void Pool::import (ifstream &input, AnimatedTextureCollection & animatedTextures
 	}
 	
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long facesSize = atoi (line);
-	for (long faceIndex = 0; faceIndex < facesSize; faceIndex++) {
-		AnimatedFace *face = new AnimatedFace;
+	SKIP_TO_SEMICOLON;
+	int facesSize = atoi(line);
+	for(int faceIndex=0;faceIndex<facesSize;faceIndex++) {
+		AnimatedFace * face = new AnimatedFace;
 		face->import(input, animatedTextures);
-		faces.push_back (face);
+		faces.push_back(face);
 	}
 
 	GamePoint * p;
 	
-	for(int i=0;i<faces.size();i++) {
-		for(int j=0;j<faces.at(i)->points.size();j++) {
+	for(i=0;i<faces.size();i++) {
+		for(j=0;j<faces.at(i)->points.size();j++) {
 			p = faces.at(i)->points.at(j);
 			if(i==0 && j==0) {
 				maxX = p->x; minX = p->x;
@@ -144,4 +155,8 @@ void Pool::import (ifstream &input, AnimatedTextureCollection & animatedTextures
 	maxX += transformation.position().x;
 	maxY += transformation.position().y;
 	maxZ += transformation.position().z;
+
+	delete [] line;
+	delete [] key;
+	delete [] value;
 }

@@ -123,7 +123,12 @@ void World::draw() {
 
 void World::import(char * fileName, TextureCollection & textures, AnimatedTextureCollection & animatedTextures) {
 	char * line;
+	char * key;
+	char * value;
+	char * type;
 	line = new char[256];
+	key = new char[256];
+	value = new char[256];
 	int i;
 	
 	ifstream input;
@@ -149,8 +154,8 @@ void World::import(char * fileName, TextureCollection & textures, AnimatedTextur
 	//Input the waypoints
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON;
-	int waypointsSize = atoi(line);
-	for(int waypointIndex = 0; waypointIndex < waypointsSize; waypointIndex++) {
+	int numberOfWaypoints = atoi(line);
+	for(int waypointIndex=0;waypointIndex<numberOfWaypoints;waypointIndex++) {
 		//Create the corresponding objects
 		Waypoint * waypoint = new Waypoint;
 		waypoint->import(input);
@@ -209,8 +214,9 @@ void World::import(char * fileName, TextureCollection & textures, AnimatedTextur
 	//Input the objects.
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON;
-	long objectsSize = atoi (line);
-	for (long objectIndex = 0; objectIndex < objectsSize; objectIndex++) {
+	int numberOfObjects = atoi(line);
+	CLEAR_THE_LINE;
+	for(int objectIndex=0;objectIndex<numberOfObjects;objectIndex++) {
 		//Input the header.
 		SKIP_TO_COLON;
 		SKIP_TO_SEMICOLON;
@@ -219,12 +225,10 @@ void World::import(char * fileName, TextureCollection & textures, AnimatedTextur
 		
 		//Input the object type
 		SKIP_TO_ENDLINE;
-		char obj_key [256];
-		char obj_value [256];
-		obj_value [0] = '\0';
-		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", obj_key, obj_value);
-		char * type = new char [strlen (obj_value) + 1];
-		strcpy(type, obj_value);
+		value[0] = '\0';
+		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+		type = new char[strlen(value) + 1];
+		strcpy(type, value);
 		
 		//Create the corresponding objects
 		if(stricmp(type, "static geometry") == 0) {
@@ -261,6 +265,7 @@ void World::import(char * fileName, TextureCollection & textures, AnimatedTextur
 			pool->import(input, animatedTextures);
 			water.push_back(pool);
 		}
+
 		delete [] type;
 	}
 	sortedObjects = new Object*[objects.size()];
@@ -277,5 +282,7 @@ void World::import(char * fileName, TextureCollection & textures, AnimatedTextur
 	}
 	
 	delete [] line;
+	delete [] key;
+	delete [] value;
 	input.close();
 }

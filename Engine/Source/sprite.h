@@ -1,9 +1,5 @@
-//*****************************************************************************************//
-//                                        Sprite                                           //
-//*****************************************************************************************//
-
-#ifndef spriteModule
-#define spriteModule 
+#ifndef _SPRITE_H
+#define _SPRITE_H 
 
 class Sprite : public Object {
 public:
@@ -16,6 +12,8 @@ public:
 		destination = NULL;
 		lastWaypoint = NULL;
 		movementSpeed = 0;
+		distanceToTravel = 0;
+		distanceTravelled = 0;
 	}
 	
 	~Sprite() {
@@ -28,8 +26,8 @@ public:
 	void draw();
 
 	void import (ifstream &input, TextureCollection & textures, WaypointCollection & waypoints);
+	
 private:
-	void switchDestinations();
 	char * name;
 	Point center;
 	Point bottomCenter;
@@ -41,8 +39,10 @@ private:
 	Vector unitVector;
 	double distanceTravelled;
 	double distanceToTravel;
+	
+	void switchDestinations();
 };
 
 declareCollection(Sprite);
 
-#endif //spriteModule
+#endif

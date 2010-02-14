@@ -4,24 +4,30 @@ double Vehicle::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
 }
 
-void Vehicle::tick () {
+void Vehicle::tick() {
 	
 }
 
-void Vehicle::draw () {
+void Vehicle::draw() {
 	if(faces.size() > 0) {
-		glPushMatrix ();
+		glPushMatrix();
 		Transformation & normal = transformation.normal();
 		glMultMatrixd(normal);
 		for(int i=0;i<faces.size();i++) {
 			faces.at(i)->draw();
 		}
-		glPopMatrix (); 
+		glPopMatrix(); 
 	}
 }
 
-void Vehicle::import (ifstream &input, TextureCollection & textures) {
-	char line [256];
+void Vehicle::import(ifstream &input, TextureCollection & textures) {
+	char * line;
+	char * key;
+	char * value;
+	char * str;
+	line = new char[256];
+	key = new char[256];
+	value = new char[256];
 	
 	//Input the transformation.
 	SKIP_TO_COLON; CLEAR_THE_LINE;
@@ -74,13 +80,16 @@ void Vehicle::import (ifstream &input, TextureCollection & textures) {
 	
 	//Input the properties
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long propertiesSize = atoi (line); CLEAR_THE_LINE;
-	for (long propertiesIndex = 0; propertiesIndex < propertiesSize; propertiesIndex++) {
+	SKIP_TO_SEMICOLON;
+	int numberOfProperties = atoi(line);
+	CLEAR_THE_LINE;
+	for(int propertyIndex=0;propertyIndex<numberOfProperties;propertyIndex++) {
 		SKIP_TO_ENDLINE;
-		char key [256]; char value [256]; value [0] = '\0';
-		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
-		convertToLowercase (key);
-		char *str = new char [strlen (value) + 1]; strcpy (str, value);
+		value[0] = '\0';
+		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+		convertToLowercase(key);
+		str = new char[strlen(value) + 1];
+		strcpy(str, value);
 
 		//Parse properties to local variables
 		if(stricmp(key, "name") == 0) {
@@ -94,10 +103,15 @@ void Vehicle::import (ifstream &input, TextureCollection & textures) {
 	
 	//Input the faces.
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long facesSize = atoi (line);
-	for (long faceIndex = 0; faceIndex < facesSize; faceIndex++) {
-		Face *face = new Face;
-		face->import (input, textures);
-		faces.push_back (face);
+	SKIP_TO_SEMICOLON;
+	int numberOfFaces = atoi(line);
+	for(int faceIndex=0;faceIndex<numberOfFaces;faceIndex++) {
+		Face * face = new Face;
+		face->import(input, textures);
+		faces.push_back(face);
 	}
+	
+	delete [] line;
+	delete [] key;
+	delete [] value;
 }

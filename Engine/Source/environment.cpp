@@ -1,12 +1,10 @@
 #include "includes.all"
 
-char textureDirectory3 [_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
-
-void Environment::tick () {
+void Environment::tick() {
 	
 }
 
-void Environment::draw () {
+void Environment::draw() {
 	double width = (255.0 / 256.0);
 
 	double rotationX = -(camera->xRotation);
@@ -24,7 +22,7 @@ void Environment::draw () {
 	
 	if(surrounds == 1) {
 		// left side
-		skyboxTextures.at(0)->activate();
+		skyboxTextures[0]->activate();
 		glBegin(GL_POLYGON);
 		glTexCoord2d(1 - width, width);
 		glVertex3d(-0.5, 0.5, 0.5);
@@ -37,7 +35,7 @@ void Environment::draw () {
 		glEnd();
 		
 		// right side
-		skyboxTextures.at(1)->activate();
+		skyboxTextures[1]->activate();
 		glBegin(GL_POLYGON);
 		glTexCoord2d(1 - width, width);
 		glVertex3d(0.5, 0.5, -0.5);
@@ -52,7 +50,7 @@ void Environment::draw () {
 		glEnd();
 
 		// front side
-		skyboxTextures.at(2)->activate();
+		skyboxTextures[2]->activate();
 		glBegin(GL_POLYGON);
 		glTexCoord2d(1 - width, width);
 		glVertex3d(-0.5, 0.5, -0.5);
@@ -65,7 +63,7 @@ void Environment::draw () {
 		glEnd();
 
 		// back side
-		skyboxTextures.at(3)->activate();
+		skyboxTextures[3]->activate();
 		glBegin(GL_POLYGON);
 		glTexCoord2d(1 - width, width);
 		glVertex3d(0.5, 0.5, 0.5);
@@ -78,7 +76,7 @@ void Environment::draw () {
 		glEnd();
 
 		// top side
-		skyboxTextures.at(4)->activate();
+		skyboxTextures[4]->activate();
 		glBegin(GL_POLYGON);
 		glTexCoord2d(1 - width, width);
 		glVertex3d(-0.5, 0.5, 0.5);
@@ -91,7 +89,7 @@ void Environment::draw () {
 		glEnd();
 
 		// bottom side
-		skyboxTextures.at(5)->activate();
+		skyboxTextures[5]->activate();
 		glBegin(GL_POLYGON);
 		glTexCoord2d(1 - width, width);
 		glVertex3d(-0.5, -0.5, -0.5);
@@ -109,18 +107,27 @@ void Environment::draw () {
 	glEnable(GL_DEPTH_TEST);
 }
 
-void Environment::import (ifstream &input, TextureCollection & textures) {
-	char line [256];
+void Environment::import(ifstream &input, TextureCollection & textures) {
+	char * line;
+	char * key;
+	char * value;
+	char * str;
+	line = new char[256];
+	key = new char[256];
+	value = new char[256];
 	
 	//Input the properties
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long propertiesSize = atoi (line); CLEAR_THE_LINE;
-	for (long propertiesIndex = 0; propertiesIndex < propertiesSize; propertiesIndex++) {
+	SKIP_TO_SEMICOLON;
+	int numberOfProperties = atoi(line);
+	CLEAR_THE_LINE;
+	for(int propertyIndex=0;propertyIndex<numberOfProperties;propertyIndex++) {
 		SKIP_TO_ENDLINE;
-		char key [256]; char value [256]; value [0] = '\0';
-		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
-		convertToLowercase (key);
-		char *str = new char [strlen (value) + 1]; strcpy (str, value);
+		value[0] = '\0';
+		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+		convertToLowercase(key);
+		str = new char[strlen(value) + 1];
+		strcpy(str, value);
 		
 		//Parse properties to local variables
 		if(stricmp(key, "name") == 0) {
@@ -143,40 +150,28 @@ void Environment::import (ifstream &input, TextureCollection & textures) {
 			cloudLayers = atoi(str);
 			delete [] str;
 		}
-		else if(stricmp(key, "skyboxtexture") == 0) {
-			string tempstr;
-			string texturePath;
-			string texturePathTGA;
-			string texturePathBMP;
-			Texture * newTexture;
-
-			tempstr.append(textureDirectory3);
-			tempstr.append("/");
-			tempstr.append(str);
-			
-			for(int j=0;j<6;j++) {
-				texturePath.append(tempstr);
-				texturePath.append(skyboxTextureExtensions[j]);
-				texturePathTGA.append(texturePath);
-				texturePathTGA.append(".tga");
-				newTexture = Texture::readTexture((char *) texturePathTGA.c_str());
-				if(newTexture == NULL) {
-					texturePathBMP.append(texturePath);
-					texturePathBMP.append(".bmp");
-					newTexture = Texture::readTexture((char *) texturePathBMP.c_str());
-				}
-				if(newTexture != NULL) {
-					newTexture->load();
-					skyboxTextures.push_back(newTexture);
-				}
-				else {
-					prompt("Missing texture or unknown format: %s", str);
-				}
-				texturePath.erase();
-				texturePathTGA.erase();
-				texturePathBMP.erase();
-			}
-			
+		else if(stricmp(key, "skyboxtexture-left") == 0) {
+			skyboxTextures[0] = textures.at(atoi(str));
+			delete [] str;
+		}
+		else if(stricmp(key, "skyboxtexture-right") == 0) {
+			skyboxTextures[1] = textures.at(atoi(str));
+			delete [] str;
+		}
+		else if(stricmp(key, "skyboxtexture-front") == 0) {
+			skyboxTextures[2] = textures.at(atoi(str));
+			delete [] str;
+		}
+		else if(stricmp(key, "skyboxtexture-back") == 0) {
+			skyboxTextures[3] = textures.at(atoi(str));
+			delete [] str;
+		}
+		else if(stricmp(key, "skyboxtexture-up") == 0) {
+			skyboxTextures[4] = textures.at(atoi(str));
+			delete [] str;
+		}
+		else if(stricmp(key, "skyboxtexture-down") == 0) {
+			skyboxTextures[5] = textures.at(atoi(str));
 			delete [] str;
 		}
 		else if(stricmp(key, "skycolor") == 0) {
@@ -197,4 +192,8 @@ void Environment::import (ifstream &input, TextureCollection & textures) {
 			 delete [] str;
 		}
 	}
+	
+	delete [] line;
+	delete [] key;
+	delete [] value;
 }

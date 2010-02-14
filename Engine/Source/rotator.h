@@ -1,17 +1,14 @@
-//*****************************************************************************************//
-//                                        Rotator                                          //
-//*****************************************************************************************//
-
-#ifndef rotatorModule
-#define rotatorModule 
+#ifndef _ROTATOR_H
+#define _ROTATOR_H 
 
 class Rotator : public Object {
 public:
 	DualTransformation transformation;
 	FaceCollection faces;
-
+	
 	Rotator() {
 		angleInDegrees = 0;
+		rateInDegreesPersecond = 0;
 	}
 	
 	~Rotator() {
@@ -24,7 +21,8 @@ public:
 	void tick();
 	void draw();
 
-	void import (ifstream &input, TextureCollection & textures);
+	void import(ifstream &input, TextureCollection & textures);
+	
 private:
 	char * name;
 	Point axis;
@@ -34,4 +32,4 @@ private:
 
 declareCollection(Rotator);
 
-#endif //rotatorModule
+#endif
