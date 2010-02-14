@@ -10,17 +10,21 @@ extern double DT; //Elapsed time since previous tick/draw....
 class Game {
 
 public:
-	Game() {
-		world = NULL;
-		mapDirectory = "Maps";
-		worldFileFilter = "World File (*.wrl)||*.wrl";
+	Game(Variables * settings) {
+		this->settings = settings;
+		verifySettings();
+		world = NULL;		
+		worldFileFilter = "World File (*.wrl)|*.wrl|All Files (*.*)|*.*";
 		displayHelp = false;
+		loadTextures(settings->getValue("Texture Data File"), settings->getValue("Texture Directory"));
 	}
 	
 	~Game() {
-		if(mapDirectory != NULL) { delete [] mapDirectory; }
+		if(settings != NULL) { delete settings; }
 		if(worldFileFilter != NULL) { delete [] worldFileFilter; }
 		if(world != NULL) { delete world; }
+		deleteAnimatedTextureCollectionEntries(animatedTextures);
+		deleteTextureCollectionEntries(textures);
 	}
 	
 	void tick();
@@ -32,7 +36,9 @@ public:
 	void drawMessage(long x, long y, const char * message, ...);
 	void drawFrameRate();
 	void drawNote(const char * message, ...);
-
+	
+	void verifySettings();
+	void loadTextures(char * fileName, char * textureDirectory);
 	void import();
 	
 	static HDC deviceContext;
@@ -40,9 +46,12 @@ public:
 	
 	World * world;
 	bool displayHelp;
+
+	TextureCollection textures;
+	AnimatedTextureCollection animatedTextures;
 private:
-	char * mapDirectory;
 	char * worldFileFilter;
+	Variables * settings;
 
 	void drawText(const char * message, ...);
 	void begin2DDrawing();

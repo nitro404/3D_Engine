@@ -91,6 +91,7 @@ bool Variable::parseFrom(const char * _data) {
 	int end = -1;
 	char * id = NULL;
 	char * value = NULL;
+	bool emptyID;
 	
 	for(i=0;i<strlen(_data);i++) {
 		if(_data[i] == separatorChar) {
@@ -99,13 +100,23 @@ bool Variable::parseFrom(const char * _data) {
 		}
 	}
 	
-	if(separatorIndex == -1) {
-		return NULL;
+	if(separatorIndex == -1 || separatorIndex == 0) {
+		return false;
+	}
+	emptyID = true;
+	for(i=0;i<separatorIndex;i++) {
+		if(_data[i] != ' ' && _data[i] != '\t') {
+			emptyID = false;
+			break;
+		}
+	}
+	if(emptyID) {
+		return false;
 	}
 	
 	start = 0;
 	end = separatorIndex - 1;
-	for(i=start;i<end-1;i++) {
+	for(i=start;i<=end;i++) {
 		start = i;
 		if(_data[i] != ' ' && _data[i] != '\t') {
 			break;
@@ -117,7 +128,7 @@ bool Variable::parseFrom(const char * _data) {
 			break;
 		}
 	}
-	if(start >= end) {
+	if(start > end) {
 		return false;
 	}
 	id = new char[end - start + 2];
@@ -129,7 +140,7 @@ bool Variable::parseFrom(const char * _data) {
 	
 	start = separatorIndex + 1;
 	end = strlen(_data) - 1;
-	for(i=start;i<end-1;i++) {
+	for(i=start;i<=end;i++) {
 		start = i;
 		if(_data[i] != ' ' && _data[i] != '\t') {
 			break;
@@ -141,7 +152,7 @@ bool Variable::parseFrom(const char * _data) {
 			break;
 		}
 	}
-	if(start >= end) {
+	if(start > end) {
 		delete [] id;
 		return false;
 	}

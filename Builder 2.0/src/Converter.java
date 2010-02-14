@@ -9,8 +9,10 @@ import java.io.*;
 
 public class Converter {
 	
+	public static boolean includeTextureData = false;
+	
 	// convert a set of files between two formats
-	public static void convertFiles(File fileDirectory, File outDirectory, String inExtension, String outExtension, boolean subdirectories, File textureDataFile) {
+	public static void convertFiles(File fileDirectory, File outDirectory, String inExtension, String outExtension, boolean subdirectories, boolean includeTextureData, File textureDataFile) {
 		File[] files = fileDirectory.listFiles();
 		File[] subFiles = null;
 		String fileExtension;
@@ -26,11 +28,11 @@ public class Converter {
 					if(subFiles[j].getName().charAt(0) != '.') {
 						// recurse if the current file is a directory
 						if(subFiles[j].isDirectory() && subdirectories && subFiles[j].getName().charAt(0) != '.') {
-							convertFiles(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, textureDataFile);
+							convertFiles(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile);
 						}
 						// otherwise convert the selected file
 						else if(subFiles[j].isFile()) {
-							convertFile(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, textureDataFile);
+							convertFile(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile);
 						}
 					}
 				}
@@ -39,14 +41,15 @@ public class Converter {
 			else if(files[i].isFile()) {
 				fileExtension = files[i].getName().substring(files[i].getName().lastIndexOf('.') + 1, files[i].getName().length());
 				if(inExtension.equalsIgnoreCase(fileExtension)) {
-					convertFile(files[i], outDirectory, inExtension, outExtension, subdirectories, textureDataFile);
+					convertFile(files[i], outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile);
 				}
 			}
 		}
 	}
 	
 	// convert a file between two formats
-	public static void convertFile(File file, File outDirectory, String inExtension, String outExtension, boolean subdirectories, File textureDataFile) {
+	public static void convertFile(File file, File outDirectory, String inExtension, String outExtension, boolean subdirectories, boolean includeTextureData, File textureDataFile) {
+		Converter.includeTextureData = includeTextureData;
 		Map3D originalMap = null;
 		Map3D convertedMap = null;
 		File outputFile = null;

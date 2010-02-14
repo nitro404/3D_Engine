@@ -142,6 +142,86 @@ void Game::drawNote (const char *message, ...) {
 	drawMessage(1, screenHeight-52, "%s", text);
 }
 
+void Game::verifySettings() {
+	if(settings->getValue("Map Directory") == NULL) {
+		quit("No map directory specified in settings file.");
+	}
+	if(settings->getValue("Texture Directory") == NULL) {
+		quit("No texture directory specified in settings file.");
+	}
+	if(settings->getValue("Texture Data File") == NULL) {
+		quit("No texture data file specified in settings file.");
+	}
+}
+
+void Game::loadTextures(char * fileName, char * textureDirectory) {
+	char * line;
+	line = new char[256];
+	int i, j;
+
+	ifstream input;
+	input.open(fileName); 
+	if(input.bad()) {
+		quit("Unable to open texture data file: \"%s\".", fileName);
+	}
+	
+	//Input the texture names and load the corresponding texture
+	SKIP_TO_COLON;
+	SKIP_TO_SEMICOLON;
+	int texturesSize = atoi(line);
+	CLEAR_THE_LINE;
+	char * textureName;
+	int startIndex;
+	string texturePath;
+	Texture * newTexture;
+	for(int textureIndex = 0; textureIndex < texturesSize; textureIndex++) {
+		SKIP_TO_ENDLINE;
+		startIndex = 0;
+		for(i=startIndex;i<strlen(line);i++) {
+			if(line[i] != ' ' && line[i] != '\t') {
+				startIndex = i;
+				break;
+			}
+		}
+		textureName = new char[strlen(line) - startIndex + 1];
+		j = 0;
+		for(i=startIndex;i<strlen(line);i++) {
+			textureName[j++] = line[i];
+		}
+		textureName[strlen(line) - startIndex] = '\0';
+
+		//Load the texture
+		texturePath.append(textureDirectory);
+		texturePath.append("/");
+		texturePath.append(textureName);
+		newTexture = Texture::readTexture((char *) texturePath.c_str());
+		if(newTexture != NULL) {
+			newTexture->load();
+			textures.push_back(newTexture);
+		}
+		else {
+			prompt("Missing texture: %s", textureName);
+		}
+		texturePath.erase();
+		delete [] textureName;
+	}
+	
+	//Input the animated textures 
+	SKIP_TO_COLON;
+	SKIP_TO_SEMICOLON;
+	long animatedTexturesSize = atoi(line);
+	CLEAR_THE_LINE;
+	for(int atIndex=0;atIndex<animatedTexturesSize;atIndex++) {
+		//Create the corresponding animated textures
+		AnimatedTexture * animatedTexture = new AnimatedTexture;
+		animatedTexture->import(input, textures);
+		animatedTextures.push_back(animatedTexture);
+	}
+	
+	delete [] line;
+	input.close();
+}
+
 void Game::import() {
 	if(world != NULL) {
 		delete world;
@@ -164,7 +244,7 @@ void Game::import() {
 	query.nMaxFile = MAX_PATH;
 	query.lpstrFileTitle = NULL;
 	query.nMaxFileTitle = MAX_PATH;
-	query.lpstrInitialDir = mapDirectory;
+	query.lpstrInitialDir = settings->getValue("Map Directory");
 	query.lpstrTitle = NULL;
 	query.Flags = OFN_NOCHANGEDIR;
 	query.nFileOffset = 0;
@@ -180,7 +260,7 @@ void Game::import() {
 		
 		if(strlen(fileName) > 0) {
 			world = new World;
-			world->import(fileName);
+			world->import(fileName, textures, animatedTextures);
 			player->reset(world->startPosition);
 		}
 		

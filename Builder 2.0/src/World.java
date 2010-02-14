@@ -308,21 +308,23 @@ public class World implements Map3D {
 		this.startPosition.writeTo(out);
 		out.println(";");
 		
-		// print the textures header, followed by the textures
-		out.println("Textures: " + this.textureNames.size() + ";");
-		for(int i=0;i<this.textureNames.size();i++) {
-			out.println("\t" + this.textureNames.elementAt(i));
-		}
-		
-		// print the animated textures header, followed by the animated texture data (if appropriate)
-		if(externalTextureData) {
-			out.println("AnimatedTextures: " + this.animatedTextures.size() + ";");
-			for(int i=0;i<this.animatedTextures.size();i++) {
-				this.animatedTextures.elementAt(i).writeTo(out);
+		if(Converter.includeTextureData) {
+			// print the textures header, followed by the textures
+			out.println("Textures: " + this.textureNames.size() + ";");
+			for(int i=0;i<this.textureNames.size();i++) {
+				out.println("\t" + this.textureNames.elementAt(i));
 			}
-		}
-		else {
-			out.println("AnimatedTextures: 0;");
+			
+			// print the animated textures header, followed by the animated texture data (if appropriate)
+			if(externalTextureData) {
+				out.println("AnimatedTextures: " + this.animatedTextures.size() + ";");
+				for(int i=0;i<this.animatedTextures.size();i++) {
+					this.animatedTextures.elementAt(i).writeTo(out);
+				}
+			}
+			else {
+				out.println("AnimatedTextures: 0;");
+			}
 		}
 		
 		// print the waypoints header, followed by the waypoints

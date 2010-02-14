@@ -52,6 +52,7 @@ CD "../../"
 ECHO.
 ECHO Copying Texture List...
 XCOPY "Texture Compiler\textures.ini" "Builder 2.0" /I /Y
+XCOPY "Texture Compiler\textures.ini" "Data" /I /Y
 
 ECHO.
 CD "Builder 2.0"
@@ -77,11 +78,11 @@ XCOPY "Textures" "%RELEASE%\Textures" /I /Y
 
 ECHO.
 ECHO Copying Data Files...
-XCOPY "Data" %RELEASE% /I /Y /S
+XCOPY "Data" "%RELEASE%" /I /Y /S
 
 ECHO.
 ECHO Copying Game Executable...
-XCOPY "Engine\Release\game.exe"  %RELEASE% /I /Y
+XCOPY "Engine\Release\game.exe" "%RELEASE%" /I /Y
 REN "%RELEASE%\game.exe" "Game.exe"
 
 REM IF EXIST log DEL log

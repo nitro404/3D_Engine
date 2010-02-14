@@ -121,13 +121,15 @@ void World::draw() {
 	}
 }
 
-void World::import(char * fileName) {
-	char line [256];
+void World::import(char * fileName, TextureCollection & textures, AnimatedTextureCollection & animatedTextures) {
+	char * line;
+	line = new char[256];
+	int i;
 	
 	ifstream input;
 	input.open(fileName); 
 	if(input.bad()) {
-		quit("Unable to open world file \"%s\".", fileName);
+		quit("Unable to open world file: \"%s\".", fileName);
 	}
 	
 	//Input the header.
@@ -143,66 +145,12 @@ void World::import(char * fileName) {
 	double zStartPos = atof(line);
 	startPosition = Point(xStartPos, yStartPos, zStartPos);
 	CLEAR_THE_LINE;
-
-	//Input the texture names and load the corresponding texture
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
-	int texturesSize = atoi(line);
-	CLEAR_THE_LINE;
-	char * textureName;
-	int startIndex;
-	int i, j;
-	string texturePath;
-	Texture * newTexture;
-	for(int textureIndex = 0; textureIndex < texturesSize; textureIndex++) {
-		SKIP_TO_ENDLINE;
-		startIndex = 0;
-		for(i=startIndex;i<strlen(line);i++) {
-			if(line[i] != ' ' && line[i] != '\t') {
-				startIndex = i;
-				break;
-			}
-		}
-		textureName = new char[strlen(line) - startIndex + 1];
-		j = 0;
-		for(i=startIndex;i<strlen(line);i++) {
-			textureName[j++] = line[i];
-		}
-		textureName[strlen(line) - startIndex] = '\0';
-
-		//Load the texture
-		texturePath.append(textureDirectory);
-		texturePath.append("/");
-		texturePath.append(textureName);
-		newTexture = Texture::readTexture((char *) texturePath.c_str());
-		if(newTexture != NULL) {
-			newTexture->load();
-			textures.push_back(newTexture);
-		}
-		else {
-			prompt("Missing texture: %s", textureName);
-		}
-		texturePath.erase();
-		delete [] textureName;
-	}
-	
-	//Input the animated textures 
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
-	long animatedTexturesSize = atoi(line);
-	CLEAR_THE_LINE;
-	for(int atIndex=0;atIndex<animatedTexturesSize;atIndex++) {
-		//Create the corresponding animated textures
-		AnimatedTexture * animatedTexture = new AnimatedTexture;
-		animatedTexture->import(input, textures);
-		animatedTextures.push_back(animatedTexture);
-	}
 	
 	//Input the waypoints
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON;
-	long waypointsSize = atoi (line);
-	for (long waypointIndex = 0; waypointIndex < waypointsSize; waypointIndex++) {
+	int waypointsSize = atoi(line);
+	for(int waypointIndex = 0; waypointIndex < waypointsSize; waypointIndex++) {
 		//Create the corresponding objects
 		Waypoint * waypoint = new Waypoint;
 		waypoint->import(input);
@@ -328,5 +276,6 @@ void World::import(char * fileName) {
 		sortedSprites[i] = sprites.at(i);
 	}
 	
+	delete [] line;
 	input.close();
 }

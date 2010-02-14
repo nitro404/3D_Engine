@@ -116,7 +116,7 @@ char * Variables::getValue(const char * _variableName) {
 	}
 
 	for(int i=0;i<size();i++) {
-		if( strcmp(this->elementAt(i)->id(), _variableName) == 0 ) {
+		if( stricmp(this->elementAt(i)->id(), _variableName) == 0 ) {
 			return this->elementAt(i)->value();
 		}
 	}
@@ -150,7 +150,9 @@ bool Variables::parseFrom(const char * _fileName, bool _append) {
 		}
 	}
 	else {
-		delete this->_variables;
+		if(this->_variables != NULL) {
+			delete this->_variables;
+		}
 		this->_variables = new vector<Variable *>;
 	}
 	

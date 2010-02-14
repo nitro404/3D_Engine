@@ -1,7 +1,7 @@
 #ifndef _WORLD_H
 #define _WORLD_H 
 
-declareDictionary (Texture);
+declareDictionary(Texture);
 
 class World {
 private:
@@ -23,8 +23,6 @@ public:
 	PoolCollection water;
 	SpriteCollection sprites;
 	WaypointCollection waypoints;
-	TextureCollection textures;
-	AnimatedTextureCollection animatedTextures;
 
 	World() {
 		skybox = NULL;
@@ -39,16 +37,12 @@ public:
 		deletePoolCollectionEntries(water);
 		deleteSpriteCollectionEntries(sprites);
 		deleteWaypointCollectionEntries(waypoints);
-		deleteTextureCollectionEntries(textures);
-		deleteAnimatedTextureCollectionEntries(animatedTextures);
-
-
 	}
 	
 	void tick();
 	void draw();
 	
-	void import(char * fileName);
+	void import(char * fileName, TextureCollection & textures, AnimatedTextureCollection & animatedTextures);
 };
 
 #endif

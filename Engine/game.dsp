@@ -143,6 +143,14 @@ SOURCE=.\Source\utilities.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Source\Variable.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Variables.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Source\world.cpp
 # End Source File
 # End Group
@@ -208,6 +216,14 @@ SOURCE=.\Source\transformations.h
 # Begin Source File
 
 SOURCE=.\Source\utilities.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Variable.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Variables.h
 # End Source File
 # Begin Source File
 

@@ -1,10 +1,9 @@
 #include "includes.all"
 
-char * gameName = "3D Game Engine";
-int mouseSensitivity = 5;
+int mouseSensitivity = 4;
 bool fullscreen = false;
-int initialScreenWidth = 1200;
-int initialScreenHeight = 720;
+int initialScreenWidth = 640;
+int initialScreenHeight = 480;
 
 void exitGame();
 
@@ -342,7 +341,25 @@ void createMenus () {
 }
 
 int main(int parametersSize, char ** parameters) {
-
+	//Read the settings file and pass ownership over to the game itself
+	Variables * settings = new Variables();
+	settings->parseFrom("settings.ini");
+	
+	//Initialize game settings
+	int temp;
+	temp = atoi(settings->getValue("Mouse Sensitivity"));
+	if(temp > 0) { mouseSensitivity = temp; }
+	temp = atoi(settings->getValue("Screen Width"));
+	if(temp > 0) { initialScreenWidth = temp; }
+	temp = atoi(settings->getValue("Screen Height"));
+	if(temp > 0) { initialScreenHeight = temp; }
+	char * temp2 = settings->getValue("Fullscreen");
+	if(strlen(temp2) > 0) {
+		if(temp2[0] == '1' || temp2[0] == 'y' || temp2[0] == 'Y' || stricmp(temp2, "on") == 0) {
+			fullscreen = true;
+		}
+	}
+	
 	//Setup general facilities.
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_STENCIL | GLUT_MULTISAMPLE);
 	glutInitWindowSize(initialScreenWidth, initialScreenHeight);
@@ -352,7 +369,7 @@ int main(int parametersSize, char ** parameters) {
 		glutEnterGameMode();
 	}
 	else {
-		glutCreateWindow(gameName);
+		glutCreateWindow((settings->getValue("Game Name") == NULL) ? "3D Game Engine" : settings->getValue("Game Name"));
 		createMenus();
 	}
 	
@@ -370,10 +387,11 @@ int main(int parametersSize, char ** parameters) {
     glutPassiveMotionFunc(mouseMoved); 
     glutSpecialUpFunc(specialKeyReleased);
     glutKeyboardUpFunc(normalKeyReleased);
-	
+
 	setupOpenGL();
 	Game::setupFont();
-	game = new Game;
+	game = new Game(settings);
+	
 	player = new Player;
 	camera = new Camera;
 	inputManager = new InputManager;

@@ -1,6 +1,8 @@
 @ECHO OFF
 CLS
 
+SET RELEASE=Game
+
 CD "Texture Compiler"
 ECHO Compiling Texture Compiler...
 javac src\*.java -d bin
@@ -14,6 +16,7 @@ CD "../../"
 ECHO.
 ECHO Copying Texture List...
 XCOPY "Texture Compiler\textures.ini" "Builder 2.0" /I /Y
+XCOPY "Texture Compiler\textures.ini" "Data" /I /Y
 
 ECHO.
 PAUSE
