@@ -1,6 +1,8 @@
 #ifndef _ENVIRONMENT_H
 #define _ENVIRONMENT_H
 
+#include "Colour.h"
+
 class Environment : public Object {
 public:
 	Environment() {
@@ -9,9 +11,7 @@ public:
 
 	~Environment() {
 		delete [] name;
-		delete [] ambientLight;
 		delete [] skyboxTextures;
-		delete [] skyColour;
 	}
 
 	double distanceFrom(Point & p) const { return 0; }
@@ -23,10 +23,10 @@ public:
 
 private:
 	char * name;
-	double * ambientLight;
+	Colour ambientLight;
 	int cloudLayers;
 	Texture ** skyboxTextures;
-	double * skyColour;
+	Colour skyColour;
 	int surrounds;
 };
 

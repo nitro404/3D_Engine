@@ -1,7 +1,13 @@
 #include "includes.all"
 
 void AnimatedTexture::import (ifstream &input, TextureCollection & worldTextures) {
-	char line [256];
+	char * line;
+	char * key;
+	char * value;
+	char * str;
+	line = new char[256];
+	key = new char[256];
+	value = new char[256];
 	
 	//Input the header.
 	SKIP_TO_COLON;
@@ -13,14 +19,15 @@ void AnimatedTexture::import (ifstream &input, TextureCollection & worldTextures
 	int firstTexture;
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON;
-	int propertiesSize = atoi(line);
+	int numberOfProperties = atoi(line);
 	CLEAR_THE_LINE;
-	for(int propertiesIndex = 0; propertiesIndex < propertiesSize; propertiesIndex++) {
+	for(int propertyIndex=0;propertyIndex<numberOfProperties;propertyIndex++) {
 		SKIP_TO_ENDLINE;
-		char key [256]; char value [256]; value [0] = '\0';
-		sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
-		convertToLowercase (key);
-		char *str = new char [strlen (value) + 1]; strcpy (str, value);
+		value[0] = '\0';
+		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+		convertToLowercase(key);
+		str = new char[strlen(value) + 1];
+		strcpy (str, value);
 		
 		//Parse properties to local variables
 		if(stricmp(key, "name") == 0) {
@@ -43,4 +50,8 @@ void AnimatedTexture::import (ifstream &input, TextureCollection & worldTextures
 	for(int i=firstTexture;i<firstTexture+frames;i++) {
 		textures.push_back(worldTextures.at(i));
 	}
+	
+	delete [] line;
+	delete [] key;
+	delete [] value;
 }

@@ -2,8 +2,6 @@
 #define _ANIMATEDFACE_H 
 
 class AnimatedFace : public Face {
-private:
-	double textureIndex;
 public:
 	AnimatedTexture * animatedTexture;
 	double animationSpeed;
@@ -18,10 +16,12 @@ public:
 
 	void tick();
 	void draw();
-	void draw(double red, double green, double blue, double alpha);
-	void import(ifstream &input, AnimatedTextureCollection & animatedTextures);
+	void draw(Colour & colour);
+	void import(ifstream & input, AnimatedTextureCollection & animatedTextures);
+	
+private:
+	double textureIndex;
 };
-
 
 declareCollection(AnimatedFace);
 

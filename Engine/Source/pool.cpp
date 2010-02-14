@@ -21,7 +21,7 @@ void Pool::draw() {
 	Transformation & normal = transformation.normal();
 	glMultMatrixd(normal);
 	for(int i=0;i<faces.size();i++) {
-		faces.at(i)->draw(red, green, blue, alpha);
+		faces.at(i)->draw(waterColour);
 	}
 	glPopMatrix(); 
 }
@@ -105,17 +105,17 @@ void Pool::import(ifstream &input, AnimatedTextureCollection & animatedTextures)
 		else if(stricmp(key, "watercolour") == 0) {
 			char * temp = strchr(str + sizeof(char), ' ');
 			*temp = '\0';
-			red = atof(str);
+			waterColour.setRed(atoi(str));
 			temp += sizeof(char);
 			char * temp2 = strchr(temp, ' ');
 			*temp2 = '\0';
-			green = atof(temp);
+			waterColour.setGreen(atoi(temp));
 			temp2 += sizeof(char);
 			char * temp3 = strchr(temp2, ' ');
 			*temp3 = '\0';
-			blue = atof(temp2);
+			waterColour.setBlue(atoi(temp2));
 			temp3 += sizeof(char);
-			alpha = atof(temp3);
+			waterColour.setAlpha(atoi(temp3));
 			delete [] str;
 		}
 	}

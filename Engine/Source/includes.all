@@ -13,66 +13,36 @@
 
 using namespace std;
 
-//#pragma warning (disable: 4786)
-
 #include "Variable.h"
 #include "Variables.h"
 
 #include "GLUT/glut.h"
-#include "logging.h"
+#include "Logging.h"
 
-#include "utilities.h"
-#include "points.h"
-#include "transformations.h"
-#include "player.h"
-#include "camera.h"
-#include "inputManager.h"
-#include "plane.h"
+#include "Utilities.h"
+#include "Points.h"
+#include "Transformations.h"
+#include "Player.h"
+#include "Camera.h"
+#include "InputManager.h"
+#include "Plane.h"
 
-#include "texture.h"
-#include "animatedtexture.h"
-#include "face.h"
-#include "animatedface.h"
+#include "Texture.h"
+#include "AnimatedTexture.h"
+#include "Face.h"
+#include "AnimatedFace.h"
 
-#include "object.h"
-#include "environment.h"
-#include "geometry.h"
-#include "vehicle.h"
-#include "rotator.h"
-#include "translator.h"
-#include "waypoint.h"
-#include "sprite.h"
-#include "pool.h"
+#include "Object.h"
+#include "Environment.h"
+#include "Geometry.h"
+#include "Vehicle.h"
+#include "Rotator.h"
+#include "Translator.h"
+#include "Waypoint.h"
+#include "Sprite.h"
+#include "Pool.h"
 
-#include "world.h"
-#include "game.h"
-
-
-
-
-
-
-/*
-#define UsingVisualStudioNet 0
-//#define UsingVisualStudioNet 1
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>    
-#if UsingVisualStudioNet
-	#include <iostream> 
-	#include <fstream>
-#else
-	#include <iostream.h> 
-	#include <fstream.h>
-#endif
-#include "GLUT/glut.h"
-#include "logging.h"
-#include "fileDialog.h"
-#include "vector"
-#include "map"
-#include "string"
-*/
+#include "World.h"
+#include "Game.h"
 
 #endif

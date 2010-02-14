@@ -134,16 +134,15 @@ void Environment::import(ifstream &input, TextureCollection & textures) {
 			name = str;
 		}
 		else if(stricmp(key, "ambientlight") == 0) {
-			ambientLight = new double[3];
 			char * temp = strchr(str + sizeof(char), ' ');
 			*temp = '\0';
-			ambientLight[0] = atof(str);
+			ambientLight.setRed(atoi(str));
 			temp += sizeof(char);
 			char * temp2 = strchr(temp, ' ');
 			*temp2 = '\0';
-			ambientLight[1] = atof(temp);
+			ambientLight.setGreen(atoi(temp));
 			temp2 += sizeof(char);
-			ambientLight[2] = atof(temp2);
+			ambientLight.setBlue(atoi(temp2));
 			delete [] str;
 		}
 		else if(stricmp(key, "cloudlayers") == 0) {
@@ -175,16 +174,15 @@ void Environment::import(ifstream &input, TextureCollection & textures) {
 			delete [] str;
 		}
 		else if(stricmp(key, "skycolor") == 0) {
-			skyColour = new double[3];
 			char * temp = strchr(str + sizeof(char), ' ');
 			*temp = '\0';
-			skyColour[0] = atof(str);
+			skyColour.setRed(atoi(str));
 			temp += sizeof(char);
 			char * temp2 = strchr(temp, ' ');
 			*temp2 = '\0';
-			skyColour[1] = atof(temp);
+			skyColour.setGreen(atoi(temp));
 			temp2 += sizeof(char);
-			skyColour[2] = atof(temp2);
+			skyColour.setBlue(atoi(temp2));
 			delete [] str;
 		}
 		else if(stricmp(key, "surrounds") == 0) {

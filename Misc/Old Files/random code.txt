@@ -1,3 +1,28 @@
+//#pragma warning (disable: 4786)
+
+/*
+#define UsingVisualStudioNet 0
+//#define UsingVisualStudioNet 1
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>    
+#if UsingVisualStudioNet
+	#include <iostream> 
+	#include <fstream>
+#else
+	#include <iostream.h> 
+	#include <fstream.h>
+#endif
+#include "GLUT/glut.h"
+#include "logging.h"
+#include "fileDialog.h"
+#include "vector"
+#include "map"
+#include "string"
+*/
+
 bool insideOf(Point & p) const;
 double maxX, maxY, maxZ;
 double minX, minY, minZ;

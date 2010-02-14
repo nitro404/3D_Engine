@@ -1,23 +1,17 @@
-//*****************************************************************************************//
-//                                        Face                                             //
-//*****************************************************************************************//
+#ifndef _FACE_H
+#define _FACE_H 
 
-#ifndef faceModule
-#define faceModule 
+#include "Colour.h"
 
 struct GamePoint {
 	double x, y, z;
 	double tx, ty;
-	//double nx, ny, nz;
 };
 
-declareCollection (GamePoint);
+declareCollection(GamePoint);
 
 class Face {
 public:
-	//A face owns it's points and therefore deletes them on its own.
-	//It does not own it's texture because other faces will refer to the same texture...
-	//The world should own the texture...
 	Texture * texture;
 	GamePointCollection points;
 
@@ -26,16 +20,16 @@ public:
 	}
 
 	virtual ~Face() {
-		deleteGamePointCollectionEntries (points);
+		deleteGamePointCollectionEntries(points);
 	}
 
 	virtual void tick() { }
 	virtual void draw();
-	virtual void draw (double red, double green, double blue, double alpha);
+	virtual void draw(Colour & Colour);
 
-	virtual void import(ifstream &input, TextureCollection & textures);
+	virtual void import(ifstream & input, TextureCollection & textures);
 };
 
 declareCollection (Face);
 
-#endif //faceModule
+#endif

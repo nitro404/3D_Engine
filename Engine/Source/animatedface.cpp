@@ -11,34 +11,35 @@ void AnimatedFace::tick() {
 void AnimatedFace::draw() {
 	texture->activate();
 
-	if (texture->type == RGBAType) {
-		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable (GL_BLEND);
-	} else {
-		glDisable (GL_BLEND);
+	if(texture->type == RGBAType) {
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+	}
+	else {
+		glDisable(GL_BLEND);
 	}
 	
-	glBegin (GL_POLYGON);
-	for (long pointIndex = 0; pointIndex < points.size(); pointIndex++) {
-		GamePoint &point = *points.at(pointIndex);
-		glTexCoord2d (point.tx, point.ty);
-		glVertex3d (point.x, point.y, point.z); //Must be last.
+	glBegin(GL_POLYGON);
+	for(int pointIndex=0;pointIndex<points.size();pointIndex++) {
+		GamePoint & point = *points.at(pointIndex);
+		glTexCoord2d(point.tx, point.ty);
+		glVertex3d(point.x, point.y, point.z);
 	}
 	glEnd();
 }
 
-void AnimatedFace::draw(double red, double green, double blue, double alpha) {
+void AnimatedFace::draw(Colour & colour) {
 	texture->activate();
 	
 	glDisable(GL_CULL_FACE);
 	glBegin(GL_POLYGON);
-	glColor4d(red, green, blue, alpha);
+	glColor4d(colour.red, colour.green, colour.blue, colour.alpha);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
-	for (long pointIndex = 0; pointIndex < points.size(); pointIndex++) {
-		GamePoint &point = *points.at(pointIndex);
-		glTexCoord2d (point.tx, point.ty);
-		glVertex3d (point.x, point.y, point.z); //Must be last.
+	for(int pointIndex=0;pointIndex<points.size();pointIndex++) {
+		GamePoint & point = *points.at(pointIndex);
+		glTexCoord2d(point.tx, point.ty);
+		glVertex3d(point.x, point.y, point.z);
 	}
 	glColor4d(1, 1, 1, 1);
 	glDisable(GL_BLEND);
@@ -46,18 +47,23 @@ void AnimatedFace::draw(double red, double green, double blue, double alpha) {
 	glEnable(GL_CULL_FACE);
 }
 
-void AnimatedFace::import(ifstream &input, AnimatedTextureCollection & animatedTextures) {
-	char line [256];
-
+void AnimatedFace::import(ifstream & input, AnimatedTextureCollection & animatedTextures) {
+	char * line;
+	char * key;
+	char * value;
+	line = new char[256];
+	key = new char[256];
+	value = new char[256];
+	
 	//Input the header.
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON;
-	int currentIndex = atoi (line);
+	int currentIndex = atoi(line);
 	CLEAR_THE_LINE;
 	
 	SKIP_TO_ENDLINE;
-	char key [256]; char value [256]; value [0] = '\0';
-	sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+	value[0] = '\0';
+	sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 	
 	//Get the animated texture
 	animatedTexture = animatedTextures.at(atoi(value));
@@ -67,9 +73,11 @@ void AnimatedFace::import(ifstream &input, AnimatedTextureCollection & animatedT
 
 	//Input the points.
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long pointsSize = atoi (line); CLEAR_THE_LINE;
-	for (long pointIndex = 0; pointIndex < pointsSize; pointIndex++) {
-		GamePoint *point = new GamePoint;
+	SKIP_TO_SEMICOLON;
+	int numberOfPoints = atoi(line);
+	CLEAR_THE_LINE;
+	for(int pointIndex=0;pointIndex<numberOfPoints;pointIndex++) {
+		GamePoint * point = new GamePoint;
 		SKIP_TO_COMMA; point->x = atof (line);
 		SKIP_TO_COMMA; point->y = atof (line);
 		SKIP_TO_COMMA; point->z = atof (line);
@@ -80,4 +88,8 @@ void AnimatedFace::import(ifstream &input, AnimatedTextureCollection & animatedT
 		SKIP_TO_ENDLINE; point->ty = atof (line);
 		points.push_back(point);
 	}
+	
+	delete [] line;
+	delete [] key;
+	delete [] value;
 }

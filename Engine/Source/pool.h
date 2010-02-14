@@ -25,10 +25,7 @@ private:
 	double maxX, maxY, maxZ;
 	double minX, minY, minZ;
 	char * name;
-	double red;
-	double green;
-	double blue;
-	double alpha;
+	Colour waterColour;
 };
 
 declareCollection(Pool);

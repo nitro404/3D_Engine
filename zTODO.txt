@@ -11,8 +11,8 @@ ENGINE
    - Implement ray function for tinting sprite and draw order: http://erich.realtimerendering.com/ptinpoly/
  + SKYBOX
    - Fix implementation using proper world position
- + ENVIRONMENT
-   - Implement colour object (divide by 255 for proper rgba colour)
+ + FACE
+   - Remove normals in builder?
 
 BUILDER 2.0
  + Implement Worldcraft *.map reading
