@@ -127,10 +127,11 @@ public class Face {
 		if(properties != null) {
 			// output the properties header, followed by all the properties
 			if(writeProperties) {
-				out.println("\t\tProperties: " + this.properties.size() + ";");
-				for(int i=0;i<this.properties.size();i++) {
-					out.println("\t\t\t\"" + this.properties.elementAt(i).key + "\" => \"" + this.properties.elementAt(i).value + "\"");
-				}
+//				out.println("\t\tProperties: " + this.properties.size() + ";");
+//				for(int i=0;i<this.properties.size();i++) {
+//					out.println("\t\t\t\"" + this.properties.elementAt(i).key + "\" => \"" + this.properties.elementAt(i).value + "\"");
+//				}
+				out.println("\t\t\"" + this.properties.elementAt(0).key + "\" => \"" + this.properties.elementAt(0).value + "\"");
 			}
 			
 			// output the points header, followed by all the points

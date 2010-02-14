@@ -20,15 +20,8 @@ ENGINE
    - implement colour object
    - divide by 255 for proper colour (create colour class)
 
-FACE CLASS
- + Should only have one property - so get rid of the property list...
-
 BUILDER 2.0
  + Implement Worldcraft *.map reading
  + Fix output directory structure being non-existant
  + Make builder determine texture extension before outputting them to the file - why the hell is the engine doing this?
  + Possibly allow textures mid-animation to be selected
-
-TEXTURE COMPILER
- + Actually implement parameter interface - most of it is currently hard coded
- + Fix up batch files to use parameter interface

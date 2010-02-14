@@ -74,9 +74,9 @@ void Geometry::import (ifstream &input, TextureCollection & textures) {
 	//Input the faces.
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON; long facesSize = atoi (line);
-	for (long faceIndex = 0; faceIndex < facesSize; faceIndex++) {
+	for(long faceIndex = 0; faceIndex < facesSize; faceIndex++) {
 		Face *face = new Face;
-		face->import (input, textures);
-		faces.push_back (face);
+		face->import(input, textures);
+		faces.push_back(face);
 	}
 }

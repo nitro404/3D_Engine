@@ -53,16 +53,19 @@ void Face::import (ifstream &input, TextureCollection & textures) {
 
 	//Input the header.
 	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long faceIndex = atoi (line); //Only useful for debugging or browsing.
+	SKIP_TO_SEMICOLON;
+	long faceIndex = atoi (line);
+	CLEAR_THE_LINE;
 
 	//Input the properties (either the texture property or nothing at all; not actually storing in a dictionary)...
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
-	long propertiesSize = atoi (line);
-	CLEAR_THE_LINE;
-	if(propertiesSize != 1) {
-		quit("Face cannot have more than one property.");
-	}
+//	SKIP_TO_COLON;
+//	SKIP_TO_SEMICOLON;
+//	long propertiesSize = atoi (line);
+//	CLEAR_THE_LINE;
+//	if(propertiesSize != 1) {
+//		quit("Face cannot have more than one property.");
+//	}
+	
 	char * textureIndex;
 	SKIP_TO_ENDLINE;
 	char key [256]; char value [256]; value [0] = '\0';
@@ -94,7 +97,7 @@ void Face::import (ifstream &input, TextureCollection & textures) {
 	}
 }
 
-void Face::import (ifstream &input) {
+/*void Face::import (ifstream &input) {
 	char line [256];
 
 	//Input the header
@@ -117,4 +120,4 @@ void Face::import (ifstream &input) {
 		SKIP_TO_ENDLINE; point->ty = atof (line);
 		points.push_back (point);
 	}
-}
+}*/

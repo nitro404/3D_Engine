@@ -33,7 +33,7 @@ public:
 	virtual void draw();
 	virtual void draw (double red, double green, double blue, double alpha);
 	virtual void import(ifstream &input, TextureCollection & textures);
-	virtual void import(ifstream &input);
+//	virtual void import(ifstream &input);
 };
 
 declareCollection (Face);

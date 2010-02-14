@@ -1,6 +1,6 @@
 #include "includes.all"
 
-void AnimatedFace::tick () {
+void AnimatedFace::tick() {
 	texture = animatedTexture->textures.at((int) textureIndex);
 	textureIndex += animationSpeed * DT;
 	if(textureIndex >= animatedTexture->frames) {
@@ -8,7 +8,7 @@ void AnimatedFace::tick () {
 	}
 }
 
-void AnimatedFace::draw () {
+void AnimatedFace::draw() {
 	//Draw this face... (see Game::draw () in the builder for an example).
 	//Permit blending if it's a texture with alpha...
 	if (texture->type == RGBAType) {
@@ -31,7 +31,7 @@ void AnimatedFace::draw () {
 	glEnd();
 }
 
-void AnimatedFace::draw (double red, double green, double blue, double alpha) {
+void AnimatedFace::draw(double red, double green, double blue, double alpha) {
 	//Activate the texture to be drawn.
 	texture->activate();
 	
@@ -52,7 +52,7 @@ void AnimatedFace::draw (double red, double green, double blue, double alpha) {
 	glEnable(GL_CULL_FACE);
 }
 
-void AnimatedFace::import (ifstream &input, AnimatedTextureCollection & animatedTextures) {
+void AnimatedFace::import(ifstream &input, AnimatedTextureCollection & animatedTextures) {
 	char line [256]; //Working variable...
 
 	//Input the header.
@@ -62,13 +62,14 @@ void AnimatedFace::import (ifstream &input, AnimatedTextureCollection & animated
 	CLEAR_THE_LINE;
 
 	//Input the properties (either the texture property or nothing at all; not actually storing in a dictionary)...
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
-	int propertiesSize = atoi (line);
-	CLEAR_THE_LINE;
-	if(propertiesSize != 1) {
-		quit("AnimatedFace cannot have more than one property.");
-	}
+//	SKIP_TO_COLON;
+//	SKIP_TO_SEMICOLON;
+//	int propertiesSize = atoi (line);
+//	CLEAR_THE_LINE;
+//	if(propertiesSize != 1) {
+//		quit("AnimatedFace cannot have more than one property.");
+//	}
+	
 	SKIP_TO_ENDLINE;
 	char key [256]; char value [256]; value [0] = '\0';
 	sscanf (line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
