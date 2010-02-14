@@ -5,6 +5,7 @@ ENGINE
    - Implement Menu
    - Implement Console
    - Optimize Text Drawing
+   - Add keybinding ability
  + POOL
    - Temporarily added insideOf() for proper draw order
    - Implement ray function for tinting sprite and draw order: http://erich.realtimerendering.com/ptinpoly/
