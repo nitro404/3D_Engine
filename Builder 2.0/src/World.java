@@ -79,6 +79,7 @@ public class World implements Map3D {
 				boolean duplicateTextureName;
 				Face face;
 				String textureName;
+				String textureNameNoExtension;
 				int textureIndex = -1;
 				
 				// get textures from data read from external texture file
@@ -90,7 +91,8 @@ public class World implements Map3D {
 /*						// get texture from animated texture list
 						if(type.equalsIgnoreCase("animatedsprite")) {
 							for(int k=0;k<animatedTextures.size();k++) {
-								if(textureNames.elementAt(animatedTextures.elementAt(k).firstTextureIndex).equalsIgnoreCase(textureName)) {
+								textureNameNoExtension = Texture.removeTextureExtension(textureNames.elementAt(animatedTextures.elementAt(k).firstTextureIndex));
+								if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
 									textureIndex = k;
 									break;
 								}
@@ -99,7 +101,8 @@ public class World implements Map3D {
 						// get texture from static texture list
 						else {
 */							for(int k=0;k<textureNames.size();k++) {
-								if(textureNames.elementAt(k).equalsIgnoreCase(textureName)) {
+								textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
+								if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
 									textureIndex = k;
 									break;
 								}
@@ -116,7 +119,8 @@ public class World implements Map3D {
 							// get texture from animated texture list
 							if(type.equalsIgnoreCase("pool")) {
 								for(int k=0;k<animatedTextures.size();k++) {
-									if(textureNames.elementAt(animatedTextures.elementAt(k).firstTextureIndex).equalsIgnoreCase(textureName)) {
+									textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(animatedTextures.elementAt(k).firstTextureIndex));
+									if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
 										textureIndex = k;
 										break;
 									}
@@ -125,7 +129,8 @@ public class World implements Map3D {
 							// get texture from static texture list
 							else {
 								for(int k=0;k<textureNames.size();k++) {
-									if(textureNames.elementAt(k).equalsIgnoreCase(textureName)) {
+									textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
+									if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
 										textureIndex = k;
 										break;
 									}
@@ -142,7 +147,8 @@ public class World implements Map3D {
 						textureName = object.getPropertyValue("picture");
 						duplicateTextureName = false;
 						for(int k=0;k<textureNames.size();k++) {
-							if(textureNames.elementAt(k).equalsIgnoreCase(textureName)) {
+							textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
+							if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
 								duplicateTextureName = true;
 								textureIndex = k;
 								break;
@@ -161,7 +167,8 @@ public class World implements Map3D {
 							duplicateTextureName = false;
 							textureName = face.getPropertyValue("texture");
 							for(int k=0;k<textureNames.size();k++) {
-								if(textureNames.elementAt(k).equalsIgnoreCase(textureName)) {
+								textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
+								if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
 									duplicateTextureName = true;
 									textureIndex = k;
 									break;

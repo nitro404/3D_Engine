@@ -8,7 +8,7 @@ ECHO Done Compiling!
 ECHO.
 CD bin
 ECHO Compiling Texture List...
-java TextureCompiler -d"../../textures/" -i"../animations.ini" -o"../textures.ini" -r
+java TextureCompiler -d"../../textures/" -i"../animations.ini" -o"../textures.ini"
 ECHO Done Compiling Texture List!
 CD "../../"
 ECHO.

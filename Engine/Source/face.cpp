@@ -1,12 +1,8 @@
 #include "includes.all"
 
-void Face::tick () {
-	//This could change textures dynamically or change texture coordinates or do nothing.
-}
-
-void Face::draw () {
-	//Draw this face... (see Game::draw () in the builder for an example).
-	//Permit blending if it's a texture with alpha...
+void Face::draw() {
+	texture->activate();
+	
 	if (texture->type == RGBAType) {
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable (GL_BLEND);
@@ -14,10 +10,6 @@ void Face::draw () {
 		glDisable (GL_BLEND);
 	}
 	
-	//Activate the texture to be drawn.
-	texture->activate();
-	
-	//Setup one polygon to be drawn and draw it.
 	glBegin (GL_POLYGON);
 	for (long pointIndex = 0; pointIndex < points.size(); pointIndex++) {
 		GamePoint &point = *points.at(pointIndex);
@@ -27,11 +19,9 @@ void Face::draw () {
 	glEnd ();
 }
 
-void Face::draw (double red, double green, double blue, double alpha) {
-	//Activate the texture to be drawn.
+void Face::draw(double red, double green, double blue, double alpha) {
 	texture->activate();
 	
-	//Setup one polygon to be drawn and draw it.
 	glDisable(GL_CULL_FACE);
 	glBegin(GL_POLYGON);
 	glColor4d(red, green, blue, alpha);
@@ -48,23 +38,14 @@ void Face::draw (double red, double green, double blue, double alpha) {
 	glEnable(GL_CULL_FACE);
 }
 
-void Face::import (ifstream &input, TextureCollection & textures) {
-	char line [256]; //Working variable...
+void Face::import(ifstream &input, TextureCollection & textures) {
+	char line [256];
 
 	//Input the header.
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON;
 	long faceIndex = atoi (line);
 	CLEAR_THE_LINE;
-
-	//Input the properties (either the texture property or nothing at all; not actually storing in a dictionary)...
-//	SKIP_TO_COLON;
-//	SKIP_TO_SEMICOLON;
-//	long propertiesSize = atoi (line);
-//	CLEAR_THE_LINE;
-//	if(propertiesSize != 1) {
-//		quit("Face cannot have more than one property.");
-//	}
 	
 	char * textureIndex;
 	SKIP_TO_ENDLINE;
@@ -75,11 +56,7 @@ void Face::import (ifstream &input, TextureCollection & textures) {
 
 	texture = textures.at(atoi(textureIndex));
 	delete [] textureIndex;
-
-	//Input the texture.
-	//Only if this code is in the game rather than the builder...
-	//texture = textureName == NULL ? NULL : world->textureFor (textureName);
-
+	
 	//Input the points.
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON; long pointsSize = atoi (line); CLEAR_THE_LINE;
@@ -97,27 +74,3 @@ void Face::import (ifstream &input, TextureCollection & textures) {
 	}
 }
 
-/*void Face::import (ifstream &input) {
-	char line [256];
-
-	//Input the header
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
-	long faceIndex = atoi (line);
-	
-	//Input the points.
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON; long pointsSize = atoi (line); CLEAR_THE_LINE;
-	for (long pointIndex = 0; pointIndex < pointsSize; pointIndex++) {
-		GamePoint *point = new GamePoint;
-		SKIP_TO_COMMA; point->x = atof (line);
-		SKIP_TO_COMMA; point->y = atof (line);
-		SKIP_TO_COMMA; point->z = atof (line);
-		SKIP_TO_COMMA;
-		SKIP_TO_COMMA;
-		SKIP_TO_COMMA;
-		SKIP_TO_COMMA; point->tx = atof (line);
-		SKIP_TO_ENDLINE; point->ty = atof (line);
-		points.push_back (point);
-	}
-}*/

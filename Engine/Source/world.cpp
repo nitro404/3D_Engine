@@ -147,16 +147,14 @@ void World::import(char * fileName) {
 	//Input the texture names and load the corresponding texture
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON;
-	long texturesSize = atoi(line);
+	int texturesSize = atoi(line);
 	CLEAR_THE_LINE;
 	char * textureName;
 	int startIndex;
 	int i, j;
 	string texturePath;
-	string texturePathBMP;
-	string texturePathTGA;
 	Texture * newTexture;
-	for(long textureIndex = 0; textureIndex < texturesSize; textureIndex++) {
+	for(int textureIndex = 0; textureIndex < texturesSize; textureIndex++) {
 		SKIP_TO_ENDLINE;
 		startIndex = 0;
 		for(i=startIndex;i<strlen(line);i++) {
@@ -176,24 +174,15 @@ void World::import(char * fileName) {
 		texturePath.append(textureDirectory);
 		texturePath.append("/");
 		texturePath.append(textureName);
-		texturePathTGA.append(texturePath);
-		texturePathTGA.append(".tga");
-		newTexture = Texture::readTexture((char *) texturePathTGA.c_str());
-		if(newTexture == NULL) {
-			texturePathBMP.append(texturePath);
-			texturePathBMP.append(".bmp");
-			newTexture = Texture::readTexture((char *) texturePathBMP.c_str());
-		}
+		newTexture = Texture::readTexture((char *) texturePath.c_str());
 		if(newTexture != NULL) {
 			newTexture->load();
 			textures.push_back(newTexture);
 		}
 		else {
-			prompt("Missing texture or unknown format: %s", textureName);
+			prompt("Missing texture: %s", textureName);
 		}
 		texturePath.erase();
-		texturePathBMP.erase();
-		texturePathTGA.erase();
 		delete [] textureName;
 	}
 	
@@ -277,7 +266,7 @@ void World::import(char * fileName) {
 		//Input the header.
 		SKIP_TO_COLON;
 		SKIP_TO_SEMICOLON;
-		int currentIndex = atoi (line);
+		int currentIndex = atoi(line);
 		CLEAR_THE_LINE;
 		
 		//Input the object type
@@ -290,41 +279,40 @@ void World::import(char * fileName) {
 		strcpy(type, obj_value);
 		
 		//Create the corresponding objects
-		if (stricmp (type, "static geometry") == 0) {
+		if(stricmp(type, "static geometry") == 0) {
 			Geometry * geometry = new Geometry;
 			geometry->import(input, textures);
 			objects.push_back(geometry);
 		}
-		else if (stricmp (type, "environment") == 0) {
+		else if(stricmp(type, "environment") == 0) {
 			skybox = new Environment;
 			skybox->import(input, textures);
 		}
-		else if (stricmp (type, "vehicle") == 0) {
+		else if(stricmp(type, "vehicle") == 0) {
 			Vehicle * vehicle = new Vehicle;
 			vehicle->import(input, textures);
 			objects.push_back (vehicle);
 		}
-		else if (stricmp (type, "rotator") == 0) {
+		else if(stricmp(type, "rotator") == 0) {
 			Rotator * rotator = new Rotator;
 			rotator->import(input, textures);
 			objects.push_back(rotator);
 		}
-		else if (stricmp (type, "translator") == 0) {
+		else if(stricmp(type, "translator") == 0) {
 			Translator * translator = new Translator;
 			translator->import(input, textures);
 			objects.push_back(translator);
 		}
-		else if (stricmp (type, "sprite") == 0) {
+		else if(stricmp(type, "sprite") == 0) {
 			Sprite * sprite = new Sprite;
 			sprite->import(input, textures, waypoints);
 			sprites.push_back(sprite);
 		}
-		else if (stricmp (type, "pool") == 0) {
+		else if(stricmp(type, "pool") == 0) {
 			Pool * pool = new Pool;
 			pool->import(input, animatedTextures);
 			water.push_back(pool);
 		}
-		
 		delete [] type;
 	}
 	sortedObjects = new Object*[objects.size()];

@@ -33,7 +33,7 @@ bool Pool::insideOf(Point & p) const {
 	printf("min: (%f, %f, %f)\n", minX, minY, minZ);
 
 
-// left side
+			// left side
 			glBegin(GL_POLYGON);
 			drawPoint(-0.5,0.5, 0.5, 1-width, width);
 			drawPoint(-0.5,0.5, -0.5, width, width);
@@ -166,5 +166,61 @@ void Waypoint::addNeighbour(Waypoint * w) {
 			}
 			delete [] str;
 		}
+
+
+
+//Input the texture names and load the corresponding texture
+	SKIP_TO_COLON;
+	SKIP_TO_SEMICOLON;
+	long texturesSize = atoi(line);
+	CLEAR_THE_LINE;
+	char * textureName;
+	int startIndex;
+	int i, j;
+	string texturePath;
+//	string texturePathBMP;
+//	string texturePathTGA;
+	Texture * newTexture;
+	for(long textureIndex = 0; textureIndex < texturesSize; textureIndex++) {
+		SKIP_TO_ENDLINE;
+		startIndex = 0;
+		for(i=startIndex;i<strlen(line);i++) {
+			if(line[i] != ' ' && line[i] != '\t') {
+				startIndex = i;
+				break;
+			}
+		}
+		textureName = new char[strlen(line) - startIndex + 1];
+		j = 0;
+		for(i=startIndex;i<strlen(line);i++) {
+			textureName[j++] = line[i];
+		}
+		textureName[strlen(line) - startIndex] = '\0';
+
+		//Load the texture
+		texturePath.append(textureDirectory);
+		texturePath.append("/");
+		texturePath.append(textureName);
+		newTexture = Texture::readTexture((char *) texturePath.c_str());
+//		texturePathTGA.append(texturePath);
+//		texturePathTGA.append(".tga");
+//		newTexture = Texture::readTexture((char *) texturePathTGA.c_str());
+//		if(newTexture == NULL) {
+//			texturePathBMP.append(texturePath);
+//			texturePathBMP.append(".bmp");
+//			newTexture = Texture::readTexture((char *) texturePathBMP.c_str());
+//		}
+		if(newTexture != NULL) {
+			newTexture->load();
+			textures.push_back(newTexture);
+		}
+		else {
+			prompt("Missing texture: %s", textureName);
+		}
+		texturePath.erase();
+//		texturePathBMP.erase();
+//		texturePathTGA.erase();
+		delete [] textureName;
+	}
 
 

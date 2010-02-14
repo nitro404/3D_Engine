@@ -1,4 +1,4 @@
-@ECHO OFF
+	@ECHO OFF
 CLS
 
 SET RELEASE=Game
@@ -8,6 +8,7 @@ SET BUILDER=Compiled
 IF NOT EXIST "Texture Compiler/bin" MKDIR "Texture Compiler/bin"
 IF NOT EXIST "Texture Compiler/bin/AnimatedTexture.class" 	SET TEXTURECOMPILER=Not Compiled
 IF NOT EXIST "Texture Compiler/bin/Property.class" 		SET TEXTURECOMPILER=Not Compiled
+IF NOT EXIST "Texture Compiler/bin/Texture.class" 		SET TEXTURECOMPILER=Not Compiled
 IF NOT EXIST "Texture Compiler/bin/TextureCompiler.class" 	SET TEXTURECOMPILER=Not Compiled
 
 IF NOT EXIST "Builder 2.0/bin" MKDIR "Builder 2.0/bin"
@@ -23,6 +24,7 @@ IF NOT EXIST "Builder 2.0/bin/Pool.class" 		SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Property.class" 		SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Rotator.class" 		SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Sprite.class" 		SET BUILDER=Not Compiled
+IF NOT EXIST "Builder 2.0/bin/Texture.class"		SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Transformation.class" 	SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/Translator.class"		SET BUILDER=Not Compiled
 IF NOT EXIST "Builder 2.0/bin/UniversalMap.class" 	SET BUILDER=Not Compiled
@@ -44,7 +46,7 @@ ECHO.
 :TEXTURECOMPILER_COMPILED
 CD bin
 ECHO Compiling Texture List...
-java TextureCompiler -d"../../textures/" -i"../animations.ini" -o"../textures.ini" -r
+java TextureCompiler -d"../../textures/" -i"../animations.ini" -o"../textures.ini"
 ECHO Done Compiling Texture List!
 CD "../../"
 ECHO.

@@ -9,8 +9,8 @@ void AnimatedFace::tick() {
 }
 
 void AnimatedFace::draw() {
-	//Draw this face... (see Game::draw () in the builder for an example).
-	//Permit blending if it's a texture with alpha...
+	texture->activate();
+
 	if (texture->type == RGBAType) {
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable (GL_BLEND);
@@ -18,10 +18,6 @@ void AnimatedFace::draw() {
 		glDisable (GL_BLEND);
 	}
 	
-	//Activate the texture to be drawn.
-	texture->activate();
-	
-	//Setup one polygon to be drawn and draw it.
 	glBegin (GL_POLYGON);
 	for (long pointIndex = 0; pointIndex < points.size(); pointIndex++) {
 		GamePoint &point = *points.at(pointIndex);
@@ -32,10 +28,8 @@ void AnimatedFace::draw() {
 }
 
 void AnimatedFace::draw(double red, double green, double blue, double alpha) {
-	//Activate the texture to be drawn.
 	texture->activate();
 	
-	//Setup one polygon to be drawn and draw it.
 	glDisable(GL_CULL_FACE);
 	glBegin(GL_POLYGON);
 	glColor4d(red, green, blue, alpha);
@@ -53,22 +47,13 @@ void AnimatedFace::draw(double red, double green, double blue, double alpha) {
 }
 
 void AnimatedFace::import(ifstream &input, AnimatedTextureCollection & animatedTextures) {
-	char line [256]; //Working variable...
+	char line [256];
 
 	//Input the header.
 	SKIP_TO_COLON;
 	SKIP_TO_SEMICOLON;
 	int currentIndex = atoi (line);
 	CLEAR_THE_LINE;
-
-	//Input the properties (either the texture property or nothing at all; not actually storing in a dictionary)...
-//	SKIP_TO_COLON;
-//	SKIP_TO_SEMICOLON;
-//	int propertiesSize = atoi (line);
-//	CLEAR_THE_LINE;
-//	if(propertiesSize != 1) {
-//		quit("AnimatedFace cannot have more than one property.");
-//	}
 	
 	SKIP_TO_ENDLINE;
 	char key [256]; char value [256]; value [0] = '\0';

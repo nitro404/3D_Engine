@@ -13,7 +13,7 @@ public class TextureCompiler {
 		Vector<String> textureNames = new Vector<String>();
 		Vector<AnimatedTexture> animatedTextures = new Vector<AnimatedTexture>();
 		
-		readDirectory(textureDirectory, textureNames);
+		readDirectory(textureDirectory, textureNames, removeExtensions);
 		
 		sortData(textureNames);
 		
@@ -107,7 +107,7 @@ public class TextureCompiler {
 		}
 	}
 	
-	private static void readDirectory(File aFolder, Vector<String> data) {
+	private static void readDirectory(File aFolder, Vector<String> data, boolean removeExtensions) {
 		if(aFolder == null || !aFolder.exists()) {
 			return;
 		}
@@ -117,7 +117,13 @@ public class TextureCompiler {
 		
 		for(int i=0;i<contents.length;i++) {
 			if(contents[i].isFile() && !contents[i].getName().equals("Thumbs.db")) {
-				fileName = removeExtensionFrom(contents[i].getName());
+				if(removeExtensions) {
+					fileName = removeExtensionFrom(contents[i].getName());
+				}
+				else {
+					fileName = contents[i].getName();
+				}
+				
 				if(!data.contains(fileName)) {
 					data.add(fileName);
 				}
@@ -203,6 +209,7 @@ public class TextureCompiler {
 				int numberOfProperties = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
 				Property newProperty;
 				String firstTextureName;
+				String textureNameNoExtension;
 				for(int i=0;i<numberOfProperties;i++) {
 					newProperty = new Property(in);
 					if(newProperty.key.equalsIgnoreCase("name")) {
@@ -211,7 +218,8 @@ public class TextureCompiler {
 					else if(newProperty.key.equalsIgnoreCase("firsttexture")) {
 						firstTextureName = newProperty.value;
 						for(int j=0;j<textureNames.size();j++) {
-							if(textureNames.elementAt(j).equalsIgnoreCase(firstTextureName)) {
+							textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(j));
+							if(textureNameNoExtension.equalsIgnoreCase(firstTextureName)) {
 								newAnimatedTexture.firstTextureIndex = j;
 								break;
 							}

@@ -7,8 +7,6 @@ ENGINE
    - optimize text drawing
    - crashes when you try to load a second map
    - implement menu
- + WORLD
-   - use readUnknownTexture instead to load all textures
  + TEXTURES
    - possibly make textures ONLY stored in external file instead of directly with map file?
  + POOL
@@ -23,5 +21,4 @@ ENGINE
 BUILDER 2.0
  + Implement Worldcraft *.map reading
  + Fix output directory structure being non-existant
- + Make builder determine texture extension before outputting them to the file - why the hell is the engine doing this?
  + Possibly allow textures mid-animation to be selected
