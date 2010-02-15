@@ -4,44 +4,13 @@ extern int screenWidth, screenHeight;
 
 Game * game = NULL;
 
-double DT; 
+double DT;
 
-HDC Game::deviceContext;
-GLuint Game::fontBase; 
-
-void Game::tick() {
-	inputManager->tick();
-	camera->tick();
-	player->tick();
-	if(world != NULL) {
-		world->tick ();
-	}
-}
-
-void Game::draw () {
-	//If there is no world, draw a teapot; otherwise, draw the world...
-	//Neither the input manager nor the camera draws itself...
-	const bool logging = false;
-	
-	camera->beginCamera ();
-	if(world != NULL) {
-		world->draw();
-	}
-	else {
-		drawMessage(125, screenHeight-20, "Right-click to load a map.");
-	}
-	player->draw ();
-	camera->endCamera ();
-	if(displayHelp || world == NULL) {
-		drawFrameRate();
-		drawMessage(1, screenHeight-52, "Use WSAD to move around, QE to move up/down and Escape to exit.");
-	}
-}
-
-void Game::setupFont () {
-	deviceContext = GetDC (NULL);
+Game::Game(Variables * settings) {
+	// setup the font
+	deviceContext = GetDC(NULL);
 	HFONT font; //Windows font ID...
-	fontBase = glGenLists (96); //Storage for 96 characters
+	fontBase = glGenLists(96); //Storage for 96 characters
 	font = CreateFont (	
 		-24,							//Height of font
 		0,								//Width of font
@@ -57,89 +26,212 @@ void Game::setupFont () {
 		ANTIALIASED_QUALITY,			//Output quality
 		FF_DONTCARE | DEFAULT_PITCH,	//Family and pitch
 		"Arial");						//Font name
-
-	SelectObject (deviceContext, font);			//Selects The Font We Want
-	wglUseFontBitmaps (deviceContext, 32, 96, fontBase); //Builds 96 characters starting at character 32
+	
+	SelectObject(deviceContext, font);			//Selects The Font We Want
+	wglUseFontBitmaps(deviceContext, 32, 96, fontBase); //Builds 96 characters starting at character 32
+	
+	this->settings = settings;
+	displayHelp = false;
+	drawFPS = true;
+	fps = new char[12];
+	fps[0] = '\0';
+	selectionPointer = "->";
+	menuOffsetX = 200;
+	menuOffsetY = 200;
+	menuIndex = 0;
+	menuSpacing = 20;
+	menuType = 0;
+	menuItems.push_back("New Game");
+	menuItems.push_back("Quit");
+	menuTitles.push_back("Main Menu");
+	menuTitles.push_back("Load Map");
+	menuColour = Colour(255, 0, 0, 255);
+	helpMessage = "Use WSAD to move around, Space/Z to move up/down and Escape to exit.";
+	
+	verifySettings();
+	world = NULL;		
+	worldFileFilter = "World File (*.wrl)|*.wrl|All Files (*.*)|*.*";
+	
+	loadTextures(settings->getValue("Texture Data File"), settings->getValue("Texture Directory"));
+	loadMapList(settings->getValue("Map Directory"));
 }
 
-void Game::wrapupFont () {
-	ReleaseDC (NULL, deviceContext);
-	glDeleteLists (fontBase, 96); //Delete all 96 characters
-}
-
-void Game::privateDrawString (const char *text) {
-	glPushAttrib (GL_LIST_BIT);	//Pushes the display list bits
-	glListBase (fontBase - 32); //Sets the base character to 32
-	glCallLists (strlen (text), GL_UNSIGNED_BYTE, text); //Draws the display list text
-	glPopAttrib (); //Pops the display list bits
-}
-
-void Game::begin2DDrawing() {
-	glMatrixMode (GL_PROJECTION);
-	glPushMatrix ();
-		glLoadIdentity ();
-		glOrtho (0.0,(GLfloat) screenWidth,0.0,(GLfloat) screenHeight, -100.0f, 100.0f);
-		glMatrixMode (GL_MODELVIEW);
-		glPushMatrix ();
-			glLoadIdentity ();
-}
-
-void Game::end2DDrawing() {
-			glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-}
-
-void Game::drawMessage (long x, long y, const char *message, ...) {
-	char text [1000]; va_list parameters;									
-	if (message == NULL) return;
-
-	//Extract variable length parameters and copy into text as in printf.
-	va_start (parameters, message);					
-	    vsprintf (text, message, parameters);		
-	va_end (parameters);
-
-	//Determine the end of the string and convert each occurrence of '\n' to '\0'.
-	char *end = text + strlen (text);
-	for (char *next = text; *next != '\0'; next++) {
-		if (*next == '\n') *next = '\0';
+Game::~Game() {
+	if(helpMessage != NULL) { delete [] helpMessage; }
+	if(selectionPointer != NULL) { delete [] selectionPointer; }
+	if(fps != NULL) { delete [] fps; }
+	if(settings != NULL) { delete settings; }
+	for(int i=0;i<menuItems.size();i++) {
+		delete [] menuItems.at(i);
 	}
-
-	//Draw the multi-line message...
-	begin2DDrawing ();
-		glDisable (GL_TEXTURE_2D);
-		glDisable (GL_LIGHTING);
-		glColor4f (1.0f,1.0f,1.0f,1.0f);
-		long yOffset = y;
-		for (char *line = text; line < end; line += strlen (line) + 1) {
-			glRasterPos2i (x, yOffset); yOffset -= 32;
-			privateDrawString (line);
-		}
-	end2DDrawing ();
+	for(int j=0;j<menuTitles.size();j++) {
+		delete [] menuTitles.at(j);
+	}
+	if(worldFileFilter != NULL) { delete [] worldFileFilter; }
+	if(world != NULL) { delete world; }
+	deleteAnimatedTextureCollectionEntries(animatedTextures);
+	deleteTextureCollectionEntries(textures);
+	ReleaseDC(NULL, deviceContext);
+	glDeleteLists(fontBase, 96);
 }
 
-void Game::drawFrameRate () {
+void Game::tick() {
+	inputManager->tick();
+	camera->tick();
+	player->tick();
+	if(world != NULL) {
+		world->tick ();
+	}
+}
+
+void Game::draw() {
+	camera->beginCamera();
+	if(world != NULL) {
+		world->draw();
+	}
+	player->draw();
+	camera->endCamera();
+	
+	if(drawFPS) {
+		drawFrameRate();
+	}
+	if(displayHelp || world == NULL) {
+		drawText(1, screenHeight-21, helpMessage);
+	}
+	if(world == NULL) {
+		drawMenu();
+	}
+}
+
+void Game::menuNextItem() {
+	if(world == NULL) {
+		int lastItem = 0;
+		if(menuType == 0) {
+			lastItem = menuItems.size() - 1;
+		}
+		else if(menuType == 1) {
+			lastItem = mapList.size() - 1;
+		}
+		
+		if(menuIndex >= lastItem) {
+			menuIndex = 0;
+		}
+		else {
+			menuIndex++;
+		}
+	}
+}
+
+void Game::menuPrevItem() {
+	if(world == NULL) {
+		int lastItem = 0;
+		if(menuType == 0) {
+			lastItem = menuItems.size() - 1;
+		}
+		else if(menuType == 1) {
+			lastItem = mapList.size() - 1;
+		}
+		
+		if(menuIndex <= 0) {
+			menuIndex = lastItem;
+		}
+		else { 
+			menuIndex--;
+		}
+	}
+}
+
+void Game::selectMenuItem() {
+	if(world == NULL) {
+		if(menuType == 0) {
+			if(menuIndex == 0) {
+				menuType = 1;
+			}
+			else if(menuIndex == 1) {
+				quit(0);
+			}
+		}
+		else if(menuType == 1) {
+			closeMap();
+			loadMap((char *) mapList.at(menuIndex).c_str());
+			menuIndex = 0;
+			menuType = 0;
+		}
+	}
+}
+
+void Game::escapePressed() {
+	if(world != NULL) {
+		game->closeMap();
+	}
+	else {
+		if(menuType == 0) {
+			quit(0);
+		}
+		if(menuType == 1) {
+			menuType = 0;
+		}
+	}
+}
+
+void Game::closeMap() {
+	if(world != NULL) {
+		delete world;
+		world = NULL;
+	}
+}	
+
+void Game::drawMenu() {
+	int yOffset = screenHeight-menuOffsetY;
+	drawText(menuOffsetX, yOffset, menuTitles.at(menuType));
+	yOffset -= menuSpacing;
+	drawText(menuOffsetX-25, yOffset - (menuIndex * menuSpacing), selectionPointer);
+	if(menuType == 0) {
+		for(int i=0;i<menuItems.size();i++) {
+			drawText(menuOffsetX, yOffset, menuItems.at(i));
+			yOffset -= menuSpacing;
+		}
+	}
+	else if(menuType == 1) {
+		for(int i=0;i<mapList.size();i++) {
+			drawText(menuOffsetX, yOffset, strchr((char *) mapList.at(i).c_str(), '\\') + sizeof(char));
+			yOffset -= menuSpacing;
+		}
+	}
+}
+
+void Game::drawFrameRate() {
 	//Draw the frame rate avoiding extreme fluctuations (since all you see is flickering).
 	double frameRate = 1.0 / DT; //Frames/sec = 1/(seconds per frame).
 	static double stableRate = frameRate; //This initializes only the first time...
 	static double oldFrameRate = frameRate;
 	//If it changed by more than 2 per cent of the stable value, use the new value; otherwise use the stable one...
 	if(absolute(frameRate - stableRate) > 2.0) stableRate  = frameRate; 
-	drawMessage(1, screenHeight-20, "FPS: %3.1f", stableRate);
+	sprintf(fps, "%3.1f FPS", stableRate);
+	drawText(screenWidth-101, screenHeight-20, fps);
 }
 
-void Game::drawNote (const char *message, ...) {
-	char text[1000];
-	va_list parameters;									
-	if (message == NULL) return;
-	
-	//Extract variable length parameters and copy into text as in printf.
-	va_start(parameters, message);					
-	    vsprintf(text, message, parameters);		
-	va_end(parameters);
-
-	drawMessage(1, screenHeight-52, "%s", text);
+void Game::drawText(int x, int y, const char * text) {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+		glLoadIdentity ();
+		glOrtho(0.0,(GLfloat) screenWidth,0.0,(GLfloat) screenHeight, -100.0f, 100.0f);
+		glMatrixMode (GL_MODELVIEW);
+		glPushMatrix();
+			glLoadIdentity ();
+				glDisable(GL_TEXTURE_2D);
+				glDisable(GL_LIGHTING);
+				glColor4f(menuColour.red, menuColour.green, menuColour.blue, menuColour.alpha);
+				glRasterPos2i(x, y);
+				glPushAttrib(GL_LIST_BIT);	//Pushes the display list bits
+				glListBase(fontBase - 32); //Sets the base character to 32
+				glCallLists(strlen(text), GL_UNSIGNED_BYTE, text); //Draws the display list text
+				glPopAttrib(); //Pops the display list bits
+				glColor4f(1, 1, 1, 1);
+			glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 }
 
 void Game::verifySettings() {
@@ -151,6 +243,34 @@ void Game::verifySettings() {
 	}
 	if(settings->getValue("Texture Data File") == NULL) {
 		quit("No texture data file specified in settings file.");
+	}
+}
+
+void Game::loadMapList(char * mapDirectory) {
+	string rootDirectory = mapDirectory;
+	string filePath;
+	string strPattern;
+	string strFileName;
+	HANDLE hFile;
+	WIN32_FIND_DATA fileInformation;
+
+	strPattern = rootDirectory + "\\*.wrl";
+
+	hFile = ::FindFirstFile(strPattern.c_str(), & fileInformation);
+	if(hFile != INVALID_HANDLE_VALUE) {
+		do {
+			if(fileInformation.cFileName[0] != '.') {
+				filePath.erase();
+				filePath = rootDirectory + "\\" + fileInformation.cFileName;
+
+				if(!(fileInformation.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+					strFileName = fileInformation.cFileName;
+					mapList.push_back(filePath);
+				}
+			}
+		} while(::FindNextFile(hFile, &fileInformation) == TRUE);
+
+		::FindClose(hFile);
 	}
 }
 
@@ -222,50 +342,8 @@ void Game::loadTextures(char * fileName, char * textureDirectory) {
 	input.close();
 }
 
-void Game::import() {
-	if(world != NULL) {
-		delete world;
-		world = NULL;
-	}
-	
-	char * fileName = NULL;
-	char * filenameBuffer = new char[MAX_PATH];
-	filenameBuffer[0] = '\0';
-	
-	OPENFILENAME query;
-	query.lStructSize = sizeof(OPENFILENAME);
-	query.hwndOwner = NULL;
-	query.hInstance = GetModuleHandle(NULL);
-	query.lpstrFilter = worldFileFilter;
-	query.lpstrCustomFilter = NULL;
-	query.nMaxCustFilter = 0;
-	query.nFilterIndex = 0;
-	query.lpstrFile = filenameBuffer;
-	query.nMaxFile = MAX_PATH;
-	query.lpstrFileTitle = NULL;
-	query.nMaxFileTitle = MAX_PATH;
-	query.lpstrInitialDir = settings->getValue("Map Directory");
-	query.lpstrTitle = NULL;
-	query.Flags = OFN_NOCHANGEDIR;
-	query.nFileOffset = 0;
-	query.nFileExtension = 0;
-	query.lpstrDefExt = NULL;
-	query.lCustData = 0;
-	query.lpfnHook = NULL;
-	query.lpTemplateName = NULL;
-	
-	if(GetOpenFileName(&query)) {
-		fileName = new char[strlen(query.lpstrFile) + 1];
-		strcpy(fileName, query.lpstrFile);
-		
-		if(strlen(fileName) > 0) {
-			world = new World;
-			world->import(fileName, textures, animatedTextures);
-			player->reset(world->startPosition);
-		}
-		
-		delete [] fileName;
-	}
-	
-	delete[] filenameBuffer;
+void Game::loadMap(char * fileName) {
+	world = new World;
+	world->import(fileName, textures, animatedTextures);
+	player->reset(world->startPosition);
 }

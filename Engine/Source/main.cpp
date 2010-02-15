@@ -1,29 +1,17 @@
 #include "includes.all"
 
 int mouseSensitivity = 4;
-bool fullscreen = false;
-int initialScreenWidth = 640;
-int initialScreenHeight = 480;
 
 void exitGame();
 
-enum MenuItem {DifficultyEasy, DifficultyChallenging, DifficultyImpossible,
-	DisplayModeWireframe, DisplayModeTextured, RunWorld, Quit};
-
-MenuItem difficulty; MenuItem displayMode;
+//enum MenuItem {DifficultyEasy, DifficultyChallenging, DifficultyImpossible,
+//	DisplayModeWireframe, DisplayModeTextured, RunWorld, Quit};
+//MenuItem difficulty;
+//MenuItem displayMode;
 
 bool wireframe = false;
 int screenWidth;
 int screenHeight;
-char filename [256];
-
-#define escapeCharacter 27
-#define enterCharacter 13
-#define VK_ALT VK_MENU
-
-#define matches(a,b) strlen(b) >= strlen(a) && memcmp(a,b,strlen(a)) == 0
-
-inline bool keyIsDown (long key) {return (GetAsyncKeyState (key) & 0x8000) != 0;}
 
 void setupOpenGL() {
 	glEnable(GL_CULL_FACE);
@@ -145,14 +133,17 @@ void visibilityChanged (int visible) {
 }
 
 void specialKeyPressed (int character, int x, int y) {
-	switch (character) {
+	switch(character) {
 		case GLUT_KEY_F1:
+			game->displayHelp = !game->displayHelp;
 			break;
 		case GLUT_KEY_F2:
 			break;
 		case GLUT_KEY_UP:
+			game->menuPrevItem();
 			break;
 		case GLUT_KEY_DOWN:
+			game->menuNextItem();
 			break;
 		case GLUT_KEY_RIGHT:
 			break;
@@ -166,18 +157,18 @@ void specialKeyPressed (int character, int x, int y) {
 	glutPostRedisplay ();
 }
 
-void specialKeyReleased (int character, int x, int y) {
-	switch (character) {
+void specialKeyReleased(int character, int x, int y) {
+	switch(character) {
 		case GLUT_KEY_F1:
 			break;
 	}
 	glutPostRedisplay ();
 }
 
-void normalKeyPressed (unsigned char character, int x, int y) {
+void normalKeyPressed(unsigned char character, int x, int y) {
 	switch(character) {
-		case escapeCharacter:
-			quit(0);
+		case 27: // escape
+			game->escapePressed();
 			break;
 		
 		case 'w':
@@ -218,9 +209,11 @@ void normalKeyPressed (unsigned char character, int x, int y) {
 		case '?':
 			game->displayHelp = !game->displayHelp;
 			break;
-
-//		case enterCharacter:
-//			if(keyIsDown (VK_ALT)) {
+			
+		case 13: // enter
+			game->selectMenuItem();
+//			if(keyIsDown (VK_MENU)) { // alt
+//			if((GetAsyncKeyState(VK_MENU) & 0x8000) != 0) { // alt
 //				fullscreen = !fullscreen;
 //				if(fullscreen) {
 //					glutEnterGameMode();
@@ -229,7 +222,7 @@ void normalKeyPressed (unsigned char character, int x, int y) {
 //					glutLeaveGameMode();
 //				}
 //			}
-//			break;
+			break;
 	}
 
 	glutPostRedisplay();
@@ -326,10 +319,10 @@ void mouseMoved(int x, int y) {
 	inputManager->rotateBy (rotation * (InputManager::rotationSpeed * DT)); //degrees = degrees per second * second
 }
 
-void genericMenuHandler(int item) {
+/*void genericMenuHandler(int item) {
 	switch(item) {
 		case RunWorld:
-			game->import();
+			game->loadMap();
 			break;
 	}
 }
@@ -338,9 +331,13 @@ void createMenus () {
 	int genericMenu = glutCreateMenu (genericMenuHandler);
 	glutAddMenuEntry ("Run World", RunWorld);
 	glutAttachMenu (GLUT_RIGHT_BUTTON);
-}
+}*/
 
 int main(int parametersSize, char ** parameters) {
+	bool fullscreen = false;
+	int initialScreenWidth = 640;
+	int initialScreenHeight = 480;
+
 	//Read the settings file and pass ownership over to the game itself
 	Variables * settings = new Variables();
 	settings->parseFrom("settings.ini");
@@ -355,7 +352,7 @@ int main(int parametersSize, char ** parameters) {
 	if(temp > 0) { initialScreenHeight = temp; }
 	char * temp2 = settings->getValue("Fullscreen");
 	if(strlen(temp2) > 0) {
-		if(temp2[0] == '1' || temp2[0] == 'y' || temp2[0] == 'Y' || stricmp(temp2, "on") == 0) {
+		if(temp2[0] == '1' || temp2[0] == 'y' || temp2[0] == 'Y' || temp2[0] == 't' || temp2[0] == 'T' || stricmp(temp2, "on") == 0) {
 			fullscreen = true;
 		}
 	}
@@ -370,7 +367,7 @@ int main(int parametersSize, char ** parameters) {
 	}
 	else {
 		glutCreateWindow((settings->getValue("Game Name") == NULL) ? "3D Game Engine" : settings->getValue("Game Name"));
-		createMenus();
+//		createMenus();
 	}
 	
     glutIgnoreKeyRepeat(GLUT_KEY_REPEAT_ON);
@@ -389,9 +386,7 @@ int main(int parametersSize, char ** parameters) {
     glutKeyboardUpFunc(normalKeyReleased);
 
 	setupOpenGL();
-	Game::setupFont();
 	game = new Game(settings);
-	
 	player = new Player;
 	camera = new Camera;
 	inputManager = new InputManager;
@@ -404,7 +399,6 @@ int main(int parametersSize, char ** parameters) {
 }
 
 void exitGame() {
-	Game::wrapupFont();
 	if(game != NULL) { delete game; }
 	if(player != NULL) { delete player; }
 	if(camera != NULL) { delete camera; }

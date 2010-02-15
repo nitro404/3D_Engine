@@ -2,7 +2,6 @@ ENGINE
  + MAIN
    - Add fullscreen option (main.cpp)
      - if (fullscreen) /*glutEnterGameMode ()*/; else {glutCreateWindow ("game engine"); createMenus ();}
-   - Implement Menu
    - Implement Console
    - Optimize Text Drawing
    - Add keybinding ability

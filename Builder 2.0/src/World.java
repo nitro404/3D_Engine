@@ -300,10 +300,6 @@ public class World implements Map3D {
 						break;
 					}
 				}
-				if(waypointIndex == -1) {
-					System.out.println("ERROR: Invalid waypoint reference on sprite \"" + sprites.elementAt(i).getPropertyValue("name") + "\": \"" + waypointName + "\".");
-					System.exit(1);
-				}
 				
 				sprites.elementAt(i).setPropertyValue("waypoint", Integer.toString(waypointIndex));
 			}

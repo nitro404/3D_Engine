@@ -1,49 +1,35 @@
-//*****************************************************************************************//
-//                                        Game                                             //
-//*****************************************************************************************//
-
 #ifndef _GAME_H
 #define _GAME_H
 
-extern double DT; //Elapsed time since previous tick/draw....
+extern double DT;
 
 class Game {
-
 public:
-	Game(Variables * settings) {
-		this->settings = settings;
-		verifySettings();
-		world = NULL;		
-		worldFileFilter = "World File (*.wrl)|*.wrl|All Files (*.*)|*.*";
-		displayHelp = false;
-		loadTextures(settings->getValue("Texture Data File"), settings->getValue("Texture Directory"));
-	}
-	
-	~Game() {
-		if(settings != NULL) { delete settings; }
-		if(worldFileFilter != NULL) { delete [] worldFileFilter; }
-		if(world != NULL) { delete world; }
-		deleteAnimatedTextureCollectionEntries(animatedTextures);
-		deleteTextureCollectionEntries(textures);
-	}
+	Game(Variables * settings);
+	~Game();
 	
 	void tick();
 	void draw();
 	
-	static void setupFont();
-	static void wrapupFont();
+	void menuNextItem();
+	void menuPrevItem();
+	void selectMenuItem();
+	void escapePressed();
+	void closeMap();
 	
-	void drawMessage(long x, long y, const char * message, ...);
+	void drawText(int x, int y, const char * text);
+	void drawMenu();
 	void drawFrameRate();
-	void drawNote(const char * message, ...);
 	
 	void verifySettings();
 	void loadTextures(char * fileName, char * textureDirectory);
-	void import();
+	void loadMapList(char * mapDirectory);
+	void loadMapPrompt();
+	void loadMap(char * fileName);
 	
-	static HDC deviceContext;
-	static GLuint fontBase; 
-	
+	HDC deviceContext;
+	GLuint fontBase;
+
 	World * world;
 	bool displayHelp;
 
@@ -53,10 +39,20 @@ private:
 	char * worldFileFilter;
 	Variables * settings;
 
-	void drawText(const char * message, ...);
-	void begin2DDrawing();
-	void end2DDrawing(); 
-	void privateDrawString(const char * text);
+	bool drawFPS;
+	char * fps;
+
+	char * helpMessage;
+	char * selectionPointer;
+	Colour menuColour;
+	int menuOffsetX;
+	int menuOffsetY;
+	int menuIndex;
+	int menuSpacing;
+	int menuType;
+	vector<char *> menuItems;
+	vector<char *> menuTitles;
+	vector<string> mapList;
 };
 
 extern Game * game;

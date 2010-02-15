@@ -114,7 +114,10 @@ void Sprite::import(ifstream &input, TextureCollection & textures, WaypointColle
 			delete [] str;
 		}
 		else if(stricmp(key, "waypoint") == 0) {
-			origin = waypoints.at(atoi(str));
+			int waypointIndex = atoi(str);
+			if(waypointIndex >= 0) {
+				origin = waypoints.at(waypointIndex);
+			}
 			delete [] str;
 		}
 		else if(stricmp(key, "movementSpeed") == 0) {

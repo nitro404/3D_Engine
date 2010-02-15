@@ -249,3 +249,118 @@ void Waypoint::addNeighbour(Waypoint * w) {
 	}
 
 
+
+
+//#define matches(a,b) strlen(b) >= strlen(a) && memcmp(a,b,strlen(a)) == 0
+
+inline bool keyIsDown(int key) {
+	return (GetAsyncKeyState(key) & 0x8000) != 0;
+}
+
+
+
+
+
+void Game::drawMessage(long x, long y, const char *message, ...) {
+	char * text;
+	text = new char[512];
+	
+	va_list parameters;									
+	if(message == NULL) return;
+
+	//Extract variable length parameters and copy into text as in printf.
+	va_start (parameters, message);					
+	    vsprintf (text, message, parameters);		
+	va_end (parameters);
+
+	//Determine the end of the string and convert each occurrence of '\n' to '\0'.
+	char *end = text + strlen (text);
+	for (char *next = text; *next != '\0'; next++) {
+		if (*next == '\n') *next = '\0';
+	}
+
+	//Draw the multi-line message...
+	begin2DDrawing ();
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_LIGHTING);
+	glColor4f(1.0f,1.0f,1.0f,1.0f);
+	int yOffset = y;
+	for(char * line=text;line<end;line+=strlen(line)+1) {
+		glRasterPos2i(x, yOffset);
+		yOffset -= 32;
+		privateDrawString (line);
+	}
+	end2DDrawing();
+
+	delete [] text;
+}
+
+void Game::drawFrameRate () {
+	//Draw the frame rate avoiding extreme fluctuations (since all you see is flickering).
+	double frameRate = 1.0 / DT; //Frames/sec = 1/(seconds per frame).
+	static double stableRate = frameRate; //This initializes only the first time...
+	static double oldFrameRate = frameRate;
+	//If it changed by more than 2 per cent of the stable value, use the new value; otherwise use the stable one...
+	if(absolute(frameRate - stableRate) > 2.0) stableRate  = frameRate; 
+	drawMessage(1, screenHeight-20, "FPS: %3.1f", stableRate);
+}
+
+void Game::drawNote (const char *message, ...) {
+	char text[1000];
+	va_list parameters;									
+	if (message == NULL) return;
+	
+	//Extract variable length parameters and copy into text as in printf.
+	va_start(parameters, message);					
+	    vsprintf(text, message, parameters);		
+	va_end(parameters);
+
+	drawMessage(1, screenHeight-52, "%s", text);
+}
+
+
+
+
+void Game::loadMapPrompt() {
+	closeWorld();
+	
+	char * fileName = NULL;
+	char * filenameBuffer = new char[MAX_PATH];
+	filenameBuffer[0] = '\0';
+	
+	OPENFILENAME query;
+	query.lStructSize = sizeof(OPENFILENAME);
+	query.hwndOwner = NULL;
+	query.hInstance = GetModuleHandle(NULL);
+	query.lpstrFilter = worldFileFilter;
+	query.lpstrCustomFilter = NULL;
+	query.nMaxCustFilter = 0;
+	query.nFilterIndex = 0;
+	query.lpstrFile = filenameBuffer;
+	query.nMaxFile = MAX_PATH;
+	query.lpstrFileTitle = NULL;
+	query.nMaxFileTitle = MAX_PATH;
+	query.lpstrInitialDir = settings->getValue("Map Directory");
+	query.lpstrTitle = NULL;
+	query.Flags = OFN_NOCHANGEDIR;
+	query.nFileOffset = 0;
+	query.nFileExtension = 0;
+	query.lpstrDefExt = NULL;
+	query.lCustData = 0;
+	query.lpfnHook = NULL;
+	query.lpTemplateName = NULL;
+	
+	if(GetOpenFileName(&query)) {
+		fileName = new char[strlen(query.lpstrFile) + 1];
+		strcpy(fileName, query.lpstrFile);
+
+		if(strlen(fileName) > 0) {
+			loadMap(fileName);
+		}
+		
+		delete [] fileName;
+	}
+	
+	delete[] filenameBuffer;
+}
+

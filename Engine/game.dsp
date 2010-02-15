@@ -85,10 +85,162 @@ LINK32=link.exe
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=.\Source\AnimatedFace.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\AnimatedTexture.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Camera.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Colour.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Face.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Game.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\InputManager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Logging.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Main.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Plane.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Player.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Points.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Sound.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Texture.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Utilities.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Variable.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Variables.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\World.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\Source\AnimatedFace.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\AnimatedTexture.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Camera.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Colour.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Face.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Game.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Geometry.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Includes.all
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\InputManager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Logging.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Plane.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Player.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Points.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Sound.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Texture.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Transformations.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Utilities.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Variable.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Variables.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\World.h
+# End Source File
 # End Group
 # Begin Group "GLUT"
 
@@ -109,6 +261,70 @@ SOURCE=.\Source\GLUT\glut.h
 # Begin Group "Objects"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Source\Environment.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Environment.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Geometry.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Object.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Pool.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Pool.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Rotator.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Rotator.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Sprite.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Sprite.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Translator.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Translator.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Vehicle.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Vehicle.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Waypoint.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Waypoint.h
+# End Source File
 # End Group
 # End Target
 # End Project
