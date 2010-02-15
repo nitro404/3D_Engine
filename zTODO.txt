@@ -12,6 +12,8 @@ ENGINE
    - Fix implementation using proper world position
  + FACE
    - Remove normals in builder?
+ + SPRITE
+   - Try to fix randomization based off of preivous DT
 
 BUILDER 2.0
  + Implement Worldcraft *.map reading

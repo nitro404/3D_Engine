@@ -64,7 +64,7 @@
 // Waypoint
 @PointClass = Waypoint [
     targetname(string) : "Name"
-    neighbours(string) : "Neighbours" : "p1, p2, p3"
+    neighbours(string) : "Neighbours"
 ]
 
 // Pool

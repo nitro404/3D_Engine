@@ -18,11 +18,12 @@ public:
 	double distanceFrom(Point & p) const;
 	
 	void addNeighbour(Waypoint * w);
+	bool hasNeighbours();
 	Waypoint * getRandomNeighbour();
 	Point & getPosition();
 	
-	void tick();
-	void draw();
+	void tick() { }
+	void draw() { }
 	
 	void import (ifstream &input);
 	

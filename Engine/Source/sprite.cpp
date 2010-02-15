@@ -14,7 +14,7 @@ void Sprite::switchDestinations() {
 }
 
 void Sprite::tick() {
-	if(origin != NULL) {
+	if(origin != NULL && origin->hasNeighbours()) {
 		position += unitVector * (movementSpeed * DT);
 		distanceTravelled = sqrt(pow(position.x - lastWaypoint->getPosition().x, 2) + pow(position.y - lastWaypoint->getPosition().y, 2) + pow(position.z - lastWaypoint->getPosition().z, 2));
 		if(distanceTravelled >= distanceToTravel) {
@@ -28,7 +28,7 @@ void Sprite::draw() {
 	glGetMatrixd(cameraMatrix);
 	Point newPosition = position * cameraMatrix;
 	
-	if (picture->type == RGBAType) {
+	if(picture->type == RGBAType) {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
 	}
@@ -39,39 +39,39 @@ void Sprite::draw() {
 	picture->activate();
 	
 	glPushIdentity();
-
-	if(origin == NULL) {
-		glTranslated(newPosition.x, newPosition.y, newPosition.z);
-	}
-	else {
-		glTranslated(newPosition.x, newPosition.y + (extent.y/2), newPosition.z);
-	}
-	glScaled(extent.x, extent.y, extent.z);
-
-	glBegin(GL_POLYGON);
-
-	glNormal3d (0, 0, 1);
-	glTexCoord2d (0, 1);
-	glVertex3d (-0.5, 0.5, 0);
-
-	glNormal3d (0, 0, 1);
-	glTexCoord2d (0, 0);
-	glVertex3d (-0.5, -0.5, 0);
-
-	glNormal3d (0, 0, 1);
-	glTexCoord2d (1, 0);
-	glVertex3d (0.5, -0.5, 0);
-
-	glNormal3d (0, 0, 1);
-	glTexCoord2d (1, 1);
-	glVertex3d (0.5, 0.5, 0);
-	
-	glEnd ();
-
+		
+		if(origin == NULL) {
+			glTranslated(newPosition.x, newPosition.y, newPosition.z);
+		}
+		else {
+			glTranslated(newPosition.x, newPosition.y + (extent.y/2), newPosition.z);
+		}
+		glScaled(extent.x, extent.y, extent.z);
+		
+		glBegin(GL_POLYGON);
+			
+			glNormal3d(0, 0, 1);
+			glTexCoord2d(0, 1);
+			glVertex3d(-0.5, 0.5, 0);
+			
+			glNormal3d(0, 0, 1);
+			glTexCoord2d(0, 0);
+			glVertex3d(-0.5, -0.5, 0);
+			
+			glNormal3d(0, 0, 1);
+			glTexCoord2d(1, 0);
+			glVertex3d(0.5, -0.5, 0);
+			
+			glNormal3d(0, 0, 1);
+			glTexCoord2d(1, 1);
+			glVertex3d(0.5, 0.5, 0);
+			
+		glEnd();
+		
 	glPopMatrix();
 }
 
-void Sprite::import(ifstream &input, TextureCollection & textures, WaypointCollection & waypoints) {
+void Sprite::import(ifstream & input, TextureCollection & textures, WaypointCollection & waypoints) {
 	char * line;
 	char * key;
 	char * value;
@@ -114,9 +114,10 @@ void Sprite::import(ifstream &input, TextureCollection & textures, WaypointColle
 			delete [] str;
 		}
 		else if(stricmp(key, "waypoint") == 0) {
-			int waypointIndex = atoi(str);
-			if(waypointIndex >= 0) {
-				origin = waypoints.at(waypointIndex);
+			int index = atoi(str);
+			if(index >= 0) {
+				origin = waypoints.at(index);
+				position = origin->getPosition();
 			}
 			delete [] str;
 		}
@@ -169,10 +170,12 @@ void Sprite::import(ifstream &input, TextureCollection & textures, WaypointColle
 	if(origin != NULL) {
 		lastWaypoint = origin;
 		position = origin->getPosition();
-		destination = lastWaypoint->getRandomNeighbour();
-		distanceToTravel = sqrt(pow(destination->getPosition().x - lastWaypoint->getPosition().x, 2) + pow(destination->getPosition().y - lastWaypoint->getPosition().y, 2) + pow(destination->getPosition().z - lastWaypoint->getPosition().z, 2));
-		unitVector = Vector((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
-		distanceTravelled = 0;
+		if(origin->hasNeighbours()) {
+			destination = lastWaypoint->getRandomNeighbour();
+			distanceToTravel = sqrt(pow(destination->getPosition().x - lastWaypoint->getPosition().x, 2) + pow(destination->getPosition().y - lastWaypoint->getPosition().y, 2) + pow(destination->getPosition().z - lastWaypoint->getPosition().z, 2));
+			unitVector = Vector((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
+			distanceTravelled = 0;
+		}
 	}
 	
 	delete [] line;

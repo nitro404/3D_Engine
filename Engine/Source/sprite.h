@@ -5,7 +5,7 @@ class Sprite : public Object {
 public:
 	Point position;
 	Texture * picture;
-
+	
 	Sprite() {
 		picture = NULL;
 		origin = NULL;
@@ -24,7 +24,7 @@ public:
 	
 	void tick();
 	void draw();
-
+	
 	void import (ifstream &input, TextureCollection & textures, WaypointCollection & waypoints);
 	
 private:

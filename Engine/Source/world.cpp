@@ -77,7 +77,7 @@ bool World::checkUnderWater() const {
 }
 
 void World::draw() {
-	int i;
+	int i, j;
 	sortObjects();
 	sortWater();
 	sortSprites();
@@ -90,14 +90,14 @@ void World::draw() {
 	}
 	for(i=0;i<water.size();i++) {
 		if(!underWater) {
-			for(int j=0;j<sprites.size();j++) {
+			for(j=0;j<sprites.size();j++) {
 				if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
 					sortedSprites[j]->draw();
 				}
 			}
 		}
 		else {
-			for(int j=0;j<sprites.size();j++) {
+			for(j=0;j<sprites.size();j++) {
 				if(!sortedWater[i]->insideOf(sortedSprites[j]->position)) {
 					sortedSprites[j]->draw();
 				}
@@ -105,14 +105,14 @@ void World::draw() {
 		}
 		sortedWater[i]->draw();
 		if(underWater) {
-			for(int j=0;j<sprites.size();j++) {
+			for(j=0;j<sprites.size();j++) {
 				if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
 					sortedSprites[j]->draw();
 				}
 			}
 		}
 		else {
-			for(int j=0;j<sprites.size();j++) {
+			for(j=0;j<sprites.size();j++) {
 				if(!sortedWater[i]->insideOf(sortedSprites[j]->position)) {
 					sortedSprites[j]->draw();
 				}
@@ -129,7 +129,7 @@ void World::import(char * fileName, TextureCollection & textures, AnimatedTextur
 	line = new char[256];
 	key = new char[256];
 	value = new char[256];
-	int i;
+	int i, j;
 	
 	ifstream input;
 	input.open(fileName); 
@@ -172,43 +172,52 @@ void World::import(char * fileName, TextureCollection & textures, AnimatedTextur
 	for(i=0;i<waypoints.size();i++) {
 		// parse through the string of neighbour waypoint values
 		head = waypoints.at(i)->neighbourValues;
-		do {
-			// trim whitespace
-			valid = true;
-			endOfString = false;
-			separator = strchr(head, ',');
-			if(separator == NULL) {
-				separator = head + ((strlen(head) - 1) * sizeof(char) + sizeof(char));
-				endOfString = true;
+		bool hasText = false;
+		for(j=0;j<strlen(head);j++) {
+			if(head[j] != ' ' && head[j] != '\t') {
+				hasText = true;
+				break;
 			}
-			else {
-				*separator = '\0';
-			}
-			start = head;
-			end = separator - sizeof(char);
-			// trim the front of the string
-			while(*start == ' ' || *start == '\t') {
-				*start = '\0';
-				start += sizeof(char);
-			}
-			// trim the end of the string
-			while(*end == ' ' || *end == '\t') {
-				*end = '\0';
-				end -= sizeof(char);
-			}
-			if(start > end) {
-				valid = false;
-			}
-			head = start;
-			
-			// set each waypoint as a neighbour of the other
-			if(valid) {
-				waypoints.at(i)->addNeighbour(waypoints.at(atoi(head)));
-			}
-			
-			// iterate to the next element in the string
-			head = separator + sizeof(char);
-		} while(!endOfString);
+		}
+		if(hasText && strlen(head) > 0) {
+			do {
+				// trim whitespace
+				valid = true;
+				endOfString = false;
+				separator = strchr(head, ',');
+				if(separator == NULL) {
+					separator = head + ((strlen(head) - 1) * sizeof(char) + sizeof(char));
+					endOfString = true;
+				}
+				else {
+					*separator = '\0';
+				}
+				start = head;
+				end = separator - sizeof(char);
+				// trim the front of the string
+				while(*start == ' ' || *start == '\t') {
+					*start = '\0';
+					start += sizeof(char);
+				}
+				// trim the end of the string
+				while(*end == ' ' || *end == '\t') {
+					*end = '\0';
+					end -= sizeof(char);
+				}
+				if(start > end) {
+					valid = false;
+				}
+				head = start;
+				
+				// set each waypoint as a neighbour of the other
+				if(valid) {
+					waypoints.at(i)->addNeighbour(waypoints.at(atoi(head)));
+				}
+				
+				// iterate to the next element in the string
+				head = separator + sizeof(char);
+			} while(!endOfString);
+		}
 	}
 	
 	//Input the objects.

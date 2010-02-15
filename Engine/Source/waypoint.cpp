@@ -10,6 +10,10 @@ void Waypoint::addNeighbour(Waypoint * w) {
 	this->neighbours.push_back(w);
 }
 
+bool Waypoint::hasNeighbours() {
+	return this->neighbours.size() > 0;
+}
+
 Waypoint * Waypoint::getRandomNeighbour() {
 	srand((unsigned int) time(NULL));
 	return this->neighbours.at((rand() % this->neighbours.size()));
@@ -17,14 +21,6 @@ Waypoint * Waypoint::getRandomNeighbour() {
 
 Point & Waypoint::getPosition() {
 	return position;
-}
-
-void Waypoint::tick() {
-
-}
-
-void Waypoint::draw() {
-	
 }
 
 void Waypoint::import (ifstream &input) {
