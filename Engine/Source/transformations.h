@@ -10,9 +10,14 @@
 #ifndef transformationsModule
 #define transformationsModule 
 
+#include "Includes.h"
+#include "Points.h"
+
 //*****************************************************************************************//
 //                           OpenGL Stack Manipulation Extensions                          //
 //*****************************************************************************************//
+
+class Transformation;
 
 inline void glGetMatrixd (GLenum whichMatrix, Transformation &matrix) {
 	glGetDoublev (whichMatrix, (GLdouble *) &matrix);

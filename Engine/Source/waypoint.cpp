@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Waypoint.h"
 
 double Waypoint::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - position.x, 2) + pow(p.y - position.y, 2) + pow(p.z - position.z, 2) );

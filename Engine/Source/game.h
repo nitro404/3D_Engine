@@ -1,6 +1,14 @@
 #ifndef _GAME_H
 #define _GAME_H
 
+#include "Includes.h"
+#include "Variable.h"
+#include "Variables.h"
+#include "World.h"
+#include "Player.h"
+#include "Camera.h"
+#include "InputManager.h"
+
 extern double DT;
 
 class Game {
@@ -33,8 +41,8 @@ public:
 	World * world;
 	bool displayHelp;
 
-	TextureCollection textures;
-	AnimatedTextureCollection animatedTextures;
+	vector<Texture *> textures;
+	vector<AnimatedTexture *> animatedTextures;
 private:
 	char * worldFileFilter;
 	Variables * settings;

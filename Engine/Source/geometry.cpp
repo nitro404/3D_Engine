@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Geometry.h"
 
 double Geometry::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
@@ -18,7 +18,7 @@ void Geometry::draw () {
 	glPopMatrix(); 
 }
 
-void Geometry::import (ifstream &input, TextureCollection & textures) {
+void Geometry::import (ifstream & input, vector<Texture *> & textures) {
 	char * line;
 	line = new char[256];
 	

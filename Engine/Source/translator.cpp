@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Translator.h"
 
 double Translator::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
@@ -29,7 +29,7 @@ void Translator::draw() {
 	glPopMatrix();
 }
 
-void Translator::import (ifstream &input, TextureCollection & textures) {
+void Translator::import (ifstream & input, vector<Texture *> & textures) {
 	char * line;
 	char * key;
 	char * value;

@@ -1,5 +1,12 @@
 #ifndef _ANIMATEDFACE_H
-#define _ANIMATEDFACE_H 
+#define _ANIMATEDFACE_H
+
+#include "Includes.h"
+#include "Utilities.h"
+#include "AnimatedTexture.h"
+#include "Face.h"
+
+extern double DT;
 
 class AnimatedFace : public Face {
 public:
@@ -17,12 +24,10 @@ public:
 	void tick();
 	void draw();
 	void draw(Colour & colour);
-	void import(ifstream & input, AnimatedTextureCollection & animatedTextures);
+	void import(ifstream & input, vector<AnimatedTexture * > & animatedTextures);
 	
 private:
 	double textureIndex;
 };
-
-declareCollection(AnimatedFace);
 
 #endif

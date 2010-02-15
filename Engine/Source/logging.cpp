@@ -1,4 +1,4 @@
-#include "logging.h"
+#include "Logging.h"
 
 double timeNow() {
 	//Returns how much time has elapsed since the first call of this function... Accurate to a microsecond...

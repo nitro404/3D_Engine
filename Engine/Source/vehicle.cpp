@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Vehicle.h"
 
 double Vehicle::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
@@ -20,7 +20,7 @@ void Vehicle::draw() {
 	}
 }
 
-void Vehicle::import(ifstream &input, TextureCollection & textures) {
+void Vehicle::import(ifstream & input, vector<Texture *> & textures) {
 	char * line;
 	char * key;
 	char * value;

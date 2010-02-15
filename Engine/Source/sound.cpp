@@ -1,6 +1,4 @@
-#include "sound.h"
-#include <windows.h>
-#include <mmsystem.h>
+#include "Sound.h"
 
 bool Sound::playOnce () const {
 	return PlaySound (filename, NULL, SND_FILENAME | SND_ASYNC) == TRUE;

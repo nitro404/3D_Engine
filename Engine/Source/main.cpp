@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Game.h"
 
 int mouseSensitivity = 4;
 

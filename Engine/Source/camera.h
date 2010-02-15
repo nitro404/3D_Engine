@@ -1,6 +1,10 @@
 #ifndef _CAMERA_H
 #define _CAMERA_H
 
+#include "Includes.h"
+#include "Points.h"
+#include "Player.h"
+
 class Camera {
 public:
 	Camera() {

@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Pool.h"
 
 double Pool::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
@@ -26,7 +26,7 @@ void Pool::draw() {
 	glPopMatrix(); 
 }
 
-void Pool::import(ifstream &input, AnimatedTextureCollection & animatedTextures) {
+void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures) {
 	int i, j;
 	char * line;
 	char * key;

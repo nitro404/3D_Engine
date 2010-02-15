@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Face.h"
 
 void Face::draw() {
 	texture->activate();
@@ -39,7 +39,7 @@ void Face::draw(Colour & colour) {
 	glEnable(GL_CULL_FACE);
 }
 
-void Face::import(ifstream &input, TextureCollection & textures) {
+void Face::import(ifstream &input, vector<Texture *> & textures) {
 	char * line;
 	char * key;
 	char * value;

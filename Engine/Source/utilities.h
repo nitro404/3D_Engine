@@ -3,7 +3,11 @@
 //*****************************************************************************************//
 
 #ifndef utilitiesModule
-#define utilitiesModule 
+#define utilitiesModule
+
+#include "Includes.h"
+
+/*
 
 //Macro "declareCollection" below declares a type of vector, e.g., declareCollection (Face);
 //creates a vector of Face pointers.
@@ -122,7 +126,7 @@ inline void deleteStringCollection (StringCollection *collection) {
 		\
 	inline type *get (type##Dictionary &collection, char *key) { \
 		type##DictionaryIterator result = collection.find (key); \
-		if (result == collection.end ()) return NULL; /*Key not there.*/ \
+		if (result == collection.end ()) return NULL; \
 		return result->second; \
 	} \
 	inline void put (type##Dictionary &collection, char *key, type *value) { \
@@ -156,6 +160,7 @@ inline void deleteStringDictionary (StringDictionary *collection) {
 	classOrStruct type; \
 	typedef vector <type *> type##Collection;
 
+*/
 
 //Generic macros for reading world files...
 //Note: input.getline (line, 256, c) => picks up everything up to c exclusive and discards c.

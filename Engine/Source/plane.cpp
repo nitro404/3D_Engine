@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Plane.h"
 
 bool Plane::normalIsValid (Point &point1, Point &point2, Point &point3, Vector &normal, double &squaredLength) {
     //Where point1, point2, point3 are counter-clockwise. Returns true if a normal

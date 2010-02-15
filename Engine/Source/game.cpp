@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Game.h"
 
 extern int screenWidth, screenHeight;
 
@@ -57,20 +57,25 @@ Game::Game(Variables * settings) {
 }
 
 Game::~Game() {
+	int i;
 	if(helpMessage != NULL) { delete [] helpMessage; }
 	if(selectionPointer != NULL) { delete [] selectionPointer; }
 	if(fps != NULL) { delete [] fps; }
 	if(settings != NULL) { delete settings; }
-	for(int i=0;i<menuItems.size();i++) {
+	for(i=0;i<menuItems.size();i++) {
 		delete [] menuItems.at(i);
 	}
-	for(int j=0;j<menuTitles.size();j++) {
-		delete [] menuTitles.at(j);
+	for(i=0;i<menuTitles.size();i++) {
+		delete [] menuTitles.at(i);
 	}
 	if(worldFileFilter != NULL) { delete [] worldFileFilter; }
 	if(world != NULL) { delete world; }
-	deleteAnimatedTextureCollectionEntries(animatedTextures);
-	deleteTextureCollectionEntries(textures);
+	for(i=0;i<animatedTextures.size();i++) {
+		delete animatedTextures.at(i);
+	}
+	for(i=0;i<textures.size();i++) {
+		delete textures.at(i);
+	}
 	ReleaseDC(NULL, deviceContext);
 	glDeleteLists(fontBase, 96);
 }

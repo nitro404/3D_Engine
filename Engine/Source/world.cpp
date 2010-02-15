@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "World.h"
 
 char textureDirectory [_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
 
@@ -121,7 +121,7 @@ void World::draw() {
 	}
 }
 
-void World::import(char * fileName, TextureCollection & textures, AnimatedTextureCollection & animatedTextures) {
+void World::import(char * fileName, vector<Texture *> & textures, vector<AnimatedTexture *> & animatedTextures) {
 	char * line;
 	char * key;
 	char * value;

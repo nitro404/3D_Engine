@@ -1,6 +1,10 @@
 #ifndef _SPRITE_H
 #define _SPRITE_H 
 
+#include "Includes.h"
+#include "Object.h"
+#include "Waypoint.h"
+
 class Sprite : public Object {
 public:
 	Point position;
@@ -25,7 +29,7 @@ public:
 	void tick();
 	void draw();
 	
-	void import (ifstream &input, TextureCollection & textures, WaypointCollection & waypoints);
+	void import (ifstream &input, vector<Texture *> & textures, vector<Waypoint *> & waypoints);
 	
 private:
 	char * name;
@@ -42,7 +46,5 @@ private:
 	
 	void switchDestinations();
 };
-
-declareCollection(Sprite);
 
 #endif

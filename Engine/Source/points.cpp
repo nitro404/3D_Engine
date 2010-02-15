@@ -1,4 +1,5 @@
-#include "includes.all"
+#include "Points.h"
+#include "Transformations.h"
 
 Point Point::operator * (const Transformation & t) const {
 	//or Vector = Vector * transformation.

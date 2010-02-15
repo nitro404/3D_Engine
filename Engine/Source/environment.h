@@ -1,7 +1,8 @@
 #ifndef _ENVIRONMENT_H
 #define _ENVIRONMENT_H
 
-#include "Colour.h"
+#include "Includes.h"
+#include "Object.h"
 
 class Environment : public Object {
 public:
@@ -19,7 +20,7 @@ public:
 	void tick();
 	void draw();
 
-	void import(ifstream &input, TextureCollection & textures);
+	void import(ifstream &input, vector<Texture *> & textures);
 
 private:
 	char * name;

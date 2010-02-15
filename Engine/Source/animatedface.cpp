@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "AnimatedFace.h"
 
 void AnimatedFace::tick() {
 	texture = animatedTexture->textures.at((int) textureIndex);
@@ -47,7 +47,7 @@ void AnimatedFace::draw(Colour & colour) {
 	glEnable(GL_CULL_FACE);
 }
 
-void AnimatedFace::import(ifstream & input, AnimatedTextureCollection & animatedTextures) {
+void AnimatedFace::import(ifstream & input, vector<AnimatedTexture * > & animatedTextures) {
 	char * line;
 	char * key;
 	char * value;

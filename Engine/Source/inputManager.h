@@ -6,7 +6,13 @@
 //it could pass different things to the camera and player...
 
 #ifndef inputManagerModule
-#define inputManagerModule 
+#define inputManagerModule
+
+#include "Includes.h"
+#include "Points.h"
+#include "Camera.h"
+
+extern double DT;
 
 class InputManager {
 public:

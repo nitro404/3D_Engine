@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Player.h"
 
 Player * player = NULL;
 

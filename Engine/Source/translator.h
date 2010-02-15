@@ -1,10 +1,13 @@
 #ifndef _TRANSLATOR_H
 #define _TRANSLATOR_H 
 
+#include "Includes.h"
+#include "Object.h"
+
 class Translator : public Object {
 public:
 	DualTransformation transformation;
-	FaceCollection faces;
+	vector<Face *> faces;
 	
 	Translator() {
 		forward = true;
@@ -12,7 +15,9 @@ public:
 
 	~Translator() {
 		delete [] name;
-		deleteFaceCollectionEntries(faces);
+		for(int i=0;i<faces.size();i++) {
+			delete faces.at(i);
+		}
 	}
 
 	double distanceFrom(Point & p) const;
@@ -20,7 +25,7 @@ public:
 	void tick();
 	void draw();
 
-	void import(ifstream &input, TextureCollection & textures);
+	void import(ifstream & input, vector<Texture *> & textures);
 
 private:
 	char * name;
@@ -34,7 +39,5 @@ private:
 	double distanceTravelled;
 	double distanceToTravel;
 };
-
-declareCollection(Translator);
 
 #endif

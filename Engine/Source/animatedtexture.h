@@ -1,6 +1,10 @@
 #ifndef _ANIMATEDTEXTURE_H
 #define _ANIMATEDTEXTURE_H
 
+#include "Includes.h"
+#include "Utilities.h"
+#include "Texture.h"
+
 class AnimatedTexture {
 public:
 	char * name;
@@ -14,10 +18,7 @@ public:
 		delete [] name;
 	}
 	
-	void import(ifstream &input, TextureCollection & worldTextures);
+	void import(ifstream &input, vector<Texture *> & worldTextures);
 };
-
-
-declareCollection(AnimatedTexture);
 
 #endif

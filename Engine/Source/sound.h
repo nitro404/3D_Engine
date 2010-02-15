@@ -9,6 +9,9 @@
 //#include <afxdlgs.h>
 //#include "AudioStream.h"
 
+#include <windows.h>
+#include <mmsystem.h>
+
 class Sound {
 
 private:

@@ -1,6 +1,6 @@
-#include "includes.all"
+#include "AnimatedTexture.h"
 
-void AnimatedTexture::import (ifstream &input, TextureCollection & worldTextures) {
+void AnimatedTexture::import (ifstream & input, vector<Texture *> & worldTextures) {
 	char * line;
 	char * key;
 	char * value;

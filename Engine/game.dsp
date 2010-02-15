@@ -187,11 +187,7 @@ SOURCE=.\Source\Game.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\Geometry.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\Includes.all
+SOURCE=.\Source\Includes.h
 # End Source File
 # Begin Source File
 
@@ -272,6 +268,10 @@ SOURCE=.\Source\Environment.h
 # Begin Source File
 
 SOURCE=.\Source\Geometry.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Source\Geometry.h
 # End Source File
 # Begin Source File
 

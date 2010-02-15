@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Sprite.h"
 
 double Sprite::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - position.x, 2) + pow(p.y - position.y, 2) + pow(p.z - position.z, 2) );
@@ -71,7 +71,7 @@ void Sprite::draw() {
 	glPopMatrix();
 }
 
-void Sprite::import(ifstream & input, TextureCollection & textures, WaypointCollection & waypoints) {
+void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypoint *> & waypoints) {
 	char * line;
 	char * key;
 	char * value;

@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Camera.h"
 
 Camera * camera = NULL;
 

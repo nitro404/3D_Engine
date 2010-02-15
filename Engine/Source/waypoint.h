@@ -1,5 +1,8 @@
 #ifndef _WAYPOINT_H
-#define _WAYPOINT_H 
+#define _WAYPOINT_H
+
+#include "Includes.h"
+#include "Object.h"
 
 class Waypoint : public Object {
 public:

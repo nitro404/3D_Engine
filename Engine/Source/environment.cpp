@@ -1,4 +1,4 @@
-#include "includes.all"
+#include "Environment.h"
 
 void Environment::tick() {
 	
@@ -107,7 +107,7 @@ void Environment::draw() {
 	glEnable(GL_DEPTH_TEST);
 }
 
-void Environment::import(ifstream &input, TextureCollection & textures) {
+void Environment::import(ifstream & input, vector<Texture *> & textures) {
 	char * line;
 	char * key;
 	char * value;

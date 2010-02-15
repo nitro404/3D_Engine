@@ -1,10 +1,13 @@
 #ifndef _ROTATOR_H
 #define _ROTATOR_H 
 
+#include "Includes.h"
+#include "Object.h"
+
 class Rotator : public Object {
 public:
 	DualTransformation transformation;
-	FaceCollection faces;
+	vector<Face *> faces;
 	
 	Rotator() {
 		angleInDegrees = 0;
@@ -13,7 +16,9 @@ public:
 	
 	~Rotator() {
 		delete [] name;
-		deleteFaceCollectionEntries(faces);
+		for(int i=0;i<faces.size();i++) {
+			delete faces.at(i);
+		}
 	}
 	
 	double distanceFrom(Point & p) const;
@@ -21,7 +26,7 @@ public:
 	void tick();
 	void draw();
 
-	void import(ifstream &input, TextureCollection & textures);
+	void import(ifstream & input, vector<Texture *> & textures);
 	
 private:
 	char * name;
@@ -29,7 +34,5 @@ private:
 	double rateInDegreesPersecond;
 	double angleInDegrees;
 };
-
-declareCollection(Rotator);
 
 #endif
