@@ -227,7 +227,35 @@ public:
 		set (r11,r12,r13,r14,r21,r22,r23,r24,r31,r32,r33,r34,r41,r42,r43,r44);
 	}
 	
-	Point position () {return Point (m41, m42, m43);}
+	Point position () { return Point (m41, m42, m43); }
+	
+	void importSingleTransformation(ifstream & input) {
+		char * line;
+		line = new char[256];
+		
+		input.getline(line, 256, ','); m11 = atof(line);
+		input.getline(line, 256, ','); m12 = atof(line);
+		input.getline(line, 256, ','); m13 = atof(line);
+		input.getline(line, 256, ','); m14 = atof(line);
+		
+		input.getline(line, 256, ','); m21 = atof(line);
+		input.getline(line, 256, ','); m22 = atof(line);
+		input.getline(line, 256, ','); m23 = atof(line);
+		input.getline(line, 256, ','); m24 = atof(line);
+		
+		input.getline(line, 256, ','); m31 = atof(line);
+		input.getline(line, 256, ','); m32 = atof(line);
+		input.getline(line, 256, ','); m33 = atof(line);
+		input.getline(line, 256, ','); m34 = atof(line);
+		
+		input.getline(line, 256, ','); m41 = atof(line);
+		input.getline(line, 256, ','); m42 = atof(line);
+		input.getline(line, 256, ','); m43 = atof(line);
+		input.getline(line, 256, ';'); m44 = atof(line);
+		input.getline(line, 256, '\n');
+		
+		delete [] line;
+	}
 };
 
 //*****************************************************************************************//
@@ -239,7 +267,9 @@ public:
 	//Has both a normal transformation and an inverse; maintains the identity "this * this->inverse = I".
 	Transformation inverse;
 
-	Transformation &normal () {return *((Transformation *) this);}
+	Transformation & normal() {
+		return *((Transformation *) this);
+	}
 
 	//Important fact: if A-1 denotes the inverse of A, then (A*B)-1 = B-1*A-1 (the order is reversed).
 	//Proof: If B-1*A-1 is the inverse of A*B, their product will turn out to be the identity.
@@ -320,6 +350,21 @@ public:
 	
 	Point position() {
 		return this->normal().position();
+	}
+
+	void import(ifstream & input) {
+		char * line;
+		line = new char[256];
+		
+		// input the transformation header
+		input.getline(line, 256, ':');
+		input.getline(line, 256, '\n');
+		
+		// input the transformations
+		this->importSingleTransformation(input);
+		inverse.importSingleTransformation(input);
+		
+		delete [] line;
 	}
 };
 

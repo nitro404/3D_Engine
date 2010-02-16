@@ -13,6 +13,8 @@ ENGINE
    - Remove normals in builder?
  + SPRITE
    - Try to fix randomization based off of preivous DT
+ + WAYPOINT
+   - Only need point, not full transformation?
 
 BUILDER 2.0
  + Implement Worldcraft *.map reading
