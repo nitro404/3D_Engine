@@ -2,15 +2,7 @@
 
 Camera * camera = NULL;
 
-void Camera::tick () {
-	//Not currently doing anything but could if lagging was supported...
-}
-
-void Camera::draw () {
-	//Normally, the camera is invisible but you might consider drawing a cursor in the center of the screen.
-}
-
-void Camera::beginCamera () {
+void Camera::beginCamera() {
 	//If R is the camera's rotation, T is the camera's translation, and W is the player's 
 	//transformation, then moving the camera LOCALLY is a pre-transformation. So the movement
 	//result needed is RTW... However, we are being asked to push the transformation
@@ -24,13 +16,13 @@ void Camera::beginCamera () {
 	//rotate by R-1 which pre-multiplies whatever is on the stack already, and finally
 	//translate by T-1...
 
-	glPushMatrix ();
-		glRotated (-xRotation, 1.0, 0.0, 0.0); //Rotate around x-axis...
-		glTranslated (-offset.x, -offset.y, -offset.z);
-		target->beginCamera ();
+	glPushMatrix();
+		glRotated(-xRotation, 1.0, 0.0, 0.0);
+		glTranslated(-offset.x, -offset.y, -offset.z);
+		target->beginCamera();
 }
 
-void Camera::endCamera () {
-		target->endCamera (); //Match indentation in beginCamera.
-	glPopMatrix (); //Match indentation in pushCamera.
+void Camera::endCamera() {
+		target->endCamera();
+	glPopMatrix();
 }

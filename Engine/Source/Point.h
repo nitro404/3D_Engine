@@ -86,8 +86,4 @@ public:
 	Point operator * (const Transformation & transformation) const;
 };
 
-extern Point Zero;
-
-declareCollection (Point);
-
 #endif

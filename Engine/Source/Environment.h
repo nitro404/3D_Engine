@@ -31,6 +31,4 @@ private:
 	int surrounds;
 };
 
-declareCollection(Environment);
-
 #endif

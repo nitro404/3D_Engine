@@ -70,6 +70,4 @@ public:
 	}
 };
 
-declareCollection (Plane);
-
 #endif

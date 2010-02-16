@@ -7,8 +7,8 @@
 //                                      Includes                                           //
 //*****************************************************************************************//
 
-#ifndef transformationsModule
-#define transformationsModule 
+#ifndef _TRANSFORMATION_H
+#define _TRANSFORMATION_H 
 
 #include "Includes.h"
 #include "Point.h"
@@ -228,17 +228,7 @@ public:
 	}
 	
 	Point position () {return Point (m41, m42, m43);}
-
-	/*void log (long tabs = 0) {
-		char *tabbing = indentation (tabs);
-		::log ("\n%s%3.3f, %3.3f, %3.3f, %3.3f" "\n%s%3.3f, %3.3f, %3.3f, %3.3f" 
-			"\n%s%3.3f, %3.3f, %3.3f, %3.3f" "\n%s%3.3f, %3.3f, %3.3f, %3.3f", 
-			tabbing, m11, m12, m13, m14, tabbing, m21, m22, m23, m24, 
-			tabbing, m31, m32, m33, m34, tabbing, m41, m42, m43, m44);
-	}*/
 };
-
-declareCollection (Transformation);
 
 //*****************************************************************************************//
 //                      Dual Transformations (Have Their Own Inverses)                     //

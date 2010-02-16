@@ -13,5 +13,3 @@ Point Point::operator * (const Transformation & t) const {
 	if (absoluteW < epsilon ()) return result * inverseEpsilon (); //w is 0.0 (use epsilon).
 	return result * (1.0 / w); //the complicated case.
 }
-
-Point Zero = Point(0.0, 0.0, 0.0);

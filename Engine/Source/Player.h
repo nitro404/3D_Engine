@@ -11,9 +11,9 @@ public:
 	Player() { }
 	~Player() { }
 	
-	void tick();
-	void draw();
-
+	void tick() { } // add collision detection
+	void draw() { }
+	
 	void beginCamera();
 	void endCamera();
 	

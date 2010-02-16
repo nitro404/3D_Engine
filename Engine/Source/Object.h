@@ -23,6 +23,4 @@ public:
 	virtual void import (ifstream & input, vector<Texture *> & textures) { }
 };
 
-declareCollection(Object);
-
 #endif

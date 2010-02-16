@@ -34,6 +34,4 @@ private:
 	vector<Waypoint *> neighbours;
 };
 
-declareCollection(Waypoint);
-
 #endif
