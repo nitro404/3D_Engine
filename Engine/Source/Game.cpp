@@ -179,6 +179,12 @@ void Game::escapePressed() {
 	}
 }
 
+void Game::loadMap(char * fileName) {
+	world = new World;
+	world->import(fileName, textures, animatedTextures);
+	player->reset(world->startPosition);
+}
+
 void Game::closeMap() {
 	if(world != NULL) {
 		delete world;
@@ -345,10 +351,4 @@ void Game::loadTextures(char * fileName, char * textureDirectory) {
 	
 	delete [] line;
 	input.close();
-}
-
-void Game::loadMap(char * fileName) {
-	world = new World;
-	world->import(fileName, textures, animatedTextures);
-	player->reset(world->startPosition);
 }

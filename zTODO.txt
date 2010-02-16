@@ -15,6 +15,9 @@ ENGINE
    - Try to fix randomization based off of preivous DT
  + WAYPOINT
    - Only need point, not full transformation?
+ + MISC
+   - Fish sprites seem to disappear
+   - Issue with castle map
 
 BUILDER 2.0
  + Implement Worldcraft *.map reading

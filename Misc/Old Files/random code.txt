@@ -623,3 +623,22 @@ void createMenus () {
 	*/
 
 
+
+
+
+double timeNow();
+
+double timeNow() {
+	//Returns how much time has elapsed since the first call of this function... Accurate to a microsecond...
+	static INT64 countsPerSecond; static INT64 oldTime; static bool firstTime = true;
+	if (firstTime) {firstTime = false; QueryPerformanceCounter ((LARGE_INTEGER *) &oldTime); QueryPerformanceFrequency ((LARGE_INTEGER *) &countsPerSecond);}
+	
+	INT64 newTime; QueryPerformanceCounter ((LARGE_INTEGER *) &newTime);
+	INT64 elapsedCounts = newTime - oldTime; 
+	
+	double seconds = (double) elapsedCounts / (double) countsPerSecond; //count / (counts / second) = seconds
+	return seconds;
+}
+
+
+

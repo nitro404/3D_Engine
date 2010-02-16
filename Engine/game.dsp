@@ -115,7 +115,7 @@ SOURCE=.\Source\InputManager.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\Logging.cpp
+SOURCE=.\Source\Macros.cpp
 # End Source File
 # Begin Source File
 
@@ -188,10 +188,6 @@ SOURCE=.\Source\Includes.h
 # Begin Source File
 
 SOURCE=.\Source\InputManager.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\Logging.h
 # End Source File
 # Begin Source File
 

@@ -10,10 +10,14 @@
 #include <time.h>
 #include <vector>
 #include <map>
+#include <windows.h>
+#include <mmsystem.h>
 
 using namespace std;
 
 #include "GLUT/glut.h"
-#include "Logging.h"
+
+void prompt(char *message, ...);
+void quit(char *message, ...);
 
 #endif

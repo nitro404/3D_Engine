@@ -34,11 +34,27 @@ void resizeWindow(int width, int height) {
 }
 
 inline void computeDT() {
+	//Returns how much time has elapsed since the first call of this function... Accurate to a microsecond...
+	static INT64 countsPerSecond;
+	static INT64 oldTime;
+	static bool firstTime = true;
+	if(firstTime) {
+		firstTime = false;
+		QueryPerformanceCounter((LARGE_INTEGER *) & oldTime);
+		QueryPerformanceFrequency((LARGE_INTEGER *) & countsPerSecond);
+	}
+	
+	INT64 newTime;
+	QueryPerformanceCounter((LARGE_INTEGER *) & newTime);
+	INT64 elapsedCounts = newTime - oldTime; 
+	
+	double seconds = (double) elapsedCounts / (double) countsPerSecond; //count / (counts / second) = seconds
+	
 	//Compute elapsed time needed for controlling frame rate independent effects.
 	//If running slower than 5 frames per second, pretend it's 5 frames/sec.
 	//Note: 30 frames per second means 1/30 seconds per frame = 0.03333... seconds per frame.
-	static double lastTimeInSeconds = timeNow() - 0.033; //Pretend we are running 30 frames per second on the first tick.
-	double timeInSeconds = timeNow();
+	static double lastTimeInSeconds = seconds; //Pretend we are running 30 frames per second on the first tick.
+	double timeInSeconds = seconds;
 	DT = timeInSeconds - lastTimeInSeconds;
 	if(DT > 0.2) DT = 0.2; //5 frames/sec means 1 frame in 1/5 (= 0.2) seconds.
 	lastTimeInSeconds = timeInSeconds;
