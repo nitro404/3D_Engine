@@ -64,7 +64,7 @@ Texture::Texture (long width, long height, TextureType type) {
 
 Texture::~Texture () {
 	this->unload();
-	delete [] bytes;
+	if(bytes != NULL) { delete [] bytes; }
 	delete [] textureName;
 }
 
@@ -379,6 +379,8 @@ void Texture::load (bool mipmapping, bool forceClamp) {
 	else
 		glTexImage2D (GL_TEXTURE_2D, 0, components [type], width, height, 0,
 			format [type], GL_UNSIGNED_BYTE, bytes);
+	
+	if(bytes != NULL) { delete [] bytes; bytes = NULL; }
 }
 
 void Texture::unload () {
