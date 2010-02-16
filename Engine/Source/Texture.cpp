@@ -1,98 +1,44 @@
 #include "Texture.h"
 
-//*****************************************************************************************//
-//                                      Texture                                            //
-//*****************************************************************************************//
-
-//*****************************************************************************************//
-//                          Private Packing/Unpacking Facilities                           //
-//*****************************************************************************************//
-
-#define redMask 0X000000FF
-#define greenMask 0X0000FF00
-#define blueMask 0X00FF0000
-#define alphaMask 0XFF000000
-
-#define redShift 0
-#define greenShift 8
-#define blueShift 16
-#define alphaShift 24
-
-inline long pack (const long red, const long green, const long blue, const long alpha) {
-	return 
-		((red << redShift) & redMask) | 
-		((green << greenShift) & greenMask) | 
-		((blue << blueShift) & blueMask)| 
-		((alpha << alphaShift) & alphaMask);
+long Texture::pack(const long red, const long green, const long blue, const long alpha) {
+	return  ((red << 0) & 0X000000FF) |
+			((green << 8) & 0X0000FF00) |
+			((blue << 16) & 0X00FF0000) |
+			((alpha << 24) & 0XFF000000);
 }
 
-inline long unpackRed (const long pixel) {
-	return (pixel >> redShift) & 0X000000FF;
-}
-
-inline long unpackGreen (const long pixel) {
-	return (pixel >> greenShift) & 0X000000FF;
-}
-
-inline long unpackBlue (const long pixel) {
-	return (pixel >> blueShift) & 0X000000FF;
-}
-
-inline long unpackAlpha (const long pixel) {
-	return (pixel >> alphaShift) & 0X000000FF;
-}
-
-inline bool isPowerOf2 (long value) {
-	return (value & ~(value - 1)) == value;
-}	
-
-//*****************************************************************************************//
-//                                Texture Implementation                                   //
-//*****************************************************************************************//
-
-Texture::Texture (long width, long height, TextureType type) {
-	//Fill in all attributes.
+Texture::Texture(long width, long height, TextureType type) {
 	this->type = type;
 	this->width = width;
 	this->height = height;
-	this->bytes = new long [width * height]; 
-	this->textureHandle = -1; //If we don't get a handle, it will still be -1.
+	this->bytes = new long[width * height]; 
+	this->textureHandle = -1;
 	this->textureLoaded = false;
-	this->textureName = NULL; //So far.
-	glGenTextures (1, &this->textureHandle);
+	this->textureName = NULL;
+	glGenTextures(1, &this->textureHandle);
 }
 
-Texture::~Texture () {
+Texture::~Texture() {
 	this->unload();
-	if(bytes != NULL) { delete [] bytes; }
+	if(bytes != NULL) {
+		delete [] bytes;
+	}
 	delete [] textureName;
 }
 
-//Private utility...
-inline char *fileSuffix (const char *fileName) {
-	//Returns a pointer to an ALL UPPERCASE string in a static area containing the 3 CHARACTER SUFFIX SUCH AS
-	//"BMP" OR "TGA". Don't call twice on 2 different file names and then process (call once, process, call 
-	//again, process, ...).
-	long size = strlen (fileName); static char uppercase [5];
-	for (char *s = (char *) &fileName [size - 4], *d = &uppercase [0]; *s; s++, d++) {
-		*d = toupper (*s);
+Texture * Texture::readTexture(char * fullPathName) {
+	char * suffix = strrchr(fullPathName, '.');
+	if(stricmp(suffix, ".bmp") == 0) {
+		return readBMPTexture(fullPathName);
 	}
-	uppercase [4] = '\0'; //Make sure the file extension ends with a NULL
-	return uppercase;
-}
-
-Texture *Texture::readTexture (char *fullPathName) {
-	//Special case 3 possibilities...
-	char *suffix = fileSuffix (fullPathName);
-	Texture *readBMPTexture (char *fullPathName); //Forward reference.
-	Texture *readTGATexture (char *fullPathName); //Forward reference.
-	if (strcmp (suffix, ".BMP") == 0) return readBMPTexture (fullPathName);
-	if (strcmp (suffix, ".TGA") == 0) return readTGATexture (fullPathName);
-	printf("Unknown texture type requested for \"%s\"...\n", fullPathName);
+	else if(stricmp(suffix, ".tga") == 0) {
+		return readTGATexture(fullPathName);
+	}
+	quit("Unknown texture type for \"%s\".\n", fullPathName);
 	return NULL;
 }	
 
-Texture *readBMPTexture (char *fullPathName) {
+Texture * Texture::readBMPTexture(char *fullPathName) {
 	//Read a texture and fill in all attributes; returns NULL if unsuccessful.
 	//Creates a full RGBA texture rather than optimize with just a RGB texture...
 
@@ -111,10 +57,12 @@ Texture *readBMPTexture (char *fullPathName) {
 	long pixelSize = bitmap.bmBitsPixel;
 	long planes = bitmap.bmPlanes;
 	char *bits = (char *) bitmap.bmBits;
-
-	if (!isPowerOf2 (width) || !isPowerOf2 (height)) {
+	
+	// check that the dimensions of the image are powers of 2
+	if (!(width & ~(width - 1)) == width || !(height & ~(height - 1)) == height) {
+	
 		//OpenGL needs a power of 2 (it is possible to force OpenGL to resize it but that's slow).
-		prompt ("\nBitmap \"%s\" is not a power of 2; width %d, height %d.", fullPathName, width, height);
+		printf("\nBitmap \"%s\" is not a power of 2; width %d, height %d.", fullPathName, width, height);
 	}
 
 	//Allocate space for RGBA format.
@@ -180,7 +128,7 @@ Texture *readBMPTexture (char *fullPathName) {
     DeleteObject (bitmapHandle); return texture;
 }
 
-Texture *readTGATexture (char *fullPathName) {
+Texture * Texture::readTGATexture(char * fullPathName) {
 	//Creates either an RGBA texture or an RGB texture depending on whether or not the file
 	//contains alpha bits... 24 bit TGA textures have not been tested...
 
@@ -260,133 +208,60 @@ Texture *readTGATexture (char *fullPathName) {
 	#undef logError
 }
 
-bool Texture::readTextureExtent (char *fullPathName, long &width, long &height) {
-	//Read just enough of a texture to determine it's extent; i.e., width and height.
-	//Returns true if successful; false otherwise. Special case 3 possibilities...
-	char *suffix = fileSuffix (fullPathName);
-	bool readRGBTextureExtent (char *fullPathName, long &width, long &height); //Forward reference.
-	bool readTGATextureExtent (char *fullPathName, long &width, long &height); //Forward reference.
-	if (strcmp (suffix, ".BMP") == 0) return readRGBTextureExtent (fullPathName, width, height);
-	if (strcmp (suffix, ".TGA") == 0) return readTGATextureExtent (fullPathName, width, height);
-	printf("Unknown texture type requested for \"%s\"...\n", fullPathName);
-	return false;
-}
-
-bool readRGBTextureExtent (char *fullPathName, long &width, long &height) {
-	//Read just enough of a texture to determine it's extent; i.e., width and height.
-	//Returns true if successful; false otherwise.
-
-	//Get Microsoft to read it (they must know how).
-    HBITMAP bitmapHandle = (HBITMAP) LoadImage (NULL, fullPathName, 
-    	IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	
-	if (bitmapHandle == NULL) {
-		printf("File \"%s\" not found...\n", fullPathName);
-		return false;
-	}
-
-    //Find out how big it is.
-	BITMAP bitmap; GetObject (bitmapHandle, sizeof (bitmap), &bitmap);
-	width = bitmap.bmWidth;	height = bitmap.bmHeight;
-	DeleteObject (bitmapHandle); 
-	return true;
-}
-
-bool readTGATextureExtent (char *fullPathName, long &width, long &height) {
-	//Read just enough of a texture to determine it's extent; i.e., width and height.
-	//Returns true if successful; false otherwise.
-
-	FILE *file = fopen (fullPathName, "rb");
-	if (file == NULL) {
-		printf("Unable to open texture %s\n", fullPathName);
-		return false;
-	}
-
-	struct TGAHeader {
-		byte idLength, colorMapType, imageType, colorMapSpecification [5];
-		short xOrigin, yOrigin, imageWidth, imageHeight;
-		byte pixelDepth, imageDescriptor;
-	};
-
-	TGAHeader header;
-	if (fread (&header, 1, sizeof (header), file) != sizeof (header)) {
-		printf("TGA file \"%s\" appears to be truncated.\n", fullPathName);
-		return false;
-	}
-	fclose (file);
-	width = header.imageWidth;
-	height = header.imageHeight; 
-	return true;
-}
-
-Texture *Texture::readUnknownTexture (char *shortTextureName, const bool haltIfNotFound) {
-	//Given a short texture name such as "brick", builds a full path name such as
-	//"c:\3d\student\textures\brick.tga" and then tries to read it to see if it exists.
-	//If it exists, it is returned. Otherwise, tries ".bmp" as the suffix... If that
-	//fails, either returns NULL or gives an error message depending on "haltIfNotFound". 
-	
-	//Basic idea: tga files are preferred over bmp files...
-	const long maximumSuffixes = 2;
-	static char *suffixes [] = {".tga", ".bmp"};
-	static char fileName [500]; 
-	
-	for (long suffixIndex = 0; suffixIndex < maximumSuffixes; suffixIndex++) {
-		strcpy (fileName, "..\\textures\\");
-		strcat (fileName, shortTextureName);
-		strcat (fileName, suffixes [suffixIndex]);
-		
-		Texture *texture = Texture::readTexture (fileName);
-		if (texture != NULL) return texture;
-	}
-	
-	//If we get to here, it's because none of the suffixes worked.
-	if(haltIfNotFound) {
-		printf("Could not find texture \"%s\" in the textures directory...\n", shortTextureName);
-	}
-	return NULL; //Can't be found...
-}
-
-void Texture::activate () {
-	if (!textureLoaded) {
-		quit("Texture: \"%s\" not loaded onto video card.", textureName);
-	}
-	if (textureHandle == -1) {glDisable (GL_TEXTURE_2D); return;}
-	glEnable (GL_TEXTURE_2D);  //Turn on texturing.
-	glBindTexture (GL_TEXTURE_2D, textureHandle); //Bind the current texture.
-}
-
-void Texture::load (bool mipmapping, bool forceClamp) {
-	//Give the texture to the game card.
-	textureLoaded = true; //It will be loaded shortly...
-	if (textureHandle == -1 || bytes == NULL) {
+void Texture::activate() {
+	if(!textureLoaded) {
+		printf("Texture \"%s\" not loaded onto video card.\n", textureName);
 		return;
 	}
-	static long alignment [2] = {4, 1};
-	static GLint wrap [2] = {GL_REPEAT, GL_REPEAT}; //GL_CLAMP is currently not used
-	static GLint components [2] = {GL_RGBA8, GL_RGB8};
-	static GLenum format [2] = {GL_RGBA, GL_RGB};
+	if(textureHandle == -1) {
+		glDisable(GL_TEXTURE_2D);
+		return;
+	}
 
-	activate ();
-	glPixelStorei (GL_PACK_ALIGNMENT, alignment [type]);
-	GLint wrapping = forceClamp ? GL_CLAMP : wrap [type];
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapping);
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapping);
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	GLint minFilter = mipmapping ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR;
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
-	if (mipmapping)
-		gluBuild2DMipmaps (GL_TEXTURE_2D, components [type], width, height,
-			format [type], GL_UNSIGNED_BYTE, bytes);
-	else
-		glTexImage2D (GL_TEXTURE_2D, 0, components [type], width, height, 0,
-			format [type], GL_UNSIGNED_BYTE, bytes);
-	
-	if(bytes != NULL) { delete [] bytes; bytes = NULL; }
+	glEnable(GL_TEXTURE_2D); //Turn on texturing.
+	glBindTexture(GL_TEXTURE_2D, textureHandle); //Bind the current texture.
 }
 
-void Texture::unload () {
-	if (textureHandle != -1) {
-		glDeleteTextures (1, &textureHandle);
+void Texture::load(bool mipmapping, bool forceClamp) {
+	//Give the texture to the game card.
+	if(textureHandle == -1 || bytes == NULL) {
+		return;
 	}
+	
+	static long alignment[2] = {4, 1};
+	static GLint wrap[2] = {GL_REPEAT, GL_REPEAT}; //GL_CLAMP is currently not used
+	static GLint components[2] = {GL_RGBA8, GL_RGB8};
+	static GLenum format[2] = {GL_RGBA, GL_RGB};
+	
+	textureLoaded = true;
+	activate();
+	
+	glPixelStorei(GL_PACK_ALIGNMENT, alignment[type]);
+	GLint wrapping = forceClamp ? GL_CLAMP : wrap[type];
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapping);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapping);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	GLint minFilter = mipmapping ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR;
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
+
+	if(mipmapping) {
+		gluBuild2DMipmaps(GL_TEXTURE_2D, components[type], width, height, format[type], GL_UNSIGNED_BYTE, bytes);
+	}
+	else {
+		glTexImage2D(GL_TEXTURE_2D, 0, components[type], width, height, 0, format[type], GL_UNSIGNED_BYTE, bytes);
+	}
+	
+	if(bytes != NULL) {
+		delete [] bytes;
+		bytes = NULL;
+	}
+}
+
+void Texture::unload() {
+	if(textureHandle != -1) {
+		glDeleteTextures(1, & textureHandle);
+	}
+
 	textureHandle = -1;
 	textureLoaded = false;
 }

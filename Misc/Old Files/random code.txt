@@ -642,3 +642,143 @@ double timeNow() {
 
 
 
+inline char *fileSuffix (const char *fileName) {
+	//Returns a pointer to an ALL UPPERCASE string in a static area containing the 3 CHARACTER SUFFIX SUCH AS
+	//"BMP" OR "TGA". Don't call twice on 2 different file names and then process (call once, process, call 
+	//again, process, ...).
+	long size = strlen (fileName); static char uppercase [5];
+	for (char *s = (char *) &fileName [size - 4], *d = &uppercase [0]; *s; s++, d++) {
+		*d = toupper (*s);
+	}
+	uppercase [4] = '\0'; //Make sure the file extension ends with a NULL
+	return uppercase;
+}
+
+//	static Texture * readUnknownTexture(char *shortTextureName, const bool haltIfNotFound = true);
+
+/*Texture *Texture::readUnknownTexture(char *shortTextureName, const bool haltIfNotFound) {
+	//Given a short texture name such as "brick", builds a full path name such as
+	//"c:\3d\student\textures\brick.tga" and then tries to read it to see if it exists.
+	//If it exists, it is returned. Otherwise, tries ".bmp" as the suffix... If that
+	//fails, either returns NULL or gives an error message depending on "haltIfNotFound". 
+	
+	//Basic idea: tga files are preferred over bmp files...
+	const long maximumSuffixes = 2;
+	static char * suffixes[] = {".tga", ".bmp"};
+	static char fileName[500]; 
+	
+	for(long suffixIndex = 0; suffixIndex < maximumSuffixes; suffixIndex++) {
+		strcpy(fileName, "..\\textures\\");
+		strcat(fileName, shortTextureName);
+		strcat(fileName, suffixes [suffixIndex]);
+		
+		Texture *texture = Texture::readTexture (fileName);
+		if (texture != NULL) return texture;
+	}
+	
+	//If we get to here, it's because none of the suffixes worked.
+	if(haltIfNotFound) {
+		printf("Could not find texture \"%s\" in the textures directory...\n", shortTextureName);
+	}
+	return NULL;
+}*/
+
+
+//	static bool readTextureExtent(char * fileName, long & width, long & height);
+//	static bool readRGBTextureExtent(char * fullPathName, long & width, long & height);
+//	static bool readTGATextureExtent(char * fullPathName, long & width, long & height);
+
+/*bool Texture::readTextureExtent(char * fullPathName, long & width, long & height) {
+	//Read just enough of a texture to determine it's extent; i.e., width and height.
+	//Returns true if successful; false otherwise. Special case 3 possibilities...
+	char * suffix = strrchr(fullPathName, '.');
+	if(stricmp(suffix, ".bmp") == 0) {
+		return readRGBTextureExtent(fullPathName, width, height);
+	}
+	if(stricmp(suffix, ".tga") == 0) {
+		return readTGATextureExtent(fullPathName, width, height);
+	}
+	quit("Unknown texture type for \"%s\".\n", fullPathName);
+	return false;
+}
+
+bool Texture::readRGBTextureExtent(char * fullPathName, long & width, long & height) {
+	//Read just enough of a texture to determine it's extent; i.e., width and height.
+	//Returns true if successful; false otherwise.
+
+	//Get Microsoft to read it (they must know how).
+    HBITMAP bitmapHandle = (HBITMAP) LoadImage (NULL, fullPathName, 
+    	IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	
+	if (bitmapHandle == NULL) {
+		printf("File \"%s\" not found...\n", fullPathName);
+		return false;
+	}
+
+    //Find out how big it is.
+	BITMAP bitmap; GetObject (bitmapHandle, sizeof (bitmap), &bitmap);
+	width = bitmap.bmWidth;	height = bitmap.bmHeight;
+	DeleteObject (bitmapHandle); 
+	return true;
+}
+
+bool Texture::readTGATextureExtent(char * fullPathName, long & width, long & height) {
+	//Read just enough of a texture to determine it's extent; i.e., width and height.
+	//Returns true if successful; false otherwise.
+
+	FILE *file = fopen (fullPathName, "rb");
+	if (file == NULL) {
+		printf("Unable to open texture %s\n", fullPathName);
+		return false;
+	}
+
+	struct TGAHeader {
+		byte idLength, colorMapType, imageType, colorMapSpecification [5];
+		short xOrigin, yOrigin, imageWidth, imageHeight;
+		byte pixelDepth, imageDescriptor;
+	};
+
+	TGAHeader header;
+	if (fread (&header, 1, sizeof (header), file) != sizeof (header)) {
+		printf("TGA file \"%s\" appears to be truncated.\n", fullPathName);
+		return false;
+	}
+	fclose (file);
+	width = header.imageWidth;
+	height = header.imageHeight; 
+	return true;
+}*/
+
+inline bool isPowerOf2(long value) {
+	return (value & ~(value - 1)) == value;
+}
+
+
+/*
+#define redMask 0X000000FF
+#define greenMask 0X0000FF00
+#define blueMask 0X00FF0000
+#define alphaMask 0XFF000000
+*/
+
+#define redShift 0
+#define greenShift 8
+#define blueShift 16
+#define alphaShift 24
+
+
+/*inline long unpackRed(const long pixel) {
+	return (pixel >> redShift) & 0X000000FF;
+}
+
+inline long unpackGreen(const long pixel) {
+	return (pixel >> greenShift) & 0X000000FF;
+}
+
+inline long unpackBlue(const long pixel) {
+	return (pixel >> blueShift) & 0X000000FF;
+}
+
+inline long unpackAlpha(const long pixel) {
+	return (pixel >> alphaShift) & 0X000000FF;
+}*/
+
