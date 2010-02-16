@@ -6,7 +6,7 @@
 --------------------Configuration: game - Win32 Release--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP190.tmp" with contents
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP294.tmp" with contents
 [
 /nologo /ML /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Release/game.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\AnimatedFace.cpp"
@@ -20,10 +20,9 @@ Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP190.tmp" with con
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Main.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Plane.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Player.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Points.cpp"
+"C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Point.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Sound.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Texture.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Utilities.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Variable.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Variables.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\World.cpp"
@@ -36,8 +35,8 @@ Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP190.tmp" with con
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Vehicle.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Waypoint.cpp"
 ]
-Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP190.tmp" 
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP191.tmp" with contents
+Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP294.tmp" 
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP295.tmp" with contents
 [
 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:no /pdb:"Release/game.pdb" /machine:I386 /out:"Release/game.exe" 
 ".\Release\AnimatedFace.obj"
@@ -51,10 +50,9 @@ kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32
 ".\Release\Main.obj"
 ".\Release\Plane.obj"
 ".\Release\Player.obj"
-".\Release\Points.obj"
+".\Release\Point.obj"
 ".\Release\Sound.obj"
 ".\Release\Texture.obj"
-".\Release\Utilities.obj"
 ".\Release\Variable.obj"
 ".\Release\Variables.obj"
 ".\Release\World.obj"
@@ -67,7 +65,7 @@ kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32
 ".\Release\Vehicle.obj"
 ".\Release\Waypoint.obj"
 ]
-Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP191.tmp"
+Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP295.tmp"
 <h3>Output Window</h3>
 Compiling...
 AnimatedFace.cpp
@@ -81,10 +79,9 @@ Logging.cpp
 Main.cpp
 Plane.cpp
 Player.cpp
-Points.cpp
+Point.cpp
 Sound.cpp
 Texture.cpp
-Utilities.cpp
 Variable.cpp
 Variables.cpp
 World.cpp
@@ -107,7 +104,7 @@ game.exe - 0 error(s), 1 warning(s)
 --------------------Configuration: game - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP193.tmp" with contents
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP297.tmp" with contents
 [
 /nologo /MLd /w /W0 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\AnimatedFace.cpp"
@@ -121,10 +118,9 @@ Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP193.tmp" with con
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Main.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Plane.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Player.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Points.cpp"
+"C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Point.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Sound.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Texture.cpp"
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Utilities.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Variable.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Variables.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\World.cpp"
@@ -137,8 +133,8 @@ Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP193.tmp" with con
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Vehicle.cpp"
 "C:\Settings\nitro glycerine\Desktop\3D Engine\Engine\Source\Waypoint.cpp"
 ]
-Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP193.tmp" 
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP194.tmp" with contents
+Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP297.tmp" 
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP298.tmp" with contents
 [
 glut32.lib glu32.lib opengl32.lib winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/game.pdb" /debug /machine:I386 /out:"Debug/game.exe" /pdbtype:sept 
 ".\Debug\AnimatedFace.obj"
@@ -152,10 +148,9 @@ glut32.lib glu32.lib opengl32.lib winmm.lib kernel32.lib user32.lib gdi32.lib wi
 ".\Debug\Main.obj"
 ".\Debug\Plane.obj"
 ".\Debug\Player.obj"
-".\Debug\Points.obj"
+".\Debug\Point.obj"
 ".\Debug\Sound.obj"
 ".\Debug\Texture.obj"
-".\Debug\Utilities.obj"
 ".\Debug\Variable.obj"
 ".\Debug\Variables.obj"
 ".\Debug\World.obj"
@@ -168,7 +163,7 @@ glut32.lib glu32.lib opengl32.lib winmm.lib kernel32.lib user32.lib gdi32.lib wi
 ".\Debug\Vehicle.obj"
 ".\Debug\Waypoint.obj"
 ]
-Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP194.tmp"
+Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP298.tmp"
 <h3>Output Window</h3>
 Compiling...
 AnimatedFace.cpp
@@ -182,18 +177,17 @@ Logging.cpp
 Main.cpp
 Plane.cpp
 Player.cpp
-Points.cpp
+Point.cpp
 Sound.cpp
 Texture.cpp
-Utilities.cpp
 Variable.cpp
 Variables.cpp
 World.cpp
 Environment.cpp
 Geometry.cpp
+Pool.cpp
 Generating Code...
 Compiling...
-Pool.cpp
 Rotator.cpp
 Sprite.cpp
 Translator.cpp

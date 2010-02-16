@@ -2,7 +2,6 @@
 #define _FACE_H 
 
 #include "Colour.h"
-#include "Utilities.h"
 #include "Texture.h"
 
 struct GamePoint {

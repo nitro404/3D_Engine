@@ -56,12 +56,12 @@ void AnimatedFace::import(ifstream & input, vector<AnimatedTexture * > & animate
 	value = new char[256];
 	
 	//Input the header.
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ';');
 	int currentIndex = atoi(line);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 	
-	SKIP_TO_ENDLINE;
+	input.getline(line, 256, '\n');
 	value[0] = '\0';
 	sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 	
@@ -72,20 +72,20 @@ void AnimatedFace::import(ifstream & input, vector<AnimatedTexture * > & animate
 	}
 
 	//Input the points.
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ';');
 	int numberOfPoints = atoi(line);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 	for(int pointIndex=0;pointIndex<numberOfPoints;pointIndex++) {
 		GamePoint * point = new GamePoint;
-		SKIP_TO_COMMA; point->x = atof (line);
-		SKIP_TO_COMMA; point->y = atof (line);
-		SKIP_TO_COMMA; point->z = atof (line);
-		SKIP_TO_COMMA;
-		SKIP_TO_COMMA;
-		SKIP_TO_COMMA;
-		SKIP_TO_COMMA; point->tx = atof (line);
-		SKIP_TO_ENDLINE; point->ty = atof (line);
+		input.getline(line, 256, ','); point->x = atof (line);
+		input.getline(line, 256, ','); point->y = atof (line);
+		input.getline(line, 256, ','); point->z = atof (line);
+		input.getline(line, 256, ',');
+		input.getline(line, 256, ',');
+		input.getline(line, 256, ',');
+		input.getline(line, 256, ','); point->tx = atof (line);
+		input.getline(line, 256, '\n'); point->ty = atof (line);
 		points.push_back(point);
 	}
 	

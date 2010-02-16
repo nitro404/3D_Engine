@@ -291,16 +291,16 @@ void Game::loadTextures(char * fileName, char * textureDirectory) {
 	}
 	
 	//Input the texture names and load the corresponding texture
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ';');
 	int texturesSize = atoi(line);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 	char * textureName;
 	int startIndex;
 	string texturePath;
 	Texture * newTexture;
 	for(int textureIndex = 0; textureIndex < texturesSize; textureIndex++) {
-		SKIP_TO_ENDLINE;
+		input.getline(line, 256, '\n');
 		startIndex = 0;
 		for(i=startIndex;i<strlen(line);i++) {
 			if(line[i] != ' ' && line[i] != '\t') {
@@ -332,10 +332,10 @@ void Game::loadTextures(char * fileName, char * textureDirectory) {
 	}
 	
 	//Input the animated textures 
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ';');
 	long animatedTexturesSize = atoi(line);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 	for(int atIndex=0;atIndex<animatedTexturesSize;atIndex++) {
 		//Create the corresponding animated textures
 		AnimatedTexture * animatedTexture = new AnimatedTexture;

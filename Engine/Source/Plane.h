@@ -2,7 +2,7 @@
 #define _PLANE_H
 
 #include "Includes.h"
-#include "Points.h"
+#include "Point.h"
 
 enum PointSign {positiveSign, zeroSign, negativeSign};
 enum LineSign {frontSign, backSign, onSign, straddlesSign};

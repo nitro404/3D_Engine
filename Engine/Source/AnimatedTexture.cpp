@@ -10,24 +10,23 @@ void AnimatedTexture::import (ifstream & input, vector<Texture *> & worldTexture
 	value = new char[256];
 	
 	//Input the header.
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ';');
 	int currentIndex = atoi(line);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 
 	//Input the properties
 	int firstTexture;
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ';');
 	int numberOfProperties = atoi(line);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 	for(int propertyIndex=0;propertyIndex<numberOfProperties;propertyIndex++) {
-		SKIP_TO_ENDLINE;
+		input.getline(line, 256, '\n');
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
-		convertToLowercase(key);
 		str = new char[strlen(value) + 1];
-		strcpy (str, value);
+		strcpy(str, value);
 		
 		//Parse properties to local variables
 		if(stricmp(key, "name") == 0) {

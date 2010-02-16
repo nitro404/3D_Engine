@@ -11,7 +11,7 @@
 #define transformationsModule 
 
 #include "Includes.h"
-#include "Points.h"
+#include "Point.h"
 
 //*****************************************************************************************//
 //                           OpenGL Stack Manipulation Extensions                          //

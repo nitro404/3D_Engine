@@ -131,7 +131,7 @@ SOURCE=.\Source\Player.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\Points.cpp
+SOURCE=.\Source\Point.cpp
 # End Source File
 # Begin Source File
 
@@ -140,10 +140,6 @@ SOURCE=.\Source\Sound.cpp
 # Begin Source File
 
 SOURCE=.\Source\Texture.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\Utilities.cpp
 # End Source File
 # Begin Source File
 
@@ -207,7 +203,7 @@ SOURCE=.\Source\Player.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\Points.h
+SOURCE=.\Source\Point.h
 # End Source File
 # Begin Source File
 
@@ -219,11 +215,7 @@ SOURCE=.\Source\Texture.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Source\Transformations.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Source\Utilities.h
+SOURCE=.\Source\Transformation.h
 # End Source File
 # Begin Source File
 

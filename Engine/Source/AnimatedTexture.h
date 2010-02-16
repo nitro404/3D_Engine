@@ -2,7 +2,6 @@
 #define _ANIMATEDTEXTURE_H
 
 #include "Includes.h"
-#include "Utilities.h"
 #include "Texture.h"
 
 class AnimatedTexture {

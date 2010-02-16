@@ -2,7 +2,6 @@
 #define _ANIMATEDFACE_H
 
 #include "Includes.h"
-#include "Utilities.h"
 #include "AnimatedTexture.h"
 #include "Face.h"
 

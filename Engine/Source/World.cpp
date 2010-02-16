@@ -138,22 +138,22 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<Animate
 	}
 	
 	//Input the header.
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 
 	//Input the start position
-	SKIP_TO_COLON;
-	SKIP_TO_COMMA;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ',');
 	double xStartPos = atof(line);
-	SKIP_TO_COMMA;
+	input.getline(line, 256, ',');
 	double yStartPos = atof(line);
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ';');
 	double zStartPos = atof(line);
 	startPosition = Point(xStartPos, yStartPos, zStartPos);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 	
 	//Input the waypoints
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ';');
 	int numberOfWaypoints = atoi(line);
 	for(int waypointIndex=0;waypointIndex<numberOfWaypoints;waypointIndex++) {
 		//Create the corresponding objects
@@ -221,19 +221,19 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<Animate
 	}
 	
 	//Input the objects.
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ';');
 	int numberOfObjects = atoi(line);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 	for(int objectIndex=0;objectIndex<numberOfObjects;objectIndex++) {
 		//Input the header.
-		SKIP_TO_COLON;
-		SKIP_TO_SEMICOLON;
+		input.getline(line, 256, ':');
+		input.getline(line, 256, ';');
 		int currentIndex = atoi(line);
-		CLEAR_THE_LINE;
+		input.getline(line, 256, '\n');
 		
 		//Input the object type
-		SKIP_TO_ENDLINE;
+		input.getline(line, 256, '\n');
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		type = new char[strlen(value) + 1];

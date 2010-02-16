@@ -82,26 +82,25 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 	
 	//Input the position
 	double x, y, z;
-	SKIP_TO_COLON;
-	SKIP_TO_COMMA;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ',');
 	x = atof(line);
-	SKIP_TO_COMMA;
+	input.getline(line, 256, ',');
 	y = atof(line);
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ';');
 	z = atof(line);
 	position = Point(x, y, z);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 	
 	//Input the properties
-	SKIP_TO_COLON;
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ';');
 	int numberOfProperties = atoi(line);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 	for(int propertyIndex=0;propertyIndex<numberOfProperties;propertyIndex++) {
-		SKIP_TO_ENDLINE;
+		input.getline(line, 256, '\n');
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
-		convertToLowercase(key);
 		str = new char[strlen(value) + 1];
 		strcpy(str, value);
 
@@ -131,26 +130,26 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 	Point max, min;
 	
 	// Input the maximum
-	SKIP_TO_COLON;
-	SKIP_TO_COMMA;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ',');
 	x = atof(line);
-	SKIP_TO_COMMA;
+	input.getline(line, 256, ',');
 	y = atof(line);
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ';');
 	z = atof(line);
 	max = Point(x, y, z);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 	
 	// Input the minimum
-	SKIP_TO_COLON;
-	SKIP_TO_COMMA;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ',');
 	x = atof(line);
-	SKIP_TO_COMMA;
+	input.getline(line, 256, ',');
 	y = atof(line);
-	SKIP_TO_SEMICOLON;
+	input.getline(line, 256, ';');
 	z = atof(line);
 	min = Point(x, y, z);
-	CLEAR_THE_LINE;
+	input.getline(line, 256, '\n');
 	
 	// Calculate the center of the sprite
 	center.x = (max.x + min.x) / 2;

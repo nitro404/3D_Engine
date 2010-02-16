@@ -2,7 +2,7 @@
 #define _CAMERA_H
 
 #include "Includes.h"
-#include "Points.h"
+#include "Point.h"
 #include "Player.h"
 
 class Camera {

@@ -2,10 +2,9 @@
 #define _OBJECT_H
 
 #include "Includes.h"
-#include "Utilities.h"
 #include "Colour.h"
-#include "Points.h"
-#include "Transformations.h"
+#include "Point.h"
+#include "Transformation.h"
 #include "Camera.h"
 #include "Texture.h"
 #include "Face.h"
