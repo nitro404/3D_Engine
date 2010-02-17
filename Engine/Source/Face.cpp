@@ -53,15 +53,10 @@ void Face::import(ifstream &input, vector<Texture *> & textures) {
 	int currentIndex = atoi(line);
 	input.getline(line, 256, '\n');
 	
-	char * textureIndex;
 	input.getline(line, 256, '\n');
 	value[0] = '\0';
 	sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
-	textureIndex = new char[strlen(value) + 1];
-	strcpy(textureIndex, value);
-
-	texture = textures.at(atoi(textureIndex));
-	delete [] textureIndex;
+	texture = textures.at(atoi(value));
 	
 	//Input the points.
 	input.getline(line, 256, ':');

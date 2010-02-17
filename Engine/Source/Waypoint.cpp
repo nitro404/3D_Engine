@@ -5,9 +5,9 @@ double Waypoint::distanceFrom(Point & p) const {
 }
 
 void Waypoint::addNeighbour(Waypoint * w) {
-	if(w == NULL) { return; }
-	
-	this->neighbours.push_back(w);
+	if(w != NULL) {
+		this->neighbours.push_back(w);
+	}
 }
 
 bool Waypoint::hasNeighbours() {
@@ -15,8 +15,14 @@ bool Waypoint::hasNeighbours() {
 }
 
 Waypoint * Waypoint::getRandomNeighbour() {
-	srand((unsigned int) time(NULL));
-	return this->neighbours.at((rand() % this->neighbours.size()));
+	if(hasNeighbours()) {
+		srand((unsigned int) time(NULL));
+		return this->neighbours.at((rand() % this->neighbours.size()));
+	}
+	else {
+		quit("Waypoint \"%s\" has no neighbours.", name);
+		return NULL;
+	}
 }
 
 Point & Waypoint::getPosition() {

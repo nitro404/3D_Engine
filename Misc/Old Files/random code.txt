@@ -782,3 +782,10 @@ inline long unpackAlpha(const long pixel) {
 	return (pixel >> alphaShift) & 0X000000FF;
 }*/
 
+//#define setupStaticBuffer() \
+//	static char buffer [500]; va_list parameters; \
+//	va_start(parameters, message); \
+//	vsprintf(buffer, message, parameters); \
+//	va_end(parameters) 
+
+

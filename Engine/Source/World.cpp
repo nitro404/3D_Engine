@@ -125,7 +125,6 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<Animate
 	char * line;
 	char * key;
 	char * value;
-	char * type;
 	line = new char[256];
 	key = new char[256];
 	value = new char[256];
@@ -236,46 +235,42 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<Animate
 		input.getline(line, 256, '\n');
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
-		type = new char[strlen(value) + 1];
-		strcpy(type, value);
 		
 		//Create the corresponding objects
-		if(stricmp(type, "static geometry") == 0) {
+		if(stricmp(value, "static geometry") == 0) {
 			Geometry * geometry = new Geometry;
 			geometry->import(input, textures);
 			objects.push_back(geometry);
 		}
-		else if(stricmp(type, "environment") == 0) {
+		else if(stricmp(value, "environment") == 0) {
 			skybox = new Environment;
 			skybox->import(input, textures);
 		}
-		else if(stricmp(type, "vehicle") == 0) {
+		else if(stricmp(value, "vehicle") == 0) {
 			Vehicle * vehicle = new Vehicle;
 			vehicle->import(input, textures);
 			objects.push_back (vehicle);
 		}
-		else if(stricmp(type, "rotator") == 0) {
+		else if(stricmp(value, "rotator") == 0) {
 			Rotator * rotator = new Rotator;
 			rotator->import(input, textures);
 			objects.push_back(rotator);
 		}
-		else if(stricmp(type, "translator") == 0) {
+		else if(stricmp(value, "translator") == 0) {
 			Translator * translator = new Translator;
 			translator->import(input, textures);
 			objects.push_back(translator);
 		}
-		else if(stricmp(type, "sprite") == 0) {
+		else if(stricmp(value, "sprite") == 0) {
 			Sprite * sprite = new Sprite;
 			sprite->import(input, textures, waypoints);
 			sprites.push_back(sprite);
 		}
-		else if(stricmp(type, "pool") == 0) {
+		else if(stricmp(value, "pool") == 0) {
 			Pool * pool = new Pool;
 			pool->import(input, animatedTextures);
 			water.push_back(pool);
 		}
-
-		delete [] type;
 	}
 	sortedObjects = new Object*[objects.size()];
 	for(i=0;i<objects.size();i++) {
