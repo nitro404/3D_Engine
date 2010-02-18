@@ -26,7 +26,7 @@ Variables & Variables::operator = (const Variables & x) {
 }
 
 Variables::~Variables(void) {
-	for(int i=0;i<this->_variables->size();i++) {
+	for(UINT i=0;i<this->_variables->size();i++) {
 		delete this->_variables->at(i);
 	}
 	delete this->_variables;
@@ -116,7 +116,7 @@ char * Variables::getValue(const char * _variableName) {
 	}
 
 	for(int i=0;i<size();i++) {
-		if( stricmp(this->elementAt(i)->id(), _variableName) == 0 ) {
+		if( _stricmp(this->elementAt(i)->id(), _variableName) == 0 ) {
 			return this->elementAt(i)->value();
 		}
 	}
@@ -129,7 +129,7 @@ bool Variables::parseFrom(const char * _fileName, bool _append) {
 	}
 	
 	const int MAX_STRING_LENGTH = 1024;
-	int i;
+	UINT i;
 	char temp[MAX_STRING_LENGTH];
 	char * temp2;
 	vector<string> data;
@@ -140,7 +140,7 @@ bool Variables::parseFrom(const char * _fileName, bool _append) {
 	while(fpt != NULL && !fpt.eof()) {
 		fpt.getline(temp, MAX_STRING_LENGTH);
 		temp2 = new char[strlen(temp) + 1];
-		strcpy(temp2, temp);
+		strcpy_s(temp2,strlen(temp) + 1, temp);
 		data.push_back(temp2);
 	}
 	
@@ -177,7 +177,7 @@ bool Variables::parseFrom(const char * _fileName, bool _append) {
 
 bool Variables::operator == (const Variables & x) const {
 	bool contains;
-	for(int i=0;i<this->_variables->size();i++) {
+	for(UINT i=0;i<this->_variables->size();i++) {
 		contains = false;
 		for(int j=0;j<x.size();j++) {
 			if( *(this->_variables->at(i)) == *(x._variables->at(j)) ) {
@@ -197,7 +197,7 @@ bool Variables::operator != (const Variables & x) const {
 }
 
 void Variables::printOn(ostream & o) const {
-	for(int i=0;i<this->_variables->size();i++) {
+	for(UINT i=0;i<this->_variables->size();i++) {
 		o << this->_variables->at(i)->id() << ": " << this->_variables->at(i)->value();
 		
 		if(i < this->_variables->size() - 1) {

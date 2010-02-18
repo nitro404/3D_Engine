@@ -4,10 +4,6 @@
 #ifndef _VARIABLES_H
 #define _VARIABLES_H
 
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
 #include "Variable.h"
 
 using namespace std;

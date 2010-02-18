@@ -26,7 +26,7 @@ public class Property {
 		}
 	}
 	
-	public void readFrom(BufferedReader in) throws Exception {
+	public void readFrom(BufferedReader in) throws IOException {
 		String input;
 		
 		// parse the key and store it

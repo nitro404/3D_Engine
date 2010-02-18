@@ -23,7 +23,7 @@ void Translator::draw() {
 	Point p = transformation.position();
 	glPushMatrix();
 	glTranslated(position.x, position.y, position.z);
-	for(int i=0;i<faces.size();i++) {
+	for(UINT i=0;i<faces.size();i++) {
 		faces.at(i)->draw();
 	}
 	glPopMatrix();
@@ -50,13 +50,13 @@ void Translator::import (ifstream & input, vector<Texture *> & textures) {
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		str = new char[strlen(value) + 1];
-		strcpy(str, value);
+		strcpy_s(str, strlen(value) + 1, value);
 		
 		//Parse properties to local variables
-		if(stricmp(key, "name") == 0) {
+		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
-		else if(stricmp(key, "offset") == 0) {
+		else if(_stricmp(key, "offset") == 0) {
 			double xPos, yPos, zPos;
 			char * temp = strchr(str + sizeof(char), ' ');
 			*temp = '\0';
@@ -70,7 +70,7 @@ void Translator::import (ifstream & input, vector<Texture *> & textures) {
 			offset = Point(xPos, yPos, zPos);
 			delete [] str;
 		}
-		else if(stricmp(key, "rateInMetersPerSecond") == 0) {
+		else if(_stricmp(key, "rateInMetersPerSecond") == 0) {
 			rateInMetersPerSecond = atof(str);
 			delete [] str;
 		}

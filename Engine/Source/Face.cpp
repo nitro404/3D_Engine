@@ -12,7 +12,7 @@ void Face::draw() {
 	}
 	
 	glBegin(GL_POLYGON);
-	for(int pointIndex=0;pointIndex<points.size();pointIndex++) {
+	for(UINT pointIndex=0;pointIndex<points.size();pointIndex++) {
 		GamePoint & point = *points.at(pointIndex);
 		glTexCoord2d(point.tx, point.ty);
 		glVertex3d(point.x, point.y, point.z);
@@ -28,7 +28,7 @@ void Face::draw(Colour & colour) {
 	glColor4d(colour.red, colour.green, colour.blue, colour.alpha);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
-	for(int pointIndex=0;pointIndex<points.size();pointIndex++) {
+	for(UINT pointIndex=0;pointIndex<points.size();pointIndex++) {
 		GamePoint & point = *points.at(pointIndex);
 		glTexCoord2d(point.tx, point.ty);
 		glVertex3d(point.x, point.y, point.z);

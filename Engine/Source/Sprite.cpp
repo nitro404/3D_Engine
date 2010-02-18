@@ -102,17 +102,17 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		str = new char[strlen(value) + 1];
-		strcpy(str, value);
+		strcpy_s(str, strlen(value) + 1, value);
 
 		//Parse properties to local variables
-		if(stricmp(key, "name") == 0) {
+		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
-		else if(stricmp(key, "picture") == 0) {
+		else if(_stricmp(key, "picture") == 0) {
 			picture = textures.at(atoi(str));
 			delete [] str;
 		}
-		else if(stricmp(key, "waypoint") == 0) {
+		else if(_stricmp(key, "waypoint") == 0) {
 			int index = atoi(str);
 			if(index >= 0) {
 				origin = waypoints.at(index);
@@ -120,7 +120,7 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 			}
 			delete [] str;
 		}
-		else if(stricmp(key, "movementSpeed") == 0) {
+		else if(_stricmp(key, "movementSpeed") == 0) {
 			movementSpeed = atoi(str);
 			delete [] str;
 		}

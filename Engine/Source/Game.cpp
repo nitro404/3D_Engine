@@ -57,18 +57,18 @@ Game::Game(Variables * settings) {
 }
 
 Game::~Game() {
-	int i;
-	if(helpMessage != NULL) { delete [] helpMessage; }
-	if(selectionPointer != NULL) { delete [] selectionPointer; }
+	UINT i;
+	//if(helpMessage != NULL) { delete [] helpMessage; } The string is located in the code, not the heap
+	//if(selectionPointer != NULL) { delete [] selectionPointer; } The string is located in the code, not the heap
 	if(fps != NULL) { delete [] fps; }
 	if(settings != NULL) { delete settings; }
-	for(i=0;i<menuItems.size();i++) {
-		delete [] menuItems.at(i);
-	}
-	for(i=0;i<menuTitles.size();i++) {
-		delete [] menuTitles.at(i);
-	}
-	if(worldFileFilter != NULL) { delete [] worldFileFilter; }
+	//for(i=0;i<menuItems.size();i++) { The entries of menuItems are located in the code, not the heap
+	//	delete [] menuItems.at(i);		Unless additional entries are added somewhere, this will not cause a problem
+	//}
+	//for(i=0;i<menuTitles.size();i++) { The entries of menuTitles are located in the code, not the heap
+	//	delete [] menuTitles.at(i);		Unless additional entries are added somewhere, this will not cause a problem
+	//}
+	//if(worldFileFilter != NULL) { delete [] worldFileFilter; } The string is located in the code, not the heap
 	if(world != NULL) { delete world; }
 	for(i=0;i<animatedTextures.size();i++) {
 		delete animatedTextures.at(i);
@@ -198,13 +198,13 @@ void Game::drawMenu() {
 	yOffset -= menuSpacing;
 	drawText(menuOffsetX-25, yOffset - (menuIndex * menuSpacing), selectionPointer);
 	if(menuType == 0) {
-		for(int i=0;i<menuItems.size();i++) {
+		for(UINT i=0;i<menuItems.size();i++) {
 			drawText(menuOffsetX, yOffset, menuItems.at(i));
 			yOffset -= menuSpacing;
 		}
 	}
 	else if(menuType == 1) {
-		for(int i=0;i<mapList.size();i++) {
+		for(UINT i=0;i<mapList.size();i++) {
 			drawText(menuOffsetX, yOffset, strchr((char *) mapList.at(i).c_str(), '\\') + sizeof(char));
 			yOffset -= menuSpacing;
 		}
@@ -218,7 +218,7 @@ void Game::drawFrameRate() {
 	static double oldFrameRate = frameRate;
 	//If it changed by more than 2 per cent of the stable value, use the new value; otherwise use the stable one...
 	if(absolute(frameRate - stableRate) > 2.0) stableRate  = frameRate; 
-	sprintf(fps, "%3.1f FPS", stableRate);
+	sprintf_s(fps, 12, "%3.1f FPS", stableRate);
 	drawText(screenWidth-101, screenHeight-20, fps);
 }
 
@@ -288,7 +288,7 @@ void Game::loadMapList(char * mapDirectory) {
 void Game::loadTextures(char * fileName, char * textureDirectory) {
 	char * line;
 	line = new char[256];
-	int i, j;
+	UINT i, j;
 
 	ifstream input;
 	input.open(fileName); 

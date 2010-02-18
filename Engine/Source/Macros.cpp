@@ -6,7 +6,7 @@ void prompt(char * message, ...) {
 		buffer = new char[256];
 		va_list parameters;
 		va_start(parameters, message);
-		vsprintf(buffer, message, parameters);
+		vsprintf_s(buffer, 256, message, parameters);
 		va_end(parameters);
 		MessageBox(NULL, buffer, "Message", MB_OK);
 		delete [] buffer;
@@ -19,7 +19,7 @@ void quit(char * message, ...) {
 		buffer = new char[256];
 		va_list parameters;
 		va_start(parameters, message);
-		vsprintf(buffer, message, parameters);
+		vsprintf_s(buffer,256, message, parameters);
 		va_end(parameters);
 		MessageBox(NULL, buffer, "Terminating", MB_OK);
 		delete [] buffer;

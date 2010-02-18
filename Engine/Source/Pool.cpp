@@ -11,7 +11,7 @@ bool Pool::insideOf(Point & p) const {
 }
 
 void Pool::tick() {
-	for(int i=0;i<faces.size();i++) {
+	for(UINT i=0;i<faces.size();i++) {
 		faces.at(i)->tick();
 	}
 }
@@ -20,14 +20,14 @@ void Pool::draw() {
 	glPushMatrix();
 	Transformation & normal = transformation.normal();
 	glMultMatrixd(normal);
-	for(int i=0;i<faces.size();i++) {
+	for(UINT i=0;i<faces.size();i++) {
 		faces.at(i)->draw(waterColour);
 	}
 	glPopMatrix(); 
 }
 
 void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures) {
-	int i, j;
+	UINT i, j;
 	char * line;
 	char * key;
 	char * value;
@@ -48,13 +48,13 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		str = new char[strlen(value) + 1];
-		strcpy(str, value);
+		strcpy_s(str, strlen(value) + 1, value);
 		
 		//Parse properties to local variables
-		if(stricmp(key, "name") == 0) {
+		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
-		else if(stricmp(key, "watercolour") == 0) {
+		else if(_stricmp(key, "watercolour") == 0) {
 			char * temp = strchr(str + sizeof(char), ' ');
 			*temp = '\0';
 			waterColour.setRed(atoi(str));

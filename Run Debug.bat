@@ -1,5 +1,7 @@
 @ECHO OFF
 CLS
 
-CD Game
+CD Debug
 Game.exe
+
+pause

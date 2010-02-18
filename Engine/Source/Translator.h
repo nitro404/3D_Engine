@@ -15,7 +15,7 @@ public:
 
 	~Translator() {
 		delete [] name;
-		for(int i=0;i<faces.size();i++) {
+		for(UINT i=0;i<faces.size();i++) {
 			delete faces.at(i);
 		}
 	}

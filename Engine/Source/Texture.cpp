@@ -28,10 +28,10 @@ Texture::~Texture() {
 
 Texture * Texture::readTexture(char * fullPathName) {
 	char * suffix = strrchr(fullPathName, '.');
-	if(stricmp(suffix, ".bmp") == 0) {
+	if(_stricmp(suffix, ".bmp") == 0) {
 		return readBMPTexture(fullPathName);
 	}
-	else if(stricmp(suffix, ".tga") == 0) {
+	else if(_stricmp(suffix, ".tga") == 0) {
 		return readTGATexture(fullPathName);
 	}
 	quit("Unknown texture type for \"%s\".\n", fullPathName);
@@ -124,7 +124,7 @@ Texture * Texture::readBMPTexture(char *fullPathName) {
 	}
 
 	texture->textureName = new char [strlen (fullPathName) + 1];
-	strcpy (texture->textureName, fullPathName);
+	strcpy_s (texture->textureName, strlen(fullPathName) + 1, fullPathName);
     DeleteObject (bitmapHandle); return texture;
 }
 
@@ -132,8 +132,9 @@ Texture * Texture::readTGATexture(char * fullPathName) {
 	//Creates either an RGBA texture or an RGB texture depending on whether or not the file
 	//contains alpha bits... 24 bit TGA textures have not been tested...
 
-	FILE *file = fopen (fullPathName, "rb");
-	if (file == NULL) {
+	FILE *file;
+	int errNo = fopen_s(&file,fullPathName, "rb");
+	if (errNo != 0) {
 		return NULL;
 	}
 
@@ -203,7 +204,7 @@ Texture * Texture::readTGATexture(char * fullPathName) {
 	}
 
 	texture->textureName = new char [strlen (fullPathName) + 1];
-	strcpy (texture->textureName, fullPathName);
+	strcpy_s (texture->textureName, strlen(fullPathName) + 1, fullPathName);
     return texture;
 	#undef logError
 }

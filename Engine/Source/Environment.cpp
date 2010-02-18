@@ -126,13 +126,13 @@ void Environment::import(ifstream & input, vector<Texture *> & textures) {
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		str = new char[strlen(value) + 1];
-		strcpy(str, value);
+		strcpy_s(str, strlen(value) + 1, value);
 		
 		//Parse properties to local variables
-		if(stricmp(key, "name") == 0) {
+		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
-		else if(stricmp(key, "ambientlight") == 0) {
+		else if(_stricmp(key, "ambientlight") == 0) {
 			char * temp = strchr(str + sizeof(char), ' ');
 			*temp = '\0';
 			ambientLight.setRed(atoi(str));
@@ -144,35 +144,35 @@ void Environment::import(ifstream & input, vector<Texture *> & textures) {
 			ambientLight.setBlue(atoi(temp2));
 			delete [] str;
 		}
-		else if(stricmp(key, "cloudlayers") == 0) {
+		else if(_stricmp(key, "cloudlayers") == 0) {
 			cloudLayers = atoi(str);
 			delete [] str;
 		}
-		else if(stricmp(key, "skyboxtexture-left") == 0) {
+		else if(_stricmp(key, "skyboxtexture-left") == 0) {
 			skyboxTextures[0] = textures.at(atoi(str));
 			delete [] str;
 		}
-		else if(stricmp(key, "skyboxtexture-right") == 0) {
+		else if(_stricmp(key, "skyboxtexture-right") == 0) {
 			skyboxTextures[1] = textures.at(atoi(str));
 			delete [] str;
 		}
-		else if(stricmp(key, "skyboxtexture-front") == 0) {
+		else if(_stricmp(key, "skyboxtexture-front") == 0) {
 			skyboxTextures[2] = textures.at(atoi(str));
 			delete [] str;
 		}
-		else if(stricmp(key, "skyboxtexture-back") == 0) {
+		else if(_stricmp(key, "skyboxtexture-back") == 0) {
 			skyboxTextures[3] = textures.at(atoi(str));
 			delete [] str;
 		}
-		else if(stricmp(key, "skyboxtexture-up") == 0) {
+		else if(_stricmp(key, "skyboxtexture-up") == 0) {
 			skyboxTextures[4] = textures.at(atoi(str));
 			delete [] str;
 		}
-		else if(stricmp(key, "skyboxtexture-down") == 0) {
+		else if(_stricmp(key, "skyboxtexture-down") == 0) {
 			skyboxTextures[5] = textures.at(atoi(str));
 			delete [] str;
 		}
-		else if(stricmp(key, "skycolor") == 0) {
+		else if(_stricmp(key, "skycolor") == 0) {
 			char * temp = strchr(str + sizeof(char), ' ');
 			*temp = '\0';
 			skyColour.setRed(atoi(str));
@@ -184,7 +184,7 @@ void Environment::import(ifstream & input, vector<Texture *> & textures) {
 			skyColour.setBlue(atoi(temp2));
 			delete [] str;
 		}
-		else if(stricmp(key, "surrounds") == 0) {
+		else if(_stricmp(key, "surrounds") == 0) {
 			 surrounds = atoi(str);
 			 delete [] str;
 		}

@@ -13,7 +13,7 @@ void Vehicle::draw() {
 		glPushMatrix();
 		Transformation & normal = transformation.normal();
 		glMultMatrixd(normal);
-		for(int i=0;i<faces.size();i++) {
+		for(UINT i=0;i<faces.size();i++) {
 			faces.at(i)->draw();
 		}
 		glPopMatrix(); 
@@ -41,13 +41,13 @@ void Vehicle::import(ifstream & input, vector<Texture *> & textures) {
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		str = new char[strlen(value) + 1];
-		strcpy(str, value);
+		strcpy_s(str, strlen(value) + 1, value);
 
 		//Parse properties to local variables
-		if(stricmp(key, "name") == 0) {
+		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
-		else if(stricmp(key, "style") == 0) {
+		else if(_stricmp(key, "style") == 0) {
 			style = atoi(str);
 			delete [] str;
 		}

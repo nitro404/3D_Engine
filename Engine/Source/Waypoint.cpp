@@ -56,13 +56,13 @@ void Waypoint::import (ifstream &input) {
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		str = new char[strlen(value) + 1];
-		strcpy(str, value);
+		strcpy_s(str, strlen(value) + 1, value);
 		
 		//Parse properties to local variables
-		if(stricmp(key, "name") == 0) {
+		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
-		else if(stricmp(key, "neighbours") == 0) {
+		else if(_stricmp(key, "neighbours") == 0) {
 			neighbourValues = str;
 		}
 	}

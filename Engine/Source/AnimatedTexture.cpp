@@ -26,21 +26,21 @@ void AnimatedTexture::import (ifstream & input, vector<Texture *> & worldTexture
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		str = new char[strlen(value) + 1];
-		strcpy(str, value);
+		strcpy_s(str, strlen(value) + 1, value);
 		
 		//Parse properties to local variables
-		if(stricmp(key, "name") == 0) {
+		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
-		else if(stricmp(key, "firsttexture") == 0) {
+		else if(_stricmp(key, "firsttexture") == 0) {
 			firstTexture = atoi(str);
 			delete [] str;
 		}
-		else if(stricmp(key, "frames") == 0) {
+		else if(_stricmp(key, "frames") == 0) {
 			frames = atoi(str);
 			delete [] str;
 		}
-		else if(stricmp(key, "speed") == 0) {
+		else if(_stricmp(key, "speed") == 0) {
 			speed = atoi(str);
 			delete [] str;
 		}

@@ -10,7 +10,7 @@ Variable::Variable(const char * _id, const char * _value) {
 	}
 	else {
 		this->_id = new char[strlen(_id) + 1];
-		strcpy(this->_id, _id);
+		strcpy_s(this->_id,strlen(_id) + 1, _id);
 	}
 	
 	if(_value == NULL) {
@@ -19,16 +19,16 @@ Variable::Variable(const char * _id, const char * _value) {
 	}
 	else {
 		this->_value = new char[strlen(_value) + 1];
-		strcpy(this->_value, _value);
+		strcpy_s(this->_value, strlen(_value) + 1, _value);
 	}
 }
 
 Variable::Variable(const Variable & x) {
 	this->_id = new char[strlen(x._id) + 1];
-	strcpy(this->_id, x._id);
+	strcpy_s(this->_id, strlen(x._id), x._id);
 	
 	this->_value = new char[strlen(x._value) + 1];
-	strcpy(this->_value, x._value);
+	strcpy_s(this->_value, strlen(x._value) + 1, x._value);
 }
 
 Variable & Variable::operator = (const Variable & x) {
@@ -36,10 +36,10 @@ Variable & Variable::operator = (const Variable & x) {
 	delete [] this->_value;
 
 	this->_id = new char[strlen(x._id) + 1];
-	strcpy(this->_id, x._id);
+	strcpy_s(this->_id, strlen(x._id) + 1, x._id);
 
 	this->_value = new char[strlen(x._value) + 1];
-	strcpy(this->_value, x._value);
+	strcpy_s(this->_value, strlen(x._value) + 1, x._value);
 
 	return *this;
 }
@@ -58,7 +58,7 @@ void Variable::id(const char * _id) {
 	}
 	else {
 		this->_id = new char[strlen(_id) + 1];
-		strcpy(this->_id, _id);
+		strcpy_s(this->_id, strlen(_id) + 1, _id);
 	}
 }
 
@@ -71,7 +71,7 @@ void Variable::value(const char * _value) {
 	}
 	else {
 		this->_value = new char[strlen(_value) + 1];
-		strcpy(this->_value, _value);
+		strcpy_s(this->_value, strlen(_value) + 1, _value);
 	}
 }
 
@@ -93,7 +93,7 @@ bool Variable::parseFrom(const char * _data) {
 	char * value = NULL;
 	bool emptyID;
 	
-	for(i=0;i<strlen(_data);i++) {
+	for(i=0;i<(int)strlen(_data);i++) {
 		if(_data[i] == separatorChar) {
 			separatorIndex = i;
 			break;
@@ -167,10 +167,10 @@ bool Variable::parseFrom(const char * _data) {
 	if(this->_value != NULL) { delete [] this->_value; }
 	
 	this->_id = new char[strlen(id) + 1];
-	strcpy(this->_id, id);
+	strcpy_s(this->_id, strlen(id) + 1, id);
 	
 	this->_value = new char[strlen(value) + 1];
-	strcpy(this->_value, value);
+	strcpy_s(this->_value, strlen(value) + 1, value);
 	
 	delete [] id;
 	delete [] value;
@@ -179,7 +179,7 @@ bool Variable::parseFrom(const char * _data) {
 }
 
 bool Variable::operator == (const Variable & x) const {
-	return stricmp(this->_id, x._id) == 0;
+	return _stricmp(this->_id, x._id) == 0;
 }
 
 bool Variable::operator != (const Variable & x) const {

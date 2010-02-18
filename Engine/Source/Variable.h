@@ -4,9 +4,7 @@
 #ifndef _VARIABLE_H
 #define _VARIABLE_H
 
-#include <iostream>
-#include <string>
-#include <fstream>
+#include "Includes.h"
 
 using namespace std;
 

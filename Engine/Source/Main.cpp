@@ -355,7 +355,7 @@ int main(int parametersSize, char ** parameters) {
 	if(temp > 0) { initialScreenHeight = temp; }
 	char * temp2 = settings->getValue("Fullscreen");
 	if(strlen(temp2) > 0) {
-		if(temp2[0] == '1' || temp2[0] == 'y' || temp2[0] == 'Y' || temp2[0] == 't' || temp2[0] == 'T' || stricmp(temp2, "on") == 0) {
+		if(temp2[0] == '1' || temp2[0] == 'y' || temp2[0] == 'Y' || temp2[0] == 't' || temp2[0] == 'T' || _stricmp(temp2, "on") == 0) {
 			fullscreen = true;
 		}
 	}
@@ -400,9 +400,16 @@ int main(int parametersSize, char ** parameters) {
 	return 0;
 }
 
+#if _DEBUG
+	#include <crtdbg.h>
+#endif
+
 void exitGame() {
 	if(game != NULL) { delete game; }
 	if(player != NULL) { delete player; }
 	if(camera != NULL) { delete camera; }
 	if(inputManager != NULL) { delete inputManager; }
+	#if _DEBUG
+		_CrtDumpMemoryLeaks();
+	#endif
 }

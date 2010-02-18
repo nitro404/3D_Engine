@@ -16,7 +16,7 @@ void Rotator::draw () {
 	glPushMatrix(); 
 	glTranslated(p.x, p.y, p.z);
 	glRotated(angleInDegrees, axis.x, axis.y, axis.z);
-	for(int i=0;i<faces.size();i++) {
+	for(UINT i=0;i<faces.size();i++) {
 		faces.at(i)->draw();
 	}
 	glPopMatrix ();
@@ -43,13 +43,13 @@ void Rotator::import (ifstream & input, vector<Texture *> & textures) {
 		value[0] = '\0';
 		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
 		str = new char[strlen(value) + 1];
-		strcpy(str, value);
+		strcpy_s(str, strlen(value) + 1, value);
 		
 		//Parse properties to local variables
-		if(stricmp(key, "name") == 0) {
+		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
-		else if(stricmp(key, "axis") == 0) {
+		else if(_stricmp(key, "axis") == 0) {
 			double xPos, yPos, zPos;
 			char * temp = strchr(str + sizeof(char), ' ');
 			*temp = '\0';
@@ -63,7 +63,7 @@ void Rotator::import (ifstream & input, vector<Texture *> & textures) {
 			axis = Point(xPos, yPos, zPos);
 			delete [] str;
 		}
-		else if(stricmp(key, "rateInDegreesPersecond") == 0) {
+		else if(_stricmp(key, "rateInDegreesPersecond") == 0) {
 			rateInDegreesPersecond = atof(str);
 			delete [] str;
 		}

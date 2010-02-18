@@ -19,7 +19,7 @@ public:
 	}
 
 	virtual ~Face() {
-		for(int i=0;i<points.size();i++) {
+		for(UINT i=0;i<points.size();i++) {
 			delete points.at(i);
 		}
 	}

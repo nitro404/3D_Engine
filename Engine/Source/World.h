@@ -12,8 +12,6 @@
 #include "Vehicle.h"
 #include "Waypoint.h"
 
-declareDictionary(Texture);
-
 class World {
 private:
 	static bool compareDistance(const Object & x, const Object & y);
@@ -40,7 +38,7 @@ public:
 	}
 
 	~World() {
-		int i;
+		UINT i;
 		if(skybox != NULL) { delete skybox; }
 		delete [] sortedObjects;
 		delete [] sortedWater;
