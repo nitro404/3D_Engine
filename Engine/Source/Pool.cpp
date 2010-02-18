@@ -1,7 +1,7 @@
 #include "Pool.h"
 
 double Pool::distanceFrom(Point & p) const {
-	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
+	return sqrt( pow(p.x - transformation->m41, 2) + pow(p.y - transformation->m42, 2) + pow(p.z - transformation->m43, 2) );
 }
 
 bool Pool::insideOf(Point & p) const {
@@ -18,7 +18,7 @@ void Pool::tick() {
 
 void Pool::draw() {
 	glPushMatrix();
-	Transformation & normal = transformation.normal();
+	Transformation & normal = transformation->normal();
 	glMultMatrixd(normal);
 	for(UINT i=0;i<faces.size();i++) {
 		faces.at(i)->draw(waterColour);
@@ -36,7 +36,7 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 	key = new char[256];
 	value = new char[256];
 	
-	transformation.import(input);
+	transformation = DualTransformation::import(input);
 	
 	//Input the properties
 	input.getline(line, 256, ':');
@@ -101,12 +101,12 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 			}
 		}
 	}
-	minX += transformation.position().x;
-	minY += transformation.position().y;
-	minZ += transformation.position().z;
-	maxX += transformation.position().x;
-	maxY += transformation.position().y;
-	maxZ += transformation.position().z;
+	minX += transformation->position().x;
+	minY += transformation->position().y;
+	minZ += transformation->position().z;
+	maxX += transformation->position().x;
+	maxY += transformation->position().y;
+	maxZ += transformation->position().z;
 
 	delete [] line;
 	delete [] key;

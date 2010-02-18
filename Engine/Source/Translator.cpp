@@ -1,7 +1,7 @@
 #include "Translator.h"
 
 double Translator::distanceFrom(Point & p) const {
-	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
+	return sqrt( pow(p.x - transformation->m41, 2) + pow(p.y - transformation->m42, 2) + pow(p.z - transformation->m43, 2) );
 }
 
 void Translator::tick() {
@@ -20,7 +20,7 @@ void Translator::tick() {
 
 void Translator::draw() {
 	//Draw the faces in this object.
-	Point p = transformation.position();
+	Point p = transformation->position();
 	glPushMatrix();
 	glTranslated(position.x, position.y, position.z);
 	for(UINT i=0;i<faces.size();i++) {
@@ -38,7 +38,7 @@ void Translator::import (ifstream & input, vector<Texture *> & textures) {
 	key = new char[256];
 	value = new char[256];
 	
-	transformation.import(input);
+	transformation = DualTransformation::import(input);
 	
 	//Input the properties
 	input.getline(line, 256, ':');
@@ -86,7 +86,7 @@ void Translator::import (ifstream & input, vector<Texture *> & textures) {
 		faces.push_back(face);
 	}
 	
-	origin = transformation.position();
+	origin = transformation->position();
 	position = origin;
 	destination = origin + offset;
 	distanceToTravel = sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2) + pow(destination.z - origin.z, 2));

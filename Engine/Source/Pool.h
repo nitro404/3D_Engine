@@ -8,7 +8,6 @@
 
 class Pool : public Object {
 public:
-	DualTransformation transformation;
 	vector<Face *> faces;
 
 	Pool() { }

@@ -352,19 +352,21 @@ public:
 		return this->normal().position();
 	}
 
-	void import(ifstream & input) {
+	static DualTransformation* import(ifstream & input) {
 		char * line;
 		line = new char[256];
+		DualTransformation* t = new DualTransformation();
 		
 		// input the transformation header
 		input.getline(line, 256, ':');
 		input.getline(line, 256, '\n');
 		
 		// input the transformations
-		this->importSingleTransformation(input);
-		inverse.importSingleTransformation(input);
+		t->importSingleTransformation(input);
+		t->inverse.importSingleTransformation(input);
 		
 		delete [] line;
+		return t;
 	}
 };
 

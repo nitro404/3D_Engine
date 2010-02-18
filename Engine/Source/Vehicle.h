@@ -6,7 +6,6 @@
 
 class Vehicle : public Object {
 public:
-	DualTransformation transformation;
 	vector<Face *> faces;
 	
 	Vehicle() { }

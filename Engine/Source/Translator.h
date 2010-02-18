@@ -6,7 +6,6 @@
 
 class Translator : public Object {
 public:
-	DualTransformation transformation;
 	vector<Face *> faces;
 	
 	Translator() {

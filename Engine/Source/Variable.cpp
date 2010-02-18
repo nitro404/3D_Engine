@@ -25,7 +25,7 @@ Variable::Variable(const char * _id, const char * _value) {
 
 Variable::Variable(const Variable & x) {
 	this->_id = new char[strlen(x._id) + 1];
-	strcpy_s(this->_id, strlen(x._id), x._id);
+	strcpy_s(this->_id, strlen(x._id) + 1, x._id);
 	
 	this->_value = new char[strlen(x._value) + 1];
 	strcpy_s(this->_value, strlen(x._value) + 1, x._value);

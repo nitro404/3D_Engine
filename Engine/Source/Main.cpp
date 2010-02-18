@@ -341,9 +341,13 @@ int main(int parametersSize, char ** parameters) {
 	int initialScreenWidth = 640;
 	int initialScreenHeight = 480;
 
+	srand((unsigned int) time(NULL));
+
 	//Read the settings file and pass ownership over to the game itself
 	Variables * settings = new Variables();
-	settings->parseFrom("settings.ini");
+	if (!settings->parseFrom("settings.ini")) {
+		quit("Could not find the settings file");
+	}
 	
 	//Initialize game settings
 	int temp;

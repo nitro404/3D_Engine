@@ -16,7 +16,6 @@ bool Waypoint::hasNeighbours() {
 
 Waypoint * Waypoint::getRandomNeighbour() {
 	if(hasNeighbours()) {
-		srand((unsigned int) time(NULL));
 		return this->neighbours.at((rand() % this->neighbours.size()));
 	}
 	else {
@@ -44,7 +43,7 @@ void Waypoint::import (ifstream &input) {
 	int currentIndex = atoi(line);
 	input.getline(line, 256, '\n');
 	
-	transformation.import(input);
+	transformation = DualTransformation::import(input);
 	
 	//Input the properties
 	input.getline(line, 256, ':');
@@ -67,7 +66,7 @@ void Waypoint::import (ifstream &input) {
 		}
 	}
 	
-	this->position = this->transformation.normal().position();
+	this->position = this->transformation->normal().position();
 	
 	delete [] line;
 	delete [] key;

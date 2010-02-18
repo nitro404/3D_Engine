@@ -131,19 +131,9 @@ bool Variables::parseFrom(const char * _fileName, bool _append) {
 	const int MAX_STRING_LENGTH = 1024;
 	UINT i;
 	char temp[MAX_STRING_LENGTH];
-	char * temp2;
-	vector<string> data;
 	Variable * v;
 	bool duplicate;
 
-	ifstream fpt (_fileName);
-	while(fpt != NULL && !fpt.eof()) {
-		fpt.getline(temp, MAX_STRING_LENGTH);
-		temp2 = new char[strlen(temp) + 1];
-		strcpy_s(temp2,strlen(temp) + 1, temp);
-		data.push_back(temp2);
-	}
-	
 	if(_append) {
 		if(this->_variables == NULL) {
 			this->_variables = new vector<Variable *>;
@@ -155,10 +145,15 @@ bool Variables::parseFrom(const char * _fileName, bool _append) {
 		}
 		this->_variables = new vector<Variable *>;
 	}
-	
-	for(i=0;i<data.size();i++) {
+
+	ifstream fpt (_fileName);
+	if (fpt == NULL) {
+		return false;
+	}
+	while(!fpt.eof()) {
+		fpt.getline(temp, MAX_STRING_LENGTH);
 		v = new Variable();
-		if(v->parseFrom((char *) data.at(i).c_str())) {
+		if(v->parseFrom( temp ) ) {
 			duplicate = false;
 			for(i=0;i<this->_variables->size();i++) {
 				if(*this->_variables->at(i) == *v) {

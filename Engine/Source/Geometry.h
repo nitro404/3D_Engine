@@ -6,7 +6,6 @@
 
 class Geometry : public Object {
 public:
-	DualTransformation transformation;
 	vector<Face *> faces;
 	
 	Geometry() { }

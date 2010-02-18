@@ -1,7 +1,7 @@
 #include "Rotator.h"
 
 double Rotator::distanceFrom(Point & p) const {
-	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
+	return sqrt( pow(p.x - transformation->m41, 2) + pow(p.y - transformation->m42, 2) + pow(p.z - transformation->m43, 2) );
 }
 
 void Rotator::tick () {
@@ -12,7 +12,7 @@ void Rotator::tick () {
 }
 
 void Rotator::draw () {
-	Point p = transformation.position();
+	Point p = transformation->position();
 	glPushMatrix(); 
 	glTranslated(p.x, p.y, p.z);
 	glRotated(angleInDegrees, axis.x, axis.y, axis.z);
@@ -31,7 +31,7 @@ void Rotator::import (ifstream & input, vector<Texture *> & textures) {
 	key = new char[256];
 	value = new char[256];
 
-	transformation.import(input);
+	transformation = DualTransformation::import(input);
 	
 	//Input the properties
 	input.getline(line, 256, ':');

@@ -1,7 +1,7 @@
 #include "Vehicle.h"
 
 double Vehicle::distanceFrom(Point & p) const {
-	return sqrt( pow(p.x - transformation.m41, 2) + pow(p.y - transformation.m42, 2) + pow(p.z - transformation.m43, 2) );
+	return sqrt( pow(p.x - transformation->m41, 2) + pow(p.y - transformation->m42, 2) + pow(p.z - transformation->m43, 2) );
 }
 
 void Vehicle::tick() {
@@ -11,7 +11,7 @@ void Vehicle::tick() {
 void Vehicle::draw() {
 	if(faces.size() > 0) {
 		glPushMatrix();
-		Transformation & normal = transformation.normal();
+		Transformation & normal = transformation->normal();
 		glMultMatrixd(normal);
 		for(UINT i=0;i<faces.size();i++) {
 			faces.at(i)->draw();
@@ -29,7 +29,7 @@ void Vehicle::import(ifstream & input, vector<Texture *> & textures) {
 	key = new char[256];
 	value = new char[256];
 	
-	transformation.import(input);
+	transformation = DualTransformation::import(input);
 	
 	//Input the properties
 	input.getline(line, 256, ':');

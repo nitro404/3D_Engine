@@ -6,7 +6,6 @@
 
 class Waypoint : public Object {
 public:
-	DualTransformation transformation;
 	Point position;
 	char * name;
 	char * neighbourValues;

@@ -6,7 +6,6 @@
 
 class Rotator : public Object {
 public:
-	DualTransformation transformation;
 	vector<Face *> faces;
 	
 	Rotator() {

@@ -131,6 +131,7 @@ void Environment::import(ifstream & input, vector<Texture *> & textures) {
 		//Parse properties to local variables
 		if(_stricmp(key, "name") == 0) {
 			name = str;
+			continue;
 		}
 		else if(_stricmp(key, "ambientlight") == 0) {
 			char * temp = strchr(str + sizeof(char), ' ');
@@ -142,35 +143,27 @@ void Environment::import(ifstream & input, vector<Texture *> & textures) {
 			ambientLight.setGreen(atoi(temp));
 			temp2 += sizeof(char);
 			ambientLight.setBlue(atoi(temp2));
-			delete [] str;
 		}
 		else if(_stricmp(key, "cloudlayers") == 0) {
 			cloudLayers = atoi(str);
-			delete [] str;
 		}
 		else if(_stricmp(key, "skyboxtexture-left") == 0) {
 			skyboxTextures[0] = textures.at(atoi(str));
-			delete [] str;
 		}
 		else if(_stricmp(key, "skyboxtexture-right") == 0) {
 			skyboxTextures[1] = textures.at(atoi(str));
-			delete [] str;
 		}
 		else if(_stricmp(key, "skyboxtexture-front") == 0) {
 			skyboxTextures[2] = textures.at(atoi(str));
-			delete [] str;
 		}
 		else if(_stricmp(key, "skyboxtexture-back") == 0) {
 			skyboxTextures[3] = textures.at(atoi(str));
-			delete [] str;
 		}
 		else if(_stricmp(key, "skyboxtexture-up") == 0) {
 			skyboxTextures[4] = textures.at(atoi(str));
-			delete [] str;
 		}
 		else if(_stricmp(key, "skyboxtexture-down") == 0) {
 			skyboxTextures[5] = textures.at(atoi(str));
-			delete [] str;
 		}
 		else if(_stricmp(key, "skycolor") == 0) {
 			char * temp = strchr(str + sizeof(char), ' ');
@@ -182,12 +175,11 @@ void Environment::import(ifstream & input, vector<Texture *> & textures) {
 			skyColour.setGreen(atoi(temp));
 			temp2 += sizeof(char);
 			skyColour.setBlue(atoi(temp2));
-			delete [] str;
 		}
 		else if(_stricmp(key, "surrounds") == 0) {
 			 surrounds = atoi(str);
-			 delete [] str;
 		}
+		delete [] str;
 	}
 	
 	delete [] line;
