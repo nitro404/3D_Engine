@@ -234,7 +234,7 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<Animate
 		//Input the object type
 		input.getline(line, 256, '\n');
 		value[0] = '\0';
-		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+		sscanf_s(line, " \"%[^\"]\" => \"%[^\"]\"", key, 256, value, 256);
 		
 		//Create the corresponding objects
 		if(_stricmp(value, "static geometry") == 0) {

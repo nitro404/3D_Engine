@@ -55,7 +55,7 @@ void Face::import(ifstream &input, vector<Texture *> & textures) {
 	
 	input.getline(line, 256, '\n');
 	value[0] = '\0';
-	sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+	sscanf_s(line, " \"%[^\"]\" => \"%[^\"]\"", key, 256, value, 256);
 	texture = textures.at(atoi(value));
 	
 	//Input the points.

@@ -24,7 +24,7 @@ void AnimatedTexture::import (ifstream & input, vector<Texture *> & worldTexture
 	for(int propertyIndex=0;propertyIndex<numberOfProperties;propertyIndex++) {
 		input.getline(line, 256, '\n');
 		value[0] = '\0';
-		sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+		sscanf_s(line, " \"%[^\"]\" => \"%[^\"]\"", key, 256, value, 256);
 		str = new char[strlen(value) + 1];
 		strcpy_s(str, strlen(value) + 1, value);
 		

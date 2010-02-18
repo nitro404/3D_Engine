@@ -63,7 +63,7 @@ void AnimatedFace::import(ifstream & input, vector<AnimatedTexture * > & animate
 	
 	input.getline(line, 256, '\n');
 	value[0] = '\0';
-	sscanf(line, " \"%[^\"]\" => \"%[^\"]\"", key, value);
+	sscanf_s(line, " \"%[^\"]\" => \"%[^\"]\"", key, 256, value, 256);
 	
 	//Get the animated texture
 	animatedTexture = animatedTextures.at(atoi(value));
