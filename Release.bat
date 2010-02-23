@@ -82,8 +82,24 @@ XCOPY "Data" "%RELEASE%" /I /Y /S
 
 ECHO.
 ECHO Copying Game Executable...
-XCOPY "Engine\Release\game.exe" "%RELEASE%" /I /Y
-REN "%RELEASE%\game.exe" "Game.exe"
+XCOPY "Engine\Release\Engine.exe" "%RELEASE%" /I /Y
+IF EXIST "%RELEASE%\Game.exe" DEL "%RELEASE%\Game.exe"
+REN "%RELEASE%\Engine.exe" "Game.exe
+
+ECHO.
+ECHO Done!
+
+ECHO.
+ECHO Copy Debug Executable? (Y/N)
+IF EXIST "%RELEASE%\Debug.exe" DEL "%RELEASE%\Debug.exe"
+SET /P DEBUG=
+IF "%DEBUG:~0,1%" == "Y" GOTO COPY_DEBUG
+IF "%DEBUG:~0,1%" == "y" GOTO COPY_DEBUG
+GOTO SKIP_DEBUG
+:COPY_DEBUG
+XCOPY "Engine\Debug\Engine.exe" "%RELEASE%" /I /Y
+REN "%RELEASE%\Engine.exe" "Debug.exe
+:SKIP_DEBUG
 
 REM IF EXIST log DEL log
 
