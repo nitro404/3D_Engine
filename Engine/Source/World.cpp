@@ -5,7 +5,7 @@ char textureDirectory [_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
 Point World::playerPosition = Point(0, 0, 0);
 
 void World::tick () {
-	UINT i;
+	unsigned int i;
 	playerPosition = player->playerMatrix.position();
 	
 	underWater = checkUnderWater();
@@ -30,8 +30,8 @@ bool World::compareDistance(const Object & x, const Object & y) {
 
 void World::sortObjects() {
 	Object * temp;
-	for(UINT i=0;i<objects.size();i++) {
-		for(UINT j=i;j<objects.size();j++) {
+	for(unsigned int i=0;i<objects.size();i++) {
+		for(unsigned int j=i;j<objects.size();j++) {
 			if(compareDistance(*sortedObjects[i], *sortedObjects[j])) {
 				temp = sortedObjects[i];
 				sortedObjects[i] = sortedObjects[j];
@@ -43,8 +43,8 @@ void World::sortObjects() {
 
 void World::sortWater() {
 	Pool * temp;
-	for(UINT i=0;i<water.size();i++) {
-		for(UINT j=i;j<water.size();j++) {
+	for(unsigned int i=0;i<water.size();i++) {
+		for(unsigned int j=i;j<water.size();j++) {
 			if(compareDistance(*sortedWater[i], *sortedWater[j])) {
 				temp = sortedWater[i];
 				sortedWater[i] = sortedWater[j];
@@ -56,8 +56,8 @@ void World::sortWater() {
 
 void World::sortSprites() {
 	Sprite * temp;
-	for(UINT i=0;i<sprites.size();i++) {
-		for(UINT j=i;j<sprites.size();j++) {
+	for(unsigned int i=0;i<sprites.size();i++) {
+		for(unsigned int j=i;j<sprites.size();j++) {
 			if(compareDistance(*sortedSprites[i], *sortedSprites[j])) {
 				temp = sortedSprites[i];
 				sortedSprites[i] = sortedSprites[j];
@@ -68,7 +68,7 @@ void World::sortSprites() {
 }
 
 bool World::checkUnderWater() const {
-	for(UINT i=0;i<water.size();i++) {
+	for(unsigned int i=0;i<water.size();i++) {
 		if(water.at(i)->insideOf(playerPosition)) {
 			return true;
 		}
@@ -77,7 +77,7 @@ bool World::checkUnderWater() const {
 }
 
 void World::draw() {
-	UINT i, j;
+	unsigned int i, j;
 	sortObjects();
 	sortWater();
 	sortSprites();
@@ -128,7 +128,7 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<Animate
 	line = new char[256];
 	key = new char[256];
 	value = new char[256];
-	UINT i, j;
+	unsigned int i, j;
 	
 	ifstream input;
 	input.open(fileName); 

@@ -11,7 +11,7 @@ bool Pool::insideOf(Point & p) const {
 }
 
 void Pool::tick() {
-	for(UINT i=0;i<faces.size();i++) {
+	for(unsigned int i=0;i<faces.size();i++) {
 		faces.at(i)->tick();
 	}
 }
@@ -20,14 +20,14 @@ void Pool::draw() {
 	glPushMatrix();
 	Transformation & normal = transformation->normal();
 	glMultMatrixd(normal);
-	for(UINT i=0;i<faces.size();i++) {
+	for(unsigned int i=0;i<faces.size();i++) {
 		faces.at(i)->draw(waterColour);
 	}
 	glPopMatrix(); 
 }
 
 void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures) {
-	UINT i, j;
+	unsigned int i, j;
 	char * line;
 	char * key;
 	char * value;
@@ -68,6 +68,9 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 			waterColour.setBlue(atoi(temp2));
 			temp3 += sizeof(char);
 			waterColour.setAlpha(atoi(temp3));
+			delete [] str;
+		}
+		else {
 			delete [] str;
 		}
 	}

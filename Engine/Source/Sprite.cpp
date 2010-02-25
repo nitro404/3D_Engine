@@ -124,6 +124,9 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 			movementSpeed = atoi(str);
 			delete [] str;
 		}
+		else {
+			delete [] str;
+		}
 	}
 	
 	//Input the bounding box

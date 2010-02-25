@@ -45,7 +45,7 @@ Texture * Texture::readBMPTexture(char *fullPathName) {
 	//Get Microsoft to read it (they must know how).
     HBITMAP bitmapHandle = (HBITMAP) LoadImage (NULL, fullPathName, 
     	IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	
-	if (bitmapHandle == NULL) {
+	if(bitmapHandle == NULL) {
 		return NULL;
 	}
 
@@ -56,10 +56,10 @@ Texture * Texture::readBMPTexture(char *fullPathName) {
 	long height = bitmap.bmHeight;
 	long pixelSize = bitmap.bmBitsPixel;
 	long planes = bitmap.bmPlanes;
-	char *bits = (char *) bitmap.bmBits;
+	char * bits = (char *) bitmap.bmBits;
 	
 	// check that the dimensions of the image are powers of 2
-	if (!(width & ~(width - 1)) == width || !(height & ~(height - 1)) == height) {
+	if(!(width & ~(width - 1)) == width || !(height & ~(height - 1)) == height) {
 	
 		//OpenGL needs a power of 2 (it is possible to force OpenGL to resize it but that's slow).
 		printf("\nBitmap \"%s\" is not a power of 2; width %d, height %d.", fullPathName, width, height);
@@ -67,19 +67,19 @@ Texture * Texture::readBMPTexture(char *fullPathName) {
 
 	//Allocate space for RGBA format.
 	Texture *texture = new Texture (width, height, RGBAType);
-	if (texture == NULL) {DeleteObject (bitmapHandle); return NULL;}
+	if(texture == NULL) {DeleteObject (bitmapHandle); return NULL;}
 
 	//Prepare to transfer the bits.
-	long *destination = texture->bytes; //REVERSES: destination += height * width; //past the end
-    BYTE *source = (BYTE *) bits; //at the beginning
+	long * destination = texture->bytes; //REVERSES: destination += height * width; //past the end
+    BYTE * source = (BYTE *) bits; //at the beginning
 
 	//Move the bits from the bitmap handle to the texture.	 
 	long red, green, blue; long alpha = 255; //0=>transparent, 255=>opaque
-	if (pixelSize == 24) {
+	if(pixelSize == 24) {
 		//Successively read 3 RGB bytes at a time, write RGBA bytes. 
-    	for	(long j = height; j > 0; j--) {
+    	for(long j=height;j>0;j--) {
 			//REVERSES: destination -= width; 
-			long *to = destination; BYTE *from = source;
+			long * to = destination; BYTE *from = source;
     		for (int i = 0; i < width; i++) { 
 				blue = *from++;	green = *from++; red = *from++;
 				*to++ = pack (red, green, blue, alpha);
@@ -87,7 +87,8 @@ Texture * Texture::readBMPTexture(char *fullPathName) {
 			destination += width; 											   
 			source += byteWidth;
 		} 
-	} else if (pixelSize == 8) { 
+	}
+	else if (pixelSize == 8) { 
 		//Obtains the palette information from the handle.
 		typedef PALETTEENTRY PaletteEntries [256];
 		HDC deviceContextHandle = CreateCompatibleDC (NULL);
@@ -132,13 +133,13 @@ Texture * Texture::readTGATexture(char * fullPathName) {
 	//Creates either an RGBA texture or an RGB texture depending on whether or not the file
 	//contains alpha bits... 24 bit TGA textures have not been tested...
 
-	FILE *file;
+	FILE * file;
 	int errNo = fopen_s(&file,fullPathName, "rb");
-	if (errNo != 0) {
+	if(errNo != 0) {
 		return NULL;
 	}
 
-	#define logError(message) {log (message, fullPathName); fclose (file); return NULL;}
+//	#define logError(message) {log (message, fullPathName); fclose (file); return NULL;}
 	struct TGAHeader {
 		byte idLength, colorMapType, imageType, colorMapSpecification [5];
 		short xOrigin, yOrigin, imageWidth, imageHeight;
@@ -167,7 +168,7 @@ Texture * Texture::readTGATexture(char * fullPathName) {
 	//Allocate space for RGBA format.
 	const long width = header.imageWidth; const long height = header.imageHeight; 
 	Texture *texture = new Texture (width, height, useAlpha ? RGBAType : RGBType);
-	if (texture == NULL) {
+	if(texture == NULL) {
 		printf("Failed to create textures for \"%s\".\n");
 	}
 
@@ -177,8 +178,11 @@ Texture * Texture::readTGATexture(char * fullPathName) {
 	BYTE *localBytes = (BYTE *) texture->bytes; BYTE *destination = (BYTE *) localBytes;
  
 	long bytesRead = fread (localBytes, sizeof (BYTE), bytesSize, file);
-	if (bytesRead == 0) {delete texture; }//logError ("\nUnable to read all the bytes in file \"%s\".");}
-	fclose (file); //From here on, no longer have "close the file" as a pending action...
+	if(bytesRead == 0) {
+		delete texture;
+		printf("Unable to read all the bytes in file \"%s\".", fullPathName);
+	}
+	fclose(file); //From here on, no longer have "close the file" as a pending action...
 
 	//TGA is stored as BGR(A). Swizzle bits into RGB(A) format
 	if (hasAlpha) {

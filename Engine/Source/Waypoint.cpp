@@ -64,6 +64,9 @@ void Waypoint::import (ifstream &input) {
 		else if(_stricmp(key, "neighbours") == 0) {
 			neighbourValues = str;
 		}
+		else {
+			delete [] str;
+		}
 	}
 	
 	this->position = this->transformation->normal().position();

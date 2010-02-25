@@ -346,7 +346,7 @@ int main(int parametersSize, char ** parameters) {
 	//Read the settings file and pass ownership over to the game itself
 	Variables * settings = new Variables();
 	if (!settings->parseFrom("settings.ini")) {
-		quit("Could not find the settings file");
+		quit("Could not find the settings file.");
 	}
 	
 	//Initialize game settings

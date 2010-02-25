@@ -1,12 +1,3 @@
-
-//*****************************************************************************************//
-//                                   Transformations                                       //
-//*****************************************************************************************//
-
-//*****************************************************************************************//
-//                                      Includes                                           //
-//*****************************************************************************************//
-
 #ifndef _TRANSFORMATION_H
 #define _TRANSFORMATION_H 
 
@@ -352,10 +343,11 @@ public:
 		return this->normal().position();
 	}
 
-	static DualTransformation* import(ifstream & input) {
+	static DualTransformation * import(ifstream & input) {
 		char * line;
 		line = new char[256];
-		DualTransformation* t = new DualTransformation();
+
+		DualTransformation * t = new DualTransformation();
 		
 		// input the transformation header
 		input.getline(line, 256, ':');
@@ -366,6 +358,7 @@ public:
 		t->inverse.importSingleTransformation(input);
 		
 		delete [] line;
+
 		return t;
 	}
 };

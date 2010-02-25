@@ -44,6 +44,9 @@ void AnimatedTexture::import (ifstream & input, vector<Texture *> & worldTexture
 			speed = atoi(str);
 			delete [] str;
 		}
+		else {
+			delete [] str;
+		}
 	}
 	
 	for(int i=firstTexture;i<firstTexture+frames;i++) {

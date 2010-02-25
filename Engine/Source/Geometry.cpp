@@ -12,7 +12,7 @@ void Geometry::draw () {
 	glPushMatrix();
 	Transformation & normal = transformation->normal();
 	glMultMatrixd(normal);
-	for(UINT i=0;i<faces.size();i++) {
+	for(unsigned int i=0;i<faces.size();i++) {
 		faces.at(i)->draw();
 	}
 	glPopMatrix(); 

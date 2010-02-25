@@ -131,7 +131,6 @@ void Environment::import(ifstream & input, vector<Texture *> & textures) {
 		//Parse properties to local variables
 		if(_stricmp(key, "name") == 0) {
 			name = str;
-			continue;
 		}
 		else if(_stricmp(key, "ambientlight") == 0) {
 			char * temp = strchr(str + sizeof(char), ' ');
@@ -179,7 +178,9 @@ void Environment::import(ifstream & input, vector<Texture *> & textures) {
 		else if(_stricmp(key, "surrounds") == 0) {
 			 surrounds = atoi(str);
 		}
-		delete [] str;
+		else {
+			delete [] str;
+		}
 	}
 	
 	delete [] line;

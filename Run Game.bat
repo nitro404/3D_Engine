@@ -2,4 +2,4 @@
 CLS
 
 CD Game
-Game.exe
+START Game.exe

@@ -13,7 +13,7 @@ void Vehicle::draw() {
 		glPushMatrix();
 		Transformation & normal = transformation->normal();
 		glMultMatrixd(normal);
-		for(UINT i=0;i<faces.size();i++) {
+		for(unsigned int i=0;i<faces.size();i++) {
 			faces.at(i)->draw();
 		}
 		glPopMatrix(); 
@@ -49,6 +49,9 @@ void Vehicle::import(ifstream & input, vector<Texture *> & textures) {
 		}
 		else if(_stricmp(key, "style") == 0) {
 			style = atoi(str);
+			delete [] str;
+		}
+		else {
 			delete [] str;
 		}
 	}

@@ -16,7 +16,7 @@ void Rotator::draw () {
 	glPushMatrix(); 
 	glTranslated(p.x, p.y, p.z);
 	glRotated(angleInDegrees, axis.x, axis.y, axis.z);
-	for(UINT i=0;i<faces.size();i++) {
+	for(unsigned int i=0;i<faces.size();i++) {
 		faces.at(i)->draw();
 	}
 	glPopMatrix ();
@@ -65,6 +65,9 @@ void Rotator::import (ifstream & input, vector<Texture *> & textures) {
 		}
 		else if(_stricmp(key, "rateInDegreesPersecond") == 0) {
 			rateInDegreesPersecond = atof(str);
+			delete [] str;
+		}
+		else {
 			delete [] str;
 		}
 	}

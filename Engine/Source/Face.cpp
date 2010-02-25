@@ -12,7 +12,7 @@ void Face::draw() {
 	}
 	
 	glBegin(GL_POLYGON);
-	for(UINT pointIndex=0;pointIndex<points.size();pointIndex++) {
+	for(unsigned int pointIndex=0;pointIndex<points.size();pointIndex++) {
 		GamePoint & point = *points.at(pointIndex);
 		glTexCoord2d(point.tx, point.ty);
 		glVertex3d(point.x, point.y, point.z);
@@ -22,13 +22,13 @@ void Face::draw() {
 
 void Face::draw(Colour & colour) {
 	texture->activate();
-	
+	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 	glBegin(GL_POLYGON);
 	glColor4d(colour.red, colour.green, colour.blue, colour.alpha);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
-	for(UINT pointIndex=0;pointIndex<points.size();pointIndex++) {
+	for(unsigned int pointIndex=0;pointIndex<points.size();pointIndex++) {
 		GamePoint & point = *points.at(pointIndex);
 		glTexCoord2d(point.tx, point.ty);
 		glVertex3d(point.x, point.y, point.z);
@@ -37,6 +37,7 @@ void Face::draw(Colour & colour) {
 	glDisable(GL_BLEND);
 	glEnd();
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Face::import(ifstream &input, vector<Texture *> & textures) {

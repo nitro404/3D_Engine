@@ -38,7 +38,7 @@ public:
 	}
 
 	~World() {
-		UINT i;
+		unsigned int i;
 		if(skybox != NULL) { delete skybox; }
 		delete [] sortedObjects;
 		delete [] sortedWater;

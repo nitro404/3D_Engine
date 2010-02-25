@@ -57,18 +57,18 @@ Game::Game(Variables * settings) {
 }
 
 Game::~Game() {
-	UINT i;
-	//if(helpMessage != NULL) { delete [] helpMessage; } The string is located in the code, not the heap
-	//if(selectionPointer != NULL) { delete [] selectionPointer; } The string is located in the code, not the heap
+	unsigned int i;
 	if(fps != NULL) { delete [] fps; }
 	if(settings != NULL) { delete settings; }
-	//for(i=0;i<menuItems.size();i++) { The entries of menuItems are located in the code, not the heap
-	//	delete [] menuItems.at(i);		Unless additional entries are added somewhere, this will not cause a problem
+	//if(helpMessage != NULL) { delete [] helpMessage; } // The string is located in the code, not the heap
+	//if(selectionPointer != NULL) { delete [] selectionPointer; } // The string is located in the code, not the heap
+	//for(i=0;i<menuItems.size();i++) { // The entries of menuItems are located in the code, not the heap
+	//	delete [] menuItems.at(i);		// Unless additional entries are added somewhere, this will not cause a problem
 	//}
-	//for(i=0;i<menuTitles.size();i++) { The entries of menuTitles are located in the code, not the heap
-	//	delete [] menuTitles.at(i);		Unless additional entries are added somewhere, this will not cause a problem
+	//for(i=0;i<menuTitles.size();i++) { // The entries of menuTitles are located in the code, not the heap
+	//	delete [] menuTitles.at(i);		// Unless additional entries are added somewhere, this will not cause a problem
 	//}
-	//if(worldFileFilter != NULL) { delete [] worldFileFilter; } The string is located in the code, not the heap
+	//if(worldFileFilter != NULL) { delete [] worldFileFilter; } // The string is located in the code, not the heap
 	if(world != NULL) { delete world; }
 	for(i=0;i<animatedTextures.size();i++) {
 		delete animatedTextures.at(i);
@@ -198,13 +198,13 @@ void Game::drawMenu() {
 	yOffset -= menuSpacing;
 	drawText(menuOffsetX-25, yOffset - (menuIndex * menuSpacing), selectionPointer);
 	if(menuType == 0) {
-		for(UINT i=0;i<menuItems.size();i++) {
+		for(unsigned int i=0;i<menuItems.size();i++) {
 			drawText(menuOffsetX, yOffset, menuItems.at(i));
 			yOffset -= menuSpacing;
 		}
 	}
 	else if(menuType == 1) {
-		for(UINT i=0;i<mapList.size();i++) {
+		for(unsigned int i=0;i<mapList.size();i++) {
 			drawText(menuOffsetX, yOffset, strchr((char *) mapList.at(i).c_str(), '\\') + sizeof(char));
 			yOffset -= menuSpacing;
 		}
@@ -288,7 +288,7 @@ void Game::loadMapList(char * mapDirectory) {
 void Game::loadTextures(char * fileName, char * textureDirectory) {
 	char * line;
 	line = new char[256];
-	UINT i, j;
+	unsigned int i, j;
 
 	ifstream input;
 	input.open(fileName); 

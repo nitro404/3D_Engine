@@ -26,7 +26,7 @@ Variables & Variables::operator = (const Variables & x) {
 }
 
 Variables::~Variables(void) {
-	for(UINT i=0;i<this->_variables->size();i++) {
+	for(unsigned int i=0;i<this->_variables->size();i++) {
 		delete this->_variables->at(i);
 	}
 	delete this->_variables;
@@ -129,11 +129,16 @@ bool Variables::parseFrom(const char * _fileName, bool _append) {
 	}
 	
 	const int MAX_STRING_LENGTH = 1024;
-	UINT i;
+	unsigned int i;
 	char temp[MAX_STRING_LENGTH];
 	Variable * v;
 	bool duplicate;
-
+	
+	ifstream fpt(_fileName);
+	if(fpt == NULL) {
+		return false;
+	}
+	
 	if(_append) {
 		if(this->_variables == NULL) {
 			this->_variables = new vector<Variable *>;
@@ -145,15 +150,11 @@ bool Variables::parseFrom(const char * _fileName, bool _append) {
 		}
 		this->_variables = new vector<Variable *>;
 	}
-
-	ifstream fpt (_fileName);
-	if (fpt == NULL) {
-		return false;
-	}
+	
 	while(!fpt.eof()) {
 		fpt.getline(temp, MAX_STRING_LENGTH);
 		v = new Variable();
-		if(v->parseFrom( temp ) ) {
+		if(v->parseFrom(temp)) {
 			duplicate = false;
 			for(i=0;i<this->_variables->size();i++) {
 				if(*this->_variables->at(i) == *v) {
@@ -172,7 +173,7 @@ bool Variables::parseFrom(const char * _fileName, bool _append) {
 
 bool Variables::operator == (const Variables & x) const {
 	bool contains;
-	for(UINT i=0;i<this->_variables->size();i++) {
+	for(unsigned int i=0;i<this->_variables->size();i++) {
 		contains = false;
 		for(int j=0;j<x.size();j++) {
 			if( *(this->_variables->at(i)) == *(x._variables->at(j)) ) {
@@ -192,7 +193,7 @@ bool Variables::operator != (const Variables & x) const {
 }
 
 void Variables::printOn(ostream & o) const {
-	for(UINT i=0;i<this->_variables->size();i++) {
+	for(unsigned int i=0;i<this->_variables->size();i++) {
 		o << this->_variables->at(i)->id() << ": " << this->_variables->at(i)->value();
 		
 		if(i < this->_variables->size() - 1) {

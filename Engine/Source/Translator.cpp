@@ -23,7 +23,7 @@ void Translator::draw() {
 	Point p = transformation->position();
 	glPushMatrix();
 	glTranslated(position.x, position.y, position.z);
-	for(UINT i=0;i<faces.size();i++) {
+	for(unsigned int i=0;i<faces.size();i++) {
 		faces.at(i)->draw();
 	}
 	glPopMatrix();
@@ -72,6 +72,9 @@ void Translator::import (ifstream & input, vector<Texture *> & textures) {
 		}
 		else if(_stricmp(key, "rateInMetersPerSecond") == 0) {
 			rateInMetersPerSecond = atof(str);
+			delete [] str;
+		}
+		else {
 			delete [] str;
 		}
 	}

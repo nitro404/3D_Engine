@@ -15,7 +15,7 @@ public:
 	
 	~Rotator() {
 		delete [] name;
-		for(UINT i=0;i<faces.size();i++) {
+		for(unsigned int i=0;i<faces.size();i++) {
 			delete faces.at(i);
 		}
 	}
