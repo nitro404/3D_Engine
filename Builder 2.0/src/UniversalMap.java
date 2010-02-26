@@ -75,7 +75,8 @@ public class UniversalMap implements Map3D {
 			   type.equalsIgnoreCase("translator") ||
 			   type.equalsIgnoreCase("sprite") ||
 			   type.equalsIgnoreCase("waypoint") ||
-			   type.equalsIgnoreCase("pool")) {
+			   type.equalsIgnoreCase("pool") ||
+			   type.equalsIgnoreCase("terrain")) {
 				this.objects.add(newObject);
 			}
 			else {

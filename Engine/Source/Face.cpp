@@ -23,6 +23,7 @@ void Face::draw() {
 void Face::draw(Colour & colour) {
 	texture->activate();
 	glDisable(GL_DEPTH_TEST);
+//	glDepthFunc(GL_LESS);
 	glDisable(GL_CULL_FACE);
 	glBegin(GL_POLYGON);
 	glColor4d(colour.red, colour.green, colour.blue, colour.alpha);
@@ -38,6 +39,7 @@ void Face::draw(Colour & colour) {
 	glEnd();
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+//	glDepthFunc(GL_LEQUAL);
 }
 
 void Face::import(ifstream &input, vector<Texture *> & textures) {

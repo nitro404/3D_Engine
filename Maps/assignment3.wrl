@@ -141,7 +141,7 @@ Waypoint: 19;
 	Properties: 2;
 		"name" => "d16"
 		"neighbours" => "4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19"
-Objects: 74;
+Objects: 75;
 Object: 0;
 	"type" => "static geometry"
 	Transformation:
@@ -4565,3 +4565,13 @@ Object: 73;
 		"skyboxtexture-back" => "55"
 		"skyboxtexture-up" => "60"
 		"skyboxtexture-down" => "56"
+Object: 74;
+	"type" => "terrain"
+	Transformation:
+		1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -9.75360012054443, 32.5120010375977, 1.0;
+		1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 9.75360012054443, -32.5120010375977, 1.0;
+	Properties: 4;
+		"heightmap" => "miniTerrainHeightMap"
+		"name" => "grass"
+		"stretched" => "0"
+		"texturemap" => "wall1"

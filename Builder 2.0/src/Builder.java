@@ -12,6 +12,7 @@ public class Builder {
 	public static void main(String[] args) {
 		parseParameters(args);
 		// sample program calls:
+		// -d../Maps -iuni -owrl -m../Maps -t../Data/textures.ini -h"../Textures/Height Maps/"
 		// -d../Maps -iuni -owrl -m../Maps -ttextures.ini
 		// -dMaps -iuni -owrl -mMaps
 		// -d"Maps" -iuni -owrl
@@ -29,8 +30,8 @@ public class Builder {
 			System.out.println(" - Universal Format (.uni) Files (read and write)");
 			System.out.println(" - 3D Engine World (.wrl) Files (write only)");
 			System.out.println("");
-			System.out.println("usage: java Builder -f\"mapname.ext\" [-m\"new_mapdir\"] -oext [-s] [-n] [-t\"file.ext\"]");
-			System.out.println("                    -d\"path_to_maps\" [-m\"new_mapdir\"] -iext -oext [-s] [-n] [-t\"file.ext\"]");
+			System.out.println("usage: java Builder -f\"mapname.ext\" [-m\"new_mapdir\"] -oext [-s] [-n] [-t\"file.ext\"] [-h\"path_to_height_maps\"]");
+			System.out.println("                    -d\"path_to_maps\" [-m\"new_mapdir\"] -iext -oext [-s] [-n] [-t\"file.ext\"] [-h\"path_to_height_maps\"]");
 			System.out.println("");
 			System.out.println(" -f :: file name; e.g., -f\"C:\\Test\\Maps\\room.map\"");
 			System.out.println(" -d :: directory (containing map files to convert); e.g., -d\"..\\Project\\Maps\"");
@@ -40,6 +41,7 @@ public class Builder {
 			System.out.println(" -s :: recurse to subdirectories (only if present)");
 			System.out.println(" -n :: include texture and animation data in world file (optional)");
 			System.out.println(" -t :: read texture data from alternate file (optional); e.g., -t\"textures.ini\"");
+			System.out.println(" -h :: height map directory (optional); e.g., -t\"..\\Textures\\Height Maps\\\"");
 		}
 		else {
 			String fileName = null;
@@ -50,11 +52,13 @@ public class Builder {
 			boolean subdirectories = false;
 			boolean includeTextureData = false;
 			String textureDataFileName = null;
+			String heightMapDirectoryName = null;
 			
 			File file = null;
 			File fileDirectory = null;
 			File outDirectory = null;
 			File textureDataFile = null;
+			File heightMapDirectory = null;
 			
 			// parse through parameters
 			for(int i=0;i<args.length;i++) {
@@ -82,6 +86,9 @@ public class Builder {
 					}
 					else if(args[i].substring(0, 2).equalsIgnoreCase("-t")) {
 						textureDataFileName = args[i].substring(2, args[i].length());
+					}
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-h")) {
+						heightMapDirectoryName = args[i].substring(2, args[i].length());
 					}
 				}
 			}
@@ -131,6 +138,17 @@ public class Builder {
 					System.exit(1);
 				}
 			}
+			if(heightMapDirectoryName != null) {
+				heightMapDirectory = new File(heightMapDirectoryName);
+				if(!heightMapDirectory.exists()) {
+					System.out.println("ERROR: Specified height map directory does not exist.");
+					System.exit(1);
+				}
+				if(!heightMapDirectory.isDirectory()) {
+					System.out.println("ERROR: Invalid height map directory.");
+					System.exit(1);
+				}
+			}
 			
 			// verify that either a file or a directory containing files was specified
 			if(fileName == null && fileDirectoryName == null) {
@@ -170,7 +188,7 @@ public class Builder {
 				}
 				
 				// convert map file
-				Converter.convertFile(file, outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile);
+				Converter.convertFile(file, outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile, heightMapDirectory);
 			}
 			
 			// verify that the right parameters were specified for converting a directory containing files
@@ -205,7 +223,7 @@ public class Builder {
 				}
 				
 				// convert map files
-				Converter.convertFiles(fileDirectory, outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile);
+				Converter.convertFiles(fileDirectory, outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile, heightMapDirectory);
 			}
 			
 		}

@@ -156,6 +156,7 @@ public class UniversalObject {
 		else if(this instanceof Sprite)		{ out.println("\t\"type\" => \"sprite\""); }
 		else if(this instanceof Waypoint)	{ }
 		else if(this instanceof Pool)		{ out.println("\t\"type\" => \"pool\""); }
+		else if(this instanceof Terrain)	{ out.println("\t\"type\" => \"terrain\""); }
 		else   								{ System.out.println("WARNING: Ignoring unexpected object of type \"" + this.getPropertyValue("type") + "\"."); }
 		
 		// output the transformations

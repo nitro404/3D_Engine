@@ -9,10 +9,8 @@ import java.io.*;
 
 public class Converter {
 	
-	public static boolean includeTextureData = false;
-	
 	// convert a set of files between two formats
-	public static void convertFiles(File fileDirectory, File outDirectory, String inExtension, String outExtension, boolean subdirectories, boolean includeTextureData, File textureDataFile) {
+	public static void convertFiles(File fileDirectory, File outDirectory, String inExtension, String outExtension, boolean subdirectories, boolean includeTextureData, File textureDataFile, File heightMapDirectory) {
 		File[] files = fileDirectory.listFiles();
 		File[] subFiles = null;
 		String fileExtension;
@@ -28,11 +26,11 @@ public class Converter {
 					if(subFiles[j].getName().charAt(0) != '.') {
 						// recurse if the current file is a directory
 						if(subFiles[j].isDirectory() && subdirectories && subFiles[j].getName().charAt(0) != '.') {
-							convertFiles(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile);
+							convertFiles(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile, heightMapDirectory);
 						}
 						// otherwise convert the selected file
 						else if(subFiles[j].isFile()) {
-							convertFile(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile);
+							convertFile(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile, heightMapDirectory);
 						}
 					}
 				}
@@ -41,15 +39,14 @@ public class Converter {
 			else if(files[i].isFile()) {
 				fileExtension = files[i].getName().substring(files[i].getName().lastIndexOf('.') + 1, files[i].getName().length());
 				if(inExtension.equalsIgnoreCase(fileExtension)) {
-					convertFile(files[i], outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile);
+					convertFile(files[i], outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile, heightMapDirectory);
 				}
 			}
 		}
 	}
 	
 	// convert a file between two formats
-	public static void convertFile(File file, File outDirectory, String inExtension, String outExtension, boolean subdirectories, boolean includeTextureData, File textureDataFile) {
-		Converter.includeTextureData = includeTextureData;
+	public static void convertFile(File file, File outDirectory, String inExtension, String outExtension, boolean subdirectories, boolean includeTextureData, File textureDataFile, File heightMapDirectory) {
 		Map3D originalMap = null;
 		Map3D convertedMap = null;
 		File outputFile = null;
@@ -103,7 +100,7 @@ public class Converter {
 				convertedMap = new World(originalMap);
 			}
 			else {
-				convertedMap = new World(originalMap, textureNames, animatedTextures);
+				convertedMap = new World(originalMap, textureNames, animatedTextures, includeTextureData, heightMapDirectory);
 			}
 		}
 		

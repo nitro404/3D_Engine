@@ -72,3 +72,11 @@
     targetname(string) : "Name"
     waterColour(string) : "Water Colour" : "0.2 0.2 0.85 0.77"
 ]
+
+// Terrain
+@SolidClass = Terrain [
+    targetname(string) : "Name"
+    heightMap(string) : "Height Map"
+    textureMap(string) : "Texture Map"
+    stretched(string) : "Stretch Texture" : "0"
+]

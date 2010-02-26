@@ -16,6 +16,8 @@ public class World implements Map3D {
 	public Vector<UniversalObject> objects;
 	public Vector<Waypoint> waypoints;
 	public boolean externalTextureData;
+	public boolean includeTextureData;
+	public File heightMapDirectory;
 	
 	public World(File file) {
 		try {
@@ -39,9 +41,11 @@ public class World implements Map3D {
 		}
 	}
 	
-	public World(Map3D map, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures) {
+	public World(Map3D map, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures, boolean includeTextureData, File heightMapDirectory) {
 		this.textureNames = textureNames;
 		this.animatedTextures = animatedTextures;
+		this.includeTextureData = includeTextureData;
+		this.heightMapDirectory = heightMapDirectory;
 		try {
 			this.convertFrom(map);
 		}
@@ -245,6 +249,9 @@ public class World implements Map3D {
 				else if(type.equalsIgnoreCase("pool")) {
 					objects.add(new Pool(object, textureIndex));
 				}
+				else if(type.equalsIgnoreCase("terrain")) {
+					objects.add(new Terrain(object, heightMapDirectory));
+				}
 				else {
 					System.out.println("WARNING: Ignoring unexpected object of type \"" + type + "\".");
 				}
@@ -330,7 +337,7 @@ public class World implements Map3D {
 		this.startPosition.writeTo(out);
 		out.println(";");
 		
-		if(Converter.includeTextureData) {
+		if(this.includeTextureData) {
 			// print the textures header, followed by the textures
 			out.println("Textures: " + this.textureNames.size() + ";");
 			for(int i=0;i<this.textureNames.size();i++) {
