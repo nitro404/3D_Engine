@@ -5848,7 +5848,7 @@ Object: 95;
 		1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, -9.75360012054443, 32.5120010375977, 1; //Standard...
 		1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 9.75360012054443, -32.5120010375977, 1; //Inverse...
 	Properties: 5;
-		"heightmap" => "miniTerrainHeightMap"
+		"heightmap" => "microTerrainHeightMap"
 		"name" => "grass"
 		"stretched" => "0"
 		"texturemap" => "wall1"

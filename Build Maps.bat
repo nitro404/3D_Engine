@@ -11,13 +11,11 @@ ECHO Done Compiling!
 ECHO.
 CD bin
 ECHO Compiling Texture List...
-java TextureCompiler -d"../../textures/" -i"../animations.ini" -o"../textures.ini"
+java TextureCompiler -d"../../textures/" -i"../animations.ini" -o"../../Data/textures.ini"
 ECHO Done Compiling Texture List!
 CD "../../"
 ECHO.
 ECHO Copying Texture List...
-XCOPY "Texture Compiler\textures.ini" "Builder 2.0" /I /Y
-XCOPY "Texture Compiler\textures.ini" "Data" /I /Y
 
 ECHO.
 CD "Builder 2.0"
@@ -27,7 +25,7 @@ ECHO Done Compiling!
 ECHO.
 CD bin
 ECHO Building Maps...
-java Builder -d../../Maps -iuni -owrl -m../../Maps -t../textures.ini
+java Builder -d../../Maps -iuni -owrl -m../../Maps -t../../Data/textures.ini -h"../../Textures/Height Maps/"
 ECHO Done Building Maps!
 CD "../../"
 

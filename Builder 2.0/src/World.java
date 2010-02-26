@@ -15,8 +15,6 @@ public class World implements Map3D {
 	public Vector<AnimatedTexture> animatedTextures;
 	public Vector<UniversalObject> objects;
 	public Vector<Waypoint> waypoints;
-	public boolean externalTextureData;
-	public boolean includeTextureData;
 	public File heightMapDirectory;
 	
 	public World(File file) {
@@ -41,10 +39,9 @@ public class World implements Map3D {
 		}
 	}
 	
-	public World(Map3D map, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures, boolean includeTextureData, File heightMapDirectory) {
+	public World(Map3D map, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures, File heightMapDirectory) {
 		this.textureNames = textureNames;
 		this.animatedTextures = animatedTextures;
-		this.includeTextureData = includeTextureData;
 		this.heightMapDirectory = heightMapDirectory;
 		try {
 			this.convertFrom(map);
@@ -69,149 +66,121 @@ public class World implements Map3D {
 			objects = new Vector<UniversalObject>();
 			waypoints = new Vector<Waypoint>();
 			Vector<Sprite> sprites = new Vector<Sprite>();
-			externalTextureData = textureNames != null && animatedTextures != null;
 			
-			// collect a list of all the texture names in the map
-			// and assign index pointers in place of where the texture name used to be
-			if(!externalTextureData) { textureNames = new Vector<String>(); }
+			// assign index pointers in place of texture names to corresponding locations in the texture and animated texture lists
 			String type;
 			for(int i=0;i<universalMap.objects.size();i++) {
 				object = universalMap.objects.elementAt(i);
 				type = object.getPropertyValue("type");
 				object.removeProperty("type");
 				
-				boolean duplicateTextureName;
 				Face face;
 				String textureName;
 				String textureNameNoExtension;
 				int textureIndex = -1;
 				
-				// get textures from data read from external texture file
-				if(externalTextureData) {
-					// get texture from regular texture list
-					if(type.equalsIgnoreCase("sprite")) {
-						textureName = object.getPropertyValue("picture");
-						textureIndex = -1;
-						
+				// set sprite texture (special case)
+				if(type.equalsIgnoreCase("sprite")) {
+					textureName = object.getPropertyValue("picture");
+					textureIndex = -1;
+					
+					for(int k=0;k<textureNames.size();k++) {
+						textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
+						if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
+							textureIndex = k;
+							break;
+						}
+					}
+					
+					if(textureIndex == -1) {
+						System.out.println("ERROR: Sprite missing texture: \"" + textureName + "\".");
+						System.exit(1);
+					}
+					
+					object.setPropertyValue("picture", Integer.toString(textureIndex));
+				}
+				// set terrain texture (special case)
+				if(type.equalsIgnoreCase("terrain")) {
+					textureName = object.getPropertyValue("texturemap");
+					textureIndex = -1;
+					
+					for(int k=0;k<textureNames.size();k++) {
+						textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
+						if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
+							textureIndex = k;
+							break;
+						}
+					}
+					
+					if(textureIndex == -1) {
+						System.out.println("ERROR: Terrain missing texture: \"" + textureName + "\".");
+						System.exit(1);
+					}
+					
+					object.setPropertyValue("texturemap", Integer.toString(textureIndex));
+				}
+				// set skybox textures (special case)
+				else if(type.equalsIgnoreCase("environment")) {
+					String baseTextureName = object.getPropertyValue("skyboxtexture");
+					textureIndex = -1;
+					object.removeProperty("skyboxtexture");
+					
+					for(int l=0;l<Environment.skyboxTextureExtensions.length;l++) {
 						for(int k=0;k<textureNames.size();k++) {
 							textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
-							if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
+							if(textureNameNoExtension.equalsIgnoreCase(baseTextureName + Environment.skyboxTextureExtensions[l])) {
 								textureIndex = k;
 								break;
 							}
 						}
 						
 						if(textureIndex == -1) {
-							System.out.println("ERROR: Sprite missing texture: \"" + textureName + "\".");
+							System.out.println("ERROR: Environment skybox missing texture: \"" + baseTextureName + Environment.skyboxTextureExtensions[l] + "\".");
 							System.exit(1);
 						}
 						
-						object.setPropertyValue("picture", Integer.toString(textureIndex));
+						object.addProperty("skyboxtexture" + Environment.skyboxTextureExtensions[l], Integer.toString(textureIndex));
 					}
-					else if(type.equalsIgnoreCase("environment")) {
-						String baseTextureName = object.getPropertyValue("skyboxtexture");
+				}
+				// set regular textures (normal case)
+				else {
+					for(int j=0;j<object.faces.size();j++) {
+						face = object.faces.elementAt(j);
+						textureName = face.getPropertyValue("texture");
 						textureIndex = -1;
-						object.removeProperty("skyboxtexture");
 						
-						for(int l=0;l<Environment.skyboxTextureExtensions.length;l++) {
-							for(int k=0;k<textureNames.size();k++) {
-								textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
-								if(textureNameNoExtension.equalsIgnoreCase(baseTextureName + Environment.skyboxTextureExtensions[l])) {
+						// set pool texture (animated texture)
+						if(type.equalsIgnoreCase("pool")) {
+							for(int k=0;k<animatedTextures.size();k++) {
+								textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(animatedTextures.elementAt(k).firstTextureIndex));
+								if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
 									textureIndex = k;
 									break;
 								}
 							}
 							
 							if(textureIndex == -1) {
-								System.out.println("ERROR: Environment skybox missing texture: \"" + baseTextureName + Environment.skyboxTextureExtensions[l] + "\".");
+								System.out.println("ERROR: Pool missing animated texture: \"" + textureName + "\".");
 								System.exit(1);
 							}
-							
-							object.addProperty("skyboxtexture" + Environment.skyboxTextureExtensions[l], Integer.toString(textureIndex));
 						}
-					}
-					else {
-						for(int j=0;j<object.faces.size();j++) {
-							face = object.faces.elementAt(j);
-							textureName = face.getPropertyValue("texture");
-							textureIndex = -1;
-							
-							// get texture from animated texture list
-							if(type.equalsIgnoreCase("pool")) {
-								for(int k=0;k<animatedTextures.size();k++) {
-									textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(animatedTextures.elementAt(k).firstTextureIndex));
-									if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
-										textureIndex = k;
-										break;
-									}
-								}
-								
-								if(textureIndex == -1) {
-									System.out.println("ERROR: Pool missing animated texture: \"" + textureName + "\".");
-									System.exit(1);
-								}
-							}
-							// get texture from static texture list
-							else {
-								for(int k=0;k<textureNames.size();k++) {
-									textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
-									if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
-										textureIndex = k;
-										break;
-									}
-								}
-								
-								if(textureIndex == -1) {
-									System.out.println("ERROR: Object missing texture: \"" + textureName + "\".");
-									System.exit(1);
-								}
-							}
-							
-							face.setPropertyValue("texture", Integer.toString(textureIndex));
-						}
-					}
-				}
-				// collect textures from universal map file
-				else {
-					if(type.equalsIgnoreCase("sprite")) {
-						textureName = object.getPropertyValue("picture");
-						duplicateTextureName = false;
-						for(int k=0;k<textureNames.size();k++) {
-							textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
-							if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
-								duplicateTextureName = true;
-								textureIndex = k;
-								break;
-							}
-						}
-						if(!duplicateTextureName) {
-							textureNames.add(textureName);
-							textureIndex = textureNames.size() - 1;
-						}
-						
-						object.setPropertyValue("picture", Integer.toString(textureIndex));
-					}
-					else {
-						for(int j=0;j<object.faces.size();j++) {
-							face = object.faces.elementAt(j);
-							duplicateTextureName = false;
-							textureName = face.getPropertyValue("texture");
+						// set textures for all other objects (normal textures)
+						else {
 							for(int k=0;k<textureNames.size();k++) {
 								textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
 								if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
-									duplicateTextureName = true;
 									textureIndex = k;
 									break;
 								}
 							}
 							
-							if(!duplicateTextureName) {
-								textureNames.add(textureName);
-								textureIndex = textureNames.size() - 1;
+							if(textureIndex == -1) {
+								System.out.println("ERROR: Object missing texture: \"" + textureName + "\".");
+								System.exit(1);
 							}
-							
-							face.setPropertyValue("texture", Integer.toString(textureIndex));
 						}
+						
+						face.setPropertyValue("texture", Integer.toString(textureIndex));
 					}
 				}
 				
@@ -336,25 +305,6 @@ public class World implements Map3D {
 		out.print("Start position: ");
 		this.startPosition.writeTo(out);
 		out.println(";");
-		
-		if(this.includeTextureData) {
-			// print the textures header, followed by the textures
-			out.println("Textures: " + this.textureNames.size() + ";");
-			for(int i=0;i<this.textureNames.size();i++) {
-				out.println("\t" + this.textureNames.elementAt(i));
-			}
-			
-			// print the animated textures header, followed by the animated texture data (if appropriate)
-			if(externalTextureData) {
-				out.println("AnimatedTextures: " + this.animatedTextures.size() + ";");
-				for(int i=0;i<this.animatedTextures.size();i++) {
-					this.animatedTextures.elementAt(i).writeTo(out);
-				}
-			}
-			else {
-				out.println("AnimatedTextures: 0;");
-			}
-		}
 		
 		// print the waypoints header, followed by the waypoints
 		out.println("Waypoints: " + this.waypoints.size() + ";");

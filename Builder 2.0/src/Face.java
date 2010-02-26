@@ -13,6 +13,22 @@ public class Face {
 	public Vector<Property> properties;
 	public Vector<GamePoint3D> points;
 	
+	public Face(int faceIndex, Vector<Property> properties, Vector<GamePoint3D> points) {
+		this.faceIndex = faceIndex;
+		if(properties == null) {
+			this.properties = new Vector<Property>();
+		}
+		else {
+			this.properties = properties;
+		}
+		if(points == null) {
+			this.points = new Vector<GamePoint3D>();
+		}
+		else {
+			this.points = points;
+		}
+	}
+	
 	public Face(BufferedReader in) {
 		try {
 			this.readFrom(in);
@@ -21,6 +37,21 @@ public class Face {
 			System.out.println("ERROR: Invalid face in map file.");
 			System.exit(1);
 		}
+	}
+	
+	public void addPoint(GamePoint3D point) {
+		points.add(point);
+	}
+	
+	public boolean addProperty(String key, String value) {
+		// add a property if it is not a duplicate
+		for(int i=0;i<this.properties.size();i++) {
+			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
+				return false;
+			}
+		}
+		this.properties.add(new Property(key, value));
+		return true;
 	}
 	
 	public String getPropertyValue(String key) {
@@ -126,16 +157,12 @@ public class Face {
 	public void writeTo(PrintWriter out, boolean writeProperties) throws Exception {
 		if(properties != null) {
 			// output the properties header, followed by all the properties
-			if(writeProperties) {
-//				out.println("\t\tProperties: " + this.properties.size() + ";");
-//				for(int i=0;i<this.properties.size();i++) {
-//					out.println("\t\t\t\"" + this.properties.elementAt(i).key + "\" => \"" + this.properties.elementAt(i).value + "\"");
-//				}
+			if(writeProperties && properties.size() != 0) {
 				out.println("\t\t\"" + this.properties.elementAt(0).key + "\" => \"" + this.properties.elementAt(0).value + "\"");
 			}
 			
 			// output the points header, followed by all the points
-			out.println("\t\tPoints: " + this.points.size() + "; //x, y, z, nx, ny, nz, tx, ty");
+			out.println("\t\tPoints: " + this.points.size() + ";");
 			for(int i=0;i<this.points.size();i++) {
 				out.print("\t\t\t");
 				this.points.elementAt(i).writeTo(out);

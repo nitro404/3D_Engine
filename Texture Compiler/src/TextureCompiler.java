@@ -6,7 +6,7 @@ public class TextureCompiler {
 	public static void main(String args[]) {
 		parseParameters(args);
 		// sample program calls:
-		// -d"../textures/" -i"animations.ini" -o"textures.ini"
+		// -d"../Textures/" -i"animations.ini" -o"../../Data/textures.ini"
 	}
 
 	private static void generateTextureData(File textureDirectory, File animationFile, File textureFile, boolean removeExtensions) {

@@ -30,8 +30,8 @@ public class Builder {
 			System.out.println(" - Universal Format (.uni) Files (read and write)");
 			System.out.println(" - 3D Engine World (.wrl) Files (write only)");
 			System.out.println("");
-			System.out.println("usage: java Builder -f\"mapname.ext\" [-m\"new_mapdir\"] -oext [-s] [-n] [-t\"file.ext\"] [-h\"path_to_height_maps\"]");
-			System.out.println("                    -d\"path_to_maps\" [-m\"new_mapdir\"] -iext -oext [-s] [-n] [-t\"file.ext\"] [-h\"path_to_height_maps\"]");
+			System.out.println("usage: java Builder -f\"mapname.ext\" [-m\"new_mapdir\"] -oext [-s] [-t\"file.ext\"] [-h\"path_to_height_maps\"]");
+			System.out.println("                    -d\"path_to_maps\" [-m\"new_mapdir\"] -iext -oext [-s] [-t\"file.ext\"] [-h\"path_to_height_maps\"]");
 			System.out.println("");
 			System.out.println(" -f :: file name; e.g., -f\"C:\\Test\\Maps\\room.map\"");
 			System.out.println(" -d :: directory (containing map files to convert); e.g., -d\"..\\Project\\Maps\"");
@@ -39,7 +39,6 @@ public class Builder {
 			System.out.println(" -i :: file extension to read (only required if -d specified); e.g., -imap");
 			System.out.println(" -o :: file extension to output; e.g., -ouni");
 			System.out.println(" -s :: recurse to subdirectories (only if present)");
-			System.out.println(" -n :: include texture and animation data in world file (optional)");
 			System.out.println(" -t :: read texture data from alternate file (optional); e.g., -t\"textures.ini\"");
 			System.out.println(" -h :: height map directory (optional); e.g., -t\"..\\Textures\\Height Maps\\\"");
 		}
@@ -50,7 +49,6 @@ public class Builder {
 			String outExtension = null;
 			String outDirectoryName = null;
 			boolean subdirectories = false;
-			boolean includeTextureData = false;
 			String textureDataFileName = null;
 			String heightMapDirectoryName = null;
 			
@@ -80,9 +78,6 @@ public class Builder {
 					}
 					else if(args[i].substring(0, 2).equalsIgnoreCase("-s")) {
 						subdirectories = true;
-					}
-					else if(args[i].substring(0, 2).equalsIgnoreCase("-n")) {
-						includeTextureData = true;
 					}
 					else if(args[i].substring(0, 2).equalsIgnoreCase("-t")) {
 						textureDataFileName = args[i].substring(2, args[i].length());
@@ -188,7 +183,7 @@ public class Builder {
 				}
 				
 				// convert map file
-				Converter.convertFile(file, outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile, heightMapDirectory);
+				Converter.convertFile(file, outDirectory, inExtension, outExtension, subdirectories, textureDataFile, heightMapDirectory);
 			}
 			
 			// verify that the right parameters were specified for converting a directory containing files
@@ -223,7 +218,7 @@ public class Builder {
 				}
 				
 				// convert map files
-				Converter.convertFiles(fileDirectory, outDirectory, inExtension, outExtension, subdirectories, includeTextureData, textureDataFile, heightMapDirectory);
+				Converter.convertFiles(fileDirectory, outDirectory, inExtension, outExtension, subdirectories, textureDataFile, heightMapDirectory);
 			}
 			
 		}
