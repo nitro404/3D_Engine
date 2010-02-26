@@ -19,15 +19,6 @@ ENGINE
    - Fish sprites seem to disappear
    - Issue with castle map
  + TERRAIN
-   - Hard coded heightmap stuff - still need to insert indicies and remove height map property later
-   - Add slash to end of texture dir?
-   - Remove Transformations
-   - Remove Properties
-     - Height map index
-     - Stretched (dealt with in builder)
-   - Add properties
-     - (width / height) Height map width+1 and height+1 (number of verticies on each axis)
-     - (maxpoint / minpoint) Bounding box min and max xyz
    - IN GENERAL:
      - name
      - texturemap
@@ -35,9 +26,7 @@ ENGINE
      - height
      - minpoint
      - maxpoint
- + Calculations
-   - Bounding box max and min co-ordinates
-
+     - raw data
 
 BUILDER 2.0
  + Implement Worldcraft *.map reading
