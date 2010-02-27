@@ -80,7 +80,7 @@ ECHO.
 ECHO Copying Game Executable...
 XCOPY "Engine\Release\Engine.exe" "%RELEASE%" /I /Y
 IF EXIST "%RELEASE%\Game.exe" DEL "%RELEASE%\Game.exe"
-REN "%RELEASE%\Engine.exe" "Game.exe
+REN "%RELEASE%\Engine.exe" "Game.exe"
 
 ECHO.
 ECHO Done!
@@ -94,7 +94,7 @@ IF "%DEBUG:~0,1%" == "y" GOTO COPY_DEBUG
 GOTO SKIP_DEBUG
 :COPY_DEBUG
 XCOPY "Engine\Debug\Engine.exe" "%RELEASE%" /I /Y
-REN "%RELEASE%\Engine.exe" "Debug.exe
+REN "%RELEASE%\Engine.exe" "Debug.exe"
 :SKIP_DEBUG
 
 REM IF EXIST log DEL log
