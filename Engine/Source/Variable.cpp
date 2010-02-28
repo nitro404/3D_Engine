@@ -1,5 +1,5 @@
 //Created: September 18, 2008
-//Revised: February 14, 2010
+//Revised: February 27, 2010
 
 #include "Variable.h"
 
@@ -137,6 +137,10 @@ bool Variable::parseFrom(const char * _data) {
 		id[j++] = _data[i];
 	}
 	id[j] = '\0';
+	if(strlen(id) == 0) {
+		delete [] id;
+		return false;
+	}
 	
 	start = separatorIndex + 1;
 	end = strlen(_data) - 1;
