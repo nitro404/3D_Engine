@@ -271,6 +271,11 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<Animate
 			pool->import(input, animatedTextures);
 			water.push_back(pool);
 		}
+		else if (_stricmp(value, "terrain") == 0) {
+			TerrainMap * terrain = new TerrainMap;
+			terrain->import(input, textures);
+			objects.push_back(terrain);
+		}
 	}
 	sortedObjects = new Object*[objects.size()];
 	for(i=0;i<objects.size();i++) {
