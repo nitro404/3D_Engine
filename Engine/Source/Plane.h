@@ -1,5 +1,4 @@
-#ifndef _PLANE_H
-#define _PLANE_H
+#pragma once
 
 #include "Includes.h"
 #include "Point.h"
@@ -69,5 +68,3 @@ public:
 		return absolute(normal.dot (unitDirection)) - 1.0 < epsilon();
 	}
 };
-
-#endif

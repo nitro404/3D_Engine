@@ -1,8 +1,4 @@
-//Passes the buck to the camera who then passes the buck to the player... Alternatively,
-//it could pass different things to the camera and player...
-
-#ifndef _INPUTMANAGER_H
-#define _INPUTMANAGER_H
+#pragma once
 
 #include "Includes.h"
 #include "Point.h"
@@ -44,5 +40,3 @@ public:
 };
 
 extern InputManager * inputManager;
-
-#endif

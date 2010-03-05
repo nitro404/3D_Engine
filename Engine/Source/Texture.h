@@ -1,5 +1,4 @@
-#ifndef _TEXTURE_H
-#define _TEXTURE_H
+#pragma once
 
 #include "Includes.h"
 
@@ -27,5 +26,3 @@ public:
 	static Texture * readBMPTexture(char * fullPathName);
 	static Texture * readTGATexture(char * fullPathName);
 };
-
-#endif

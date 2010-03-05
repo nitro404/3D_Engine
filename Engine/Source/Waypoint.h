@@ -1,5 +1,4 @@
-#ifndef _WAYPOINT_H
-#define _WAYPOINT_H
+#pragma once
 
 #include "Includes.h"
 #include "Object.h"
@@ -32,5 +31,3 @@ public:
 private:
 	vector<Waypoint *> neighbours;
 };
-
-#endif

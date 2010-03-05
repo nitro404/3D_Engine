@@ -9,15 +9,18 @@ public class TextureCompiler {
 		// -d"../Textures/" -i"animations.ini" -o"../../Data/textures.ini"
 	}
 
-	private static void generateTextureData(File textureDirectory, File animationFile, File textureFile, boolean removeExtensions) {
+	private static void generateTextureData(File textureDirectory, File animationFile, File textureFile, File heightMapFile, boolean removeExtensions) {
 		Vector<String> textureNames = new Vector<String>();
 		Vector<AnimatedTexture> animatedTextures = new Vector<AnimatedTexture>();
+		Vector<HeightMap> heightMaps = new Vector<HeightMap>();
 		
 		readDirectory(textureDirectory, textureNames, removeExtensions);
 		
 		sortData(textureNames);
 		
 		readAmimationData(animationFile, animatedTextures, textureNames);
+		
+		readHeightMapData(heightMapFile, heightMaps);
 		
 		writeTextureData(textureFile, textureNames, animatedTextures);
 	}
@@ -27,22 +30,25 @@ public class TextureCompiler {
 			// print instructions on how to use program parameters
 			System.out.println("Compiles a list of textures and animations for a 3D Engine.");
 			System.out.println("");
-			System.out.println("usage: java TextureCompiler -d\"..\\textures\" -i\"animations.ini\" -o\"textures.ini\" [-r]");
+			System.out.println("usage: java TextureCompiler -d\"..\\textures\" -i\"animations.ini\" -o\"textures.ini\" [-h\"heightmaps.ini\"] [-r]");
 			System.out.println("");
 			System.out.println(" -d :: directory containing a set of textures; e.g., -d\"..\\Textures\\\"");
 			System.out.println(" -i :: input animation data file; e.g., -i\"animations.ini\"");
 			System.out.println(" -o :: output texture data file (with animation data); e.g., -o\"textures.ini\"");
+			System.out.println(" -h :: height map data file (e.g., -h \"heightmaps.ini"");
 			System.out.println(" -r :: remove texture file name extensions (only if present)");
 		}
 		else {
 			String textureDirectoryName = null;
 			String animationFileName = null;
 			String textureFileName = null;
+			String heightMapFileName = null;
 			boolean removeExtensions = false;
 			
 			File textureDirectory = null;
 			File animationFile = null;
 			File textureFile = null;
+			File heightMapFile = null;
 			
 			// parse through parameters
 			for(int i=0;i<args.length;i++) {
@@ -55,6 +61,9 @@ public class TextureCompiler {
 					}
 					else if(args[i].substring(0, 2).equalsIgnoreCase("-o")) {
 						textureFileName = args[i].substring(2, args[i].length());
+					}
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-h")) {
+						heightMapFileName = args[i].substring(2, args[i].length());
 					}
 					else if(args[i].substring(0, 2).equalsIgnoreCase("-r")) {
 						removeExtensions = true;

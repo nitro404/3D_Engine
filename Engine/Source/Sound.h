@@ -1,9 +1,4 @@
-//*****************************************************************************************//
-//                                         Sound                                           //
-//*****************************************************************************************//
-
-#ifndef soundModule
-#define soundModule
+#pragma once
 
 //#include <afxwin.h> // TO DO: revise these files
 //#include <afxdlgs.h>
@@ -23,6 +18,3 @@ public:
 	bool playLoop () const;
 	bool stop () const;
 };
-
-#endif //soundModule
-

@@ -1,5 +1,4 @@
-#ifndef _INCLUDES_ALL
-#define _INCLUDES_ALL
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,5 +18,3 @@ using namespace std;
 
 void prompt(char *message, ...);
 void quit(char *message, ...);
-
-#endif

@@ -1,4 +1,4 @@
-#include "TerrainMap.h"
+#include "Terrain.h"
 #include "Includes.h"
 
 #define USE_QUADS							0
@@ -135,6 +135,9 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures) {
 		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
+		else if (_stricmp(key, "heightmap") == 0) {
+//			heightMapFile = str;
+		}
 		else if (_stricmp(key, "texturemap") == 0) {
 			textureMap = textures.at(atoi(str));
 			delete[] str;
@@ -146,20 +149,6 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures) {
 		else if (_stricmp(key, "height") == 0) {
 			height = atoi(value);
 			delete[] str;
-		}
-		else if (_stricmp(key, "minpoint") == 0) {
-			double xPos, yPos, zPos;
-			char * temp = strchr(str + sizeof(char), ' ');
-			*temp = '\0';
-			xPos = atof(str);
-			temp += sizeof(char);
-			char * temp2 = strchr(temp, ' ');
-			*temp2 = '\0';
-			yPos = atof(temp);
-			temp2 += sizeof(char);
-			zPos = atof(temp2);
-			minPoint = Point(xPos, yPos, zPos);
-			delete [] str;
 		}
 		else if (_stricmp(key, "maxpoint") == 0) {
 			double xPos, yPos, zPos;
@@ -175,15 +164,22 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures) {
 			maxPoint = Point(xPos, yPos, zPos);
 			delete [] str;
 		}
+		else if (_stricmp(key, "minpoint") == 0) {
+			double xPos, yPos, zPos;
+			char * temp = strchr(str + sizeof(char), ' ');
+			*temp = '\0';
+			xPos = atof(str);
+			temp += sizeof(char);
+			char * temp2 = strchr(temp, ' ');
+			*temp2 = '\0';
+			yPos = atof(temp);
+			temp2 += sizeof(char);
+			zPos = atof(temp2);
+			minPoint = Point(xPos, yPos, zPos);
+			delete [] str;
+		}
 		else if (_stricmp(key, "tiled") == 0) {
 			
 		}
-		else if (_stricmp(key, "heightmap") == 0) {
-			heightMapFile = str;
-		}
 	}
-	
-	delete [] line;
-	delete [] key;
-	delete [] value;
 }

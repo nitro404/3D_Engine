@@ -1,5 +1,4 @@
-#ifndef _WORLD_H
-#define _WORLD_H 
+#pragma once
 
 #include "Includes.h"
 #include "Object.h"
@@ -63,5 +62,3 @@ public:
 	
 	void import(char * fileName, vector<Texture *> & textures, vector<AnimatedTexture *> & animatedTextures);
 };
-
-#endif

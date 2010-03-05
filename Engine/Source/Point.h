@@ -1,5 +1,4 @@
-#ifndef _POINTS_H
-#define _POINTS_H
+#pragma once
 
 #include "Includes.h"
 
@@ -85,5 +84,3 @@ public:
 
 	Point operator * (const Transformation & transformation) const;
 };
-
-#endif

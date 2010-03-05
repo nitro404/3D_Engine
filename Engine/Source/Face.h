@@ -1,5 +1,4 @@
-#ifndef _FACE_H
-#define _FACE_H 
+#pragma once
 
 #include "Colour.h"
 #include "Texture.h"
@@ -30,5 +29,3 @@ public:
 
 	virtual void import(ifstream & input, vector<Texture *> & textures);
 };
-
-#endif

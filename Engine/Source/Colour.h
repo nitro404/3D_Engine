@@ -1,5 +1,4 @@
-#ifndef _COLOUR_H
-#define _COLOUR_H
+#pragma once
 
 #include <iostream>
 
@@ -26,5 +25,3 @@ public:
 };
 
 ostream & operator << (ostream & o, const Colour & x);
-
-#endif

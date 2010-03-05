@@ -1,5 +1,4 @@
-#ifndef _POOL_H
-#define _POOL_H
+#pragma once
 
 #include "Includes.h"
 #include "Object.h"
@@ -33,5 +32,3 @@ private:
 	char * name;
 	Colour waterColour;
 };
-
-#endif

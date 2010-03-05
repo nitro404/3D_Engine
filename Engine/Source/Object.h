@@ -1,5 +1,4 @@
-#ifndef _OBJECT_H
-#define _OBJECT_H
+#pragma once
 
 #include "Includes.h"
 #include "Colour.h"
@@ -25,5 +24,3 @@ public:
 	virtual void draw() { }
 	virtual void import(ifstream & input, vector<Texture *> & textures) { }
 };
-
-#endif

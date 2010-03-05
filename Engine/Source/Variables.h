@@ -1,8 +1,7 @@
 //Created: January 15, 2009
 //Revised: February 14, 2010
 
-#ifndef _VARIABLES_H
-#define _VARIABLES_H
+#pragma once
 
 #include "Variable.h"
 
@@ -40,5 +39,3 @@ private:
 };
 
 ostream & operator << (ostream & o, const Variables & x);
-
-#endif

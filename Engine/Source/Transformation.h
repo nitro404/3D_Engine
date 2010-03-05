@@ -1,5 +1,4 @@
-#ifndef _TRANSFORMATION_H
-#define _TRANSFORMATION_H 
+#pragma once
 
 #include "Includes.h"
 #include "Point.h"
@@ -356,5 +355,3 @@ public:
 		return t;
 	}
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef _GAME_H
-#define _GAME_H
+#pragma once
 
 #include "Includes.h"
 #include "Variable.h"
@@ -64,5 +63,3 @@ private:
 };
 
 extern Game * game;
-
-#endif

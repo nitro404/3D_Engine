@@ -1,5 +1,4 @@
-#ifndef _ANIMATEDTEXTURE_H
-#define _ANIMATEDTEXTURE_H
+#pragma once
 
 #include "Includes.h"
 #include "Texture.h"
@@ -19,5 +18,3 @@ public:
 	
 	void import(ifstream &input, vector<Texture *> & worldTextures);
 };
-
-#endif

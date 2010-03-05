@@ -23,15 +23,6 @@ public class Terrain extends UniversalObject {
 	public Terrain(UniversalObject object) {
 		super(object.objectIndex, null, null, object.properties, null);
 		
-		try {
-			stretched = Integer.valueOf(getPropertyValue("stretched"));
-			removeProperty("stretched");
-		}
-		catch(NumberFormatException e) {
-			System.out.println("ERROR: Invalid stretched texture property on terrain object \"" + getPropertyValue("name") + ".");
-			System.exit(1);
-		}
-		
 		Point3D p;
 		for(int i=0;i<object.faces.size();i++) {
 			for(int j=0;j<object.faces.elementAt(i).points.size();j++) {
@@ -53,6 +44,10 @@ public class Terrain extends UniversalObject {
 		addProperty("maxpoint", maxPoint.x + ", " + maxPoint.y + ", " + maxPoint.z);
 		addProperty("minpoint", minPoint.x + ", " + minPoint.y + ", " + minPoint.z);
 		
+		addProperty("width", "64");
+		addProperty("height", "64");
+		
+/*
 		try {
 			char lastChar = heightMapDirectory.getPath().charAt(heightMapDirectory.getPath().length() - 1);
 			String fileName = "";
@@ -72,7 +67,7 @@ public class Terrain extends UniversalObject {
 				System.exit(1);
 			}
 			
-			removeProperty("heightmap");
+//			removeProperty("heightmap");
 			
 			generateTerrain(heightMapFile);
 		}
@@ -80,6 +75,7 @@ public class Terrain extends UniversalObject {
 			System.out.println("ERROR: Error generating terrain from height map \"" + getPropertyValue("heightmap") + "\".");
 			e.printStackTrace();
 		}
+*/
 	}
 	
 	// can't be larger than 2^11
@@ -200,7 +196,7 @@ test.close();
 	
 	public void writeTo(PrintWriter out) throws Exception {
 		super.writeTo(out); 
-		
+		/*
 		ByteArrayOutputStream byteStream; 
 		DataOutputStream dataStream;
 		for(int j=0;j<heightMapHeight+1;j++) {
@@ -220,6 +216,7 @@ test.close();
 			}
 		}
 		out.println();
+		*/
 	}
 	
 	private double scaleHeight(int x, int y) {

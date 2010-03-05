@@ -1,5 +1,4 @@
-#ifndef _CAMERA_H
-#define _CAMERA_H
+#pragma once
 
 #include "Includes.h"
 #include "Point.h"
@@ -41,5 +40,3 @@ public:
 };
 
 extern Camera * camera;
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef _GEOMETRY_H
-#define _GEOMETRY_H 
+#pragma once
 
 #include "Includes.h"
 #include "Object.h"
@@ -23,5 +22,3 @@ public:
 
 	void import (ifstream &input, vector<Texture *> & textures);
 };
-
-#endif

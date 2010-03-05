@@ -1,4 +1,5 @@
 #pragma once
+
 #include "object.h"
 
 class Terrain :
@@ -16,6 +17,7 @@ private:
 	//int drawType;
 
 	void drawQuads();
+	void drawStrips();
 	void drawFrustrums();
 	void drawFull();
 

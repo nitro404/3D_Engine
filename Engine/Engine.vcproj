@@ -387,6 +387,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\Terrain.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Terrain.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\Translator.cpp"
 				>
 			</File>

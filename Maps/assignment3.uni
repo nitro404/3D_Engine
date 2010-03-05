@@ -5850,8 +5850,8 @@ Object: 95;
 	Properties: 5;
 		"heightmap" => "microTerrainHeightMap"
 		"name" => "grass"
-		"stretched" => "0"
 		"texturemap" => "wall1"
+		"tiled" => "0"
 		"type" => "terrain"
 	Faces: 6;
 	Face: 0;
