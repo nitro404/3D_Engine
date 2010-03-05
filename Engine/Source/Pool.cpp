@@ -28,13 +28,10 @@ void Pool::draw() {
 
 void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures) {
 	unsigned int i, j;
-	char * line;
-	char * key;
-	char * value;
+	char line[256];
+	char key[256];
+	char value[256];
 	char * str;
-	line = new char[256];
-	key = new char[256];
-	value = new char[256];
 	
 	transformation = DualTransformation::import(input);
 	
@@ -110,8 +107,4 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 	maxX += transformation->position().x;
 	maxY += transformation->position().y;
 	maxZ += transformation->position().z;
-
-	delete [] line;
-	delete [] key;
-	delete [] value;
 }

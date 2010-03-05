@@ -78,5 +78,5 @@
     targetname(string) : "Name"
     heightMap(string) : "Height Map"
     textureMap(string) : "Texture Map"
-    stretched(string) : "Stretch Texture" : "0"
+    tiled(string) : "Tile Texture" : "0"
 ]

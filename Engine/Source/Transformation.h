@@ -221,8 +221,7 @@ public:
 	Point position () { return Point (m41, m42, m43); }
 	
 	void importSingleTransformation(ifstream & input) {
-		char * line;
-		line = new char[256];
+		char line[256];
 		
 		input.getline(line, 256, ','); m11 = atof(line);
 		input.getline(line, 256, ','); m12 = atof(line);
@@ -244,8 +243,6 @@ public:
 		input.getline(line, 256, ','); m43 = atof(line);
 		input.getline(line, 256, ';'); m44 = atof(line);
 		input.getline(line, 256, '\n');
-		
-		delete [] line;
 	}
 };
 
@@ -344,8 +341,7 @@ public:
 	}
 
 	static DualTransformation * import(ifstream & input) {
-		char * line;
-		line = new char[256];
+		char line[256];
 
 		DualTransformation * t = new DualTransformation();
 		
@@ -356,8 +352,6 @@ public:
 		// input the transformations
 		t->importSingleTransformation(input);
 		t->inverse.importSingleTransformation(input);
-		
-		delete [] line;
 
 		return t;
 	}

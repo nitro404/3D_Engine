@@ -29,13 +29,10 @@ Point & Waypoint::getPosition() {
 }
 
 void Waypoint::import (ifstream &input) {
-	char * line;
-	char * key;
-	char * value;
+	char line[256];
+	char key[256];
+	char value[256];
 	char * str;
-	line = new char[256];
-	key = new char[256];
-	value = new char[256];
 	
 	//Input the header.
 	input.getline(line, 256, ':');
@@ -70,8 +67,4 @@ void Waypoint::import (ifstream &input) {
 	}
 	
 	this->position = this->transformation->normal().position();
-	
-	delete [] line;
-	delete [] key;
-	delete [] value;
 }

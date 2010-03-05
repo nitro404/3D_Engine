@@ -11,7 +11,7 @@
 #include "Translator.h"
 #include "Vehicle.h"
 #include "Waypoint.h"
-#include "TerrainMap.h"
+#include "Terrain.h"
 
 class World {
 private:

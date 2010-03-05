@@ -30,13 +30,10 @@ void Translator::draw() {
 }
 
 void Translator::import (ifstream & input, vector<Texture *> & textures) {
-	char * line;
-	char * key;
-	char * value;
+	char line[256];
+	char key[256];
+	char value[256];
 	char * str;
-	line = new char[256];
-	key = new char[256];
-	value = new char[256];
 	
 	transformation = DualTransformation::import(input);
 	
@@ -95,8 +92,4 @@ void Translator::import (ifstream & input, vector<Texture *> & textures) {
 	distanceToTravel = sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2) + pow(destination.z - origin.z, 2));
 	unitVector = Vector((destination.x - origin.x) / distanceToTravel, (destination.y - origin.y) / distanceToTravel, (destination.z - origin.z) / distanceToTravel);
 	distanceTravelled = 0;
-	
-	delete [] line;
-	delete [] key;
-	delete [] value;
 }

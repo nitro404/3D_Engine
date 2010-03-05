@@ -1,13 +1,10 @@
 #include "AnimatedTexture.h"
 
 void AnimatedTexture::import (ifstream & input, vector<Texture *> & worldTextures) {
-	char * line;
-	char * key;
-	char * value;
+char line[256];
+	char key[256];
+	char value[256];
 	char * str;
-	line = new char[256];
-	key = new char[256];
-	value = new char[256];
 	
 	//Input the header.
 	input.getline(line, 256, ':');
@@ -52,8 +49,4 @@ void AnimatedTexture::import (ifstream & input, vector<Texture *> & worldTexture
 	for(int i=firstTexture;i<firstTexture+frames;i++) {
 		textures.push_back(worldTextures.at(i));
 	}
-	
-	delete [] line;
-	delete [] key;
-	delete [] value;
 }

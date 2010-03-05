@@ -19,8 +19,7 @@ void Geometry::draw () {
 }
 
 void Geometry::import(ifstream & input, vector<Texture *> & textures) {
-	char * line;
-	line = new char[256];
+	char line[256];
 	
 	transformation = DualTransformation::import(input);
 	
@@ -33,6 +32,4 @@ void Geometry::import(ifstream & input, vector<Texture *> & textures) {
 		face->import(input, textures);
 		faces.push_back(face);
 	}
-	
-	delete [] line;
 }

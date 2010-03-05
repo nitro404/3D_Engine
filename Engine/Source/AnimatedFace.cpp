@@ -51,12 +51,9 @@ void AnimatedFace::draw(Colour & colour) {
 }
 
 void AnimatedFace::import(ifstream & input, vector<AnimatedTexture * > & animatedTextures) {
-	char * line;
-	char * key;
-	char * value;
-	line = new char[256];
-	key = new char[256];
-	value = new char[256];
+	char line[256];
+	char key[256];
+	char value[256];
 	
 	//Input the header.
 	input.getline(line, 256, ':');
@@ -91,8 +88,4 @@ void AnimatedFace::import(ifstream & input, vector<AnimatedTexture * > & animate
 		input.getline(line, 256, '\n'); point->ty = atof (line);
 		points.push_back(point);
 	}
-	
-	delete [] line;
-	delete [] key;
-	delete [] value;
 }

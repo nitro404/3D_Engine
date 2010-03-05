@@ -286,8 +286,7 @@ void Game::loadMapList(char * mapDirectory) {
 }
 
 void Game::loadTextures(char * fileName, char * textureDirectory) {
-	char * line;
-	line = new char[256];
+	char line[256];
 	unsigned int i, j;
 
 	ifstream input;
@@ -349,6 +348,5 @@ void Game::loadTextures(char * fileName, char * textureDirectory) {
 		animatedTextures.push_back(animatedTexture);
 	}
 	
-	delete [] line;
 	input.close();
 }

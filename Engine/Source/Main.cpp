@@ -346,6 +346,7 @@ int main(int parametersSize, char ** parameters) {
 	//Read the settings file and pass ownership over to the game itself
 	Variables * settings = new Variables();
 	if (!settings->parseFrom("settings.ini")) {
+		delete settings;
 		quit("Could not find the settings file.");
 	}
 	
@@ -406,6 +407,7 @@ int main(int parametersSize, char ** parameters) {
 
 #if _DEBUG
 	#include <crtdbg.h>
+	#include <vld.h>
 #endif
 
 void exitGame() {

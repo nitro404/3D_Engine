@@ -72,13 +72,10 @@ void Sprite::draw() {
 }
 
 void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypoint *> & waypoints) {
-	char * line;
-	char * key;
-	char * value;
+	char line[256];
+	char key[256];
+	char value[256];
 	char * str;
-	line = new char[256];
-	key = new char[256];
-	value = new char[256];
 	
 	//Input the position
 	double x, y, z;
@@ -179,9 +176,5 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 			distanceTravelled = 0;
 		}
 	}
-	
-	delete [] line;
-	delete [] key;
-	delete [] value;
 }
 

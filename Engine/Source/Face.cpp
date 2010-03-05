@@ -43,12 +43,9 @@ void Face::draw(Colour & colour) {
 }
 
 void Face::import(ifstream &input, vector<Texture *> & textures) {
-	char * line;
-	char * key;
-	char * value;
-	line = new char[256];
-	key = new char[256];
-	value = new char[256];
+char line[256];
+	char key[256];
+	char value[256];
 
 	//Input the header.
 	input.getline(line, 256, ':');
@@ -78,9 +75,5 @@ void Face::import(ifstream &input, vector<Texture *> & textures) {
 		input.getline(line, 256, '\n'); point->ty = atof (line);
 		points.push_back (point);
 	}
-	
-	delete [] line;
-	delete [] key;
-	delete [] value;
 }
 

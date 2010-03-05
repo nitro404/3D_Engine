@@ -789,3 +789,13 @@ inline long unpackAlpha(const long pixel) {
 //	va_end(parameters) 
 
 
+
+		
+		/*
+		ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
+		ImageIO.write(heightMap, "bmp", baos);
+		baos.flush();
+		byte[] heightMapBytes = baos.toByteArray();
+		baos.close();
+		*/
+

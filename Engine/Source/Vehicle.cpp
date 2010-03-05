@@ -21,13 +21,10 @@ void Vehicle::draw() {
 }
 
 void Vehicle::import(ifstream & input, vector<Texture *> & textures) {
-	char * line;
-	char * key;
-	char * value;
+	char line[256];
+	char key[256];
+	char value[256];
 	char * str;
-	line = new char[256];
-	key = new char[256];
-	value = new char[256];
 	
 	transformation = DualTransformation::import(input);
 	
@@ -65,8 +62,4 @@ void Vehicle::import(ifstream & input, vector<Texture *> & textures) {
 		face->import(input, textures);
 		faces.push_back(face);
 	}
-	
-	delete [] line;
-	delete [] key;
-	delete [] value;
 }

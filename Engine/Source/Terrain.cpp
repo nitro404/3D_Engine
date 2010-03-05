@@ -7,7 +7,7 @@
 #define USE_FACE_GROUPS_AND_FRUSTUM_CULLING 3 
 #define TERRAIN_IMPLEMENTATION USE_QUADS
 
-TerrainMap::TerrainMap(void)
+Terrain::Terrain(void)
 {
 	name = NULL;
 	textureMap = NULL;
@@ -19,7 +19,7 @@ TerrainMap::TerrainMap(void)
 	//drawType = GL_QUADS;
 }
 
-TerrainMap::~TerrainMap(void)
+Terrain::~Terrain(void)
 {
 	if (name != NULL) {
 		delete[] name;
@@ -29,7 +29,7 @@ TerrainMap::~TerrainMap(void)
 	}
 }
 
-void TerrainMap::draw() {
+void Terrain::draw() {
 	textureMap->activate();
 	
 	if(textureMap->type == RGBAType) {
@@ -54,7 +54,7 @@ void TerrainMap::draw() {
 	}
 }
 
-void TerrainMap::drawQuads() {
+void Terrain::drawQuads() {
 	for (int j = 0; j < height - 1;j++) {
 		for (int i = 0; i < width;i++) {
 			glBegin(GL_POLYGON);
@@ -82,7 +82,7 @@ void TerrainMap::drawQuads() {
 	}
 }
 
-void TerrainMap::drawStrips() {
+void Terrain::drawStrips() {
 	GamePoint* point;
 
 	glBegin(GL_TRIANGLE_STRIP);
@@ -105,22 +105,19 @@ void TerrainMap::drawStrips() {
 	glEnd();
 }
 
-void TerrainMap::drawFrustrums() {
+void Terrain::drawFrustrums() {
 	
 }
 
-void TerrainMap::drawFull() {
+void Terrain::drawFull() {
 	
 }
 
-void TerrainMap::import(ifstream & input, vector<Texture *> & textures) {
-	char * line;
-	char * key;
-	char * value;
+void Terrain::import(ifstream & input, vector<Texture *> & textures) {
+	char line[256];
+	char key[256];
+	char value[256];
 	char * str;
-	line = new char[256];
-	key = new char[256];
-	value = new char[256];
 	
 	//Input the properties
 	input.getline(line, 256, ':');

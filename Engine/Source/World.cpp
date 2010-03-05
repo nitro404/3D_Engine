@@ -122,12 +122,9 @@ void World::draw() {
 }
 
 void World::import(char * fileName, vector<Texture *> & textures, vector<AnimatedTexture *> & animatedTextures) {
-	char * line;
-	char * key;
-	char * value;
-	line = new char[256];
-	key = new char[256];
-	value = new char[256];
+	char line[256];
+	char key[256];
+	char value[256];
 	unsigned int i, j;
 	
 	ifstream input;
@@ -272,7 +269,7 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<Animate
 			water.push_back(pool);
 		}
 		else if (_stricmp(value, "terrain") == 0) {
-			TerrainMap * terrain = new TerrainMap;
+			Terrain * terrain = new Terrain;
 			terrain->import(input, textures);
 			objects.push_back(terrain);
 		}
@@ -290,8 +287,5 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<Animate
 		sortedSprites[i] = sprites.at(i);
 	}
 	
-	delete [] line;
-	delete [] key;
-	delete [] value;
 	input.close();
 }

@@ -20,8 +20,13 @@ public class Terrain extends UniversalObject {
 	private int heightMap[][];
 	private int stretched;
 	
-	public Terrain(UniversalObject object) {
+	public Terrain(UniversalObject object, File heightMapDirectory) {
 		super(object.objectIndex, null, null, object.properties, null);
+		
+		if(heightMapDirectory == null) {
+			System.out.println("ERROR: Height map directory missing, cannot generate terrain.");
+			System.exit(1);
+		}
 		
 		try {
 			stretched = Integer.valueOf(getPropertyValue("stretched"));

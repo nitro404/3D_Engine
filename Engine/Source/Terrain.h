@@ -1,7 +1,7 @@
 #pragma once
 #include "object.h"
 
-class TerrainMap :
+class Terrain :
 	public Object
 {
 private:
@@ -20,8 +20,8 @@ private:
 	void drawFull();
 
 public:
-	TerrainMap(void);
-	~TerrainMap(void);
+	Terrain(void);
+	~Terrain(void);
 
 	virtual void draw();
 	virtual void import(ifstream & input, vector<Texture *> & textures);

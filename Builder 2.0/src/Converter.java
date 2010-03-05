@@ -10,7 +10,7 @@ import java.io.*;
 public class Converter {
 	
 	// convert a set of files between two formats
-	public static void convertFiles(File fileDirectory, File outDirectory, String inExtension, String outExtension, boolean subdirectories, File textureDataFile, File heightMapDirectory) {
+	public static void convertFiles(File fileDirectory, File outDirectory, String inExtension, String outExtension, boolean subdirectories, File textureDataFile) {
 		File[] files = fileDirectory.listFiles();
 		File[] subFiles = null;
 		String fileExtension;
@@ -26,11 +26,11 @@ public class Converter {
 					if(subFiles[j].getName().charAt(0) != '.') {
 						// recurse if the current file is a directory
 						if(subFiles[j].isDirectory() && subdirectories && subFiles[j].getName().charAt(0) != '.') {
-							convertFiles(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, textureDataFile, heightMapDirectory);
+							convertFiles(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, textureDataFile);
 						}
 						// otherwise convert the selected file
 						else if(subFiles[j].isFile()) {
-							convertFile(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, textureDataFile, heightMapDirectory);
+							convertFile(subFiles[j], outDirectory, inExtension, outExtension, subdirectories, textureDataFile);
 						}
 					}
 				}
@@ -39,14 +39,14 @@ public class Converter {
 			else if(files[i].isFile()) {
 				fileExtension = files[i].getName().substring(files[i].getName().lastIndexOf('.') + 1, files[i].getName().length());
 				if(inExtension.equalsIgnoreCase(fileExtension)) {
-					convertFile(files[i], outDirectory, inExtension, outExtension, subdirectories, textureDataFile, heightMapDirectory);
+					convertFile(files[i], outDirectory, inExtension, outExtension, subdirectories, textureDataFile);
 				}
 			}
 		}
 	}
 	
 	// convert a file between two formats
-	public static void convertFile(File file, File outDirectory, String inExtension, String outExtension, boolean subdirectories, File textureDataFile, File heightMapDirectory) {
+	public static void convertFile(File file, File outDirectory, String inExtension, String outExtension, boolean subdirectories, File textureDataFile) {
 		Map3D originalMap = null;
 		Map3D convertedMap = null;
 		File outputFile = null;
@@ -100,7 +100,7 @@ public class Converter {
 				convertedMap = new World(originalMap);
 			}
 			else {
-				convertedMap = new World(originalMap, textureNames, animatedTextures, heightMapDirectory);
+				convertedMap = new World(originalMap, textureNames, animatedTextures);
 			}
 		}
 		
