@@ -9,23 +9,23 @@ double DT;
 Game::Game(Variables * settings) {
 	// setup the font
 	deviceContext = GetDC(NULL);
-	HFONT font; //Windows font ID...
-	fontBase = glGenLists(96); //Storage for 96 characters
+	HFONT font; // windows font ID
+	fontBase = glGenLists(96); // storage for 96 characters
 	font = CreateFont (	
-		-24,							//Height of font
-		0,								//Width of font
-		0,								//Angle of escapement
-		0,								//Orientation angle
-		FW_BOLD,						//Font weight
-		FALSE,							//Italic
-		FALSE,							//Underline
-		FALSE,							//Strikeout
-		ANSI_CHARSET,					//Character set identifier
-		OUT_TT_PRECIS,					//Output precision
-		CLIP_DEFAULT_PRECIS,			//Clipping precision
-		ANTIALIASED_QUALITY,			//Output quality
-		FF_DONTCARE | DEFAULT_PITCH,	//Family and pitch
-		"Arial");						//Font name
+		-24,							// height of font
+		0,								// width of font
+		0,								// angle of escapement
+		0,								// orientation angle
+		FW_BOLD,						// font weight
+		FALSE,							// italic
+		FALSE,							// underline
+		FALSE,							// strikeout
+		ANSI_CHARSET,					// character set identifier
+		OUT_TT_PRECIS,					// output precision
+		CLIP_DEFAULT_PRECIS,			// clipping precision
+		ANTIALIASED_QUALITY,			// output quality
+		FF_DONTCARE | DEFAULT_PITCH,	// family and pitch
+		"Arial");						// font name
 	
 	SelectObject(deviceContext, font);			//Selects The Font We Want
 	wglUseFontBitmaps(deviceContext, 32, 96, fontBase); //Builds 96 characters starting at character 32
@@ -50,9 +50,8 @@ Game::Game(Variables * settings) {
 	
 	verifySettings();
 	world = NULL;		
-	worldFileFilter = "World File (*.wrl)|*.wrl|All Files (*.*)|*.*";
 	
-	loadTextures(settings->getValue("Texture Data File"), settings->getValue("Texture Directory"));
+	loadTextures(settings->getValue("Texture Data File"), settings->getValue("Texture Directory"), settings->getValue("Height Map Directory"));
 	loadMapList(settings->getValue("Map Directory"));
 }
 
@@ -60,18 +59,12 @@ Game::~Game() {
 	unsigned int i;
 	if(fps != NULL) { delete [] fps; }
 	if(settings != NULL) { delete settings; }
-	//if(helpMessage != NULL) { delete [] helpMessage; } // The string is located in the code, not the heap
-	//if(selectionPointer != NULL) { delete [] selectionPointer; } // The string is located in the code, not the heap
-	//for(i=0;i<menuItems.size();i++) { // The entries of menuItems are located in the code, not the heap
-	//	delete [] menuItems.at(i);		// Unless additional entries are added somewhere, this will not cause a problem
-	//}
-	//for(i=0;i<menuTitles.size();i++) { // The entries of menuTitles are located in the code, not the heap
-	//	delete [] menuTitles.at(i);		// Unless additional entries are added somewhere, this will not cause a problem
-	//}
-	//if(worldFileFilter != NULL) { delete [] worldFileFilter; } // The string is located in the code, not the heap
 	if(world != NULL) { delete world; }
 	for(i=0;i<animatedTextures.size();i++) {
 		delete animatedTextures.at(i);
+	}
+	for(i=0;i<heightMaps.size();i++) {
+		delete [] heightMaps.at(i);
 	}
 	for(i=0;i<textures.size();i++) {
 		delete textures.at(i);
@@ -181,7 +174,7 @@ void Game::escapePressed() {
 
 void Game::loadMap(char * fileName) {
 	world = new World;
-	world->import(fileName, textures, animatedTextures);
+	world->import(fileName, textures, heightMaps, animatedTextures);
 	player->reset(world->startPosition);
 }
 
@@ -212,11 +205,11 @@ void Game::drawMenu() {
 }
 
 void Game::drawFrameRate() {
-	//Draw the frame rate avoiding extreme fluctuations (since all you see is flickering).
-	double frameRate = 1.0 / DT; //Frames/sec = 1/(seconds per frame).
-	static double stableRate = frameRate; //This initializes only the first time...
+	// draw the frame rate avoiding extreme fluctuations (since all you see is flickering).
+	double frameRate = 1.0 / DT; // frames/sec = 1/(seconds per frame).
+	static double stableRate = frameRate; // this initializes only the first time...
 	static double oldFrameRate = frameRate;
-	//If it changed by more than 2 per cent of the stable value, use the new value; otherwise use the stable one...
+	// if it changed by more than 2 per cent of the stable value, use the new value; otherwise use the stable one...
 	if(absolute(frameRate - stableRate) > 2.0) stableRate  = frameRate; 
 	sprintf_s(fps, 12, "%3.1f FPS", stableRate);
 	drawText(screenWidth-101, screenHeight-20, fps);
@@ -234,10 +227,10 @@ void Game::drawText(int x, int y, const char * text) {
 				glDisable(GL_LIGHTING);
 				glColor4f(menuColour.red, menuColour.green, menuColour.blue, menuColour.alpha);
 				glRasterPos2i(x, y);
-				glPushAttrib(GL_LIST_BIT);	//Pushes the display list bits
-				glListBase(fontBase - 32); //Sets the base character to 32
-				glCallLists(strlen(text), GL_UNSIGNED_BYTE, text); //Draws the display list text
-				glPopAttrib(); //Pops the display list bits
+				glPushAttrib(GL_LIST_BIT);	// pushes the display list bits
+				glListBase(fontBase - 32); // sets the base character to 32
+				glCallLists(strlen(text), GL_UNSIGNED_BYTE, text); // draws the display list text
+				glPopAttrib(); // pops the display list bits
 				glColor4f(1, 1, 1, 1);
 			glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
@@ -285,9 +278,11 @@ void Game::loadMapList(char * mapDirectory) {
 	}
 }
 
-void Game::loadTextures(char * fileName, char * textureDirectory) {
+void Game::loadTextures(char * fileName, char * textureDirectory, char * heightMapDirectory) {
 	char line[256];
 	unsigned int i, j;
+	int startIndex;
+	int length;
 
 	ifstream input;
 	input.open(fileName); 
@@ -295,16 +290,15 @@ void Game::loadTextures(char * fileName, char * textureDirectory) {
 		quit("Unable to open texture data file: \"%s\".", fileName);
 	}
 	
-	//Input the texture names and load the corresponding texture
+	// input the texture names and load the corresponding texture
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
-	int texturesSize = atoi(line);
+	int numberOfTextures = atoi(line);
 	input.getline(line, 256, '\n');
 	char * textureName;
-	int startIndex;
 	string texturePath;
 	Texture * newTexture;
-	for(int textureIndex = 0; textureIndex < texturesSize; textureIndex++) {
+	for(int textureIndex = 0; textureIndex < numberOfTextures; textureIndex++) {
 		input.getline(line, 256, '\n');
 		startIndex = 0;
 		for(i=startIndex;i<strlen(line);i++) {
@@ -320,9 +314,12 @@ void Game::loadTextures(char * fileName, char * textureDirectory) {
 		}
 		textureName[strlen(line) - startIndex] = '\0';
 
-		//Load the texture
+		// load the texture
 		texturePath.append(textureDirectory);
-		texturePath.append("/");
+		length = strlen(textureDirectory);
+		if(textureDirectory[length-1] != '\\' && textureDirectory[length-1] != '/') {
+			texturePath.append("/");
+		}
 		texturePath.append(textureName);
 		newTexture = Texture::readTexture((char *) texturePath.c_str());
 		if(newTexture != NULL) {
@@ -335,14 +332,51 @@ void Game::loadTextures(char * fileName, char * textureDirectory) {
 		texturePath.erase();
 		delete [] textureName;
 	}
+
+	// input the height map names
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ';');
+	int numberOfHeightMaps = atoi(line);
+	input.getline(line, 256, '\n');
+	char * heightMapName;
+	string heightMapPath;
+	for(int heightMapIndex = 0; heightMapIndex < numberOfHeightMaps; heightMapIndex++) {
+		input.getline(line, 256, '\n');
+		startIndex = 0;
+		for(i=startIndex;i<strlen(line);i++) {
+			if(line[i] != ' ' && line[i] != '\t') {
+				startIndex = i;
+				break;
+			}
+		}
+		heightMapName = new char[strlen(line) - startIndex + 1];
+		j = 0;
+		for(i=startIndex;i<strlen(line);i++) {
+			heightMapName[j++] = line[i];
+		}
+		heightMapName[strlen(line) - startIndex] = '\0';
+		
+		heightMapPath.append(heightMapDirectory);
+		length = strlen(heightMapDirectory);
+		if(heightMapDirectory[length-1] != '\\' && heightMapDirectory[length-1] != '/') {
+			heightMapPath.append("/");
+		}
+		heightMapPath.append(heightMapName);
+
+		char * temp = new char[strlen(heightMapPath.c_str()) + 1];
+		strcpy_s(temp, strlen(heightMapPath.c_str()) + 1, heightMapPath.c_str());
+		heightMaps.push_back(temp);
+		
+		delete [] heightMapName;
+	}
 	
-	//Input the animated textures 
+	// input the animated textures 
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	long animatedTexturesSize = atoi(line);
 	input.getline(line, 256, '\n');
 	for(int atIndex=0;atIndex<animatedTexturesSize;atIndex++) {
-		//Create the corresponding animated textures
+		// create the corresponding animated textures
 		AnimatedTexture * animatedTexture = new AnimatedTexture;
 		animatedTexture->import(input, textures);
 		animatedTextures.push_back(animatedTexture);

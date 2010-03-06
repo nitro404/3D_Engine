@@ -210,7 +210,6 @@ Texture * Texture::readTGATexture(char * fullPathName) {
 	texture->textureName = new char [strlen (fullPathName) + 1];
 	strcpy_s (texture->textureName, strlen(fullPathName) + 1, fullPathName);
     return texture;
-	#undef logError
 }
 
 void Texture::activate() {

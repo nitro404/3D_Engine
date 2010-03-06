@@ -12,7 +12,9 @@ public class World implements Map3D {
 	
 	public Point3D startPosition;
 	public Vector<String> textureNames;
+	public Vector<String> heightMapNames;
 	public Vector<AnimatedTexture> animatedTextures;
+	public Vector<HeightMap> heightMaps;
 	public Vector<UniversalObject> objects;
 	public Vector<Waypoint> waypoints;
 	
@@ -38,9 +40,11 @@ public class World implements Map3D {
 		}
 	}
 	
-	public World(Map3D map, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures) {
+	public World(Map3D map, Vector<String> textureNames, Vector<String> heightMapNames, Vector<AnimatedTexture> animatedTextures, Vector<HeightMap> heightMaps) {
 		this.textureNames = textureNames;
+		this.heightMapNames = heightMapNames;
 		this.animatedTextures = animatedTextures;
+		this.heightMaps = heightMaps;
 		try {
 			this.convertFrom(map);
 		}
@@ -217,7 +221,7 @@ public class World implements Map3D {
 					objects.add(new Pool(object, textureIndex));
 				}
 				else if(type.equalsIgnoreCase("terrain")) {
-					objects.add(new Terrain(object));
+					objects.add(new Terrain(object, heightMaps));
 				}
 				else {
 					System.out.println("WARNING: Ignoring unexpected object of type \"" + type + "\".");

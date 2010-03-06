@@ -35,7 +35,7 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 	
 	transformation = DualTransformation::import(input);
 	
-	//Input the properties
+	// input the properties
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfProperties = atoi(line);
@@ -47,7 +47,7 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 		str = new char[strlen(value) + 1];
 		strcpy_s(str, strlen(value) + 1, value);
 		
-		//Parse properties to local variables
+		// parse properties to local variables
 		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
@@ -68,6 +68,7 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 			delete [] str;
 		}
 		else {
+			printf("WARNING: Encountered unexpected property when parsing pool object: \"%s\"", key);
 			delete [] str;
 		}
 	}

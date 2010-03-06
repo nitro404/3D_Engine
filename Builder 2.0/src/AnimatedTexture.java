@@ -49,7 +49,6 @@ public class AnimatedTexture {
 			System.exit(1);
 		}
 		
-
 		// input the properties header
 		input = in.readLine().trim();
 		String propertyHeader = input.substring(0, input.lastIndexOf(':')).trim();

@@ -62,6 +62,7 @@ void Waypoint::import (ifstream &input) {
 			neighbourValues = str;
 		}
 		else {
+			printf("WARNING: Encountered unexpected property when parsing waypoint object: \"%s\"", key);
 			delete [] str;
 		}
 	}

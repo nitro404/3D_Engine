@@ -5,47 +5,34 @@ public class TextureCompiler {
 	
 	public static void main(String args[]) {
 		parseParameters(args);
-		// sample program calls:
-		// -d"../Textures/" -i"animations.ini" -o"../../Data/textures.ini"
+		// sample program call:
+		// -t"../Textures/" -m"../Textures/Height Maps/" -a"animations.ini" -h"heightmaps.ini" -o"../Data/textures.ini"
 	}
 
-	private static void generateTextureData(File textureDirectory, File animationFile, File textureFile, File heightMapFile, boolean removeExtensions) {
-		Vector<String> textureNames = new Vector<String>();
-		Vector<AnimatedTexture> animatedTextures = new Vector<AnimatedTexture>();
-		Vector<HeightMap> heightMaps = new Vector<HeightMap>();
-		
-		readDirectory(textureDirectory, textureNames, removeExtensions);
-		
-		sortData(textureNames);
-		
-		readAmimationData(animationFile, animatedTextures, textureNames);
-		
-		readHeightMapData(heightMapFile, heightMaps);
-		
-		writeTextureData(textureFile, textureNames, animatedTextures);
-	}
-	
 	public static void parseParameters(String[] args) {
 		if(args == null || args.length == 0) {
 			// print instructions on how to use program parameters
 			System.out.println("Compiles a list of textures and animations for a 3D Engine.");
 			System.out.println("");
-			System.out.println("usage: java TextureCompiler -d\"..\\textures\" -i\"animations.ini\" -o\"textures.ini\" [-h\"heightmaps.ini\"] [-r]");
+			System.out.println("usage: java TextureCompiler -t\"..\\textures\" [-m\"..\\heightmaps\"] [-a\"animations.ini\"] [-h\"heightmaps.ini\"] -o\"textures.ini\" [-r]");
 			System.out.println("");
-			System.out.println(" -d :: directory containing a set of textures; e.g., -d\"..\\Textures\\\"");
-			System.out.println(" -i :: input animation data file; e.g., -i\"animations.ini\"");
+			System.out.println(" -t :: directory containing a set of textures; e.g., -d\"..\\Textures\\\"");
+			System.out.println(" -m :: directory containing a set of height maps; e.g., -d\"..\\Textures\\Height Maps\\\"");
+			System.out.println(" -a :: input animation data file; e.g., -a\"animations.ini\"");
+			System.out.println(" -h :: height map data file (e.g., -h \"heightmaps.ini\"");
 			System.out.println(" -o :: output texture data file (with animation data); e.g., -o\"textures.ini\"");
-			System.out.println(" -h :: height map data file (e.g., -h \"heightmaps.ini"");
 			System.out.println(" -r :: remove texture file name extensions (only if present)");
 		}
 		else {
 			String textureDirectoryName = null;
+			String heightMapDirectoryName = null;
 			String animationFileName = null;
 			String textureFileName = null;
 			String heightMapFileName = null;
 			boolean removeExtensions = false;
 			
 			File textureDirectory = null;
+			File heightMapDirectory = null;
 			File animationFile = null;
 			File textureFile = null;
 			File heightMapFile = null;
@@ -53,17 +40,20 @@ public class TextureCompiler {
 			// parse through parameters
 			for(int i=0;i<args.length;i++) {
 				if(args[i].length() >= 2) {
-					if(args[i].substring(0, 2).equalsIgnoreCase("-d")) {
+					if(args[i].substring(0, 2).equalsIgnoreCase("-t")) {
 						textureDirectoryName = args[i].substring(2, args[i].length());
 					}
-					else if(args[i].substring(0, 2).equalsIgnoreCase("-i")) {
-						animationFileName = args[i].substring(2, args[i].length());
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-m")) {
+						heightMapDirectoryName = args[i].substring(2, args[i].length());
 					}
-					else if(args[i].substring(0, 2).equalsIgnoreCase("-o")) {
-						textureFileName = args[i].substring(2, args[i].length());
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-a")) {
+						animationFileName = args[i].substring(2, args[i].length());
 					}
 					else if(args[i].substring(0, 2).equalsIgnoreCase("-h")) {
 						heightMapFileName = args[i].substring(2, args[i].length());
+					}
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-o")) {
+						textureFileName = args[i].substring(2, args[i].length());
 					}
 					else if(args[i].substring(0, 2).equalsIgnoreCase("-r")) {
 						removeExtensions = true;
@@ -83,6 +73,17 @@ public class TextureCompiler {
 					System.exit(1);
 				}
 			}
+			if(heightMapDirectoryName != null) {
+				heightMapDirectory = new File(heightMapDirectoryName);
+				if(!heightMapDirectory.exists()) {
+					System.out.println("ERROR: Specified height map directory does not exist.");
+					System.exit(1);
+				}
+				if(!heightMapDirectory.isDirectory()) {
+					System.out.println("ERROR: Invalid height map directory.");
+					System.exit(1);
+				}
+			}
 			if(animationFileName != null) {
 				animationFile = new File(animationFileName);
 				if(!animationFile.exists()) {
@@ -91,6 +92,17 @@ public class TextureCompiler {
 				}
 				if(!animationFile.isFile()) {
 					System.out.println("ERROR: Invalid animation data file.");
+					System.exit(1);
+				}
+			}
+			if(heightMapFileName != null) {
+				heightMapFile = new File(heightMapFileName);
+				if(!heightMapFile.exists()) {
+					System.out.println("ERROR: Specified height map data file does not exist.");
+					System.exit(1);
+				}
+				if(!heightMapFile.isFile()) {
+					System.out.println("ERROR: Invalid height map data file.");
 					System.exit(1);
 				}
 			}
@@ -103,20 +115,223 @@ public class TextureCompiler {
 				System.out.println("ERROR: You must specify a texture directory.");
 				System.exit(1);
 			}
-			if(animationFile == null) {
-				System.out.println("ERROR: You must specify an animation data file to read from.");
-				System.exit(1);
-			}
 			if(textureFile == null) {
 				System.out.println("ERROR: You must specify a texture data file to write to.");
 				System.exit(1);
 			}
 			
-			generateTextureData(textureDirectory, animationFile, textureFile, removeExtensions);
+			generateTextureData(textureDirectory, heightMapDirectory, animationFile, heightMapFile, textureFile, removeExtensions);
+		}
+	}
+
+	private static void generateTextureData(File textureDirectory, File heightMapDirectory, File animationFile, File heightMapFile, File textureFile, boolean removeExtensions) {
+		Vector<String> textureFileNames = new Vector<String>();
+		Vector<AnimatedTexture> animatedTextures = new Vector<AnimatedTexture>();
+		Vector<String> heightMapFileNames = new Vector<String>();
+		Vector<HeightMap> heightMaps = new Vector<HeightMap>();
+		
+		readDirectory(textureDirectory, textureFileNames, null, removeExtensions);
+		
+		sortData(textureFileNames);
+		
+		readDirectory(heightMapDirectory, heightMapFileNames, "raw", removeExtensions);
+		
+		sortData(textureFileNames);
+		
+		readAmimationData(animationFile, animatedTextures, textureFileNames);
+		
+		readHeightMapData(heightMapFile, heightMapFileNames, heightMaps);
+		
+		writeTextureData(textureFile, textureFileNames, heightMapFileNames, animatedTextures, heightMaps);
+	}
+	
+	public static void readAmimationData(File animationFile, Vector<AnimatedTexture> animatedTextures, Vector<String> textureFileNames) {
+		if(animationFile == null || !animationFile.exists()) {
+			return;
+		}
+		
+		String input;
+		BufferedReader in;
+		AnimatedTexture newAnimatedTexture;
+		try {
+			in = new BufferedReader(new FileReader(animationFile));
+			while((input = in.readLine()) != null) {
+				newAnimatedTexture = new AnimatedTexture();
+				
+				// input the animated texture header
+				String animatedTextureHeader = input.substring(0, input.lastIndexOf(':')).trim();
+				if(!animatedTextureHeader.equalsIgnoreCase("AnimatedTexture")) {
+					System.out.println("ERROR: Invalid animation data file format. Expected header \"AnimatedTexture\", found \"" + animatedTextureHeader + "\".");
+					System.exit(1);
+				}
+				
+				// parse the animated texture index
+				int animatedTextureIndex = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+				if(animatedTextureIndex < 0) {
+					System.out.println("ERROR: Invalid animated texture index parsed: " + animatedTextureIndex + "\".");
+					System.exit(1);
+				}
+				newAnimatedTexture.index = animatedTextureIndex;
+				
+				// input the properties header
+				input = in.readLine().trim();
+				String propertyHeader = input.substring(0, input.lastIndexOf(':')).trim();
+				if(!propertyHeader.equalsIgnoreCase("Properties")) {
+					System.out.println("ERROR: Invalid animation data file format. Expected header \"Properties\", found \"" + propertyHeader + "\".");
+					System.exit(1);
+				}
+				
+				// input the properties
+				int numberOfProperties = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+				Property newProperty;
+				String firstTextureName;
+				String textureNameNoExtension;
+				for(int i=0;i<numberOfProperties;i++) {
+					newProperty = new Property(in);
+					if(newProperty.key.equalsIgnoreCase("name")) {
+						newAnimatedTexture.name = newProperty.value;
+					}
+					else if(newProperty.key.equalsIgnoreCase("firsttexture")) {
+						firstTextureName = Texture.removeExtension(newProperty.value);
+						for(int j=0;j<textureFileNames.size();j++) {
+							textureNameNoExtension = Texture.removeExtension(textureFileNames.elementAt(j));
+							if(textureNameNoExtension.equalsIgnoreCase(firstTextureName)) {
+								newAnimatedTexture.firstTextureIndex = j;
+								break;
+							}
+						}
+					}
+					else if(newProperty.key.equalsIgnoreCase("frames")) {
+						newAnimatedTexture.frames = Integer.valueOf(newProperty.value);
+					}
+					else if(newProperty.key.equalsIgnoreCase("speed")) {
+						newAnimatedTexture.speed = Double.valueOf(newProperty.value);
+					}
+				}
+				
+				animatedTextures.add(newAnimatedTexture);
+			}
+		}
+		catch(Exception e) {
+			System.out.println("ERROR: Error reading from animation data file: " + e.getMessage());
+			System.exit(1);
 		}
 	}
 	
-	private static void readDirectory(File aFolder, Vector<String> data, boolean removeExtensions) {
+	private static void readHeightMapData(File heightMapFile, Vector<String> heightMapFileNames, Vector<HeightMap> heightMaps) {
+		if(heightMapFile == null || !heightMapFile.exists()) {
+			return;
+		}
+		
+		String input;
+		BufferedReader in;
+		HeightMap newHeightMap;
+		try {
+			in = new BufferedReader(new FileReader(heightMapFile));
+			while((input = in.readLine()) != null) {
+				newHeightMap = new HeightMap();
+				
+				// input the height map header
+				String heightMapHeader = input.substring(0, input.lastIndexOf(':')).trim();
+				if(!heightMapHeader.equalsIgnoreCase("HeightMap")) {
+					System.out.println("ERROR: Invalid height map data file format. Expected header \"HeightMap\", found \"" + heightMapHeader + "\".");
+					System.exit(1);
+				}
+				
+				// parse the height map index
+				int heightMapIndex = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+				if(heightMapIndex < 0) {
+					System.out.println("ERROR: Invalid height map index parsed: " + heightMapIndex + "\".");
+					System.exit(1);
+				}
+				newHeightMap.index = heightMapIndex;
+				
+				// input the properties header
+				input = in.readLine().trim();
+				String propertyHeader = input.substring(0, input.lastIndexOf(':')).trim();
+				if(!propertyHeader.equalsIgnoreCase("Properties")) {
+					System.out.println("ERROR: Invalid height map data file format. Expected header \"Properties\", found \"" + propertyHeader + "\".");
+					System.exit(1);
+				}
+				
+				// input the properties
+				int numberOfProperties = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+				Property newProperty;
+				String heightMapFileName;
+				String currentHeightMapFileName;
+				for(int i=0;i<numberOfProperties;i++) {
+					newProperty = new Property(in);
+					if(newProperty.key.equalsIgnoreCase("name")) {
+						newHeightMap.name = newProperty.value;
+					}
+					else if(newProperty.key.equalsIgnoreCase("heightmap")) {
+						heightMapFileName = Texture.removeExtension(newProperty.value);
+						for(int j=0;j<heightMapFileNames.size();j++) {
+							currentHeightMapFileName = Texture.removeExtension(heightMapFileNames.elementAt(j));
+							if(currentHeightMapFileName.equalsIgnoreCase(heightMapFileName)) {
+								newHeightMap.heightMapFileIndex = j;
+								break;
+							}
+						}
+					}
+					else if(newProperty.key.equalsIgnoreCase("width")) {
+						newHeightMap.width = Integer.valueOf(newProperty.value);
+					}
+					else if(newProperty.key.equalsIgnoreCase("height")) {
+						newHeightMap.height = Integer.valueOf(newProperty.value);
+					}
+				}
+				
+				heightMaps.add(newHeightMap);
+			}
+		}
+		catch(Exception e) {
+			System.out.println("ERROR: Error reading from height map data file: " + e.getMessage());
+			System.exit(1);
+		}
+	}
+
+	private static void writeTextureData(File textureFile, Vector<String> textureFileNames, Vector<String> heightMapFileNames, Vector<AnimatedTexture> animatedTextures, Vector<HeightMap> heightMaps) {
+		PrintWriter out = null;
+		
+		try {
+			out = new PrintWriter(new FileWriter(textureFile, false));
+			
+			out.println("TextureNames: " + textureFileNames.size() + ";");
+			
+			for(String s : textureFileNames) {
+				out.println("\t" + s);
+			}
+			
+			out.println("HeightMapNames: " + heightMapFileNames.size() + ";");
+			
+			for(String s : heightMapFileNames) {
+				out.println("\t" + s);
+			}
+			
+			out.println("AnimatedTextures: " + animatedTextures.size() + ";");
+			
+			for(AnimatedTexture t : animatedTextures) {
+				t.writeTo(out);
+			}
+			
+			out.println("HeightMaps: " + heightMaps.size() + ";");
+			
+			for(HeightMap h : heightMaps) {
+				h.writeTo(out);
+			}
+			
+			if(out != null) {
+				out.close();
+			}
+		}
+		catch(Exception e) {
+			System.out.println("ERROR: Error writing to texture data file: " + e.getMessage());
+			System.exit(1);
+		}
+	}
+	
+	private static void readDirectory(File aFolder, Vector<String> data, String fileExtension, boolean removeExtensions) {
 		if(aFolder == null || !aFolder.exists()) {
 			return;
 		}
@@ -126,15 +341,13 @@ public class TextureCompiler {
 		
 		for(int i=0;i<contents.length;i++) {
 			if(contents[i].isFile() && !contents[i].getName().equals("Thumbs.db")) {
-				if(removeExtensions) {
-					fileName = removeExtensionFrom(contents[i].getName());
-				}
-				else {
-					fileName = contents[i].getName();
-				}
-				
-				if(!data.contains(fileName)) {
-					data.add(fileName);
+				fileName = contents[i].getName();
+				if(fileExtension == null || Texture.hasExtension(fileName, fileExtension)) {
+					fileName = (removeExtensions) ? removeExtensionFrom(fileName) : fileName;
+					
+					if(!data.contains(fileName)) {
+						data.add(fileName);
+					}
 				}
 			}
 			
@@ -174,108 +387,6 @@ public class TextureCompiler {
 				data.set(i, data.elementAt(minIndex));
 				data.set(minIndex, temp);
 			}
-		}
-	}
-	
-	public static void readAmimationData(File file, Vector<AnimatedTexture> animatedTextures, Vector<String> textureNames) {
-		if(file == null || !file.exists()) {
-			return;
-		}
-		
-		String input;
-		BufferedReader in;
-		AnimatedTexture newAnimatedTexture;
-		try {
-			in = new BufferedReader(new FileReader(file));
-			while((input = in.readLine()) != null) {
-				newAnimatedTexture = new AnimatedTexture();
-				
-				// input the animated texture header
-				//input = in.readLine().trim();
-				String animatedTextureHeader = input.substring(0, input.lastIndexOf(':')).trim();
-				if(!animatedTextureHeader.equalsIgnoreCase("AnimatedTexture")) {
-					System.out.println("ERROR: Invalid Animation Data file format. Expected header \"AnimatedTexture\", found \"" + animatedTextureHeader + "\".");
-					System.exit(1);
-				}
-				
-				// parse the animated texture index
-				int animatedTextureIndex = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
-				if(animatedTextureIndex < 0) {
-					System.out.println("ERROR: Invalid Animated Texture index parsed: " + animatedTextureIndex + "\".");
-					System.exit(1);
-				}
-				newAnimatedTexture.index = animatedTextureIndex;
-				
-				// input the properties header
-				input = in.readLine().trim();
-				String propertyHeader = input.substring(0, input.lastIndexOf(':')).trim();
-				if(!propertyHeader.equalsIgnoreCase("Properties")) {
-					System.out.println("ERROR: Invalid Animation Data file format. Expected header \"Properties\", found \"" + propertyHeader + "\".");
-					System.exit(1);
-				}
-				
-				// input the properties
-				int numberOfProperties = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
-				Property newProperty;
-				String firstTextureName;
-				String textureNameNoExtension;
-				for(int i=0;i<numberOfProperties;i++) {
-					newProperty = new Property(in);
-					if(newProperty.key.equalsIgnoreCase("name")) {
-						newAnimatedTexture.name = newProperty.value;
-					}
-					else if(newProperty.key.equalsIgnoreCase("firsttexture")) {
-						firstTextureName = newProperty.value;
-						for(int j=0;j<textureNames.size();j++) {
-							textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(j));
-							if(textureNameNoExtension.equalsIgnoreCase(firstTextureName)) {
-								newAnimatedTexture.firstTextureIndex = j;
-								break;
-							}
-						}
-					}
-					else if(newProperty.key.equalsIgnoreCase("frames")) {
-						newAnimatedTexture.frames = Integer.valueOf(newProperty.value);
-					}
-					else if(newProperty.key.equalsIgnoreCase("speed")) {
-						newAnimatedTexture.speed = Double.valueOf(newProperty.value);
-					}
-				}
-				
-				animatedTextures.add(newAnimatedTexture);
-			}
-		}
-		catch(Exception e) {
-			System.out.println("ERROR: Error reading from animation data file: " + e.getMessage());
-			System.exit(1);
-		}
-	}
-
-	private static void writeTextureData(File textureFile, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures) {
-		PrintWriter out = null;
-		
-		try {
-			out = new PrintWriter(new FileWriter(textureFile, false));
-			
-			out.println("Textures: " + textureNames.size() + ";");
-			
-			for(String s : textureNames) {
-				out.println("\t" + s);
-			}
-			
-			out.println("AnimatedTextures: " + animatedTextures.size() + ";");
-			
-			for(AnimatedTexture t : animatedTextures) {
-				t.writeTo(out);
-			}
-			
-			if(out != null) {
-				out.close();
-			}
-		}
-		catch(Exception e) {
-			System.out.println("ERROR: Error writing to texture data file: " + e.getMessage());
-			System.exit(1);
 		}
 	}
 	

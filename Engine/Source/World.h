@@ -60,5 +60,5 @@ public:
 	void tick();
 	void draw();
 	
-	void import(char * fileName, vector<Texture *> & textures, vector<AnimatedTexture *> & animatedTextures);
+	void import(char * fileName, vector<Texture *> & textures, vector<char *> & heightMaps, vector<AnimatedTexture *> & animatedTextures);
 };

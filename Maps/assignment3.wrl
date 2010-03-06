@@ -4568,7 +4568,7 @@ Object: 73;
 Object: 74;
 	"type" => "terrain"
 	Properties: 8;
-		"heightmap" => "microTerrainHeightMap"
+		"heightmap" => "0"
 		"name" => "grass"
 		"texturemap" => "62"
 		"tiled" => "0"

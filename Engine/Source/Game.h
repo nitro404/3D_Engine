@@ -24,16 +24,18 @@ public:
 	void escapePressed();
 	void closeMap();
 	
+private:
 	void drawText(int x, int y, const char * text);
 	void drawMenu();
 	void drawFrameRate();
-	
+
 	void verifySettings();
-	void loadTextures(char * fileName, char * textureDirectory);
+	void loadTextures(char * fileName, char * textureDirectory, char * heightMapDirectory);
 	void loadMapList(char * mapDirectory);
 	void loadMapPrompt();
 	void loadMap(char * fileName);
 	
+public:
 	HDC deviceContext;
 	GLuint fontBase;
 
@@ -41,9 +43,10 @@ public:
 	bool displayHelp;
 
 	vector<Texture *> textures;
+	vector<char *> heightMaps;
 	vector<AnimatedTexture *> animatedTextures;
+
 private:
-	char * worldFileFilter;
 	Variables * settings;
 
 	bool drawFPS;

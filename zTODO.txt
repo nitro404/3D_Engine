@@ -11,24 +11,14 @@ ENGINE
    - Fix implementation using proper world position
  + FACE
    - Remove normals in builder? (Or re-add them, just ignore them?)
- + SPRITE
-   - Try to fix randomization based off of preivous DT
  + WAYPOINT
    - Only need point, not full transformation?
  + MISC
    - Fish sprites seem to disappear
    - Issue with castle map
- + TERRAIN
-   - IN GENERAL:
-     - name
-     - texturemap
-     - width
-     - height
-     - minpoint
-     - maxpoint
-     - raw data
 
 BUILDER 2.0
+ + Change it so that objects know how to identify their own texture index, rather than in the to world conversion
  + Implement Worldcraft *.map reading
  + Possibly allow textures mid-animation to be selected
  + Re-organize texture name => index replacement code

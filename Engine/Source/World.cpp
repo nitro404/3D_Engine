@@ -121,7 +121,7 @@ void World::draw() {
 	}
 }
 
-void World::import(char * fileName, vector<Texture *> & textures, vector<AnimatedTexture *> & animatedTextures) {
+void World::import(char * fileName, vector<Texture *> & textures, vector<char *> & heightMaps, vector<AnimatedTexture *> & animatedTextures) {
 	char line[256];
 	char key[256];
 	char value[256];
@@ -270,8 +270,11 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<Animate
 		}
 		else if (_stricmp(value, "terrain") == 0) {
 			Terrain * terrain = new Terrain;
-			terrain->import(input, textures);
+			terrain->import(input, textures, heightMaps);
 			objects.push_back(terrain);
+		}
+		else {
+			printf("WARNING: Encountered unexpected object when parsing world: \"%s\"", value);
 		}
 	}
 	sortedObjects = new Object*[objects.size()];

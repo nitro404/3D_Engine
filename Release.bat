@@ -1,106 +1,119 @@
 @ECHO OFF
 CLS
 
-SET RELEASE=Game
-SET TEXTURECOMPILER=Compiled
-SET BUILDER=Compiled
+SET GAME_RELEASE_DIR=Game
+SET DATA_DIR=Data
+SET MAP_DIR=Maps
+SET TEXTURE_DIR=Textures
+SET HEIGHTMAP_DIR=Textures\Heightmaps
+SET TEXTURE_COMPILER_DIR=Texture Compiler
+SET MAP_BUILDER_DIR=Builder 2.0
 
-IF NOT EXIST "Texture Compiler/bin" MKDIR "Texture Compiler/bin"
-IF NOT EXIST "Texture Compiler/bin/AnimatedTexture.class" 	SET TEXTURECOMPILER=Not Compiled
-IF NOT EXIST "Texture Compiler/bin/Property.class" 		SET TEXTURECOMPILER=Not Compiled
-IF NOT EXIST "Texture Compiler/bin/Texture.class" 		SET TEXTURECOMPILER=Not Compiled
-IF NOT EXIST "Texture Compiler/bin/TextureCompiler.class" 	SET TEXTURECOMPILER=Not Compiled
+SET TEXTURE_COMPILER_ARGS=-t"../../textures/" -m"../../textures/height maps/" -a"../animations.ini" -h"../heightmaps.ini" -o"../../Data/textures.ini"
+SET MAP_BUILDER_ARGS=-d../../Maps -iuni -owrl -m../../Maps -t../../Data/textures.ini -h"../../Textures/Height Maps/"
 
-IF NOT EXIST "Builder 2.0/bin" MKDIR "Builder 2.0/bin"
-IF NOT EXIST "Builder 2.0/bin/AnimatedTexture.class" 	SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Builder.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Converter.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Face.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/GamePoint3D.class" 	SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Geometry.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Map3D.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Point3D.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Pool.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Property.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Rotator.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Sprite.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Texture.class"		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Transformation.class" 	SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Translator.class"		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/UniversalMap.class" 	SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/UniversalObject.class" 	SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Vehicle.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/Waypoint.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/World.class" 		SET BUILDER=Not Compiled
-IF NOT EXIST "Builder 2.0/bin/WorldcraftMap.class" 	SET BUILDER=Not Compiled
+SET ENGINE_RELEASE_DIR=Engine\Release
+SET ENGINE_DEBUG_DIR=Engine\Debug
+SET ENGINE_EXE_COMPILED=Engine.exe
+SET GAME_EXE=Game.exe
+SET GAME_EXE_DEBUG=Debug.exe
 
-ECHO Creating new release of Game in folder "%RELEASE%"...
+SET TEXTURECOMPILER_COMPILED=Compiled
+SET MAPBUILDER_COMPILED=Compiled
+
+IF NOT EXIST "%TEXTURE_COMPILER_DIR%/bin" MKDIR "Texture Compiler/bin"
+IF NOT EXIST "%TEXTURE_COMPILER_DIR%/bin/AnimatedTexture.class" 	SET TEXTURECOMPILER_COMPILED=Not Compiled
+IF NOT EXIST "%TEXTURE_COMPILER_DIR%/bin/Property.class" 		SET TEXTURECOMPILER_COMPILED=Not Compiled
+IF NOT EXIST "%TEXTURE_COMPILER_DIR%/bin/Texture.class" 		SET TEXTURECOMPILER_COMPILED=Not Compiled
+IF NOT EXIST "%TEXTURE_COMPILER_DIR%/bin/TextureCompiler.class" 	SET TEXTURECOMPILER_COMPILED=Not Compiled
+
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin" MKDIR "Builder 2.0/bin"
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/AnimatedTexture.class" 	SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Builder.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Converter.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Face.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/GamePoint3D.class" 	SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Geometry.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Map3D.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Point3D.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Pool.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Property.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Rotator.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Sprite.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Texture.class"		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Transformation.class" 	SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Translator.class"		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/UniversalMap.class" 	SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/UniversalObject.class" 	SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Vehicle.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/Waypoint.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/World.class" 		SET MAPBUILDER_COMPILED=Not Compiled
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin/WorldcraftMap.class" 	SET MAPBUILDER_COMPILED=Not Compiled
+
+ECHO Creating new release of Game in folder "%GAME_RELEASE_DIR%"...
 
 ECHO.
-CD "Texture Compiler"
-IF "%TEXTURECOMPILER%" == "Compiled" GOTO TEXTURECOMPILER_COMPILED
+CD "%TEXTURE_COMPILER_DIR%"
+IF "%TEXTURECOMPILER_COMPILED%" == "Compiled" GOTO TEXTURECOMPILER_ISCOMPILED
 ECHO Compiling Texture Compiler...
 javac src\*.java -d bin
 ECHO Done Compiling!
 ECHO.
-:TEXTURECOMPILER_COMPILED
+:TEXTURECOMPILER_ISCOMPILED
 CD bin
 ECHO Compiling Texture List...
-java TextureCompiler -d"../../textures/" -i"../animations.ini" -o"../../Data/textures.ini"
+java TextureCompiler %TEXTURE_COMPILER_ARGS%
 ECHO Done Compiling Texture List!
 CD "../../"
 
 ECHO.
-CD "Builder 2.0"
-IF "%BUILDER%" == "Compiled" GOTO BUILDER_COMPILED
+CD "%MAP_BUILDER_DIR%"
+IF "%MAPBUILDER_COMPILED%" == "Compiled" GOTO MAPBUILDER_ISCOMPILED
 ECHO Compiling Map Builder...
 javac src\*.java -d bin
 ECHO Done Compiling!
 ECHO.
-:BUILDER_COMPILED
+:MAPBUILDER_ISCOMPILED
 CD bin
 ECHO Building Maps...
-java Builder -d../../Maps -iuni -owrl -m../../Maps -t../../Data/textures.ini -h"../../Textures/Height Maps/"
+java Builder %MAP_BUILDER_ARGS%
 ECHO Done Building Maps!
 CD "../../"
 
 ECHO.
 ECHO Copying Maps...
-XCOPY "Maps\*.wrl" "%RELEASE%\Maps" /I /Y
+XCOPY "%MAP_DIR%\*.wrl" "%GAME_RELEASE_DIR%\%MAP_DIR%" /I /Y
 
 ECHO.
 ECHO Copying Textures...
-XCOPY "Textures" "%RELEASE%\Textures" /I /Y
+XCOPY "%TEXTURE_DIR%" "%GAME_RELEASE_DIR%\%TEXTURE_DIR%" /I /Y
 
 ECHO.
 ECHO Copying Data Files...
-XCOPY "Data" "%RELEASE%" /I /Y /S
+XCOPY "%DATA_DIR%" "%GAME_RELEASE_DIR%" /I /Y /S
 
 ECHO.
 ECHO Copying Game Executable...
-XCOPY "Engine\Release\Engine.exe" "%RELEASE%" /I /Y
-IF EXIST "%RELEASE%\Game.exe" DEL "%RELEASE%\Game.exe"
-REN "%RELEASE%\Engine.exe" "Game.exe"
+IF EXIST "%GAME_RELEASE_DIR%\%GAME_EXE%" DEL "%GAME_RELEASE_DIR%\%GAME_EXE%"
+XCOPY "%ENGINE_RELEASE_DIR%\%ENGINE_EXE_COMPILED%" "%GAME_RELEASE_DIR%" /I /Y
+REN "%GAME_RELEASE_DIR%\%ENGINE_EXE_COMPILED%" "%GAME_EXE%"
 
 ECHO.
 ECHO Done!
 
 ECHO.
 ECHO Copy Debug Executable? (Y/N)
-IF EXIST "%RELEASE%\Debug.exe" DEL "%RELEASE%\Debug.exe"
+IF EXIST "%GAME_RELEASE_DIR%\%GAME_EXE_DEBUG%" DEL "%GAME_RELEASE_DIR%\%GAME_EXE_DEBUG%"
 SET /P DEBUG=
 IF "%DEBUG:~0,1%" == "Y" GOTO COPY_DEBUG
 IF "%DEBUG:~0,1%" == "y" GOTO COPY_DEBUG
 GOTO SKIP_DEBUG
 :COPY_DEBUG
-XCOPY "Engine\Debug\Engine.exe" "%RELEASE%" /I /Y
-REN "%RELEASE%\Engine.exe" "Debug.exe"
-:SKIP_DEBUG
-
-REM IF EXIST log DEL log
-
+XCOPY "%ENGINE_DEBUG_DIR%\%ENGINE_EXE_COMPILED%" "%GAME_RELEASE_DIR%" /I /Y
+REN "%GAME_RELEASE_DIR%\%ENGINE_EXE_COMPILED%" "%GAME_EXE_DEBUG%"
 ECHO.
 ECHO Done!
+:SKIP_DEBUG
 
 ECHO.
 PAUSE

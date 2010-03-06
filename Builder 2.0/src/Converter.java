@@ -77,13 +77,17 @@ public class Converter {
 		
 		// input the texture data (if appropriate)
 		Vector<String> textureNames = null;
+		Vector<String> heightMapNames = null;
 		Vector<AnimatedTexture> animatedTextures = null;
+		Vector<HeightMap> heightMaps = null;
 		if(textureDataFile != null) {
 			textureNames = new Vector<String>();
+			heightMapNames = new Vector<String>();
 			animatedTextures = new Vector<AnimatedTexture>();
+			heightMaps = new Vector<HeightMap>();
 			try {
 				BufferedReader in = new BufferedReader(new FileReader(textureDataFile));
-				readTextureData(in, textureNames, animatedTextures);
+				readTextureData(in, textureNames, heightMapNames, animatedTextures, heightMaps);
 			}
 			catch(Exception e) {
 				System.out.println("ERROR: Error reading texture data file " + textureDataFile.getName() + ".");
@@ -100,7 +104,7 @@ public class Converter {
 				convertedMap = new World(originalMap);
 			}
 			else {
-				convertedMap = new World(originalMap, textureNames, animatedTextures);
+				convertedMap = new World(originalMap, textureNames, heightMapNames, animatedTextures, heightMaps);
 			}
 		}
 		
@@ -116,30 +120,50 @@ public class Converter {
 		}
 	}
 	
-	private static void readTextureData(BufferedReader in, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures) throws Exception {
+	private static void readTextureData(BufferedReader in, Vector<String> textureNames, Vector<String> heightMapNames, Vector<AnimatedTexture> animatedTextures, Vector<HeightMap> heightMaps) throws Exception {
 		String input;
 		
-		// input the textures header
+		// input the texture file names header
 		input = in.readLine().trim();
-		String texturesHeader = input.substring(0, input.lastIndexOf(':')).trim();
-		if(!texturesHeader.equalsIgnoreCase("Textures")) {
-			System.out.println("ERROR: Invalid texture data file format. Expected header \"Textures\", found \"" + texturesHeader + "\".");
+		String textureNamesHeader = input.substring(0, input.lastIndexOf(':')).trim();
+		if(!textureNamesHeader.equalsIgnoreCase("TextureNames")) {
+			System.out.println("ERROR: Invalid texture data file format. Expected header \"TexturesNames\", found \"" + textureNamesHeader + "\".");
 			System.exit(1);
 		}
 		
-		// input the number of textures
-		int numberOfTextures = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
-		if(numberOfTextures < 0) {
-			System.out.println("ERROR: Texture count is negative in texture data file.");
+		// input the number of textures file names
+		int numberOfTextureNames = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+		if(numberOfTextureNames < 0) {
+			System.out.println("ERROR: Texture name count is negative in texture data file.");
 			System.exit(1);
 		}
 		
-		// input the list of textures
-		for(int i=0;i<numberOfTextures;i++) {
+		// input the list of height map file names
+		for(int i=0;i<numberOfTextureNames;i++) {
 			textureNames.add(in.readLine().trim());
 		}
 		
-		// input the textures header
+		// input the height map file names header
+		input = in.readLine().trim();
+		String heightMapNamesHeader = input.substring(0, input.lastIndexOf(':')).trim();
+		if(!heightMapNamesHeader.equalsIgnoreCase("HeightMapNames")) {
+			System.out.println("ERROR: Invalid texture data file format. Expected header \"HeightMapNames\", found \"" + heightMapNamesHeader + "\".");
+			System.exit(1);
+		}
+		
+		// input the number of height map names
+		int numberOfHeightMapNames = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+		if(numberOfHeightMapNames < 0) {
+			System.out.println("ERROR: Height map name count is negative in texture data file.");
+			System.exit(1);
+		}
+		
+		// input the list of height map names
+		for(int i=0;i<numberOfHeightMapNames;i++) {
+			heightMapNames.add(in.readLine().trim());
+		}
+		
+		// input the animated textures header
 		input = in.readLine().trim();
 		String animatedTexturesHeader = input.substring(0, input.lastIndexOf(':')).trim();
 		if(!animatedTexturesHeader.equalsIgnoreCase("AnimatedTextures")) {
@@ -147,7 +171,7 @@ public class Converter {
 			System.exit(1);
 		}
 		
-		// input the number of textures
+		// input the number of animated textures
 		int numberOfAnimatedTextures = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
 		if(numberOfAnimatedTextures < 0) {
 			System.out.println("ERROR: Animated texture count is negative in texture data file.");
@@ -158,5 +182,26 @@ public class Converter {
 		for(int i=0;i<numberOfAnimatedTextures;i++) {
 			animatedTextures.add(new AnimatedTexture(in));
 		}
+		
+		// input the height maps header
+		input = in.readLine().trim();
+		String heightMapsHeader = input.substring(0, input.lastIndexOf(':')).trim();
+		if(!heightMapsHeader.equalsIgnoreCase("HeightMaps")) {
+			System.out.println("ERROR: Invalid texture data file format. Expected header \"HeightMaps\", found \"" + heightMapsHeader + "\".");
+			System.exit(1);
+		}
+		
+		// input the number of height maps
+		int numberOfHeightMaps = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+		if(numberOfHeightMaps < 0) {
+			System.out.println("ERROR: Height map count is negative in texture data file.");
+			System.exit(1);
+		}
+		
+		// input the list of height maps
+		for(int i=0;i<numberOfHeightMaps;i++) {
+			heightMaps.add(new HeightMap(in));
+		}
 	}
+	
 }
