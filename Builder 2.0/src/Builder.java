@@ -119,7 +119,7 @@ public class Builder {
 			if(textureDataFileName != null) {
 				textureDataFile = new File(textureDataFileName);
 				if(!textureDataFile.exists()) {
-					System.out.println("ERROR: Specified textrue data file does not exist.");
+					System.out.println("ERROR: Specified texture data file does not exist.");
 					System.exit(1);
 				}
 				if(!textureDataFile.isFile()) {

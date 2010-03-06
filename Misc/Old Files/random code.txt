@@ -799,3 +799,9 @@ inline long unpackAlpha(const long pixel) {
 		baos.close();
 		*/
 
+
+//enum MenuItem {DifficultyEasy, DifficultyChallenging, DifficultyImpossible,
+//	DisplayModeWireframe, DisplayModeTextured, RunWorld, Quit};
+//MenuItem difficulty;
+//MenuItem displayMode;
+

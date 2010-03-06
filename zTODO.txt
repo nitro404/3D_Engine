@@ -16,6 +16,7 @@ ENGINE
  + MISC
    - Fish sprites seem to disappear
    - Issue with castle map
+   - Change it so that the camera position ONLY changes if the window has focus
 
 BUILDER 2.0
  + Change it so that objects know how to identify their own texture index, rather than in the to world conversion

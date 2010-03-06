@@ -22,7 +22,7 @@ void Face::draw() {
 
 void Face::draw(Colour & colour) {
 	texture->activate();
-	glDisable(GL_DEPTH_TEST);
+//	glDisable(GL_DEPTH_TEST);
 //	glDepthFunc(GL_LESS);
 	glDisable(GL_CULL_FACE);
 	glBegin(GL_POLYGON);
@@ -38,7 +38,7 @@ void Face::draw(Colour & colour) {
 	glDisable(GL_BLEND);
 	glEnd();
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
+//	glEnable(GL_DEPTH_TEST);
 //	glDepthFunc(GL_LEQUAL);
 }
 

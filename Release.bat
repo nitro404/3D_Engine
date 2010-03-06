@@ -2,15 +2,16 @@
 CLS
 
 SET GAME_RELEASE_DIR=Game
+SET CONTENT_DIR=Content
 SET DATA_DIR=Data
 SET MAP_DIR=Maps
 SET TEXTURE_DIR=Textures
-SET HEIGHTMAP_DIR=Textures\Heightmaps
+SET HEIGHTMAP_DIR=Height Maps
 SET TEXTURE_COMPILER_DIR=Texture Compiler
 SET MAP_BUILDER_DIR=Builder 2.0
 
-SET TEXTURE_COMPILER_ARGS=-t"../../textures/" -m"../../textures/height maps/" -a"../animations.ini" -h"../heightmaps.ini" -o"../../Data/textures.ini"
-SET MAP_BUILDER_ARGS=-d../../Maps -iuni -owrl -m../../Maps -t../../Data/textures.ini -h"../../Textures/Height Maps/"
+SET TEXTURE_COMPILER_ARGS=-t"../../Content/Data/Textures/" -m"../../Content/Data/Height Maps/" -a"../animations.ini" -h"../heightmaps.ini" -o"../../Content/Data/textures.ini"
+SET MAP_BUILDER_ARGS=-d"../../Maps/" -iuni -owrl -m"../../Content/Data/Maps/" -t"../../Content/Data/textures.ini" -h"../../Content/Data/Height Maps/"
 
 SET ENGINE_RELEASE_DIR=Engine\Release
 SET ENGINE_DEBUG_DIR=Engine\Debug
@@ -82,15 +83,11 @@ CD "../../"
 
 ECHO.
 ECHO Copying Maps...
-XCOPY "%MAP_DIR%\*.wrl" "%GAME_RELEASE_DIR%\%MAP_DIR%" /I /Y
-
-ECHO.
-ECHO Copying Textures...
-XCOPY "%TEXTURE_DIR%" "%GAME_RELEASE_DIR%\%TEXTURE_DIR%" /I /Y
+XCOPY "%MAP_DIR%\*.wrl" "%CONTENT_DIR%\%DATA_DIR%\%MAP_DIR%" /I /Y
 
 ECHO.
 ECHO Copying Data Files...
-XCOPY "%DATA_DIR%" "%GAME_RELEASE_DIR%" /I /Y /S
+XCOPY "%CONTENT_DIR%" "%GAME_RELEASE_DIR%" /I /Y /S
 
 ECHO.
 ECHO Copying Game Executable...

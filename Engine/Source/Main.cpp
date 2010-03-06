@@ -4,11 +4,6 @@ int mouseSensitivity = 4;
 
 void exitGame();
 
-//enum MenuItem {DifficultyEasy, DifficultyChallenging, DifficultyImpossible,
-//	DisplayModeWireframe, DisplayModeTextured, RunWorld, Quit};
-//MenuItem difficulty;
-//MenuItem displayMode;
-
 bool wireframe = false;
 int screenWidth;
 int screenHeight;
