@@ -188,11 +188,11 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 	double terrainSizeY = maxPoint.y - minPoint.y;
 	double terrainSizeZ = maxPoint.z - minPoint.z;
 	
-	double tileSizeX = terrainSizeX / width;
-	double tileSizeY = terrainSizeX / height;
+//	double tileSizeX = terrainSizeX / width;
+//	double tileSizeY = terrainSizeY / height;
 	
-	double tilingTextureWidth = (textureMap->width - 1) / (double) textureMap->width;
-	double tilingTextureHeight = (textureMap->height - 1) / (double) textureMap->height;
+//	double tilingTextureWidth = (textureMap->width - 1) / (double) textureMap->width;
+//	double tilingTextureHeight = (textureMap->height - 1) / (double) textureMap->height;
 	
 	int currentPoint = 0;
 	double x, y, z, tx, ty;
@@ -204,12 +204,16 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 			z = ((scaleHeight(i, j, heightMapData) / 255.0) * terrainSizeZ) + minPoint.z;
 
 			if(tiled == 1) {
-				tx = x + tilingTextureWidth;
-				ty = y + tilingTextureHeight;
+				tx = i;
+				ty = j;
+//				tx = i * tilingTextureWidth;
+//				ty = j * tilingTextureHeight;
 			}
 			else {
-				tx = x + (textureMap->width / terrainSizeX);
-				ty = y + (textureMap->height / terrainSizeY);
+				tx = i / textureMap->width;
+				ty = j / textureMap->height;
+//				tx = i * (textureMap->width / terrainSizeX);
+//				ty = j * (textureMap->height / terrainSizeY);
 			}
 			
 			points[currentPoint].x = x;
