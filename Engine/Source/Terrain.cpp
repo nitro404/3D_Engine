@@ -24,8 +24,8 @@ void Terrain::draw() {
 	if (TERRAIN_IMPLEMENTATION == USE_QUADS) {
 		drawQuads();
 	}
-	else if (TERRAIN_IMPLEMENTATION == USE_FACE_GROUPS) {
-		drawFull();
+	else if (TERRAIN_IMPLEMENTATION == USE_STRIPS) {
+		drawStrips();
 	}
 	else if (TERRAIN_IMPLEMENTATION == USE_FACE_GROUPS) {
 		drawFull();
