@@ -26,7 +26,8 @@ char lastDirectory [directorySize] = {'\0'};
 
 char lastMapDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','.','.','\\','M','A','P','S','\0'};
 char lastWorldDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','.','.','\\','M','A','P','S','\0'};
-char lastTextureDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','.','.','\\','T','E','X','T','U','R','E','S','\0'};
+//char lastTextureDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','.','.','\\','T','E','X','T','U','R','E','S','\0'};
+char lastTextureDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','.','.','\\','C','o','n','t','e','n','t','\\','D','a','t','a','\\','T','E','X','T','U','R','E','S','\0'};
 char lastDirectory [_MAX_DIR] = {'.','.','\\','.','.','\\','.','.','\\','M','A','P','S','\0'};
 
 char lastFilename [directorySize]; 

@@ -37,7 +37,7 @@ void Terrain::draw() {
 
 void Terrain::drawQuads() {
 	GamePoint * point;
-	for(int j=0;j<height-1;j++) {
+	for(int j=0;j<height;j++) {
 		for(int i=0;i<width;i++) {
 			glBegin(GL_POLYGON);
 				// top-left
@@ -68,18 +68,20 @@ void Terrain::drawStrips() {
 	GamePoint * point;
 
 	glBegin(GL_TRIANGLE_STRIP);
-	for (int j = 0; j < height - 1;j++) {
-		point = &points[j * width];
+	for (int j = 0; j < height;j++) {
+		point = &points[j * (width + 1)];
 		glTexCoord2d(point->tx, point->ty);
 		glVertex3d(point->x, point->y, point->z);
-		for (int i = 0; i < width;i++) {
-			point = &points[j * width + i];
+		for (int i = 0; i < width + 1;i++) {
+
+			point = &points[j * (width + 1) + i];
 			glTexCoord2d(point->tx, point->ty);
 			glVertex3d(point->x, point->y, point->z);
 
-			point = &points[(j + 1) * width + i];
+			point = &points[(j + 1) * (width + 1) + i];
 			glTexCoord2d(point->tx, point->ty);
 			glVertex3d(point->x, point->y, point->z);
+			
 		}
 		glTexCoord2d(point->tx, point->ty);
 		glVertex3d(point->x, point->y, point->z);
@@ -187,21 +189,21 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 	double terrainSizeX = maxPoint.x - minPoint.x;
 	double terrainSizeY = maxPoint.y - minPoint.y;
 	double terrainSizeZ = maxPoint.z - minPoint.z;
-	
+
 //	double tileSizeX = terrainSizeX / width;
 //	double tileSizeY = terrainSizeY / height;
 	
 //	double tilingTextureWidth = (textureMap->width - 1) / (double) textureMap->width;
 //	double tilingTextureHeight = (textureMap->height - 1) / (double) textureMap->height;
-	
+
 	int currentPoint = 0;
 	double x, y, z, tx, ty;
 	points = new GamePoint[(width + 1) * (height  + 1)];
 	for(int i=0;i<width+1;i++) {
 		for(int j=0;j<height+1;j++) {
 			x = ((i / (double) width) * terrainSizeX) + minPoint.x;
-			y = ((j / (double) height) * terrainSizeY) + minPoint.y;
-			z = ((scaleHeight(i, j, heightMapData) / 255.0) * terrainSizeZ) + minPoint.z;
+			y = ((scaleHeight(i, j, heightMapData) / 255.0) * terrainSizeY) + minPoint.y;
+			z = ((j / (double) height) * terrainSizeZ) + minPoint.z;
 
 			if(tiled == 1) {
 				tx = i;
@@ -232,22 +234,22 @@ double Terrain::scaleHeight(int x, int y, int * heightMapData) {
 	int sum = 0;
 	int vertexCount = 0;
 	
-	if(x > 0 && y > 0) {
+	if(x-1 >= 0 && x-1 < width && y-1 >= 0 && y-1 < height) {
 		sum += heightMapData[((x-1) * width) + (y-1)];
 		vertexCount++;
 	}
 	
-	if(x > 0 && y < height) {
+	if(x-1 >= 0 && x-1 < width && y >= 0 && y < height) {
 		sum += heightMapData[((x-1) * width) + y];
 		vertexCount++;
 	}
 	
-	if(y > 0 && x < width) {
+	if(x >= 0 && x < width && y-1 >= 0 && y-1 < height) {
 		sum += heightMapData[(x * width) + (y-1)];
 		vertexCount++;
 	}
 	
-	if(x < width && y < height) {
+	if(x >= 0 && x < width && y >= 0 && y < height) {
 		sum += heightMapData[(x * width) + y];
 		vertexCount++;
 	}

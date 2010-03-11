@@ -17,8 +17,10 @@ public class HeightMap {
 		this.name = name;
 		this.width = width;
 		this.height = height;
+		String heightMapNameNoExtension = Texture.removeExtension(heightMapName);
 		for(int i=0;i<heightMapNames.size();i++) {
-			if(heightMapNames.elementAt(i).equalsIgnoreCase(heightMapName)) {
+			String currentHeightMapNameNoExtension = Texture.removeExtension(heightMapNames.elementAt(i));
+			if(currentHeightMapNameNoExtension.equalsIgnoreCase(heightMapNameNoExtension)) {
 				this.heightMapFileIndex = i;
 				break;
 			}
@@ -62,7 +64,7 @@ public class HeightMap {
 			if(newProperty.key.equalsIgnoreCase("name")) {
 				this.name = newProperty.value;
 			}
-			else if(newProperty.key.equalsIgnoreCase("texturemap")) {
+			else if(newProperty.key.equalsIgnoreCase("heightmap")) {
 				this.heightMapFileIndex = Integer.valueOf(newProperty.value);
 			}
 			else if(newProperty.key.equalsIgnoreCase("width")) {

@@ -356,6 +356,7 @@ void Game::loadTextures(char * fileName, char * textureDirectory, char * heightM
 		}
 		heightMapName[strlen(line) - startIndex] = '\0';
 		
+		heightMapPath.clear();
 		heightMapPath.append(heightMapDirectory);
 		length = strlen(heightMapDirectory);
 		if(heightMapDirectory[length-1] != '\\' && heightMapDirectory[length-1] != '/') {

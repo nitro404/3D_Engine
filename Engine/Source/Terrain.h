@@ -2,12 +2,11 @@
 
 #include "Object.h"
 
-#define USE_QUADS							0
-#define USE_STRIPS							1
-#define USE_FACE_GROUPS						2
-#define USE_FACE_GROUPS_AND_FRUSTUM_CULLING 3 
+#define USE_QUADS							0 // works
+#define USE_STRIPS							1 // works
+#define USE_FACE_GROUPS						2 // doesn't work yet
+#define USE_FACE_GROUPS_AND_FRUSTUM_CULLING 3 // doesn't work yet
 #define TERRAIN_IMPLEMENTATION USE_QUADS
-//#define TERRAIN_IMPLEMENTATION -1
 
 class Terrain : public Object {
 	
@@ -20,6 +19,7 @@ public:
 
 private:
 	double scaleHeight(int x, int y, int * heightMapData);
+	double getHeightAt(int x, int y, int * heightMapData);
 
 	char * name;
 	Texture * textureMap;

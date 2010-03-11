@@ -20,7 +20,7 @@ public class Terrain extends UniversalObject {
 		for(int j=0;j<heightMaps.size();j++) {
 			currentHeightMapIdentifier = heightMaps.elementAt(j).name;
 			if(currentHeightMapIdentifier.equalsIgnoreCase(heightMapIdentifier)) {
-				heightMapIndex = j;
+				heightMapIndex = heightMaps.elementAt(j).heightMapFileIndex;
 				heightMap = heightMaps.elementAt(j);
 				break;
 			}
@@ -46,6 +46,12 @@ public class Terrain extends UniversalObject {
 				if(p.z < minPoint.z) { minPoint.z = p.z; }
 			}
 		}
+		maxPoint.x += object.normal.getPosition().x;
+		maxPoint.y += object.normal.getPosition().y;
+		maxPoint.z += object.normal.getPosition().z;
+		minPoint.x += object.normal.getPosition().x;
+		minPoint.y += object.normal.getPosition().y;
+		minPoint.z += object.normal.getPosition().z;
 		addProperty("maxpoint", maxPoint.x + ", " + maxPoint.y + ", " + maxPoint.z);
 		addProperty("minpoint", minPoint.x + ", " + minPoint.y + ", " + minPoint.z);
 		

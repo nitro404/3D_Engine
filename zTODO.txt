@@ -24,3 +24,4 @@ BUILDER 2.0
  + Implement Worldcraft *.map reading
  + Possibly allow textures mid-animation to be selected
  + Re-organize texture name => index replacement code
+ + Temporarily hardcoded terrain transformation
