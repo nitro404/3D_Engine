@@ -1,7 +1,7 @@
 World
 Start position: -40.2336006164551, -7.31519985198975, 15.8495998382568;
 Waypoints: 0;
-Objects: 430;
+Objects: 431;
 Object: 0;
 	"type" => "static geometry"
 	Transformation:
@@ -20660,3 +20660,17 @@ Object: 429;
 			1.82879886474609, -0.203220357002563, -0.203220239128419, 1.0, 0.0, 0.0, -4.7499875, -1.2500125;
 			1.82879886474609, 0.203220282997437, -0.203220239128419, 1.0, 0.0, 0.0, -4.7499875, -0.9999875;
 			1.82879886474609, 0.203220282997437, 0.203220400871583, 1.0, 0.0, 0.0, -5.0000125, -0.9999875;
+Object: 430;
+	"type" => "environment"
+	Properties: 11;
+		"ambientlight" => "230 230 230"
+		"cloudlayers" => "0"
+		"name" => "sky"
+		"skycolor" => "0 0 230"
+		"surrounds" => "1"
+		"skyboxtexture-left" => "68"
+		"skyboxtexture-right" => "69"
+		"skyboxtexture-front" => "67"
+		"skyboxtexture-back" => "65"
+		"skyboxtexture-up" => "70"
+		"skyboxtexture-down" => "66"

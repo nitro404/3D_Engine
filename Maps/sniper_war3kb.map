@@ -3455,3 +3455,12 @@
 "classname" "info_player_start"
 "origin" "-1584 -624 -288"
 }
+{
+"classname" "Environment"
+"targetname" "sky"
+"ambientlight" "230 230 230"
+"skycolor" "0 0 230"
+"skyboxtexture" "redSky"
+"surrounds" "1"
+"origin" "-1600 -512 -128"
+}
