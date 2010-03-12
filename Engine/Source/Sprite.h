@@ -6,22 +6,14 @@
 
 class Sprite : public Object {
 public:
-	Point position;
-	Texture * picture;
-	
-	Sprite() {
-		picture = NULL;
-		origin = NULL;
-		destination = NULL;
-		lastWaypoint = NULL;
-		movementSpeed = 0;
-		distanceToTravel = 0;
-		distanceTravelled = 0;
-	}
-	
-	~Sprite() {
-		delete [] name;
-	}
+	Sprite() : picture(NULL),
+			   origin(NULL),
+			   destination(NULL),
+			   lastWaypoint(NULL),
+			   movementSpeed(0),
+			   distanceToTravel(0),
+			   distanceTravelled(0) { }
+	~Sprite() { delete [] name; }
 
 	double distanceFrom(Point & p) const;
 	
@@ -30,6 +22,10 @@ public:
 	
 	void import (ifstream &input, vector<Texture *> & textures, vector<Waypoint *> & waypoints);
 	
+public:
+	Point position;
+	Texture * picture;
+
 private:
 	char * name;
 	Point center;

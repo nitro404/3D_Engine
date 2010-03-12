@@ -9,7 +9,12 @@ void Sprite::switchDestinations() {
 	lastWaypoint = destination;
 	destination = lastWaypoint->getRandomNeighbour();
 	distanceToTravel = sqrt(pow(destination->getPosition().x - lastWaypoint->getPosition().x, 2) + pow(destination->getPosition().y - lastWaypoint->getPosition().y, 2) + pow(destination->getPosition().z - lastWaypoint->getPosition().z, 2));
-	unitVector = Vector((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
+	if(distanceToTravel <= 0) {
+		unitVector = Vector(0, 0, 0);
+	}
+	else {
+		unitVector = Vector((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
+	}
 	distanceTravelled = 0;
 }
 
@@ -39,7 +44,7 @@ void Sprite::draw() {
 	picture->activate();
 	
 	glPushIdentity();
-		
+
 		if(origin == NULL) {
 			glTranslated(newPosition.x, newPosition.y, newPosition.z);
 		}
@@ -47,7 +52,7 @@ void Sprite::draw() {
 			glTranslated(newPosition.x, newPosition.y + (extent.y/2), newPosition.z);
 		}
 		glScaled(extent.x, extent.y, extent.z);
-		
+
 		glBegin(GL_POLYGON);
 			
 			glNormal3d(0, 0, 1);
@@ -173,7 +178,12 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 		if(origin->hasNeighbours()) {
 			destination = lastWaypoint->getRandomNeighbour();
 			distanceToTravel = sqrt(pow(destination->getPosition().x - lastWaypoint->getPosition().x, 2) + pow(destination->getPosition().y - lastWaypoint->getPosition().y, 2) + pow(destination->getPosition().z - lastWaypoint->getPosition().z, 2));
-			unitVector = Vector((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
+			if(distanceToTravel <= 0) {
+				unitVector = Vector(0, 0, 0);
+			}
+			else {
+				unitVector = Vector((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
+			}
 			distanceTravelled = 0;
 		}
 	}

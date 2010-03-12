@@ -4,18 +4,15 @@
 #include "Object.h"
 
 class Translator : public Object {
-public:
-	vector<Face *> faces;
-	
-	Translator() {
-		forward = true;
-	}
+public:	
+	Translator() : transformation(NULL), forward(true) { }
 
 	~Translator() {
 		delete [] name;
 		for(unsigned int i=0;i<faces.size();i++) {
 			delete faces.at(i);
 		}
+		delete transformation;
 	}
 
 	double distanceFrom(Point & p) const;
@@ -24,6 +21,10 @@ public:
 	void draw();
 
 	void import(ifstream & input, vector<Texture *> & textures);
+
+public:
+	DualTransformation * transformation;
+	vector<Face *> faces;
 
 private:
 	char * name;

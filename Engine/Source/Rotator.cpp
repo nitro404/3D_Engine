@@ -5,7 +5,7 @@ double Rotator::distanceFrom(Point & p) const {
 }
 
 void Rotator::tick () {
-	angleInDegrees += rateInDegreesPersecond * DT;
+	angleInDegrees += rateInDegreesPerSecond * DT;
 	if(angleInDegrees >= 360 || angleInDegrees <= -360) {
 		angleInDegrees = 0;
 	}
@@ -61,7 +61,7 @@ void Rotator::import (ifstream & input, vector<Texture *> & textures) {
 			delete [] str;
 		}
 		else if(_stricmp(key, "rateInDegreesPersecond") == 0) {
-			rateInDegreesPersecond = atof(str);
+			rateInDegreesPerSecond = atof(str);
 			delete [] str;
 		}
 		else {

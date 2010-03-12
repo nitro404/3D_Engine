@@ -233,6 +233,8 @@ void mousePressed(int button, int state, int x, int y) {
 }
 
 void mouseMoved(int x, int y) {
+	if(!GetFocus()) { return; }
+
 	//Note: Because we are re-centering the mouse on each tick (see function "idle ()"), here
 	//we are determining how far the mouse was moved from the center point and we use this
 	//to determine both (1) x-rotation amounts (using the vertical displacement) which we store
@@ -353,12 +355,7 @@ int main(int parametersSize, char ** parameters) {
 	if(temp > 0) { initialScreenWidth = temp; }
 	temp = atoi(settings->getValue("Screen Height"));
 	if(temp > 0) { initialScreenHeight = temp; }
-	char * temp2 = settings->getValue("Fullscreen");
-	if(strlen(temp2) > 0) {
-		if(temp2[0] == '1' || temp2[0] == 'y' || temp2[0] == 'Y' || temp2[0] == 't' || temp2[0] == 'T' || _stricmp(temp2, "on") == 0) {
-			fullscreen = true;
-		}
-	}
+	fullscreen = isTrue(settings->getValue("Fullscreen"));
 	
 	//Setup general facilities.
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_STENCIL | GLUT_MULTISAMPLE);
@@ -406,10 +403,20 @@ int main(int parametersSize, char ** parameters) {
 #endif
 
 void exitGame() {
-	if(game != NULL) { delete game; }
-	if(player != NULL) { delete player; }
-	if(camera != NULL) { delete camera; }
-	if(inputManager != NULL) { delete inputManager; }
+	glutReshapeFunc(NULL);
+	glutKeyboardFunc(NULL);
+	glutSpecialFunc(NULL);
+	glutMouseFunc(NULL);
+	glutMotionFunc(NULL);
+	glutVisibilityFunc(NULL);
+    glutPassiveMotionFunc(NULL); 
+    glutSpecialUpFunc(NULL);
+    glutKeyboardUpFunc(NULL);
+
+	if(game != NULL) { delete game; game = NULL; }
+	if(player != NULL) { delete player; player = NULL; }
+	if(camera != NULL) { delete camera; camera = NULL; }
+	if(inputManager != NULL) { delete inputManager; inputManager = NULL; }
 	#if _DEBUG
 		_CrtDumpMemoryLeaks();
 	#endif

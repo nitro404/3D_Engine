@@ -5,10 +5,6 @@
 
 class Waypoint : public Object {
 public:
-	Point position;
-	char * name;
-	char * neighbourValues;
-	
 	Waypoint() { }
 	
 	~Waypoint() {
@@ -27,7 +23,12 @@ public:
 	void draw() { }
 	
 	void import (ifstream &input);
-	
+
+public:
+	Point position;
+	char * name;
+	char * neighbourValues;
+
 private:
 	vector<Waypoint *> neighbours;
 };

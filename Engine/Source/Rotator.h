@@ -5,18 +5,14 @@
 
 class Rotator : public Object {
 public:
-	vector<Face *> faces;
-	
-	Rotator() {
-		angleInDegrees = 0;
-		rateInDegreesPersecond = 0;
-	}
+	Rotator() : transformation(NULL), angleInDegrees(0), rateInDegreesPerSecond(0) { }
 	
 	~Rotator() {
 		delete [] name;
 		for(unsigned int i=0;i<faces.size();i++) {
 			delete faces.at(i);
 		}
+		if(transformation != NULL) { delete transformation; }
 	}
 	
 	double distanceFrom(Point & p) const;
@@ -25,10 +21,14 @@ public:
 	void draw();
 
 	void import(ifstream & input, vector<Texture *> & textures);
+
+public:
+	DualTransformation * transformation;
+	vector<Face *> faces;
 	
 private:
 	char * name;
 	Point axis;
-	double rateInDegreesPersecond;
+	double rateInDegreesPerSecond;
 	double angleInDegrees;
 };

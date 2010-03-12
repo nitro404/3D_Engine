@@ -39,8 +39,18 @@ void Waypoint::import (ifstream &input) {
 	input.getline(line, 256, ';');
 	int currentIndex = atoi(line);
 	input.getline(line, 256, '\n');
-	
-	transformation = DualTransformation::import(input);
+
+	//Input the position
+	double x, y, z;
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ',');
+	x = atof(line);
+	input.getline(line, 256, ',');
+	y = atof(line);
+	input.getline(line, 256, ';');
+	z = atof(line);
+	position = Point(x, y, z);
+	input.getline(line, 256, '\n');
 	
 	//Input the properties
 	input.getline(line, 256, ':');
@@ -66,6 +76,4 @@ void Waypoint::import (ifstream &input) {
 			delete [] str;
 		}
 	}
-	
-	this->position = this->transformation->normal().position();
 }

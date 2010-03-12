@@ -1,6 +1,16 @@
 #include "Includes.h"
 
-void prompt(char * message, ...) {
+bool isTrue(const char * str) {
+	return	(str != NULL && strlen(str) > 0) &&
+			(str[0] == '1' ||
+			 str[0] == 'y' ||
+			 str[0] == 'Y' ||
+			 str[0] == 't' ||
+			 str[0] == 'T' ||
+			 (strlen(str) > 1 && _stricmp(str, "on") == 0));
+}
+
+void prompt(const char * message, ...) {
 	if(message != NULL) {
 		char * buffer;
 		buffer = new char[256];
@@ -13,7 +23,7 @@ void prompt(char * message, ...) {
 	}
 }
 
-void quit(char * message, ...) {
+void quit(const char * message, ...) {
 	if(message != NULL) {
 		char * buffer;
 		buffer = new char[256];

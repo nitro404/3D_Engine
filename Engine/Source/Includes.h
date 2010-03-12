@@ -16,5 +16,6 @@ using namespace std;
 
 #include "GLUT/glut.h"
 
-void prompt(char *message, ...);
-void quit(char *message, ...);
+bool isTrue(const char * str);
+void prompt(const char *message, ...);
+void quit(const char *message, ...);

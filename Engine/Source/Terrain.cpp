@@ -1,6 +1,6 @@
 #include "Terrain.h"
 
-Terrain::Terrain() : name(NULL), textureMap(NULL), width(0), height(0), points(NULL) {
+Terrain::Terrain() : transformation(NULL), name(NULL), textureMap(NULL), width(0), height(0), points(NULL) {
 	minPoint = Point(0,0,0);
 	maxPoint = Point(0,0,0);
 }
@@ -8,6 +8,7 @@ Terrain::Terrain() : name(NULL), textureMap(NULL), width(0), height(0), points(N
 Terrain::~Terrain() {
 	if(name != NULL) { delete [] name; }
 	if(points != NULL) { delete [] points; }
+	if(transformation != NULL) { delete transformation; }
 }
 
 void Terrain::draw() {

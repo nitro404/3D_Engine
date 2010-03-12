@@ -9,13 +9,15 @@
 #define TERRAIN_IMPLEMENTATION USE_QUADS
 
 class Terrain : public Object {
-	
 public:
 	Terrain();
 	~Terrain();
 
 	virtual void draw();
 	virtual void import(ifstream & input, vector<Texture *> & textures, vector<char *> & heightMaps);
+
+public:
+	DualTransformation * transformation;
 
 private:
 	double scaleHeight(int x, int y, int * heightMapData);

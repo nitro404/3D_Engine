@@ -805,3 +805,20 @@ inline long unpackAlpha(const long pixel) {
 //MenuItem difficulty;
 //MenuItem displayMode;
 
+
+	glColor4f(0, 0, 1, 1);
+	glDisable(GL_BLEND);
+	glBegin(GL_LINE_STRIP);
+		glVertex3d(origin->getPosition().x, origin->getPosition().y + (extent.y/2), origin->getPosition().z);
+		glVertex3d(position.x, position.y + (extent.y/2), position.z);
+	glEnd();
+	glEnable(GL_BLEND);
+	glColor4f(1, 1, 1, 1);
+
+
+		glColor4f(0, 1, 0, 1);
+		glDisable(GL_BLEND);
+		glutWireSphere(0.5, 10, 10);
+		glEnable(GL_BLEND);
+		glColor4f(1, 1, 1, 1);
+

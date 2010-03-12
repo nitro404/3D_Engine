@@ -13,28 +13,9 @@
 #include "Terrain.h"
 
 class World {
-private:
-	static bool compareDistance(const Object & x, const Object & y);
-	void sortObjects();
-	void sortWater();
-	void sortSprites();
-
-	Object ** sortedObjects;
-	Pool ** sortedWater;
-	Sprite ** sortedSprites;
-	bool checkUnderWater() const;
-	bool underWater;
 public:
-	static Point playerPosition;
-	Point startPosition;
-	Environment * skybox;
-	vector<Object *> objects;
-	vector<Pool *> water;
-	vector<Sprite *> sprites;
-	vector<Waypoint *> waypoints;
-
-	World() {
-		skybox = NULL;
+	World() : skybox(NULL) {
+		startPosition = Point(0, 0, 0);
 	}
 
 	~World() {
@@ -61,4 +42,26 @@ public:
 	void draw();
 	
 	void import(char * fileName, vector<Texture *> & textures, vector<char *> & heightMaps, vector<AnimatedTexture *> & animatedTextures);
+
+private:
+	bool compareDistance(const Object & x, const Object & y);
+	void sortObjects();
+	void sortWater();
+	void sortSprites();
+	bool checkUnderWater();
+	bool underWater;
+
+public:
+	Point playerPosition;
+	Point startPosition;
+	Environment * skybox;
+	vector<Object *> objects;
+	vector<Pool *> water;
+	vector<Sprite *> sprites;
+	vector<Waypoint *> waypoints;
+
+private:
+	Object ** sortedObjects;
+	Pool ** sortedWater;
+	Sprite ** sortedSprites;
 };

@@ -32,7 +32,7 @@ Game::Game(Variables * settings) {
 	
 	this->settings = settings;
 	displayHelp = false;
-	drawFPS = true;
+	drawFPS = isTrue(settings->getValue("Show FPS"));
 	fps = new char[12];
 	fps[0] = '\0';
 	selectionPointer = "->";
@@ -212,7 +212,7 @@ void Game::drawFrameRate() {
 	// if it changed by more than 2 per cent of the stable value, use the new value; otherwise use the stable one...
 	if(absolute(frameRate - stableRate) > 2.0) stableRate  = frameRate; 
 	sprintf_s(fps, 12, "%3.1f FPS", stableRate);
-	drawText(screenWidth-101, screenHeight-20, fps);
+	drawText(screenWidth-101-((stableRate > 99) ? 13 : 0), screenHeight-20, fps);
 }
 
 void Game::drawText(int x, int y, const char * text) {

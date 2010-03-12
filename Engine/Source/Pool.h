@@ -7,16 +7,8 @@
 
 class Pool : public Object {
 public:
-	vector<Face *> faces;
-
-	Pool() { }
-	
-	~Pool() {
-		delete [] name;
-		for(unsigned int i=0;i<faces.size();i++) {
-			delete faces.at(i);
-		}
-	}
+	Pool();
+	~Pool();
 	
 	double distanceFrom(Point & p) const;
 	bool insideOf(Point & p) const;
@@ -26,6 +18,10 @@ public:
 	
 	void import (ifstream &input, vector<AnimatedTexture *> & animatedTextures);
 	
+public:
+	DualTransformation * transformation;
+	vector<Face *> faces;
+
 private:
 	double maxX, maxY, maxZ;
 	double minX, minY, minZ;

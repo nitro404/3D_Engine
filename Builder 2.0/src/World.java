@@ -64,7 +64,7 @@ public class World implements Map3D {
 		else if(map instanceof UniversalMap) {
 			UniversalMap universalMap = (UniversalMap) map;
 			UniversalObject object;
-			this.startPosition = null;
+			this.startPosition = new Point3D(0, 0, 0);
 			objects = new Vector<UniversalObject>();
 			waypoints = new Vector<Waypoint>();
 			Vector<Sprite> sprites = new Vector<Sprite>();

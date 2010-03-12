@@ -1,9 +1,5 @@
 #include "World.h"
 
-char textureDirectory [_MAX_DIR] = {'T','E','X','T','U','R','E','S','\0'};
-
-Point World::playerPosition = Point(0, 0, 0);
-
 void World::tick () {
 	unsigned int i;
 	playerPosition = player->playerMatrix.position();
@@ -21,6 +17,58 @@ void World::tick () {
 	}
 	for(i=0;i<sprites.size();i++) {
 		sprites.at(i)->tick();
+	}
+}
+
+void World::draw() {
+	unsigned int i, j;
+	sortObjects();
+	sortWater();
+	sortSprites();
+	
+	if(skybox != NULL) {
+		skybox->draw();
+	}
+	for(i=0;i<objects.size();i++) {
+		sortedObjects[i]->draw();
+	}
+	if(water.size() == 0) {
+		for(i=0;i<sprites.size();i++) {
+			sortedSprites[i]->draw();
+		}
+	}
+	else {
+		for(i=0;i<water.size();i++) {
+			if(!underWater) {
+				for(j=0;j<sprites.size();j++) {
+					if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
+						sortedSprites[j]->draw();
+					}
+				}
+			}
+			else {
+				for(j=0;j<sprites.size();j++) {
+					if(!sortedWater[i]->insideOf(sortedSprites[j]->position)) {
+						sortedSprites[j]->draw();
+					}
+				}
+			}
+			sortedWater[i]->draw();
+			if(underWater) {
+				for(j=0;j<sprites.size();j++) {
+					if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
+						sortedSprites[j]->draw();
+					}
+				}
+			}
+			else {
+				for(j=0;j<sprites.size();j++) {
+					if(!sortedWater[i]->insideOf(sortedSprites[j]->position)) {
+						sortedSprites[j]->draw();
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -67,58 +115,13 @@ void World::sortSprites() {
 	}
 }
 
-bool World::checkUnderWater() const {
+bool World::checkUnderWater() {
 	for(unsigned int i=0;i<water.size();i++) {
 		if(water.at(i)->insideOf(playerPosition)) {
 			return true;
 		}
 	}
 	return false;
-}
-
-void World::draw() {
-	unsigned int i, j;
-	sortObjects();
-	sortWater();
-	sortSprites();
-	
-	if(skybox != NULL) {
-		skybox->draw();
-	}
-	for(i=0;i<objects.size();i++) {
-		sortedObjects[i]->draw();
-	}
-	for(i=0;i<water.size();i++) {
-		if(!underWater) {
-			for(j=0;j<sprites.size();j++) {
-				if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
-					sortedSprites[j]->draw();
-				}
-			}
-		}
-		else {
-			for(j=0;j<sprites.size();j++) {
-				if(!sortedWater[i]->insideOf(sortedSprites[j]->position)) {
-					sortedSprites[j]->draw();
-				}
-			}
-		}
-		sortedWater[i]->draw();
-		if(underWater) {
-			for(j=0;j<sprites.size();j++) {
-				if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
-					sortedSprites[j]->draw();
-				}
-			}
-		}
-		else {
-			for(j=0;j<sprites.size();j++) {
-				if(!sortedWater[i]->insideOf(sortedSprites[j]->position)) {
-					sortedSprites[j]->draw();
-				}
-			}
-		}
-	}
 }
 
 void World::import(char * fileName, vector<Texture *> & textures, vector<char *> & heightMaps, vector<AnimatedTexture *> & animatedTextures) {
@@ -240,6 +243,7 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<char *>
 			objects.push_back(geometry);
 		}
 		else if(_stricmp(value, "environment") == 0) {
+			if(skybox != NULL) { delete skybox; }
 			skybox = new Environment;
 			skybox->import(input, textures);
 		}

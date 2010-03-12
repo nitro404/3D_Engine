@@ -5,14 +5,13 @@
 
 class Geometry : public Object {
 public:
-	vector<Face *> faces;
-	
-	Geometry() { }
+	Geometry() : transformation(NULL) { }
 
 	~Geometry() {
 		for(unsigned int i=0;i<faces.size();i++) {
 			delete faces.at(i);
 		}
+		if(transformation != NULL) { delete transformation; }
 	}
 
 	double distanceFrom(Point & p) const;
@@ -21,4 +20,8 @@ public:
 	void draw();
 
 	void import (ifstream &input, vector<Texture *> & textures);
+
+public:
+	DualTransformation * transformation;
+	vector<Face *> faces;
 };

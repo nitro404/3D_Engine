@@ -12,15 +12,13 @@ extern double DT;
 
 class Object {
 public:
-
-	DualTransformation * transformation;
-
-	Object() { transformation = NULL; } 
-	virtual ~Object() { if (transformation != NULL) { delete transformation; } }
+	Object() { } 
+	virtual ~Object() { }
 	
 	virtual double distanceFrom(Point & p) const { return 0; }
 	
 	virtual void tick() { }
 	virtual void draw() { }
+
 	virtual void import(ifstream & input, vector<Texture *> & textures) { }
 };
