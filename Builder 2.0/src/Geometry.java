@@ -4,7 +4,7 @@
 // E-Mail: nitro404@hotmail.com        //
 // =================================== //
 
-public class Geometry extends UniversalObject {
+public class Geometry extends WorldObject {
 	
 	public int textureIndex;
 	

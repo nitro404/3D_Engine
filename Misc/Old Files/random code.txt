@@ -822,3 +822,20 @@ inline long unpackAlpha(const long pixel) {
 		glEnable(GL_BLEND);
 		glColor4f(1, 1, 1, 1);
 
+
+System.out.println(points[0].x + " " + points[0].y + " " + points[0].z + " ) ( " + points[1].x + " " + points[1].y + " " + points[1].z + " ) ( " + points[2].x + " " + points[2].y + " " + points[2].z + " ) " + textureName + " [ " + axis[0].x + " " + axis[0].y + " " + axis[0].z + " " + axisOffset[0] + " ] [ " + axis[1].x + " " + axis[1].y + " " + axis[1].z + " " + axisOffset[1] + " ] " + rotation + " " + axisScale[0] + " " + axisScale[1] + "#");
+
+
+
+			for(int i=0;i<textureNames.size();i++) {
+				if(sidePlane.textureName.equalsIgnoreCase(Texture.removeExtension(textureNames.elementAt(i)))) {
+					String texturePath = textureDirectory.getPath();
+					char lastChar = textureDirectory.getPath().charAt(textureDirectory.getPath().length() - 1);
+					if(!(lastChar == '\\' || lastChar == '/')) { texturePath += '\\'; }
+					texturePath += textureNames.elementAt(i);
+					dimensions = Texture.getTextureDimensions(new File(texturePath));
+					break;
+				}
+			}
+
+

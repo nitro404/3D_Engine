@@ -15,14 +15,9 @@ public class UniversalObject {
 	public Vector<Property> properties;
 	public Vector<Face> faces;
 	
-	public UniversalObject() { }
-	
-	public UniversalObject(int objectIndex, Transformation normal, Transformation inverse, Vector<Property> properties, Vector<Face> faces) {
-		this.objectIndex = objectIndex;
-		this.normal = normal;
-		this.inverse = inverse;
-		this.properties = properties;
-		this.faces = faces;
+	public UniversalObject() {
+		this.properties = new Vector<Property>();
+		this.faces = new Vector<Face>();
 	}
 	
 	public UniversalObject(BufferedReader in) {
@@ -40,9 +35,15 @@ public class UniversalObject {
 	}
 	
 	public void addProperty(Property property) {
-		if(!this.properties.contains(property)) {
-			this.properties.add(property);
+		if(property == null || property.key == null || property.value == null) { return; }
+		
+		for(int i=0;i<this.properties.size();i++) {
+			if(this.properties.elementAt(i).key.equalsIgnoreCase(property.key)) {
+				return;
+			}
 		}
+		
+		this.properties.add(property);
 	}
 	
 	public String getPropertyValue(String key) {
@@ -78,6 +79,8 @@ public class UniversalObject {
 	}
 	
 	private void readFrom(BufferedReader in) throws Exception {
+		this.properties = new Vector<Property>();
+		this.faces = new Vector<Face>();
 		String input;
 		
 		// input the object header
@@ -117,7 +120,6 @@ public class UniversalObject {
 		
 		// input the properties
 		int numberOfProperties = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
-		this.properties = new Vector<Property>();
 		for(int i=0;i<numberOfProperties;i++) {
 			this.properties.add(new Property(in));
 		}
@@ -132,7 +134,6 @@ public class UniversalObject {
 		
 		// input the faces
 		int numberOfFaces = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
-		this.faces = new Vector<Face>();
 		for(int i=0;i<numberOfFaces;i++) {
 			this.faces.add(new Face(in));
 		}
@@ -147,17 +148,8 @@ public class UniversalObject {
 	}
 	
 	public void writeTo(PrintWriter out) throws Exception {
-		// output the object type based on which subclass of UniversalObject it is
-			 if(this instanceof Geometry)	{ out.println("\t\"type\" => \"static geometry\""); }
-		else if(this instanceof Environment){ out.println("\t\"type\" => \"environment\""); }
-		else if(this instanceof Vehicle)	{ out.println("\t\"type\" => \"vehicle\""); }
-		else if(this instanceof Rotator)	{ out.println("\t\"type\" => \"rotator\""); }
-		else if(this instanceof Translator)	{ out.println("\t\"type\" => \"translator\""); }
-		else if(this instanceof Sprite)		{ out.println("\t\"type\" => \"sprite\""); }
-		else if(this instanceof Waypoint)	{ }
-		else if(this instanceof Pool)		{ out.println("\t\"type\" => \"pool\""); }
-		else if(this instanceof Terrain)	{ out.println("\t\"type\" => \"terrain\""); }
-		else   								{ System.out.println("WARNING: Ignoring unexpected object of type \"" + this.getPropertyValue("type") + "\"."); }
+		// output the object header
+		out.println("Object: " + this.objectIndex + ";");
 		
 		// output the transformations
 		if(this.normal != null && this.inverse != null) {
@@ -179,13 +171,13 @@ public class UniversalObject {
 		}
 		
 		// output the faces
-		if(this.faces != null) {
-			out.println("\tFaces: " + this.faces.size() + ";");
-			for(int i=0;i<this.faces.size();i++) {
-				out.println("\tFace: " + i + ";");
-				this.faces.elementAt(i).writeTo(out, !(this instanceof Sprite));
-			}
+		out.println("\tFaces: " + this.faces.size() + ";");
+		for(int i=0;i<this.faces.size();i++) {
+			out.println("\tFace: " + i + ";");
+			this.faces.elementAt(i).writeTo(out);
 		}
+		
+		out.println("\tSub-objects: 0;");
 	}
 	
 }

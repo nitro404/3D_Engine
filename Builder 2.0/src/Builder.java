@@ -12,14 +12,8 @@ public class Builder {
 	public static void main(String[] args) {
 		parseParameters(args);
 		// sample program calls:
+		// -d../Maps -imap -ouni -m../Maps -e"../Content/Data/Textures/" -t"../Content/Data/textures.ini"
 		// -d../Maps -iuni -owrl -m../Maps -t../Content/Data/textures.ini -h"../Content/Data/Height Maps/"
-		// -d../Maps -iuni -owrl -m../Maps -t../Data/textures.ini -h"../Textures/Height Maps/"
-		// -d../Maps -iuni -owrl -m../Maps -ttextures.ini
-		// -dMaps -iuni -owrl -mMaps
-		// -d"Maps" -iuni -owrl
-		// -f"Maps/test.uni" -owrl
-		// -d"../Map Stuff (Duplicate)/Maps/" -iuni -owrl -m"Maps"
-		// -f"../Map Stuff (Duplicate)/Maps/test.uni" -owrl -m"Maps"
 	}
 	
 	public static void parseParameters(String[] args) {
@@ -31,15 +25,16 @@ public class Builder {
 			System.out.println(" - Universal Format (.uni) Files (read and write)");
 			System.out.println(" - 3D Engine World (.wrl) Files (write only)");
 			System.out.println("");
-			System.out.println("usage: java Builder -f\"mapname.ext\" [-m\"new_mapdir\"] -oext [-s] [-t\"file.ext\"]");
-			System.out.println("                    -d\"path_to_maps\" [-m\"new_mapdir\"] -iext -oext [-s] [-t\"file.ext\"]");
+			System.out.println("usage: java Builder -f\"mapname.ext\" [-m\"new_mapdir\"] -oext [-s] [-e\"texture_dir\"] [-t\"file.ext\"]");
+			System.out.println("                    -d\"path_to_maps\" [-m\"new_mapdir\"] -iext -oext [-s] [-e\"texture_dir\"] [-t\"file.ext\"]");
 			System.out.println("");
 			System.out.println(" -f :: file name; e.g., -f\"C:\\Test\\Maps\\room.map\"");
-			System.out.println(" -d :: directory (containing map files to convert); e.g., -d\"..\\Project\\Maps\"");
+			System.out.println(" -d :: directory (containing map files to convert); e.g., -d\"..\\Maps\"");
 			System.out.println(" -m :: output directory (optional); e.g., -m\"C:\\Project\\Maps\\Converted\\");
 			System.out.println(" -i :: file extension to read (only required if -d specified); e.g., -imap");
 			System.out.println(" -o :: file extension to output; e.g., -ouni");
 			System.out.println(" -s :: recurse to subdirectories (only if present)");
+			System.out.println(" -e :: texture directory location (optional - required if reading .map files); e.g., -e\"..\\Textures\\");
 			System.out.println(" -t :: read texture data from alternate file (optional); e.g., -t\"textures.ini\"");
 		}
 		else {
@@ -49,11 +44,13 @@ public class Builder {
 			String outExtension = null;
 			String outDirectoryName = null;
 			boolean subdirectories = false;
+			String textureDirectoryName = null;
 			String textureDataFileName = null;
 			
 			File file = null;
 			File fileDirectory = null;
 			File outDirectory = null;
+			File textureDirectory = null;
 			File textureDataFile = null;
 			
 			// parse through parameters
@@ -76,6 +73,9 @@ public class Builder {
 					}
 					else if(args[i].substring(0, 2).equalsIgnoreCase("-s")) {
 						subdirectories = true;
+					}
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-e")) {
+						textureDirectoryName = args[i].substring(2, args[i].length());
 					}
 					else if(args[i].substring(0, 2).equalsIgnoreCase("-t")) {
 						textureDataFileName = args[i].substring(2, args[i].length());
@@ -117,6 +117,17 @@ public class Builder {
 					System.exit(1);
 				}
 			}
+			if(textureDirectoryName != null) {
+				textureDirectory = new File(textureDirectoryName);
+				if(!textureDirectory.exists()) {
+					System.out.println("ERROR: Specified texture directory does not exist.");
+					System.exit(1);
+				}
+				if(!textureDirectory.isDirectory()) {
+					System.out.println("ERROR: Invalid texture directory.");
+					System.exit(1);
+				}
+			}
 			if(textureDataFileName != null) {
 				textureDataFile = new File(textureDataFileName);
 				if(!textureDataFile.exists()) {
@@ -129,12 +140,24 @@ public class Builder {
 				}
 			}
 			
+			// verify that the texture directory was given if the user is converting from a .map file
+			if(inExtension != null && inExtension.equalsIgnoreCase("map")) {
+				if(textureDirectory == null) {
+					System.out.println("ERROR: You must specify a texture directory if converting from Worldcraft \".map\" file(s).");
+					System.exit(1);
+				}
+				
+				if(textureDataFile == null) {
+					System.out.println("ERROR: You must specify a texture data file if converting from Worldcraft \".map\" file(s).");
+					System.exit(1);
+				}
+			}
+			
 			// verify that either a file or a directory containing files was specified
 			if(fileName == null && fileDirectoryName == null) {
 				System.out.println("ERROR: You must specify a file name or directory containing files to convert.");
 				System.exit(1);
 			}
-			
 			// verify that the right parameters were specified for converting a single file
 			else if(fileName != null) {
 				if(fileDirectoryName != null) {
@@ -167,9 +190,8 @@ public class Builder {
 				}
 				
 				// convert map file
-				Converter.convertFile(file, outDirectory, inExtension, outExtension, subdirectories, textureDataFile);
+				Converter.convertFile(file, outDirectory, inExtension, outExtension, subdirectories, textureDirectory, textureDataFile);
 			}
-			
 			// verify that the right parameters were specified for converting a directory containing files
 			else if(fileDirectoryName != null) {
 				if(fileName != null) {
@@ -202,7 +224,7 @@ public class Builder {
 				}
 				
 				// convert map files
-				Converter.convertFiles(fileDirectory, outDirectory, inExtension, outExtension, subdirectories, textureDataFile);
+				Converter.convertFiles(fileDirectory, outDirectory, inExtension, outExtension, subdirectories, textureDirectory, textureDataFile);
 			}
 			
 		}

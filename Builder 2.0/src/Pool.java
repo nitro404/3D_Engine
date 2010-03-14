@@ -4,7 +4,7 @@
 // E-Mail: nitro404@hotmail.com        //
 // =================================== //
 
-public class Pool extends UniversalObject {
+public class Pool extends WorldObject {
 	
 	public int textureIndex;
 	

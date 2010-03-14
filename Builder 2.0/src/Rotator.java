@@ -4,7 +4,7 @@
 // E-Mail: nitro404@hotmail.com        //
 // =================================== //
 
-public class Rotator extends UniversalObject {
+public class Rotator extends WorldObject {
 	
 	public int textureIndex;
 

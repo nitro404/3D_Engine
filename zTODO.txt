@@ -20,7 +20,10 @@ CONVERTER
  + Re-add command-line interface
 
 BUILDER 2.0
- + Implement Worldcraft *.map reading
+ .MAP > .UNI CONVERSION
+   - Point class objects are not extracted
+   - Transformations are not computed
+   - Face points are not converted
  + Change it so that objects know how to identify their own texture index, rather than in the to world conversion
  + Re-organize texture name => index replacement code
  + Temporarily hardcoded terrain transformation

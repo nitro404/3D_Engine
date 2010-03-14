@@ -33,6 +33,42 @@ public class Point3D {
 		this.parseFrom(data);
 	}
 	
+	public Point3D negative() {
+		return new Point3D(-x, -y, -z);
+	}
+	
+	public Point3D minus(double c) {
+		return new Point3D(x - c, y - c, z - c);
+	}
+	
+	public Point3D minus(Point3D p) {
+		return new Point3D(x - p.x, y - p.y, z - p.z);
+	}
+	
+	public Point3D square() {
+		return new Point3D(x * x, y * y, z * z);
+	}
+	
+	public Point3D multiplyBy(double c) {
+		return new Point3D(x * c, y * c, z * c);
+	}
+	
+	public Point3D multiplyBy(Point3D p) {
+		return new Point3D(x * p.x, y * p.y, z * p.z);
+	}
+	
+	public double dot(Point3D p) {
+		return (x * p.x) + (y * p.y) + (z * p.z);
+	}
+	
+	public Point3D cross(Point3D p) {
+		return new Point3D((y * p.z) - (z * p.y), (z * p.x) - (x * p.z), (x * p.y) - (y * p.x));
+	}
+	
+	public double squaredLength() {
+		return (x * x) + (y * y) + (z * z);
+	}
+	
 	public void readFrom(BufferedReader in) throws Exception {
 		String input;
 		

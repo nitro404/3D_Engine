@@ -4,7 +4,7 @@
 // E-Mail: nitro404@hotmail.com        //
 // =================================== //
 
-public class Translator extends UniversalObject {
+public class Translator extends WorldObject {
 	
 	public int textureIndex;
 

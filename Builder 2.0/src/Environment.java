@@ -4,7 +4,7 @@
 // E-Mail: nitro404@hotmail.com        //
 // =================================== //
 
-public class Environment extends UniversalObject {
+public class Environment extends WorldObject {
 	
 	public static String[] skyboxTextureExtensions = {"-left", "-right", "-front", "-back", "-up", "-down"};
 	

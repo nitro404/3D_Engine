@@ -6,7 +6,7 @@
 
 import java.io.PrintWriter;
 
-public class Sprite extends UniversalObject {
+public class Sprite extends WorldObject {
 	
 	public int textureIndex;
 	public Point3D position;

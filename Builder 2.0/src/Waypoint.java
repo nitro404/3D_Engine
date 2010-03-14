@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 // E-Mail: nitro404@hotmail.com        //
 // =================================== //
 
-public class Waypoint extends UniversalObject {
+public class Waypoint extends WorldObject {
 	
 	public Point3D position;
 	

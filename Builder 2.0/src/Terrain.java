@@ -6,7 +6,7 @@
 
 import java.util.Vector;
 
-public class Terrain extends UniversalObject {
+public class Terrain extends WorldObject {
 	
 	public int heightMapIndex;
 	

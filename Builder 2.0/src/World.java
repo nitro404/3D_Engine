@@ -15,7 +15,7 @@ public class World implements Map3D {
 	public Vector<String> heightMapNames;
 	public Vector<AnimatedTexture> animatedTextures;
 	public Vector<HeightMap> heightMaps;
-	public Vector<UniversalObject> objects;
+	public Vector<WorldObject> objects;
 	public Vector<Waypoint> waypoints;
 	
 	public World(File file) {
@@ -65,7 +65,7 @@ public class World implements Map3D {
 			UniversalMap universalMap = (UniversalMap) map;
 			UniversalObject object;
 			this.startPosition = new Point3D(0, 0, 0);
-			objects = new Vector<UniversalObject>();
+			objects = new Vector<WorldObject>();
 			waypoints = new Vector<Waypoint>();
 			Vector<Sprite> sprites = new Vector<Sprite>();
 			
@@ -284,7 +284,14 @@ public class World implements Map3D {
 			
 		}
 		else if(map instanceof World) {
-			return;
+			World world = (World) map;
+			this.startPosition = world.startPosition;
+			this.textureNames = world.textureNames;
+			this.heightMapNames = world.heightMapNames;
+			this.animatedTextures = world.animatedTextures;
+			this.heightMaps = world.heightMaps;
+			this.objects = world.objects;
+			this.waypoints = world.waypoints;
 		}
 		else {
 			System.out.println("ERROR: Invalid map type to convert from.");

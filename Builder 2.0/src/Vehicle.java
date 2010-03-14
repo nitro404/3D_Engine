@@ -4,7 +4,7 @@
 // E-Mail: nitro404@hotmail.com        //
 // =================================== //
 
-public class Vehicle extends UniversalObject {
+public class Vehicle extends WorldObject {
 	
 	public int textureIndex;
 	
