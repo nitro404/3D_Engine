@@ -86,8 +86,6 @@ public class UniversalMap implements Map3D {
 					Vector<Face> faces = Face.convertFrom(wco.sidePlanes, currentFaceIndex, textures);
 					if(faces.size() > 0) { currentFaceIndex = faces.elementAt(faces.size() - 1).faceIndex; }
 					
-// transformations, faces
-					
 					if(lastObject == null) {
 						uo.objectIndex = currentObjectIndex++;
 						this.objects.add(uo);
