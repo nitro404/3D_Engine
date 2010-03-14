@@ -8,7 +8,7 @@ class Colour {
 public:
 	double red, green, blue, alpha;
 	
-	Colour(int red=0, int green=0, int blue=0, int alpha=0);
+	Colour(int red=1, int green=1, int blue=1, int alpha=1);
 	Colour(const Colour & x);
 	Colour & operator = (const Colour & x);
 	~Colour();

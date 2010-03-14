@@ -1,6 +1,6 @@
 #include "Colour.h"
 
-Colour::Colour(int red, int green, int blue, int alpha) {
+Colour::Colour(int red, int green, int blue, int alpha) : red(1), green(1), blue(1), alpha(1) {
 	setRed(red);
 	setGreen(green);
 	setBlue(blue);
