@@ -85,15 +85,19 @@ void Game::setup () {
 	Camera::setup ();
 	UniversalObject::setup ();
 
-//	idlingTexture = Texture::readTexture ("textures\\idling.bmp");
-	idlingTexture = Texture::readTexture ("../textures/idling.bmp");
+	idlingTexture = Texture::readTexture ("textures\\idling.bmp");
+	if(idlingTexture == NULL) {
+		idlingTexture = Texture::readTexture ("../textures/idling.bmp");
+	}
 	//idlingTexture = Texture::readTexture ("textures\\jeepside.tga");
 
 	//glClearColor (1.0, 1.0, 1.0, 1.0); //White...	
 	glClearColor (1.0, 1.0, 0.0, 1.0); //Yellow...
 	
-//	readingTexture = Texture::readTexture ("textures\\reading.bmp");
-	readingTexture = Texture::readTexture ("../textures/reading.bmp");
+	readingTexture = Texture::readTexture ("textures\\reading.bmp");
+	if(readingTexture == NULL) {
+		readingTexture = Texture::readTexture ("../textures/reading.bmp");
+	}
 	if (idlingTexture != NULL) idlingTexture->load ();
 	if (readingTexture != NULL) readingTexture->load ();
 }
@@ -126,16 +130,19 @@ void Game::draw () {
 
 		//Setup the texture (if any).
 		Texture *texture = idling ? idlingTexture : readingTexture;
-		if (texture == NULL)
+		if (texture == NULL) {
 			glColor4d (1.0, 1.0, 0.0, 1.0); //yellow
-		else texture->activate ();
+		}
+		else {
+			texture->activate ();
 
-		//Permit blending if it's a texture with alpha...
-		if (texture->type == RGBAType) {
-			glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glEnable (GL_BLEND);
-		} else {
-			glDisable (GL_BLEND);
+			//Permit blending if it's a texture with alpha...
+			if (texture->type == RGBAType) {
+				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				glEnable (GL_BLEND);
+			} else {
+				glDisable (GL_BLEND);
+			}
 		}
 
 		//Setup one polygon to be drawn.

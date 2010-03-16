@@ -102,7 +102,19 @@ public class Point3D {
 	
 	public void writeTo(PrintWriter out) throws Exception {
 		// output the points
-		out.print(x + ", " + y + ", " + z);
+		out.print(this.x + ", " + this.y + ", " + this.z);
+	}
+	
+	public boolean equals(Object o) {
+		if(o == null || !(o instanceof Point3D)) { return false; }
+		
+		Point3D p = (Point3D) o;
+		return this.x == p.x && this.y == p.y && this.z == p.z;
+	}
+	
+	
+	public String toString() {
+		return "(" + this.x + ", " + this.y + ", " + this.z + ")";
 	}
 	
 }

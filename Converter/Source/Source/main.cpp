@@ -94,9 +94,8 @@ void convertFiles () {
 /*
 void convertFile(char * filenames) {
 	//Prompt for one or more files to convert...
-filenames = "C:\\Settings\\nitro glycerine\\Desktop\\3D Engine\\Maps\\test.map";
-//	char *filenames = promptForMapRead ();
-//	void displayWindow (); displayWindow (); //Force the reading texture to be displayed.
+	char *filenames = promptForMapRead ();
+	void displayWindow (); displayWindow (); //Force the reading texture to be displayed.
 	if (filenames == NULL) return; //User must have cancelled.
 
 	//Determine how many files were selected (count cannot be 0; otherwise NULL would have been returned)...
@@ -155,7 +154,6 @@ filenames = "C:\\Settings\\nitro glycerine\\Desktop\\3D Engine\\Maps\\test.map";
 			strcat (outputFileName, shortOutputName);
 
 			::log ("\nDump file \"%s\"...", outputFileName);
-prompt(outputFileName);
 			universalObject->dump (outputFileName);
 			delete universalObject;
 		} else {
@@ -172,17 +170,11 @@ prompt(outputFileName);
 */
 
 void convertFile(char * fileName) {
-	UniversalObject *universalObject = UniversalObject::read ("C:\\Settings\\nitro glycerine\\Desktop\\3D Engine\\Maps\\test.map");
-return;
 	if (fileName == NULL) {
 		return;
 	}
 
-//	fileName = "C:\\Settings\\nitro glycerine\\Desktop\\3D Engine\\Maps\\test.map";
-//prompt("fileName=\"%s\"", fileName);
-// UNCOMMENT NEXT LINE #################
-//	UniversalObject *universalObject = UniversalObject::read (fileName);
-//prompt("read universalObject");
+	UniversalObject *universalObject = UniversalObject::read (fileName);
 	if (universalObject != NULL) {
 
 		//Change the actual suffix to a ".uni" format (it's already been read)...
@@ -195,7 +187,7 @@ return;
 		strcpy (outputFileName, mapDirectory);
 		strcat (outputFileName, "\\");
 		strcat (outputFileName, shortOutputName);
-prompt(outputFileName);
+
 		universalObject->dump(outputFileName);
 		delete universalObject;
 	}
@@ -611,7 +603,6 @@ void parseParameters (int parametersSize, char **parameters) {
 }
 
 int main (int parametersSize, char **parameters) {
-//prompt("DEBUGGING FROM MAIN IN MAIN.CPP");
 	//Welcome...
 	clearLog (); log ("\n\nStarting...");
 

@@ -75,4 +75,15 @@ public class GamePoint3D extends Point3D {
 		out.print(", " + this.nx + ", " + this.ny + ", " + this.nz + ", " + this.tx + ", " + this.ty);
 	}
 	
+	public boolean equals(Object o) {
+		if(o == null || !(o instanceof GamePoint3D) || !super.equals(o)) { return false; }
+		
+		GamePoint3D p = (GamePoint3D) o;
+		return this.nx == p.nx && this.ny == p.ny && this.nz == p.nz && this.tx == p.tx && this.ty == p.ty; 
+	}
+	
+	public String toString() {
+		return "(" + this.x + ", " + this.y + ", " + this.z + ", " + this.nx + ", " + this.ny + ", " + this.nz + ", " + this.tx + ", " + this.ty + ")";
+	}
+	
 }

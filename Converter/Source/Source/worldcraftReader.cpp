@@ -866,6 +866,22 @@ FaceCollection *convertToFaces (WorldcraftSidePlaneCollection *sidePlanes) {
 		//Consider this side plane.
 		WorldcraftSidePlane &sidePlane = *((*sidePlanes) [sidePlaneIndex]); sidePlane.planeIsDegenerate = false;
 
+printf("( %d %d %d ) ( %d %d %d ) ( %d %d %d ) %s\n",
+(int) sidePlane.point1.x, (int) sidePlane.point1.y, (int) sidePlane.point1.z,
+(int) sidePlane.point2.x, (int) sidePlane.point2.y, (int) sidePlane.point2.z,
+(int) sidePlane.point3.x, (int) sidePlane.point3.y, (int) sidePlane.point3.z,
+(int) sidePlane.textureName);
+
+/*printf("( %d %d %d ) ( %d %d %d ) ( %d %d %d ) %s [ %d %d %d %d ] [ %d %d %d %d ] %d %d %d\n",
+(int) sidePlane.point1.x, (int) sidePlane.point1.y, (int) sidePlane.point1.z,
+(int) sidePlane.point2.x, (int) sidePlane.point2.y, (int) sidePlane.point2.z,
+(int) sidePlane.point3.x, (int) sidePlane.point3.y, (int) sidePlane.point3.z,
+(int) sidePlane.textureName,
+(int) sidePlane.xAxis.x, (int) sidePlane.xAxis.y, (int) sidePlane.xAxis.z, (int) sidePlane.xAxisOffset,
+(int) sidePlane.yAxis.x, (int) sidePlane.yAxis.y, (int) sidePlane.yAxis.z, (int) sidePlane.yAxisOffset,
+(int) sidePlane.rotation,
+(int) sidePlane.xAxisScale, (int) sidePlane.yAxisScale);*/
+
 		//Convert points to a standard coordinate system (worldcraft uses x +ve is right, y+ve is back, z+ve is up).
 		//Also convert from clockwise order p1,p2,p3 to counter-clockwise order p2,p1,p3.
 		//Note: these are NOT points in a face but merely 3 points which can be used to compute the plane of the face.
@@ -1005,6 +1021,12 @@ FaceCollection *convertToFaces (WorldcraftSidePlaneCollection *sidePlanes) {
 			transformation.postScaleBy (axisScale); //S-1
 			transformation.postTranslateBy (textureTranslation); //T-1
 			transformation.postScaleBy (textureScale); //N-1
+
+printf("%f, %f, %f, %f\n", transformation.m11, transformation.m12, transformation.m13, transformation.m14);
+printf("%f, %f, %f, %f\n", transformation.m21, transformation.m22, transformation.m23, transformation.m24);
+printf("%f, %f, %f, %f\n", transformation.m31, transformation.m32, transformation.m33, transformation.m34);
+printf("%f, %f, %f, %f\n", transformation.m41, transformation.m42, transformation.m43, transformation.m44);
+printf("\n");
 		}
 	}
 

@@ -44,7 +44,7 @@ public class UniversalMap implements Map3D {
 		if(map instanceof WorldcraftMap) {
 			WorldcraftMap worldcraftMap = (WorldcraftMap) map;
 			
-			int currentObjectIndex = -1;
+			int currentObjectIndex = 0;
 			for(int i=0;i<worldcraftMap.groups.size();i++) {
 				WorldcraftGroup wcg = worldcraftMap.groups.elementAt(i);
 				
@@ -59,7 +59,7 @@ public class UniversalMap implements Map3D {
 				}
 				
 				UniversalObject lastObject = null;
-				int currentFaceIndex = -1;
+				int currentFaceIndex = 0;
 				for(int j=0;j<wcg.objects.size();j++) {
 					WorldcraftObject wco = wcg.objects.elementAt(j);
 					UniversalObject uo = null;

@@ -1,3 +1,4 @@
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.StringTokenizer;
 
@@ -11,7 +12,7 @@ public class WorldcraftSidePlane {
 	public double rotation;
 	
 	public Plane3D plane;
-	public boolean planeIsDegenerate;
+	public boolean isDegenerate;
 	public Transformation transformation;
 	
 	public WorldcraftSidePlane() {
@@ -23,8 +24,31 @@ public class WorldcraftSidePlane {
 		this.rotation = 0;
 		
 		this.plane = null;
-		this.planeIsDegenerate = false;
+		this.isDegenerate = false;
 		this.transformation = null;
+	}
+	
+	public WorldcraftSidePlane(WorldcraftSidePlane sidePlane) {
+		this.points = new Point3D[3];
+		for(int i=0;i<3;i++) {
+			this.points[i] = new Point3D(sidePlane.points[i].x, sidePlane.points[i].y, sidePlane.points[i].z);
+		}
+		this.textureName = new String(sidePlane.textureName);
+		this.axis = new Point3D[2];
+		this.axisOffset = new double[2];
+		this.axisScale = new double[2];
+		for(int i=0;i<2;i++) {
+			this.axis[i] = new Point3D(sidePlane.axis[i].x, sidePlane.axis[i].y, sidePlane.axis[i].z);
+			this.axisOffset[i] = sidePlane.axisOffset[i];
+			this.axisScale[i] = sidePlane.axisScale[i];
+		}
+		this.rotation = sidePlane.rotation;
+		if(sidePlane.plane == null) { this.plane = null; }
+		else { this.plane = new Plane3D(new Point3D(sidePlane.plane.normal.x, sidePlane.plane.normal.y, sidePlane.plane.normal.z),
+										sidePlane.plane.minusP0DotNormal); }
+		this.isDegenerate = sidePlane.isDegenerate;
+		if(sidePlane.transformation == null) { this.transformation = null; }
+		else { this.transformation = new Transformation(sidePlane.transformation); }
 	}
 	
 	public WorldcraftSidePlane(String input) {
@@ -48,7 +72,7 @@ public class WorldcraftSidePlane {
 		this.rotation = 0;
 		
 		this.plane = null;
-		this.planeIsDegenerate = false;
+		this.isDegenerate = false;
 		this.transformation = null;
 		
 		double x, y, z;
@@ -112,6 +136,83 @@ public class WorldcraftSidePlane {
 		for(int i=0;i<2;i++) {
 			axisScale[i] = Double.valueOf(sidePlaneTokenizer.nextToken());
 		}
+	}
+	
+	public boolean equals(Object o) {
+		if(o == null || !(o instanceof WorldcraftSidePlane)) { return false; }
+		
+		WorldcraftSidePlane p = (WorldcraftSidePlane) o;
+		
+		if(this.points == null && p.points != null ||
+		   this.points != null && p.points == null) { return false; }
+		if(this.points != null && p.points != null) {
+			for(int i=0;i<3;i++) {
+				if(!(this.points[i].equals(p.points[i]))) {
+					return false;
+				}
+			}
+		}
+		
+		if(this.textureName == null && p.textureName != null ||
+		   this.textureName != null && p.textureName == null) { return false; }
+		if(this.textureName != null && p.textureName != null &&
+		   !(this.textureName.equalsIgnoreCase((p.textureName)))) { return false; }
+		
+		if(this.axis == null && p.axis != null ||
+		   this.axis != null && p.axis == null) { return false; }
+		if(this.axisOffset == null && p.axisOffset != null ||
+		   this.axisOffset != null && p.axisOffset == null) { return false; }
+		if(this.axisScale == null && p.axisScale != null ||
+		   this.axisScale != null && p.axisScale == null) { return false; }
+		if(this.axis != null && p.axis != null &&
+		   this.axisOffset != null && this.axisScale != null &&
+		   this.axisScale != null && this.axisScale != null) {
+			for(int i=0;i<2;i++) {
+				if(!(this.axis[i].equals(p.axis[i])) ||
+				   this.axisOffset[i] != p.axisOffset[i] ||
+				   this.axisScale[i] != p.axisScale[i]) {
+					return false;
+				}
+			}
+		}
+		
+		if(this.plane == null && p.plane != null ||
+		   this.plane != null && p.plane == null) { return false; }
+		if(this.plane != null && p.plane != null &&
+		   !(this.plane.equals(p.plane))) { return false; }
+		
+		if(this.transformation == null && p.transformation != null ||
+		   this.transformation != null && p.transformation == null) { return false; }
+		if(this.transformation != null && p.transformation != null &&
+		   !(this.transformation.equals(p.transformation))) { return false; }
+		
+		return this.rotation == p.rotation && 
+			   this.isDegenerate == p.isDegenerate;
+	}
+	
+	public void writeTo(PrintWriter out) throws Exception {
+		DecimalFormat df = new DecimalFormat("#");
+		for(int i=0;i<3;i++) {
+			out.print("( ");
+			out.print(df.format(points[i].x) + " ");
+			out.print(df.format(points[i].y) + " ");
+			out.print(df.format(points[i].z));
+			out.print(" ) ");
+		}
+		out.print(textureName + " ");
+		for(int i=0;i<2;i++) {
+			out.print("[ ");
+			out.print(df.format(axis[i].x) + " ");
+			out.print(df.format(axis[i].y) + " ");
+			out.print(df.format(axis[i].z) + " ");
+			out.print(df.format(axisOffset[i]));
+			out.print(" ] ");
+		}
+		out.print(df.format(rotation));
+		for(int i=0;i<2;i++) {
+			out.print(" " + df.format(axisScale[i]));
+		}
+		out.println();
 	}
 	
 	public String toString() {

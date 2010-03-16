@@ -6,13 +6,13 @@
 --------------------Configuration: convert - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP9A.tmp" with contents
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP6A.tmp" with contents
 [
 /nologo /MTd /Gm /GX /ZI /Od /I "XSIFTK_3.6.2\export\h\FTK" /I "XSIFTK_3.6.2\export\h\Core" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "__XSI_APPLICATION_" /FR"Debug/" /Fp"Debug/convert.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\fileDialog.cpp"
+"C:\Settings\nitro glycerine\Desktop\3D Engine\Converter\Source\Source\worldcraftReader.cpp"
 ]
-Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP9A.tmp" 
-Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP9B.tmp" with contents
+Creating command line "cl.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP6A.tmp" 
+Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP6B.tmp" with contents
 [
 "XSIFTK_3.6.2\export\lib\XSIFtkd.lib" opennurbs_vc60.lib vfw32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/convert.pdb" /debug /machine:I386 /nodefaultlib:"libc.lib" /out:"Debug/convert.exe" /pdbtype:sept 
 ".\Debug\boundingBox.obj"
@@ -32,10 +32,10 @@ Creating temporary file "C:\Settings\NITROG~1\LOCALS~1\Temp\RSP9B.tmp" with cont
 ".\Debug\worldcraftFGDReader.obj"
 ".\Debug\worldcraftReader.obj"
 ]
-Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP9B.tmp"
+Creating command line "link.exe @C:\Settings\NITROG~1\LOCALS~1\Temp\RSP6B.tmp"
 <h3>Output Window</h3>
 Compiling...
-fileDialog.cpp
+worldcraftReader.cpp
 Linking...
 
 

@@ -12,10 +12,10 @@ public class Transformation {
 	public double[][] transformation;
 	
 	public Transformation() {
-		transformation = new double[4][4];
+		this.transformation = new double[4][4];
 		for(int i=0;i<4;i++) {
 			for(int j=0;j<4;j++) {
-				transformation[i][j] = 0;
+				this.transformation[i][j] = 0;
 			}
 		}
 	}
@@ -24,8 +24,13 @@ public class Transformation {
 						  double m21, double m22, double m23, double m24,
 						  double m31, double m32, double m33, double m34,
 						  double m41, double m42, double m43, double m44) {
-		transformation = new double[4][4];
+		this.transformation = new double[4][4];
 		set(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
+	}
+	
+	public Transformation(Transformation t) {
+		this.transformation = new double[4][4];
+		set(t);
 	}
 	
 	public Transformation(BufferedReader in) {
@@ -38,6 +43,18 @@ public class Transformation {
 		}
 	}
 	
+	public void set(Transformation t) {
+		if(t == null) {
+			set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+			return;
+		}
+		set(t.transformation[0][0], t.transformation[0][1], t.transformation[0][2], t.transformation[0][3],
+			t.transformation[1][0], t.transformation[1][1], t.transformation[1][2], t.transformation[1][3],
+			t.transformation[2][0], t.transformation[2][1], t.transformation[2][2], t.transformation[2][3],
+			t.transformation[3][0], t.transformation[3][1], t.transformation[3][2], t.transformation[3][3]);
+		fixNegatives();
+	}
+	
 	public void set(double m11, double m12, double m13, double m14,
 					double m21, double m22, double m23, double m24,
 					double m31, double m32, double m33, double m34,
@@ -46,10 +63,26 @@ public class Transformation {
 		transformation[1][0] = m21; transformation[1][1] = m22; transformation[1][2] = m23; transformation[1][3] = m24;
 		transformation[2][0] = m31; transformation[2][1] = m32; transformation[2][2] = m33; transformation[2][3] = m34;
 		transformation[3][0] = m41; transformation[3][1] = m42; transformation[3][2] = m43; transformation[3][3] = m44;
+		fixNegatives();
+	}
+	
+	public static Transformation Identity() {
+		return new Transformation(1, 0, 0, 0,
+								  0, 1, 0, 0,
+								  0, 0, 1, 0,
+								  0, 0, 0, 1);
 	}
 	
 	public Point3D getPosition() {
 		return new Point3D(transformation[3][0], transformation[3][1], transformation[3][2]);
+	}
+	
+	public void postScaleBy(Point3D scale) {
+		Transformation scalingMatrix = new Transformation(scale.x,       0,       0,       0,
+																0, scale.y,       0,       0,
+																0,       0, scale.z,       0,
+																0,       0,       0,       1);
+		this.postMultiplyBy(scalingMatrix);
 	}
 	
 	public void rotateToAxes(Point3D xAxis, Point3D yAxis, Point3D zAxis) { 
@@ -59,12 +92,34 @@ public class Transformation {
 				       0,       0,       0, 1);
 	}
 	
-	public void postScaleBy(Point3D scale) { // matrix * scale
-		Transformation scalingMatrix = new Transformation(scale.x,       0,       0,       0,
-																0, scale.y,       0,       0,
-																0,       0, scale.z,       0,
-																0,       0,       0,       1);
-		this.postMultiplyBy(scalingMatrix);
+	public void postRotateXAxis(double a) {
+		double c = Math.cos(a);
+		double s = Math.sin(a);
+		Transformation xAxisRotationMatrix = new Transformation( 1,  0,  0,  0,
+																 0,  c, -s,  0,
+																 0,  s,  c,  0,
+																 0,  0,  0,  1);
+		this.postMultiplyBy(xAxisRotationMatrix);
+	}
+	
+	public void postRotateYAxis(double a) {
+		double c = Math.cos(a);
+		double s = Math.sin(a);
+		Transformation yAxisRotationMatrix = new Transformation( c,  0,  s,  0,
+																 0,  1,  0,  0,
+																-s,  0,  c,  0,
+																 0,  0,  0,  c);
+		this.postMultiplyBy(yAxisRotationMatrix);
+	}
+	
+	public void postRotateZAxis(double a) {
+		double c = Math.cos(a);
+		double s = Math.sin(a);
+		Transformation zAxisRotationMatrix = new Transformation( c, -s,  0,  0,
+																 s,  c,  0,  0,
+																 0,  0,  1,  0,
+																 0,  0,  0,  1);
+		this.postMultiplyBy(zAxisRotationMatrix);
 	}
 	
 	public void postTranslateBy(Point3D translation) { // matrix * translation
@@ -76,9 +131,24 @@ public class Transformation {
 	}
 	
 	public void postMultiplyBy(Transformation t) {
+		Transformation t2 = new Transformation();
 		for(int i=0;i<4;i++) {
 			for(int j=0;j<4;j++) {
-				this.transformation[i][j] *= t.transformation[j][i];
+				for(int k=0;k<4;k++) {
+					t2.transformation[i][j] += this.transformation[i][k] * t.transformation[k][j];
+				}
+			}
+		}
+		set(t2);
+		fixNegatives();
+	}
+	
+	private void fixNegatives() {
+		for(int i=0;i<4;i++) {
+			for(int j=0;j<4;j++) {
+				if(transformation[i][j] == 0) {
+					transformation[i][j] = 0; // replace -0.0 with 0.0
+				}
 			}
 		}
 	}
@@ -113,6 +183,33 @@ public class Transformation {
 				}
 			}
 		}
+	}
+	
+	public boolean equals(Object o) {
+		if(o == null || !(o instanceof Transformation)) { return false; }
+		
+		Transformation t = (Transformation) o;
+		
+		for(int i=0;i<4;i++) {
+			for(int j=0;j<4;j++) {
+				if(this.transformation[i][j] != t.transformation[i][j]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	public String toString() {
+		String s = new String("");
+		for(int i=0;i<4;i++) {
+			for(int j=0;j<4;j++) {
+				s += this.transformation[i][j];
+				if(j<3) { s += ", "; }
+				else { s += "\n"; }
+			}
+		}
+		return s;
 	}
 	
 }

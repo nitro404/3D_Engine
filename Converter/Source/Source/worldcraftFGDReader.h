@@ -90,12 +90,9 @@ class WorldcraftFGDReader {
 		void log ();
 
 		void mapAllVariables (PropertyDictionary &properties) {//Except origin, angles, and pitch.
-printf("THIS IS LOCATED IN worldcraftFGDReader.h line 93\n");
 			CString *typeName = properties.get ("type");
 			if (typeName == NULL) return;
-printf("typeName=\"%s\"", (char *) (LPCTSTR) *typeName); fflush(stdout);
 			Type *type = get (types, (char *) (LPCTSTR) *typeName);
-printf("Maybe not...\n"); fflush(stdout);
 			if (type == NULL) return;
 			type->mapAllVariables (types, properties); //Except origin, angles, and pitch.
 		}
