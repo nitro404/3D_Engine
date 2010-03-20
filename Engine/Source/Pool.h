@@ -16,7 +16,7 @@ public:
 	void tick();
 	void draw();
 	
-	void import (ifstream &input, vector<AnimatedTexture *> & animatedTextures);
+	void import(ifstream &input, vector<AnimatedTexture *> & animatedTextures);
 	
 public:
 	DualTransformation * transformation;

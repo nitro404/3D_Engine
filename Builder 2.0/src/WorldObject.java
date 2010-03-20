@@ -7,12 +7,11 @@
 import java.util.Vector;
 import java.io.*;
 
-public class WorldObject {
+public class WorldObject extends Properties {
 	
 	public int objectIndex;
 	public Transformation normal;
 	public Transformation inverse;
-	public Vector<Property> properties;
 	public Vector<Face> faces;
 	
 	public WorldObject() {
@@ -26,54 +25,6 @@ public class WorldObject {
 		this.inverse = inverse;
 		this.properties = properties;
 		this.faces = faces;
-	}
-	
-	public void addProperty(String key, String value) {
-		this.addProperty(new Property(key, value));
-	}
-	
-	public void addProperty(Property property) {
-		if(property == null || property.key == null || property.value == null) { return; }
-		
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(property.key)) {
-				return;
-			}
-		}
-		
-		this.properties.add(property);
-	}
-	
-	public String getPropertyValue(String key) {
-		// search for a property based on a key and return its value if it is present
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
-				return this.properties.elementAt(i).value;
-			}
-		}
-		return null;
-	}
-	
-	public boolean setPropertyValue(String key, String newValue) {
-		// search for a property based on a key and change its value if it is present
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
-				this.properties.elementAt(i).value = newValue;
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean removeProperty(String key) {
-		// search for a property based on a key and remove it if it is present
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
-				this.properties.remove(i);
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	public void writeTo(PrintWriter out) throws Exception {

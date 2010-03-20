@@ -9,6 +9,7 @@ Terrain::~Terrain() {
 	if(name != NULL) { delete [] name; }
 	if(points != NULL) { delete [] points; }
 	if(transformation != NULL) { delete transformation; }
+	delete group;
 }
 
 void Terrain::draw() {
@@ -21,81 +22,10 @@ void Terrain::draw() {
 	else {
 		glDisable(GL_BLEND);
 	}
-	
-	if (TERRAIN_IMPLEMENTATION == USE_QUADS) {
-		drawQuads();
-	}
-	else if (TERRAIN_IMPLEMENTATION == USE_STRIPS) {
-		drawStrips();
-	}
-	else if (TERRAIN_IMPLEMENTATION == USE_FACE_GROUPS) {
-		drawFull();
-	}
-	else if (TERRAIN_IMPLEMENTATION == USE_FACE_GROUPS_AND_FRUSTUM_CULLING) {
-		drawFrustrums();
-	}
-}
-
-void Terrain::drawQuads() {
-	GamePoint * point;
-	for(int j=0;j<height;j++) {
-		for(int i=0;i<width;i++) {
-			glBegin(GL_POLYGON);
-				// top-left
-				point = &points[i * width + j];
-				glTexCoord2d(point->tx, point->ty);
-				glVertex3d(point->x, point->y, point->z);
-
-				// bottom-left
-				point = &points[i * width + j + 1];
-				glTexCoord2d(point->tx, point->ty);
-				glVertex3d(point->x, point->y, point->z);
-
-				// bottom-right
-				point = &points[(i + 1) * width + j + 1];
-				glTexCoord2d(point->tx, point->ty);
-				glVertex3d(point->x, point->y, point->z);
-
-				// top-right
-				point = &points[(i + 1) * width + j];
-				glTexCoord2d(point->tx, point->ty);
-				glVertex3d(point->x, point->y, point->z);
-			glEnd();
-		}
-	}
-}
-
-void Terrain::drawStrips() {
-	GamePoint * point;
-
-	glBegin(GL_TRIANGLE_STRIP);
-	for (int j = 0; j < height;j++) {
-		point = &points[j * (width + 1)];
-		glTexCoord2d(point->tx, point->ty);
-		glVertex3d(point->x, point->y, point->z);
-		for (int i = 0; i < width + 1;i++) {
-
-			point = &points[j * (width + 1) + i];
-			glTexCoord2d(point->tx, point->ty);
-			glVertex3d(point->x, point->y, point->z);
-
-			point = &points[(j + 1) * (width + 1) + i];
-			glTexCoord2d(point->tx, point->ty);
-			glVertex3d(point->x, point->y, point->z);
-			
-		}
-		glTexCoord2d(point->tx, point->ty);
-		glVertex3d(point->x, point->y, point->z);
-	}
-	glEnd();
-}
-
-void Terrain::drawFrustrums() {
-	
-}
-
-void Terrain::drawFull() {
-	
+	glPushMatrix();
+		glMultMatrixd(transformation->normal());
+		group->draw();
+	glPopMatrix();
 }
 
 void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char *> & heightMaps) {
@@ -104,6 +34,8 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 	char value[256];
 	char * str;
 	
+	transformation = DualTransformation::import(input);
+
 	// input the properties
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
@@ -209,14 +141,10 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 			if(tiled == 1) {
 				tx = i;
 				ty = j;
-//				tx = i * tilingTextureWidth;
-//				ty = j * tilingTextureHeight;
 			}
 			else {
-				tx = i / textureMap->width;
-				ty = j / textureMap->height;
-//				tx = i * (textureMap->width / terrainSizeX);
-//				ty = j * (textureMap->height / terrainSizeY);
+				tx = i / (textureMap->width + 1);
+				ty = j / (textureMap->height + 1);
 			}
 			
 			points[currentPoint].x = x;
@@ -229,6 +157,9 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 	}
 
 	delete [] heightMapData;
+
+	group = new FaceGroup(points, width + 1, height + 1);
+
 }
 
 double Terrain::scaleHeight(int x, int y, int * heightMapData) {

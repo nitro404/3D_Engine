@@ -29,9 +29,6 @@ public:
 	bool translateLeft, translateRight, translateAhead, translateBack, translateUp, translateDown;
 	bool rotateLeft, rotateRight, rotateUp, rotateDown;
 
-	static void setup();
-	static void wrapup();
-
 	void tick(); //But there is no draw... If you did, what would it look like?
 	
 	//Movement functions that pass the buck to the camera...

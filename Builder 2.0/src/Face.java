@@ -8,10 +8,9 @@ import java.awt.Dimension;
 import java.io.*;
 import java.util.Vector;
 
-public class Face {
+public class Face extends Properties {
 	
 	public int faceIndex;
-	public Vector<Property> properties;
 	public Vector<GamePoint3D> points;
 	
 	public Face() {
@@ -50,49 +49,6 @@ public class Face {
 		points.add(point);
 	}
 	
-	public boolean addProperty(String key, String value) {
-		// add a property if it is not a duplicate
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
-				return false;
-			}
-		}
-		this.properties.add(new Property(key, value));
-		return true;
-	}
-	
-	public String getPropertyValue(String key) {
-		// search for a property based on a key and return its value if it is present
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
-				return this.properties.elementAt(i).value;
-			}
-		}
-		return null;
-	}
-	
-	public boolean setPropertyValue(String key, String newValue) {
-		// search for a property based on a key and change its value if it is present
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
-				this.properties.elementAt(i).value = newValue;
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean removeProperty(String key) {
-		// search for a property based on a key and remove it if it is present
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
-				this.properties.remove(i);
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public static Vector<Face> convertFrom(Vector<WorldcraftSidePlane> sidePlanes, int faceIndex, Vector<Texture> textures) throws Exception {
 		
 		Vector<Face> newFaces = new Vector<Face>();
@@ -110,14 +66,14 @@ public class Face {
 				standardPoints[i] = new Point3D(sidePlane.points[i].x, sidePlane.points[i].z, -sidePlane.points[i].y);
 			}
 			
-			Point3D normal = standardPoints[0].minus(standardPoints[1]).cross(standardPoints[2].minus(standardPoints[0]));
+			Point3D normal = standardPoints[0].subtract(standardPoints[1]).cross(standardPoints[2].subtract(standardPoints[0]));
 			
 			if(!(normal.squaredLength() > 1.0e-10)) {
 				System.out.println("WARNING: Ignoring zero-area triangle: (" + standardPoints[0] + "), (" + standardPoints[1] + "), (" + standardPoints[2] + ")");
 				sidePlane.isDegenerate = true;
 			}
 			else {
-				sidePlane.plane = new Plane3D(normal.multiplyBy(1.0 / Math.sqrt(normal.squaredLength())), standardPoints[1]);
+				sidePlane.plane = new Plane3D(normal.multiply(1.0 / Math.sqrt(normal.squaredLength())), standardPoints[1]);
 				
 				Point3D xAxis = new Point3D(sidePlane.axis[0].x, sidePlane.axis[0].z, -sidePlane.axis[0].y);
 				Point3D yAxis = new Point3D(sidePlane.axis[1].x, sidePlane.axis[1].z, -sidePlane.axis[1].y);
@@ -156,18 +112,32 @@ public class Face {
 			tempPlanes.add(sidePlane);
 		}
 		
+//		double enlargementForScalingOnPlane = 1.0001;
+//		double enlargementTranslatingOnPlane = 0.0001;
+//		double enlargementForMovingPlaneOut = 0.015;
+		
+//		NOTE: sidePlanes == tempPlanes #################################################################
+		
 		Plane3D plane;
 		Transformation t;
-		for(int x=0;x<sidePlanes.size();x++) {
-			sidePlane = new WorldcraftSidePlane(sidePlanes.elementAt(x));
+//		for(int x=0;x<sidePlanes.size();x++) {
+//			sidePlane = new WorldcraftSidePlane(sidePlanes.elementAt(x));
+		for(int x=0;x<tempPlanes.size();x++) {
+		sidePlane = new WorldcraftSidePlane(tempPlanes.elementAt(x));
 			plane = sidePlane.plane;
 			t = sidePlane.transformation;
 			
 			if(sidePlane.isDegenerate) { continue; }
 			
-			Vector<Point3D> largeFacePoints = null;
-			Vector<Point3D> cutUpFacePoints = null;
-			Vector<Point3D> enlargedFacePoints = null;
+			Vector<Point3D> largeFacePoints = anyFarCornerPoints(plane);
+/*for(int v=0;v<largeFacePoints.size();v++) {
+System.out.println(largeFacePoints.elementAt(v));
+}*/
+			Vector<Point3D> cutUpFacePoints = cutUpBy(largeFacePoints, tempPlanes, x);
+for(int u=0;u<cutUpFacePoints.size();u++) {
+System.out.println(cutUpFacePoints.elementAt(u));
+}
+			Vector<Point3D> enlargedFacePoints = enlarge(cutUpFacePoints, plane, 2);
 			Vector<Point3D> moreAccurateCutUpFacePoints = null;
 		}
 		
@@ -246,12 +216,13 @@ public class Face {
 		return newFaces;
 	}
 	
-	Vector<Point3D> anyFarCornerPoints(Plane3D plane) {
+	public static Vector<Point3D> anyFarCornerPoints(Plane3D plane) {
 		double x = plane.normal.x;
 		double y = plane.normal.y;
 		double z = plane.normal.z;
 		double d = -plane.minusP0DotNormal;
-		double p = 1.0e10;
+//		double p = 1.0e10;
+		double p = 10000000000.0;
 		double m = -p;
 		
 		Point3D point[] = new Point3D[4];
@@ -270,14 +241,14 @@ public class Face {
 				point[3] = new Point3D(m, p, (d - (m * x) - (p * y)) / z);
 			}
 		}
-			else {
-				if(Math.abs(y) > Math.abs(z)) {
+		else {
+			if(Math.abs(y) > Math.abs(z)) {
 				point[0] = new Point3D(p, (d - (p * x) - (p * z)) / y, p);
 				point[1] = new Point3D(p, (d - (p * x) - (m * z)) / y, m);
 				point[2] = new Point3D(m, (d - (m * x) - (m * z)) / y, m);
 				point[3] = new Point3D(m, (d - (m * x) - (p * z)) / y, p);
-				}
-				else {
+			}
+			else {
 				point[0] = new Point3D(p, p, (d - (p * x) - (p * y)) / z);
 				point[1] = new Point3D(p, m, (d - (p * x) - (m * y)) / z);
 				point[2] = new Point3D(m, m, (d - (m * x) - (m * y)) / z);
@@ -303,107 +274,122 @@ public class Face {
 	    return points;
 	}
 	
-	Vector<Point3D> cutUpBy(Vector<Point3D> points, Vector<WorldcraftSidePlane> sidePlanes, int indexOfExcludedPlane) {
+	private static Vector<Point3D> cutUpBy(Vector<Point3D> points, Vector<WorldcraftSidePlane> sidePlanes, int indexOfExcludedPlane) {
+		Vector<Point3D> oldPoints = points;
+		Plane3D plane, flippedPlane;
+		for(int i=0;i<sidePlanes.size();i++) {
+			if(i != indexOfExcludedPlane) {
+				if(sidePlanes.elementAt(i).isDegenerate) { continue; }
+				
+				plane = sidePlanes.elementAt(i).plane;
+				flippedPlane = new Plane3D(new Point3D(plane.normal.negative()), -(plane.minusP0DotNormal));
+				Vector<Point3D> newPoints = clip(flippedPlane, oldPoints);
+				if(oldPoints != points) {
+					oldPoints.clear();
+				}
+				oldPoints = newPoints;
+			}
+		}
+		return oldPoints;
+	}
+	
+	/*private static Vector<Point3D> cutUpBy(Vector<Point3D> points, Vector<WorldcraftSidePlane> sidePlanes, int indexOfExcludedPlane) {
 		Vector<Point3D> oldPoints = points;
 		Plane3D plane, flippedPlane;
 		for(int i=0;i<sidePlanes.size();i++) {
 			if(sidePlanes.elementAt(i).isDegenerate) { continue; }
 			
 			plane = sidePlanes.elementAt(i).plane;
-			flippedPlane = new Plane3D(new Point3D(-plane.normal.x, -plane.normal.y, -plane.normal.z), -plane.minusP0DotNormal);
+			flippedPlane = new Plane3D(plane.normal.negative(), -plane.minusP0DotNormal);
+//System.out.println(flippedPlane.normal + " : " + flippedPlane.minusP0DotNormal);
+			
 			Vector<Point3D> newPoints = clip(flippedPlane, oldPoints);
 			oldPoints = newPoints;
 		}
 		return oldPoints;
-	}
+	}*/
 	
-	Vector<Point3D> enlarge(Vector<Point3D> points, Plane3D plane, double enlargementFactor) {
+	private static Vector<Point3D> enlarge(Vector<Point3D> points, Plane3D plane, double enlargementFactor) {
 		Point3D sum = new Point3D();
 		for(int i=0;i<points.size();i++) {
-			sum.x += points.elementAt(i).x;
-			sum.y += points.elementAt(i).y;
-			sum.z += points.elementAt(i).z;
+			sum = sum.add(points.elementAt(i));
 		}
 		double s = points.size();
-		Point3D center = new Point3D(sum.x / s, sum.y / s, sum.z / s);
+		Point3D center = new Point3D(sum.divide(s));
 		
 		Vector<Point3D> newPoints = new Vector<Point3D>();
 		Point3D newPoint;
 		for(int i=0;i<points.size();i++) {
-			newPoint = new Point3D(center.x + (points.elementAt(i).x - center.x) * enlargementFactor,
-								   center.y + (points.elementAt(i).y - center.y) * enlargementFactor,
-								   center.z + (points.elementAt(i).z - center.z) * enlargementFactor);
+			newPoint = new Point3D(center.add(points.elementAt(i).subtract(center).multiply(enlargementFactor))); 
+//			newPoint = new Point3D(center.x + (points.elementAt(i).x - center.x) * enlargementFactor,
+//								   center.y + (points.elementAt(i).y - center.y) * enlargementFactor,
+//								   center.z + (points.elementAt(i).z - center.z) * enlargementFactor);
+//System.out.println(newPoint);
 			newPoints.add(plane.projectionOfPoint(newPoint));
 		}
 		return newPoints;
 	}
 	
-	boolean isCounterClockwise(Plane3D plane, Point3D p1, Point3D p2, Point3D p3) {
-return false;
-		/*
-		Vector unnormalizedNormal; double squaredLength;
-		if (!plane.normalIsValid (point1, point2, point3, unnormalizedNormal, squaredLength)) return false;
-		Vector normalizedNormal = unnormalizedNormal * (1.0 / sqrt (squaredLength));
-		return (normalizedNormal - plane.normal).squaredLength () < epsilon ();
-		*/
+	private static boolean isCounterClockwise(Plane3D plane, Point3D p1, Point3D p2, Point3D p3) {
+		Point3D normal = p2.subtract(p1).cross(p3.subtract(p2));
+		if(!(normal.squaredLength() > 1.0e-10)) { return false; }
+		Point3D normalizedNormal = normal.multiply(1.0 / Math.sqrt(normal.squaredLength()));
+		return normalizedNormal.subtract(plane.normal).squaredLength() < 1.0e-10;
 	}
 
-	Vector<Point3D> clip(Plane3D plane, Vector<Point3D> candidatePoints) {
-		/*
-	    //Returns clipped points; i.e., those on the positive or zero side (also eliminates zero length edges).
-	    if (candidatePoints->empty ()) return new PointCollection; //Nothing to clip.
-
-	    //Keep what remains after clipping.
-	    PointCollection *points = new PointCollection;
-	    for (long index = 0; index < candidatePoints->size (); index++) {
-	        Point *point1 = (*candidatePoints) [index];
-			//Let point2 be the next point and wraparound to the beginning if at the end.
-	        Point *point2 = (*candidatePoints) [index == candidatePoints->size () - 1 ? 0 : index + 1]; 
-	        LineSign lineSign = plane.whereIsLine (*point1, *point2);
-
-			switch (plane.whereIsLine (*point1, *point2)) {
-				case frontSign: 
-					points->push_back (point1->newCopy ()); 
+	private static Vector<Point3D> clip(Plane3D plane, Vector<Point3D> candidatePoints) {
+		Vector<Point3D> points = new Vector<Point3D>();
+		if(candidatePoints == null || candidatePoints.size() == 0) { return points; }
+		
+		for(int i=0;i<candidatePoints.size();i++) {
+			Point3D p1 = candidatePoints.elementAt(i);
+			Point3D p2 = candidatePoints.elementAt(i == candidatePoints.size() - 1 ? 0 : i + 1);
+			
+			int lineSign = plane.whereIsLine(p1, p2);
+			
+			switch(lineSign) {
+				case Plane3D.LINE_BACK_SIGN:
 					break;
-				case backSign: 
-					//Discard. 
+					
+				case Plane3D.LINE_ON_SIGN:
+				case Plane3D.LINE_FRONT_SIGN:
+					points.add(new Point3D(p1)); 
 					break;
-				case onSign: 
-					points->push_back (point1->newCopy ()); 
-					break;
-				case straddlesSign:
-					PointSign point1Sign = plane.whereIsPoint (*point1);
-					PointSign point2Sign = plane.whereIsPoint (*point2);
-
-					if (point1Sign == positiveSign || point1Sign == zeroSign) {
-						points->push_back (point1->newCopy ()); 
+					
+				case Plane3D.LINE_STRADDLES_SIGN:
+					int s1 = plane.whereIsPoint(p1);
+					int s2 = plane.whereIsPoint(p2);
+					
+					if(s1 == Plane3D.POINT_POSITIVE_SIGN || s1 == Plane3D.POINT_ZERO_SIGN) {
+						points.add(new Point3D(p1));
 					}
-
-					if (point1Sign == positiveSign && point2Sign == negativeSign) {
-						Point intersection = whereIsIntersectionOfPlaneCrossingLine (plane, *point1, *point2);
-						points->push_back (intersection.newCopy ()); 
-					} else if (point1Sign == negativeSign && point2Sign == positiveSign) {
-						Point intersection = whereIsIntersectionOfPlaneCrossingLine (plane, *point2, *point1);
-						points->push_back (intersection.newCopy ()); 
+					
+					if(s1 == Plane3D.POINT_POSITIVE_SIGN && s2 == Plane3D.POINT_NEGATIVE_SIGN) {
+						Point3D intersection = plane.intersectionOf(p1, p2);
+						points.add(intersection);
 					}
+					else if(s1 == Plane3D.POINT_NEGATIVE_SIGN && s2 == Plane3D.POINT_POSITIVE_SIGN) {
+						Point3D intersection = plane.intersectionOf(p2, p1);
+						points.add(intersection);
+					}
+					break;
+				
 			}
 		}
-
-	    //Remove duplicates and useless points (less than 3 points means it can't be used to represent a face).
-	    PointCollection *trimmedPoints = new PointCollection;
-	    for (index = 0; index < points->size (); index++) {
-	        Point *previousPoint = (*points) [index == 0 ? points->size () - 1 : index - 1]; //wrap to right end
-	        Point *point = (*points) [index];
-			if (point->squaredDistanceTo (*previousPoint) < squaredEpsilon ())
-				; //Discard 
-			else trimmedPoints->push_back (point->newCopy ());
+		
+		Vector<Point3D> trimmedPoints = new Vector<Point3D>();
+		for(int i=0;i<points.size();i++) {
+			Point3D previousPoint = points.elementAt(i == 0 ? points.size() - 1 : i - 1);
+			Point3D point = points.elementAt(i);
+			
+			if(!(point.squaredDistanceTo(previousPoint) < 1.0e-10)) {
+				trimmedPoints.add(new Point3D(point));
+			}
 		}
-
-		deletePointCollection (points);
-		if (trimmedPoints->size () >= 3) return trimmedPoints;
-		deletePointCollection (trimmedPoints); //deletes points too...
-		return new PointCollection;
-		*/
+		
+		if(trimmedPoints.size() >= 3) {
+			return trimmedPoints;
+		}
 		return new Vector<Point3D>();
 	}
 	

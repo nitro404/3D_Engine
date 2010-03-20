@@ -45,8 +45,6 @@ void Environment::draw() {
 		glVertex3d(0.5, -0.5, 0.5);
 		glTexCoord2d(width, width);
 		glVertex3d(0.5, 0.5, 0.5);
-		
-		
 		glEnd();
 
 		// front side

@@ -1,12 +1,7 @@
 #pragma once
 
 #include "Object.h"
-
-#define USE_QUADS							0 // works
-#define USE_STRIPS							1 // works
-#define USE_FACE_GROUPS						2 // doesn't work yet
-#define USE_FACE_GROUPS_AND_FRUSTUM_CULLING 3 // doesn't work yet
-#define TERRAIN_IMPLEMENTATION USE_QUADS
+#include "FaceGroup.h"
 
 class Terrain : public Object {
 public:
@@ -32,9 +27,5 @@ private:
 	Point minPoint;
 	Point maxPoint;
 	GamePoint * points;
-
-	void drawQuads();
-	void drawStrips();
-	void drawFrustrums();
-	void drawFull();
+	FaceGroup * group;
 };

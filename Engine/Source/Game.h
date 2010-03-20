@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Includes.h"
+#include "Text.h"
 #include "Variable.h"
 #include "Variables.h"
 #include "World.h"
@@ -12,35 +13,29 @@ extern double DT;
 
 class Game {
 public:
-	Game(Variables * settings);
+	Game(int windowWidth, int windowHeight, Variables * settings);
 	~Game();
 	
 	void tick();
 	void draw();
-	
-	void menuNextItem();
-	void menuPrevItem();
-	void selectMenuItem();
-	void escapePressed();
+
+	void resume();
+	void pause();
+	void unpause();
+	void togglePause();
+	bool isPaused();
+
+	void loadMap(char * fileName);
 	void closeMap();
 	
 private:
-	void drawText(int x, int y, const char * text);
-	void drawMenu();
 	void drawFrameRate();
 
 	void verifySettings();
 	void loadTextures(char * fileName, char * textureDirectory, char * heightMapDirectory);
-	void loadMapList(char * mapDirectory);
-	void loadMapPrompt();
-	void loadMap(char * fileName);
 	
 public:
-	HDC deviceContext;
-	GLuint fontBase;
-
 	World * world;
-	bool displayHelp;
 
 	vector<Texture *> textures;
 	vector<char *> heightMaps;
@@ -51,18 +46,12 @@ private:
 
 	bool drawFPS;
 	char * fps;
+	Text * fpsText;
 
-	char * helpMessage;
-	char * selectionPointer;
-	Colour menuColour;
-	int menuOffsetX;
-	int menuOffsetY;
-	int menuIndex;
-	int menuSpacing;
-	int menuType;
-	vector<char *> menuItems;
-	vector<char *> menuTitles;
-	vector<string> mapList;
+	bool paused;
+
+	int windowWidth;
+	int windowHeight;
 };
 
 extern Game * game;

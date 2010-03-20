@@ -336,6 +336,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\FaceGroup.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Font.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Game.h"
 					>
 				</File>
@@ -345,6 +353,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\InputManager.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu.h"
 					>
 				</File>
 				<File
@@ -361,6 +373,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Sound.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Text.h"
 					>
 				</File>
 				<File
@@ -402,6 +418,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\FaceGroup.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Font.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Game.cpp"
 					>
 				</File>
@@ -418,6 +442,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Menu.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Plane.cpp"
 					>
 				</File>
@@ -431,6 +459,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Sound.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Text.cpp"
 					>
 				</File>
 				<File

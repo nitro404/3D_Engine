@@ -10,28 +10,6 @@ Pool::~Pool() {
 	if(transformation != NULL) { delete transformation; }
 }
 
-/*Pool::Pool(const Pool & x) {
-	transformation = DualTransformation(*x.transformation);
-	for(unsigned int i=0;i<x.faces.size();i++) {
-		faces.push_back(new Face(*x.faces.at(i)));
-	}
-	maxX = x.maxX; maxY = x.maxY; maxZ = x.maxZ;
-	minX = x.minX; minY = x.minY
-	double maxX, maxY, maxZ;
-	double minX, minY, minZ;
-	char * name;
-	Colour waterColour;
-}
-
-Pool & Pool::operator = (const Pool & x) {
-	delete [] this->_id;
-	delete [] this->_value;
-
-
-
-	return *this;
-}*/
-
 double Pool::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation->m41, 2) + pow(p.y - transformation->m42, 2) + pow(p.z - transformation->m43, 2) );
 }

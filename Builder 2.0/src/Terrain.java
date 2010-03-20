@@ -11,7 +11,7 @@ public class Terrain extends WorldObject {
 	public int heightMapIndex;
 	
 	public Terrain(UniversalObject object, Vector<HeightMap> heightMaps) {
-		super(object.objectIndex, null, null, object.properties, null);
+		super(object.objectIndex, object.normal, object.inverse, object.properties, null);
 		
 		heightMapIndex = -1;
 		HeightMap heightMap = null;
@@ -46,12 +46,6 @@ public class Terrain extends WorldObject {
 				if(p.z < minPoint.z) { minPoint.z = p.z; }
 			}
 		}
-		maxPoint.x += object.normal.getPosition().x;
-		maxPoint.y += object.normal.getPosition().y;
-		maxPoint.z += object.normal.getPosition().z;
-		minPoint.x += object.normal.getPosition().x;
-		minPoint.y += object.normal.getPosition().y;
-		minPoint.z += object.normal.getPosition().z;
 		addProperty("maxpoint", maxPoint.x + ", " + maxPoint.y + ", " + maxPoint.z);
 		addProperty("minpoint", minPoint.x + ", " + minPoint.y + ", " + minPoint.z);
 		

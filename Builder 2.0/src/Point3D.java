@@ -19,6 +19,11 @@ public class Point3D {
 		this.z = z;
 	}
 	
+	public Point3D(Point3D p) {
+		if(p == null) { this.x = 0; this.y = 0; this.z = 0; }
+		else { this.x = p.x; this.y = p.y; this.z = p.z; }
+	}
+	
 	public Point3D(BufferedReader in) {
 		try {
 			this.readFrom(in);
@@ -37,25 +42,50 @@ public class Point3D {
 		return new Point3D(-x, -y, -z);
 	}
 	
-	public Point3D minus(double c) {
+	public Point3D add(double c) {
+		return new Point3D(x + c, y + c, z + c);
+	}
+	
+	public Point3D add(Point3D p) {
+		return new Point3D(x + p.x, y + p.y, z + p.z);
+	}
+	
+	public Point3D subtract(double c) {
 		return new Point3D(x - c, y - c, z - c);
 	}
 	
-	public Point3D minus(Point3D p) {
+	public Point3D subtract(Point3D p) {
 		return new Point3D(x - p.x, y - p.y, z - p.z);
+	}
+	
+	public Point3D multiply(double c) {
+		return new Point3D(x * c, y * c, z * c);
+	}
+	
+	public Point3D multiply(Point3D p) {
+		return new Point3D(x * p.x, y * p.y, z * p.z);
+	}
+
+	public Point3D divide(double c) {
+		return new Point3D(x / c, y / c, z / c);
+	}
+	
+	public Point3D divide(Point3D p) {
+		return new Point3D(x / p.x, y / p.y, z / p.z);
 	}
 	
 	public Point3D square() {
 		return new Point3D(x * x, y * y, z * z);
 	}
 	
-	public Point3D multiplyBy(double c) {
-		return new Point3D(x * c, y * c, z * c);
-	}
-	
-	public Point3D multiplyBy(Point3D p) {
-		return new Point3D(x * p.x, y * p.y, z * p.z);
-	}
+	public Point3D normalize() {
+		Point3D p = new Point3D(this.x, this.y, this.z);
+		double length = Math.sqrt(this.squaredLength());
+		if(Math.abs(length) > 1.0e-10) {
+			p.multiply(1 / length);
+		}
+		return p;
+	}	
 	
 	public double dot(Point3D p) {
 		return (x * p.x) + (y * p.y) + (z * p.z);
@@ -67,6 +97,11 @@ public class Point3D {
 	
 	public double squaredLength() {
 		return (x * x) + (y * y) + (z * z);
+	}
+	
+	public double squaredDistanceTo(Point3D p) {
+		Point3D difference = p.subtract(this);
+		return difference.dot(difference);
 	}
 	
 	public void readFrom(BufferedReader in) throws Exception {

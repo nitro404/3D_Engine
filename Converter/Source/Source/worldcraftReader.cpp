@@ -758,6 +758,7 @@ PointCollection *cutUpBy (PointCollection *points, WorldcraftSidePlaneCollection
 			if (sidePlane->planeIsDegenerate) continue;
 			Plane &plane = sidePlane->plane;
 			Plane flippedPlane = Plane (-plane.normal, -plane.minusP0DotNormal);
+//printf("(%f, %f, %f) : %f\n", flippedPlane.normal.x, flippedPlane.normal.y, flippedPlane.normal.z, flippedPlane.minusP0DotNormal);
 			PointCollection *newPoints = clip (flippedPlane, oldPoints);
 			if (oldPoints != points) deletePointCollection (oldPoints);
 			oldPoints = newPoints;
@@ -781,6 +782,7 @@ PointCollection *enlarge (PointCollection *points, Plane &plane, double enlargem
 		Point *point = (*points) [pointIndex];
 		Point outwardMovedPoint = plane.projectionOfPoint (center + (*point - center) * enlargementFactor);
 		newPoints->push_back (outwardMovedPoint.newCopy ());
+//printf("%f, %f, %f)\n", outwardMovedPoint.x, outwardMovedPoint.y, outwardMovedPoint.z);
 	}
 	return newPoints;
 }
@@ -866,11 +868,11 @@ FaceCollection *convertToFaces (WorldcraftSidePlaneCollection *sidePlanes) {
 		//Consider this side plane.
 		WorldcraftSidePlane &sidePlane = *((*sidePlanes) [sidePlaneIndex]); sidePlane.planeIsDegenerate = false;
 
-printf("( %d %d %d ) ( %d %d %d ) ( %d %d %d ) %s\n",
+/*printf("( %d %d %d ) ( %d %d %d ) ( %d %d %d ) %s\n",
 (int) sidePlane.point1.x, (int) sidePlane.point1.y, (int) sidePlane.point1.z,
 (int) sidePlane.point2.x, (int) sidePlane.point2.y, (int) sidePlane.point2.z,
 (int) sidePlane.point3.x, (int) sidePlane.point3.y, (int) sidePlane.point3.z,
-(int) sidePlane.textureName);
+(int) sidePlane.textureName);*/
 
 /*printf("( %d %d %d ) ( %d %d %d ) ( %d %d %d ) %s [ %d %d %d %d ] [ %d %d %d %d ] %d %d %d\n",
 (int) sidePlane.point1.x, (int) sidePlane.point1.y, (int) sidePlane.point1.z,
@@ -1022,11 +1024,11 @@ printf("( %d %d %d ) ( %d %d %d ) ( %d %d %d ) %s\n",
 			transformation.postTranslateBy (textureTranslation); //T-1
 			transformation.postScaleBy (textureScale); //N-1
 
-printf("%f, %f, %f, %f\n", transformation.m11, transformation.m12, transformation.m13, transformation.m14);
+/*printf("%f, %f, %f, %f\n", transformation.m11, transformation.m12, transformation.m13, transformation.m14);
 printf("%f, %f, %f, %f\n", transformation.m21, transformation.m22, transformation.m23, transformation.m24);
 printf("%f, %f, %f, %f\n", transformation.m31, transformation.m32, transformation.m33, transformation.m34);
 printf("%f, %f, %f, %f\n", transformation.m41, transformation.m42, transformation.m43, transformation.m44);
-printf("\n");
+printf("\n");*/
 		}
 	}
 
@@ -1063,7 +1065,16 @@ printf("\n");
 
 		//Construct the points for the face coordinates
 		PointCollection *largeFacePoints = anyFarCornerPoints (plane);
+/*for(unsigned int v=0;v<largeFacePoints->size();v++) {
+printf("(%f, %f, %f)\n",
+largeFacePoints->at(v)->x, largeFacePoints->at(v)->y, largeFacePoints->at(v)->z);
+}*/
 		PointCollection *cutUpFacePoints = cutUpBy (largeFacePoints, sidePlanes, sidePlaneIndex);
+// CURRENT PRINTF
+/*for(unsigned int u=0;u<cutUpFacePoints->size();u++) {
+printf("(%f, %f, %f)\n",
+cutUpFacePoints->at(u)->x, cutUpFacePoints->at(u)->y, cutUpFacePoints->at(u)->z);
+}*/
 		PointCollection *enlargedFacePoints = enlarge (cutUpFacePoints, plane);
 		PointCollection *moreAccurateCutUpFacePoints = cutUpBy (enlargedFacePoints, sidePlanes, sidePlaneIndex);
 

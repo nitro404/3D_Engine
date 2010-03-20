@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Menu.h"
 
 int mouseSensitivity = 4;
 
@@ -7,6 +8,8 @@ void exitGame();
 bool wireframe = false;
 int screenWidth;
 int screenHeight;
+
+Menu * menu = NULL;
 
 void resizeWindow(int width, int height) {
 	//Setup a new viewport.
@@ -58,6 +61,7 @@ inline void computeDT() {
 void displayWindow() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	game->draw();
+	menu->draw();
 	glutSwapBuffers();
 }
 
@@ -77,15 +81,14 @@ void visibilityChanged (int visible) {
 void specialKeyPressed (int character, int x, int y) {
 	switch(character) {
 		case GLUT_KEY_F1:
-			game->displayHelp = !game->displayHelp;
 			break;
 		case GLUT_KEY_F2:
 			break;
 		case GLUT_KEY_UP:
-			game->menuPrevItem();
+			menu->moveUp();
 			break;
 		case GLUT_KEY_DOWN:
-			game->menuNextItem();
+			menu->moveDown();
 			break;
 		case GLUT_KEY_RIGHT:
 			break;
@@ -110,50 +113,64 @@ void specialKeyReleased(int character, int x, int y) {
 void normalKeyPressed(unsigned char character, int x, int y) {
 	switch(character) {
 		case 27: // escape
-			game->escapePressed();
+			menu->back();
 			break;
 		
 		case 'w':
 		case 'W':
-			inputManager->translateAhead = true;
+			if(!game->isPaused()) {
+				inputManager->translateAhead = true;
+			}
+			menu->moveUp();
 			break;
 			
 		case 's':
 		case 'S':
-			inputManager->translateBack = true;
+			if(!game->isPaused()) {
+				inputManager->translateBack = true;
+			}
+			menu->moveDown();
 			break;
 			
 		case 'a':
 		case 'A':
-			inputManager->translateLeft = true;
+			if(!game->isPaused()) {
+				inputManager->translateLeft = true;
+			}
 			break;
 			
 		case 'd':
 		case 'D':
-			inputManager->translateRight = true;
+			if(!game->isPaused()) {
+				inputManager->translateRight = true;
+			}
 			break;
 			
 		case ' ':
-			inputManager->translateUp = true;
+			if(!game->isPaused()) {
+				inputManager->translateUp = true;
+			}
+			menu->select();
 			break;
 			
 		case 'z':
 		case 'Z':
-			inputManager->translateDown = true;
+			if(!game->isPaused()) {
+				inputManager->translateDown = true;
+			}
 			break;
 
 		case 't':
 		case 'T':
-			wireframe = !wireframe;
-			glPolygonMode (GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
+//			wireframe = !wireframe;
+//			glPolygonMode (GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
 			break;
 			
 		case '?':
-			game->displayHelp = !game->displayHelp;
 			break;
 			
 		case 13: // enter
-			game->selectMenuItem();
+			menu->select();
 //			if(keyIsDown (VK_MENU)) { // alt
 //			if((GetAsyncKeyState(VK_MENU) & 0x8000) != 0) { // alt
 //				fullscreen = !fullscreen;
@@ -174,31 +191,43 @@ void normalKeyReleased (unsigned char character, int x, int y) {
 	switch (character) {
 		case 'w':
 		case 'W':
-			inputManager->translateAhead = false;
+			if(!game->isPaused()) {
+				inputManager->translateAhead = false;
+			}
 			break;
 			
 		case 's':
 		case 'S':
-			inputManager->translateBack = false;
+			if(!game->isPaused()) {
+				inputManager->translateBack = false;
+			}
 			break;
 			
 		case 'a':
 		case 'A':
-			inputManager->translateLeft = false;
+			if(!game->isPaused()) {
+				inputManager->translateLeft = false;
+			}
 			break;
 			
 		case 'd':
 		case 'D':
-			inputManager->translateRight = false;
+			if(!game->isPaused()) {
+				inputManager->translateRight = false;
+			}
 			break;
 
 		case ' ':
-			inputManager->translateUp = false;
+			if(!game->isPaused()) {
+				inputManager->translateUp = false;
+			}
 			break;
 
 		case 'z':
 		case 'Z':
-			inputManager->translateDown = false;
+			if(!game->isPaused()) {
+				inputManager->translateDown = false;
+			}
 			break;
 	}
 
@@ -361,7 +390,7 @@ int main(int parametersSize, char ** parameters) {
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_STENCIL | GLUT_MULTISAMPLE);
 	glutInitWindowSize(initialScreenWidth, initialScreenHeight);
 	glutInit(&parametersSize, parameters);
-	
+
 	if(fullscreen) {
 		glutEnterGameMode();
 	}
@@ -385,10 +414,12 @@ int main(int parametersSize, char ** parameters) {
     glutKeyboardUpFunc(normalKeyReleased);
 
 	setupOpenGL();
-	game = new Game(settings);
+	game = new Game(initialScreenWidth, initialScreenHeight, settings);
 	player = new Player;
 	camera = new Camera;
 	inputManager = new InputManager;
+
+	menu = new Menu(initialScreenWidth, initialScreenHeight, game, settings);
 	
 	atexit(exitGame);
 	
@@ -413,6 +444,7 @@ void exitGame() {
     glutSpecialUpFunc(NULL);
     glutKeyboardUpFunc(NULL);
 
+	if(menu != NULL) { delete menu; menu = NULL; }
 	if(game != NULL) { delete game; game = NULL; }
 	if(player != NULL) { delete player; player = NULL; }
 	if(camera != NULL) { delete camera; camera = NULL; }

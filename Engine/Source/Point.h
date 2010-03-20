@@ -2,6 +2,11 @@
 
 #include "Includes.h"
 
+struct GamePoint {
+	double x, y, z;
+	double tx, ty;
+};
+
 inline double squared (double input) { return input * input; }
 inline double asRadians (double degrees) { return degrees * (3.14159265358979 / 180.0); }
 inline double asDegrees (double radians) { return radians * (180.0 / 3.14159265358979); }

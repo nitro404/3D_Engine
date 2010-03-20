@@ -1,12 +1,8 @@
 #pragma once
 
+#include "Point.h"
 #include "Colour.h"
 #include "Texture.h"
-
-struct GamePoint {
-	double x, y, z;
-	double tx, ty;
-};
 
 class Face {
 public:

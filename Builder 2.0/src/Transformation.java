@@ -52,7 +52,7 @@ public class Transformation {
 			t.transformation[1][0], t.transformation[1][1], t.transformation[1][2], t.transformation[1][3],
 			t.transformation[2][0], t.transformation[2][1], t.transformation[2][2], t.transformation[2][3],
 			t.transformation[3][0], t.transformation[3][1], t.transformation[3][2], t.transformation[3][3]);
-		fixNegatives();
+//		fixNegatives();
 	}
 	
 	public void set(double m11, double m12, double m13, double m14,
@@ -63,7 +63,7 @@ public class Transformation {
 		transformation[1][0] = m21; transformation[1][1] = m22; transformation[1][2] = m23; transformation[1][3] = m24;
 		transformation[2][0] = m31; transformation[2][1] = m32; transformation[2][2] = m33; transformation[2][3] = m34;
 		transformation[3][0] = m41; transformation[3][1] = m42; transformation[3][2] = m43; transformation[3][3] = m44;
-		fixNegatives();
+//		fixNegatives();
 	}
 	
 	public static Transformation Identity() {
@@ -140,10 +140,10 @@ public class Transformation {
 			}
 		}
 		set(t2);
-		fixNegatives();
+//		fixNegatives();
 	}
 	
-	private void fixNegatives() {
+/*	private void fixNegatives() {
 		for(int i=0;i<4;i++) {
 			for(int j=0;j<4;j++) {
 				if(transformation[i][j] == 0) {
@@ -152,6 +152,7 @@ public class Transformation {
 			}
 		}
 	}
+*/
 	
 	private void readFrom(BufferedReader in) throws Exception {
 		String input;

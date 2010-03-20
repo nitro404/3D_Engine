@@ -9,15 +9,30 @@ ENGINE
    - Implement ray function for tinting sprite and draw order: http://erich.realtimerendering.com/ptinpoly/
  + SKYBOX
    - Fix implementation using proper world position
- + POOL
-   - Fix face offsets
  + CAMERA
    - Re-write: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=Quaternion_Camera_Class
- + MISC
-   - Finish writing copy and assignment constructors for all classes (started Pool)
+ + TERRAIN
+   - Allow stretched textures
+   - Write face groups + frustrum culling
 
-CONVERTER
- + Re-add command-line interface
+
+NEAT IDEAS
+ + Collision detection
+ + Fog
+ + Sky Clouds
+ + Physics
+ + Model Loader
+ + Bump Mapping
+ + Lighting
+ + Focus
+ + Rain
+ + Sun Rays
+ + Laser Beams
+ + Snow
+ + Scrolling Textures
+ + Shadows
+ + Particle System
+
 
 BUILDER 2.0
  .MAP > .UNI CONVERSION
@@ -26,5 +41,4 @@ BUILDER 2.0
    - Face points are not converted
  + Change it so that objects know how to identify their own texture index, rather than in the to world conversion
  + Re-organize texture name => index replacement code
- + Temporarily hardcoded terrain transformation
  + Possibly allow textures mid-animation to be selected

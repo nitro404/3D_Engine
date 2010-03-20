@@ -7,12 +7,11 @@
 import java.util.Vector;
 import java.io.*;
 
-public class UniversalObject {
+public class UniversalObject extends Properties {
 	
 	public int objectIndex;
 	public Transformation normal;
 	public Transformation inverse;
-	public Vector<Property> properties;
 	public Vector<Face> faces;
 	
 	public UniversalObject() {
@@ -28,54 +27,6 @@ public class UniversalObject {
 			System.out.println("ERROR: Invalid object in map file.");
 			System.exit(1);
 		}
-	}
-	
-	public void addProperty(String key, String value) {
-		this.addProperty(new Property(key, value));
-	}
-	
-	public void addProperty(Property property) {
-		if(property == null || property.key == null || property.value == null) { return; }
-		
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(property.key)) {
-				return;
-			}
-		}
-		
-		this.properties.add(property);
-	}
-	
-	public String getPropertyValue(String key) {
-		// search for a property based on a key and return its value if it is present
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
-				return this.properties.elementAt(i).value;
-			}
-		}
-		return null;
-	}
-	
-	public boolean setPropertyValue(String key, String newValue) {
-		// search for a property based on a key and change its value if it is present
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
-				this.properties.elementAt(i).value = newValue;
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean removeProperty(String key) {
-		// search for a property based on a key and remove it if it is present
-		for(int i=0;i<this.properties.size();i++) {
-			if(this.properties.elementAt(i).key.equalsIgnoreCase(key)) {
-				this.properties.remove(i);
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	private void readFrom(BufferedReader in) throws Exception {
