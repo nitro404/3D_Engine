@@ -79,6 +79,7 @@ void Text::draw() {
 }
 
 void Text::draw(const char * text) {
+	glDisable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 		glLoadIdentity ();
@@ -100,4 +101,5 @@ void Text::draw(const char * text) {
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+	glEnable(GL_DEPTH_TEST);
 }

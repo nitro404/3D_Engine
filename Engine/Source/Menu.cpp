@@ -6,7 +6,7 @@ Menu::Menu(int windowWidth,
 		   Game * externalGame,
 		   Variables * externalSettings)
 			: titleColour(255, 0, 0, 255),
-			  inactiveColour(0, 0, 96, 255),
+			  inactiveColour(0, 0, 128, 255),
 			  activeColour(0, 0, 255, 255),
 			  game(externalGame),
 			  settings(externalSettings),
