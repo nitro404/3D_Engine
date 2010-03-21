@@ -56,7 +56,7 @@ Object: 1;
 	Properties: 4;
 		"movementspeed" => "0"
 		"name" => "test"
-		"picture" => "64"
+		"picture" => "67"
 		"waypoint" => "-1"
 	Maximum: 3.25152513964569, 3.25152510035431, 0.812881289822845;
 	Minimum: -3.25152510035431, -3.25152513964569, -0.812881270177155;
