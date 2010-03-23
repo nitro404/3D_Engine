@@ -262,7 +262,7 @@ void mousePressed(int button, int state, int x, int y) {
 }
 
 void mouseMoved(int x, int y) {
-	if(!GetFocus()) { return; }
+	if(!GetFocus() || game->isPaused()) { return; }
 
 	//Note: Because we are re-centering the mouse on each tick (see function "idle ()"), here
 	//we are determining how far the mouse was moved from the center point and we use this

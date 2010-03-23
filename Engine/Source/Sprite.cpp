@@ -188,4 +188,3 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 		}
 	}
 }
-
