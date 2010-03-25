@@ -49,7 +49,7 @@ void Vehicle::import(ifstream & input, vector<Texture *> & textures) {
 			delete [] str;
 		}
 		else {
-			printf("WARNING: Encountered unexpected property when parsing vehicle object: \"%s\"", key);
+			printf("WARNING: Encountered unexpected property when parsing vehicle object: \"%s\".\n", key);
 			delete [] str;
 		}
 	}

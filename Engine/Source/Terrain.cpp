@@ -101,10 +101,13 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 			delete [] str;
 		}
 		else {
-			printf("WARNING: Encountered unexpected property when parsing terrain object: \"%s\"", key);
+			printf("WARNING: Encountered unexpected property when parsing terrain object: \"%s\".\n", key);
 			delete [] str;
 		}
 	}
+
+	printf("HEIGHT MAP (%d, %d): %s\n", width, height, heightMap);
+	printf("TEXTURE MAP(%d, %d): %s\n", textureMap->width, textureMap->height, textureMap->textureName);
 
 	// input the height map
 	int size = width * height;
@@ -118,16 +121,9 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 	}
 	heightMapFile.close();
 	
-	// generate the terrain from the height map
 	double terrainSizeX = maxPoint.x - minPoint.x;
 	double terrainSizeY = maxPoint.y - minPoint.y;
 	double terrainSizeZ = maxPoint.z - minPoint.z;
-
-//	double tileSizeX = terrainSizeX / width;
-//	double tileSizeY = terrainSizeY / height;
-	
-//	double tilingTextureWidth = (textureMap->width - 1) / (double) textureMap->width;
-//	double tilingTextureHeight = (textureMap->height - 1) / (double) textureMap->height;
 
 	int currentPoint = 0;
 	double x, y, z, tx, ty;
@@ -143,8 +139,11 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 				ty = j;
 			}
 			else {
-				tx = i / (textureMap->width + 1);
-				ty = j / (textureMap->height + 1);
+				tx = ((float) i / (width + 1.0f));
+				ty = ((float) j / (height + 1.0f));
+
+				tx = cos(tx);
+				ty = sin(ty);
 			}
 			
 			points[currentPoint].x = x;

@@ -127,7 +127,7 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 			delete [] str;
 		}
 		else {
-			printf("WARNING: Encountered unexpected property when parsing sprite object: \"%s\"", key);
+			printf("WARNING: Encountered unexpected property when parsing sprite object: \"%s\".\n", key);
 			delete [] str;
 		}
 	}

@@ -14,9 +14,12 @@ ENGINE
  + TERRAIN
    - Allow stretched textures
    - Write face groups + frustrum culling
+ + SPRITE
+   - Change extent in bounding box
 
 
 NEAT IDEAS
+ + 3D Skybox
  + Collision detection
  + Fog
  + Sky Clouds

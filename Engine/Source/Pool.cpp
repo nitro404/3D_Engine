@@ -78,7 +78,7 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 			delete [] str;
 		}
 		else {
-			printf("WARNING: Encountered unexpected property when parsing pool object: \"%s\"", key);
+			printf("WARNING: Encountered unexpected property when parsing pool object: \"%s\".\n", key);
 			delete [] str;
 		}
 	}

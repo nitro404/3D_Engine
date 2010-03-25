@@ -184,7 +184,7 @@ void Environment::import(ifstream & input, vector<Texture *> & textures) {
 			 delete [] str;
 		}
 		else {
-			printf("WARNING: Encountered unexpected property when parsing environment object: \"%s\"", key);
+			printf("WARNING: Encountered unexpected property when parsing environment object: \"%s\".\n", key);
 			delete [] str;
 		}
 	}
