@@ -5,11 +5,6 @@
 
 class AnimatedTexture {
 public:
-	char * name;
-	int frames;
-	int speed;
-	vector<Texture *> textures;
-
 	AnimatedTexture() { }
 
 	~AnimatedTexture() {
@@ -17,4 +12,12 @@ public:
 	}
 	
 	void import(ifstream &input, vector<Texture *> & worldTextures);
+
+public:
+	vector<Texture *> textures;
+	int frames;
+	int speed;
+
+private:
+	char * name;
 };

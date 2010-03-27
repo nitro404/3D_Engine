@@ -141,9 +141,6 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 			else {
 				tx = ((float) i / (width + 1.0f));
 				ty = ((float) j / (height + 1.0f));
-
-				tx = cos(tx);
-				ty = sin(ty);
 			}
 			
 			points[currentPoint].x = x;
@@ -157,8 +154,7 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 
 	delete [] heightMapData;
 
-	group = new FaceGroup(points, width + 1, height + 1);
-
+	group = new FaceGroup(points, width + 1, height + 1, 4);
 }
 
 double Terrain::scaleHeight(int x, int y, int * heightMapData) {

@@ -28,6 +28,14 @@ public class AnimatedTexture {
 		}
 	}
 	
+	public AnimatedTexture(int index, String name, int firstTextureIndex, int frames, double speed, Vector<String> textureNames) {
+		this.index = index;
+		this.name = name;
+		this.frames = frames;
+		this.speed = speed;
+		this.firstTextureIndex = firstTextureIndex;
+	}
+	
 	public AnimatedTexture(BufferedReader in) {
 		try {
 			this.readFrom(in);

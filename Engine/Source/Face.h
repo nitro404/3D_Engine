@@ -6,12 +6,7 @@
 
 class Face {
 public:
-	Texture * texture;
-	vector<GamePoint *> points;
-
-	Face() {
-		texture = NULL;
-	}
+	Face() : texture(NULL), translationLocation(0), translationSpeed(0) { }
 
 	virtual ~Face() {
 		for(unsigned int i=0;i<points.size();i++) {
@@ -24,4 +19,10 @@ public:
 	virtual void draw(Colour & Colour);
 
 	virtual void import(ifstream & input, vector<Texture *> & textures);
+
+public:
+	Texture * texture;
+	vector<GamePoint *> points;
+	double translationLocation;
+	double translationSpeed;
 };

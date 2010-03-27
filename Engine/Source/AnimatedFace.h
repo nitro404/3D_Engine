@@ -8,14 +8,7 @@ extern double DT;
 
 class AnimatedFace : public Face {
 public:
-	AnimatedTexture * animatedTexture;
-	double animationSpeed;
-
-	AnimatedFace() {
-		textureIndex = 0;
-		animatedTexture = NULL;
-		animationSpeed = -1;
-	}
+	AnimatedFace() : textureIndex(0), animatedTexture(NULL), animationSpeed(-1) { }
 
 	~AnimatedFace() { }
 
@@ -23,7 +16,11 @@ public:
 	void draw();
 	void draw(Colour & colour);
 	void import(ifstream & input, vector<AnimatedTexture * > & animatedTextures);
-	
+
+public:
+	AnimatedTexture * animatedTexture;
+	double animationSpeed;
+
 private:
 	double textureIndex;
 };

@@ -67,7 +67,6 @@ public class World implements Map3D {
 			this.startPosition = new Point3D(0, 0, 0);
 			objects = new Vector<WorldObject>();
 			waypoints = new Vector<Waypoint>();
-			Vector<Sprite> sprites = new Vector<Sprite>();
 			
 			// assign index pointers in place of texture names to corresponding locations in the texture and animated texture lists
 			String type;
@@ -75,116 +74,6 @@ public class World implements Map3D {
 				object = universalMap.objects.elementAt(i);
 				type = object.getPropertyValue("type");
 				object.removeProperty("type");
-				
-				Face face;
-				String textureName;
-				String textureNameNoExtension;
-				int textureIndex = -1;
-				
-				// set sprite texture (special case)
-				if(type.equalsIgnoreCase("sprite")) {
-					textureName = object.getPropertyValue("picture");
-					textureIndex = -1;
-					
-					for(int k=0;k<textureNames.size();k++) {
-						textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
-						if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
-							textureIndex = k;
-							break;
-						}
-					}
-					
-					if(textureIndex == -1) {
-						System.out.println("ERROR: Sprite missing texture: \"" + textureName + "\".");
-						System.exit(1);
-					}
-					
-					object.setPropertyValue("picture", Integer.toString(textureIndex));
-				}
-				// set terrain texture (special case)
-				if(type.equalsIgnoreCase("terrain")) {
-					textureName = object.getPropertyValue("texturemap");
-					textureIndex = -1;
-					
-					for(int k=0;k<textureNames.size();k++) {
-						textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
-						if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
-							textureIndex = k;
-							break;
-						}
-					}
-					
-					if(textureIndex == -1) {
-						System.out.println("ERROR: Terrain missing texture: \"" + textureName + "\".");
-						System.exit(1);
-					}
-					
-					object.setPropertyValue("texturemap", Integer.toString(textureIndex));
-				}
-				// set skybox textures (special case)
-				else if(type.equalsIgnoreCase("environment")) {
-					String baseTextureName = object.getPropertyValue("skyboxtexture");
-					textureIndex = -1;
-					object.removeProperty("skyboxtexture");
-					
-					for(int l=0;l<Environment.skyboxTextureExtensions.length;l++) {
-						for(int k=0;k<textureNames.size();k++) {
-							textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
-							if(textureNameNoExtension.equalsIgnoreCase(baseTextureName + Environment.skyboxTextureExtensions[l])) {
-								textureIndex = k;
-								break;
-							}
-						}
-						
-						if(textureIndex == -1) {
-							System.out.println("ERROR: Environment skybox missing texture: \"" + baseTextureName + Environment.skyboxTextureExtensions[l] + "\".");
-							System.exit(1);
-						}
-						
-						object.addProperty("skyboxtexture" + Environment.skyboxTextureExtensions[l], Integer.toString(textureIndex));
-					}
-				}
-				// set regular textures (normal case)
-				else {
-					for(int j=0;j<object.faces.size();j++) {
-						face = object.faces.elementAt(j);
-						textureName = face.getPropertyValue("texture");
-						textureIndex = -1;
-						
-						// set pool texture (animated texture)
-						if(type.equalsIgnoreCase("pool")) {
-							for(int k=0;k<animatedTextures.size();k++) {
-								textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(animatedTextures.elementAt(k).firstTextureIndex));
-								if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
-									textureIndex = k;
-									break;
-								}
-							}
-							
-							if(textureIndex == -1) {
-								System.out.println("ERROR: Pool missing animated texture: \"" + textureName + "\".");
-								System.exit(1);
-							}
-						}
-						// set textures for all other objects (normal textures)
-						else {
-							for(int k=0;k<textureNames.size();k++) {
-								textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(k));
-								if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
-									textureIndex = k;
-									break;
-								}
-							}
-							
-							if(textureIndex == -1) {
-								System.out.println("ERROR: Object missing texture: \"" + textureName + "\".");
-								System.exit(1);
-							}
-						}
-						
-						face.setPropertyValue("texture", Integer.toString(textureIndex));
-					}
-				}
 				
 				// add the appropriate subclass of UniversalObject based on the object type to a collection of objects
 				if(type == null) {
@@ -195,33 +84,35 @@ public class World implements Map3D {
 					this.startPosition = object.normal.getPosition();
 				}
 				else if(type.equalsIgnoreCase("static geometry")) {
-					objects.add(new Geometry(object, textureIndex));
+					objects.add(new Geometry(object, textureNames));
 				}
 				else if(type.equalsIgnoreCase("environment")) {
-					objects.add(new Environment(object));
+					objects.add(new Environment(object, textureNames));
 				}
 				else if(type.equalsIgnoreCase("vehicle")) {
-					objects.add(new Vehicle(object, textureIndex));
+					objects.add(new Vehicle(object, textureNames));
 				}
 				else if(type.equalsIgnoreCase("rotator")) {
-					objects.add(new Rotator(object, textureIndex));
+					objects.add(new Rotator(object, textureNames));
 				}
 				else if(type.equalsIgnoreCase("translator")) {
-					objects.add(new Translator(object, textureIndex));
+					objects.add(new Translator(object, textureNames));
 				}
 				else if(type.equalsIgnoreCase("sprite")) {
-					Sprite newSprite = new Sprite(object, textureIndex);
+					Sprite newSprite = new Sprite(object, textureNames);
 					objects.add(newSprite);
-					sprites.add(newSprite);
 				}
 				else if(type.equalsIgnoreCase("waypoint")) {
 					waypoints.add(new Waypoint(object));
 				}
 				else if(type.equalsIgnoreCase("pool")) {
-					objects.add(new Pool(object, textureIndex));
+					objects.add(new Pool(object, textureNames, animatedTextures));
 				}
 				else if(type.equalsIgnoreCase("terrain")) {
-					objects.add(new Terrain(object, heightMaps));
+					objects.add(new Terrain(object, textureNames, heightMaps));
+				}
+				else if(type.equalsIgnoreCase("waterfall")) {
+					objects.add(new Waterfall(object, textureNames, animatedTextures));
 				}
 				else {
 					System.out.println("WARNING: Ignoring unexpected object of type \"" + type + "\".");
@@ -269,17 +160,20 @@ public class World implements Map3D {
 			// replace the sprite waypoint reference names with actual pointers to the index of the same waypoint in the waypoint list
 			String waypointName;
 			int waypointIndex;
-			for(int i=0;i<sprites.size();i++) {
-				waypointName = sprites.elementAt(i).getPropertyValue("waypoint");
-				waypointIndex = -1;
-				for(int j=0;j<waypoints.size();j++) {
-					if(waypoints.elementAt(j).getPropertyValue("name").equalsIgnoreCase(waypointName)) {
-						waypointIndex = j;
-						break;
+			for(int i=0;i<objects.size();i++) {
+				if(objects.elementAt(i) instanceof Sprite) {
+					Sprite sprite = (Sprite) objects.elementAt(i);
+					waypointName = sprite.getPropertyValue("waypoint");
+					waypointIndex = -1;
+					for(int j=0;j<waypoints.size();j++) {
+						if(waypoints.elementAt(j).getPropertyValue("name").equalsIgnoreCase(waypointName)) {
+							waypointIndex = j;
+							break;
+						}
 					}
+					
+					sprite.setPropertyValue("waypoint", Integer.toString(waypointIndex));
 				}
-				
-				sprites.elementAt(i).setPropertyValue("waypoint", Integer.toString(waypointIndex));
 			}
 			
 		}

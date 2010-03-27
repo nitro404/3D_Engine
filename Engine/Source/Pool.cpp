@@ -28,11 +28,11 @@ void Pool::tick() {
 
 void Pool::draw() {
 	glPushMatrix();
-	Transformation & normal = transformation->normal();
-	glMultMatrixd(normal);
-	for(unsigned int i=0;i<faces.size();i++) {
-		faces.at(i)->draw(waterColour);
-	}
+		Transformation & normal = transformation->normal();
+		glMultMatrixd(normal);
+		for(unsigned int i=0;i<faces.size();i++) {
+			faces.at(i)->draw(waterColour);
+		}
 	glPopMatrix(); 
 }
 
@@ -88,7 +88,6 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 	int facesSize = atoi(line);
 	for(int faceIndex=0;faceIndex<facesSize;faceIndex++) {
 		AnimatedFace * face = new AnimatedFace;
-//		AnimatedFace * reverseFace = new AnimatedFace;
 		face->import(input, animatedTextures);
 		faces.push_back(face);
 	}

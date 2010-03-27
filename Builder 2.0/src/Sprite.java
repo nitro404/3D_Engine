@@ -5,20 +5,19 @@
 // =================================== //
 
 import java.io.PrintWriter;
+import java.util.Vector;
 
 public class Sprite extends WorldObject {
 	
-	public int textureIndex;
 	public Point3D position;
 	public Point3D max;
 	public Point3D min;
 	
 	// create the Sprite subclass (throw away the transformations and faces)
-	public Sprite(UniversalObject object, int textureIndex) {
+	public Sprite(UniversalObject object, Vector<String> textureNames) {
 		super(object.objectIndex, null, null, object.properties, null);
 		
-		// store the texture index associated with the picture
-		this.textureIndex = textureIndex;
+		setPropertyValue("picture", Integer.toString(getTextureIndex(getPropertyValue("picture"), textureNames)));
 		
 		// get the position associated with the normal transformation and store that instead
 		this.position = object.normal.getPosition();

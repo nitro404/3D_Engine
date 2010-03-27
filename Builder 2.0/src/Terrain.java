@@ -10,8 +10,10 @@ public class Terrain extends WorldObject {
 	
 	public int heightMapIndex;
 	
-	public Terrain(UniversalObject object, Vector<HeightMap> heightMaps) {
+	public Terrain(UniversalObject object, Vector<String> textureNames, Vector<HeightMap> heightMaps) {
 		super(object.objectIndex, object.normal, object.inverse, object.properties, null);
+		
+		setPropertyValue("texturemap", Integer.toString(getTextureIndex(getPropertyValue("texturemap"), textureNames)));
 		
 		heightMapIndex = -1;
 		HeightMap heightMap = null;

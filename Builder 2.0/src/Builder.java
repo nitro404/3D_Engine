@@ -35,7 +35,7 @@ public class Builder {
 			System.out.println(" -o :: file extension to output; e.g., -ouni");
 			System.out.println(" -s :: recurse to subdirectories (only if present)");
 			System.out.println(" -e :: texture directory location (optional - required if reading .map files); e.g., -e\"..\\Textures\\");
-			System.out.println(" -t :: read texture data from alternate file (optional); e.g., -t\"textures.ini\"");
+			System.out.println(" -t :: read texture data from alternate file; e.g., -t\"textures.ini\"");
 		}
 		else {
 			String fileName = null;
@@ -182,6 +182,10 @@ public class Builder {
 				inExtension = file.getName().substring(file.getName().lastIndexOf('.') + 1, file.getName().length());
 				if(!(inExtension.equalsIgnoreCase("map") || inExtension.equalsIgnoreCase("uni"))) {
 					System.out.println("ERROR: Input file extension is invalid.");
+					System.exit(1);
+				}
+				if(inExtension.equalsIgnoreCase("uni") && (textureDirectory == null || textureDataFile == null)) {
+					System.out.println("ERROR: You need to specift a texture directory and external texture data file.");
 					System.exit(1);
 				}
 				if(inExtension.equalsIgnoreCase(outExtension)) {

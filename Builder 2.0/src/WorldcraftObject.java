@@ -13,5 +13,5 @@ public class WorldcraftObject {
 			sidePlanes.add(worldcraftSidePlane);
 		}
 	}
-
+	
 }

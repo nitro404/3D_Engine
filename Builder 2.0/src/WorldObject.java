@@ -27,6 +27,88 @@ public class WorldObject extends Properties {
 		this.faces = faces;
 	}
 	
+	public int getTextureIndex(String textureName, Vector<String> textureNames) {
+		if(textureName == null || textureNames == null) { return -1; }
+		
+		for(int i=0;i<textureNames.size();i++) {
+			if(Texture.removeExtension(textureNames.elementAt(i)).equalsIgnoreCase(Texture.removeExtension(textureName))) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public int getAnimatedTextureIndex(String textureName, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures) {
+		if(textureName == null || textureNames == null || animatedTextures == null) { return -1; }
+		
+		for(int i=0;i<animatedTextures.size();i++) {
+			if(Texture.removeExtension(textureNames.elementAt(animatedTextures.elementAt(i).firstTextureIndex)).equalsIgnoreCase(Texture.removeExtension(textureName))) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public boolean setTextureIndicies(Vector<Face> faces, Vector<String> textureNames) {
+		if(faces == null || textureNames == null) { return false; }
+		
+		Face face = null;
+		String textureName, textureNameNoExtension;
+		int textureIndex = -1;
+		for(int i=0;i<faces.size();i++) {
+			face = faces.elementAt(i);
+			textureName = face.getPropertyValue("texture");
+			textureIndex = -1;
+			
+			for(int j=0;j<textureNames.size();j++) {
+				textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(j));
+				if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
+					textureIndex = j;
+					break;
+				}
+			}
+			
+			if(textureIndex == -1) {
+				System.out.println("ERROR: Object missing texture: \"" + textureName + "\".");
+				System.exit(1);
+			}
+			
+			face.setPropertyValue("texture", Integer.toString(textureIndex));
+		}
+		
+		return true;
+	}
+
+	public boolean setAnimatedTextureIndicies(Vector<Face> faces, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures) {
+		if(faces == null || textureNames == null) { return false; }
+		
+		Face face = null;
+		String textureName, textureNameNoExtension;
+		int textureIndex = -1;
+		for(int i=0;i<faces.size();i++) {
+			face = faces.elementAt(i);
+			textureName = Texture.removeExtension(face.getPropertyValue("texture"));
+			textureIndex = -1;
+			
+			for(int j=0;j<animatedTextures.size();j++) {
+				textureNameNoExtension = Texture.removeExtension(textureNames.elementAt(animatedTextures.elementAt(j).firstTextureIndex));
+				if(textureNameNoExtension.equalsIgnoreCase(textureName)) {
+					textureIndex = j;
+					break;
+				}
+			}
+			
+			if(textureIndex == -1) {
+				System.out.println("ERROR: Object missing animated texture: \"" + textureName + "\".");
+				System.exit(1);
+			}
+			
+			face.setPropertyValue("texture", Integer.toString(textureIndex));
+		}
+		
+		return true;
+	}
+	
 	public void writeTo(PrintWriter out) throws Exception {
 		// output the object type based on which subclass of UniversalObject it is
 			 if(this instanceof Geometry)	{ out.println("\t\"type\" => \"static geometry\""); }
@@ -38,6 +120,7 @@ public class WorldObject extends Properties {
 		else if(this instanceof Waypoint)	{ out.println("\t\"type\" => \"waypoint\""); }
 		else if(this instanceof Pool)		{ out.println("\t\"type\" => \"pool\""); }
 		else if(this instanceof Terrain)	{ out.println("\t\"type\" => \"terrain\""); }
+		else if(this instanceof Waterfall)	{ out.println("\t\"type\" => \"waterfall\""); }
 		else   								{ System.out.println("WARNING: Ignoring unexpected object of type \"" + this.getPropertyValue("type") + "\"."); }
 		
 		// output the transformations
