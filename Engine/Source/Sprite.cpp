@@ -10,10 +10,10 @@ void Sprite::switchDestinations() {
 	destination = lastWaypoint->getRandomNeighbour();
 	distanceToTravel = sqrt(pow(destination->getPosition().x - lastWaypoint->getPosition().x, 2) + pow(destination->getPosition().y - lastWaypoint->getPosition().y, 2) + pow(destination->getPosition().z - lastWaypoint->getPosition().z, 2));
 	if(distanceToTravel <= 0) {
-		unitVector = Vector(0, 0, 0);
+		unitVector = Point(0, 0, 0);
 	}
 	else {
-		unitVector = Vector((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
+		unitVector = Point((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
 	}
 	distanceTravelled = 0;
 }
@@ -31,7 +31,9 @@ void Sprite::tick() {
 void Sprite::draw() {
 	Transformation cameraMatrix;
 	glGetMatrixd(cameraMatrix);
-	Point newPosition = position * cameraMatrix;
+	Point newPosition((position.x * cameraMatrix.m11) + (position.y * cameraMatrix.m21) + (position.z * cameraMatrix.m31) + cameraMatrix.m41,
+					  (position.x * cameraMatrix.m12) + (position.y * cameraMatrix.m22) + (position.z * cameraMatrix.m32) + cameraMatrix.m42,
+					  (position.x * cameraMatrix.m13) + (position.y * cameraMatrix.m23) + (position.z * cameraMatrix.m33) + cameraMatrix.m43); 
 	
 	if(picture->type == RGBAType) {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -44,35 +46,11 @@ void Sprite::draw() {
 	picture->activate();
 	
 	glPushIdentity();
+		if(origin == NULL) { glTranslated(newPosition.x, newPosition.y, newPosition.z); }
+		else { glTranslated(newPosition.x, newPosition.y + (extent.y/2), newPosition.z); }
 
-		if(origin == NULL) {
-			glTranslated(newPosition.x, newPosition.y, newPosition.z);
-		}
-		else {
-			glTranslated(newPosition.x, newPosition.y + (extent.y/2), newPosition.z);
-		}
 		glScaled(extent.x, extent.y, extent.z);
-
-		glBegin(GL_POLYGON);
-			
-			glNormal3d(0, 0, 1);
-			glTexCoord2d(0, 1);
-			glVertex3d(-0.5, 0.5, 0);
-			
-			glNormal3d(0, 0, 1);
-			glTexCoord2d(0, 0);
-			glVertex3d(-0.5, -0.5, 0);
-			
-			glNormal3d(0, 0, 1);
-			glTexCoord2d(1, 0);
-			glVertex3d(0.5, -0.5, 0);
-			
-			glNormal3d(0, 0, 1);
-			glTexCoord2d(1, 1);
-			glVertex3d(0.5, 0.5, 0);
-			
-		glEnd();
-		
+		glCallList(spriteList);
 	glPopMatrix();
 }
 
@@ -179,12 +157,33 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 			destination = lastWaypoint->getRandomNeighbour();
 			distanceToTravel = sqrt(pow(destination->getPosition().x - lastWaypoint->getPosition().x, 2) + pow(destination->getPosition().y - lastWaypoint->getPosition().y, 2) + pow(destination->getPosition().z - lastWaypoint->getPosition().z, 2));
 			if(distanceToTravel <= 0) {
-				unitVector = Vector(0, 0, 0);
+				unitVector = Point(0, 0, 0);
 			}
 			else {
-				unitVector = Vector((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
+				unitVector = Point((destination->getPosition().x - lastWaypoint->getPosition().x) / distanceToTravel, (destination->getPosition().y - lastWaypoint->getPosition().y) / distanceToTravel, (destination->getPosition().z - lastWaypoint->getPosition().z) / distanceToTravel);
 			}
 			distanceTravelled = 0;
 		}
 	}
+
+	spriteList = glGenLists(1);
+	glNewList(spriteList, GL_COMPILE);
+		glBegin(GL_POLYGON);
+			glNormal3d(0, 0, 1);
+			glTexCoord2d(0, 1);
+			glVertex3d(-0.5, 0.5, 0);
+			
+			glNormal3d(0, 0, 1);
+			glTexCoord2d(0, 0);
+			glVertex3d(-0.5, -0.5, 0);
+			
+			glNormal3d(0, 0, 1);
+			glTexCoord2d(1, 0);
+			glVertex3d(0.5, -0.5, 0);
+			
+			glNormal3d(0, 0, 1);
+			glTexCoord2d(1, 1);
+			glVertex3d(0.5, 0.5, 0);
+		glEnd();
+	glEndList();
 }

@@ -69,7 +69,7 @@ Font & Font::operator = (const Font & x) {
 Font::~Font() {
 	delete [] face;
 	ReleaseDC(NULL, deviceContext);
-	glDeleteLists(fontBase, 96);
+//	glDeleteLists(fontBase, 96);
 }
 
 int Font::getSize() const { return size; }

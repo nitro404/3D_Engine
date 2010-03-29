@@ -362,7 +362,7 @@ void setupOpenGL() {
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
-int main(int parametersSize, char ** parameters) {
+int main(int argc, char *argv[]) {
 	bool fullscreen = false;
 	int initialScreenWidth = 640;
 	int initialScreenHeight = 480;
@@ -389,13 +389,15 @@ int main(int parametersSize, char ** parameters) {
 	//Setup general facilities.
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_STENCIL | GLUT_MULTISAMPLE);
 	glutInitWindowSize(initialScreenWidth, initialScreenHeight);
-	glutInit(&parametersSize, parameters);
+	glutInit(&argc, argv);
 
 	if(fullscreen) {
 		glutEnterGameMode();
 	}
 	else {
 		glutCreateWindow((settings->getValue("Game Name") == NULL) ? "3D Game Engine" : settings->getValue("Game Name"));
+//		CMenu * menu = GetSystemMenu(false);
+//		menu->ModifyMenu(SC_CLOSE, MF_BYCOMMAND | MF_GRAYED);
 	}
 	
     glutIgnoreKeyRepeat(GLUT_KEY_REPEAT_ON);
@@ -444,11 +446,12 @@ void exitGame() {
     glutSpecialUpFunc(NULL);
     glutKeyboardUpFunc(NULL);
 
-	if(menu != NULL) { delete menu; menu = NULL; }
-	if(game != NULL) { delete game; game = NULL; }
-	if(player != NULL) { delete player; player = NULL; }
-	if(camera != NULL) { delete camera; camera = NULL; }
-	if(inputManager != NULL) { delete inputManager; inputManager = NULL; }
+	if(menu != NULL) { delete menu; }
+	if(game != NULL) { delete game; }
+	if(player != NULL) { delete player; }
+	if(camera != NULL) { delete camera; }
+	if(inputManager != NULL) { delete inputManager; }
+
 	#if _DEBUG
 		_CrtDumpMemoryLeaks();
 	#endif

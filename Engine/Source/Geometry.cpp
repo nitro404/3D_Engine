@@ -10,11 +10,11 @@ void Geometry::tick () {
 
 void Geometry::draw () {
 	glPushMatrix();
-	Transformation & normal = transformation->normal();
-	glMultMatrixd(normal);
-	for(unsigned int i=0;i<faces.size();i++) {
-		faces.at(i)->draw();
-	}
+		Transformation & normal = transformation->normal();
+		glMultMatrixd(normal);
+		for(unsigned int i=0;i<faces.size();i++) {
+			faces.at(i)->draw();
+		}
 	glPopMatrix(); 
 }
 

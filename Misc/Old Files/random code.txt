@@ -1034,3 +1034,30 @@ http://math.nist.gov/javanumerics/jama/doc/Jama/Matrix.html
 					}
 				}*/
 
+
+
+
+//inline double epsilon() { return 1.0e-5; }
+//inline double squaredEpsilon() { return 1.0e-10; }
+//inline double inverseEpsilon() { return 1.0 / epsilon(); }
+
+
+
+#include "Point.h"
+#include "Transformation.h"
+
+/*Point Point::operator * (const Transformation & t) const {
+	Point result (
+		x*t.m11 + y*t.m21 + z*t.m31 + t.m41, 
+		x*t.m12 + y*t.m22 + z*t.m32 + t.m42, 
+		x*t.m13 + y*t.m23 + z*t.m33 + t.m43); 
+	double w = x*t.m14 + y*t.m24 + z*t.m34 + t.m44;
+	double absoluteW = fabs(w);
+	if ((absoluteW - 1.0) < epsilon()) return result; //usually, w is 1.0
+	if (absoluteW < epsilon()) return result * inverseEpsilon(); //w is 0.0 (use epsilon).
+	return result * (1.0 / w); //the complicated case.
+}*/
+
+
+
+//	Point newPosition = position * cameraMatrix;

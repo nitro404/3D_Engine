@@ -2,15 +2,6 @@
 
 Player * player = NULL;
 
-void Player::beginCamera() {
-	glPushMatrix();
-		glMultMatrixd(playerMatrix.inverse);
-}
-
-void Player::endCamera() {
-	glPopMatrix();
-}
-
 void Player::moveBy(Point & translation) {
 	playerMatrix.translateBy(translation);
 }

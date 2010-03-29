@@ -11,45 +11,21 @@
 #include "Vehicle.h"
 #include "Waypoint.h"
 #include "Terrain.h"
+#include "Waterfall.h"
 
 class World {
 public:
-	World() : skybox(NULL) {
-		startPosition = Point(0, 0, 0);
-	}
-
-	~World() {
-		unsigned int i;
-		if(skybox != NULL) { delete skybox; }
-		delete [] sortedObjects;
-		delete [] sortedWater;
-		delete [] sortedSprites;
-		for(i=0;i<objects.size();i++) {
-			delete objects.at(i);
-		}
-		for(i=0;i<water.size();i++) {
-			delete water.at(i);
-		}
-		for(i=0;i<sprites.size();i++) {
-			delete sprites.at(i);
-		}
-		for(i=0;i<waypoints.size();i++) {
-			delete waypoints.at(i);
-		}
-	}
+	World();
+	~World();
 	
 	void tick();
 	void draw();
+	void drawSkybox();
 	
 	void import(char * fileName, vector<Texture *> & textures, vector<char *> & heightMaps, vector<AnimatedTexture *> & animatedTextures);
 
 private:
 	bool compareDistance(const Object & x, const Object & y);
-	void sortObjects();
-	void sortWater();
-	void sortSprites();
-	bool checkUnderWater();
-	bool underWater;
 
 public:
 	Point playerPosition;
@@ -64,4 +40,6 @@ private:
 	Object ** sortedObjects;
 	Pool ** sortedWater;
 	Sprite ** sortedSprites;
+	int * spriteWater;
+	int underWater;
 };

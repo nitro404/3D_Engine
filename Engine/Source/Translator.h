@@ -32,7 +32,7 @@ private:
 	Point position;
 	Point offset;
 	Point destination;
-	Vector unitVector;
+	Point unitVector;
 	double rateInMetersPerSecond;
 	bool forward;
 	double distanceTravelled;

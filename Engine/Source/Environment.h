@@ -22,6 +22,7 @@ public:
 	void import(ifstream &input, vector<Texture *> & textures);
 
 private:
+	GLuint skyboxList;
 	char * name;
 	Colour ambientLight;
 	int cloudLayers;

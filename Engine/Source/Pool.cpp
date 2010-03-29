@@ -27,11 +27,15 @@ void Pool::tick() {
 }
 
 void Pool::draw() {
+	draw(false);
+}
+
+void Pool::draw(bool drawInside) {
 	glPushMatrix();
 		Transformation & normal = transformation->normal();
 		glMultMatrixd(normal);
 		for(unsigned int i=0;i<faces.size();i++) {
-			faces.at(i)->draw(waterColour);
+			faces.at(i)->draw(waterColour, drawInside);
 		}
 	glPopMatrix(); 
 }

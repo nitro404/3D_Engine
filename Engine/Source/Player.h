@@ -10,12 +10,6 @@ public:
 	Player() { }
 	~Player() { }
 	
-	void tick() { } // add collision detection
-	void draw() { }
-	
-	void beginCamera();
-	void endCamera();
-	
 	void moveBy(Point & translation);
 	void rotateBy(Point & rotation);
 

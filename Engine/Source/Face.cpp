@@ -12,34 +12,36 @@ void Face::draw() {
 	}
 	
 	glBegin(GL_POLYGON);
-	for(unsigned int pointIndex=0;pointIndex<points.size();pointIndex++) {
-		GamePoint & point = *points.at(pointIndex);
-		glTexCoord2d(point.tx, point.ty);
-		glVertex3d(point.x, point.y, point.z);
-	}
+		for(unsigned int pointIndex=0;pointIndex<points.size();pointIndex++) {
+			GamePoint & point = *points.at(pointIndex);
+			glTexCoord2d(point.tx, point.ty);
+			glVertex3d(point.x, point.y, point.z);
+		}
 	glEnd();
 }
 
 void Face::draw(Colour & colour) {
+	draw(colour, false);
+}
+
+void Face::draw(Colour & colour, bool drawBothSides) {
 	texture->activate();
-//	glDisable(GL_DEPTH_TEST);
-//	glDepthFunc(GL_LESS);
-	glDisable(GL_CULL_FACE);
-	glBegin(GL_POLYGON);
+	if(drawBothSides) { glDisable(GL_CULL_FACE); }
 	glColor4d(colour.red, colour.green, colour.blue, colour.alpha);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
-	for(unsigned int pointIndex=0;pointIndex<points.size();pointIndex++) {
-		GamePoint & point = *points.at(pointIndex);
-		glTexCoord2d(point.tx, point.ty);
-		glVertex3d(point.x, point.y, point.z);
-	}
+
+	glBegin(GL_POLYGON);
+		for(unsigned int pointIndex=0;pointIndex<points.size();pointIndex++) {
+			GamePoint & point = *points.at(pointIndex);
+			glTexCoord2d(point.tx, point.ty);
+			glVertex3d(point.x, point.y, point.z);
+		}
+	glEnd();
+
 	glColor4d(1, 1, 1, 1);
 	glDisable(GL_BLEND);
-	glEnd();
 	glEnable(GL_CULL_FACE);
-//	glEnable(GL_DEPTH_TEST);
-//	glDepthFunc(GL_LEQUAL);
 }
 
 void Face::import(ifstream &input, vector<Texture *> & textures) {

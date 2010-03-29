@@ -13,8 +13,6 @@ public class Terrain extends WorldObject {
 	public Terrain(UniversalObject object, Vector<String> textureNames, Vector<HeightMap> heightMaps) {
 		super(object.objectIndex, object.normal, object.inverse, object.properties, null);
 		
-		setPropertyValue("texturemap", Integer.toString(getTextureIndex(getPropertyValue("texturemap"), textureNames)));
-		
 		heightMapIndex = -1;
 		HeightMap heightMap = null;
 		String currentHeightMapIdentifier;
@@ -52,6 +50,7 @@ public class Terrain extends WorldObject {
 		addProperty("minpoint", minPoint.x + ", " + minPoint.y + ", " + minPoint.z);
 		
 		setPropertyValue("heightmap", Integer.toString(heightMapIndex));
+		setPropertyValue("texturemap", Integer.toString(getTextureIndex(getPropertyValue("texturemap"), textureNames)));
 		
 		addProperty("width", Integer.toString(heightMap.width));
 		addProperty("height", Integer.toString(heightMap.height));

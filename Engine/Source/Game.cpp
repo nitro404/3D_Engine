@@ -51,19 +51,15 @@ void Game::tick() {
 	if(paused) { return; }
 
 	inputManager->tick();
-	camera->tick();
-	player->tick();
 	if(world != NULL) {
 		world->tick ();
 	}
 }
 
 void Game::draw() {
+	if(world != NULL) { world->drawSkybox(); }
 	camera->beginCamera();
-	if(world != NULL) {
-		world->draw();
-	}
-	player->draw();
+	if(world != NULL) { world->draw(); }
 	camera->endCamera();
 	
 	if(drawFPS) {
@@ -97,7 +93,7 @@ void Game::drawFrameRate() {
 	static double stableRate = frameRate; // this initializes only the first time...
 	static double oldFrameRate = frameRate;
 	// if it changed by more than 2 per cent of the stable value, use the new value; otherwise use the stable one...
-	if(absolute(frameRate - stableRate) > 2.0) {
+	if(fabs(frameRate - stableRate) > 2.0) {
 		stableRate = frameRate;
 	}
 	sprintf_s(fps, 12, "%3.1f FPS", stableRate);
@@ -165,7 +161,6 @@ void Game::loadTextures(char * fileName, char * textureDirectory, char * heightM
 		texturePath.append(textureName);
 		newTexture = Texture::readTexture((char *) texturePath.c_str());
 		if(newTexture != NULL) {
-			newTexture->load();
 			textures.push_back(newTexture);
 		}
 		else {

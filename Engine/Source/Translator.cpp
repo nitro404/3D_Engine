@@ -91,6 +91,6 @@ void Translator::import (ifstream & input, vector<Texture *> & textures) {
 	position = origin;
 	destination = origin + offset;
 	distanceToTravel = sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2) + pow(destination.z - origin.z, 2));
-	unitVector = Vector((destination.x - origin.x) / distanceToTravel, (destination.y - origin.y) / distanceToTravel, (destination.z - origin.z) / distanceToTravel);
+	unitVector = Point((destination.x - origin.x) / distanceToTravel, (destination.y - origin.y) / distanceToTravel, (destination.z - origin.z) / distanceToTravel);
 	distanceTravelled = 0;
 }

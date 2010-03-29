@@ -3,40 +3,36 @@
 #include "Includes.h"
 #include "Point.h"
 
-//*****************************************************************************************//
-//                           OpenGL Stack Manipulation Extensions                          //
-//*****************************************************************************************//
-
 class Transformation;
 
-inline void glGetMatrixd (GLenum whichMatrix, Transformation &matrix) {
+inline void glGetMatrixd(GLenum whichMatrix, Transformation &matrix) {
 	glGetDoublev (whichMatrix, (GLdouble *) &matrix);
 }
 
-inline void glLoadMatrixd (Transformation &matrix) {
+inline void glLoadMatrixd(Transformation &matrix) {
 	glLoadMatrixd ((const GLdouble *) &matrix);
 }
 
-inline void glMultMatrixd (Transformation &matrix) {
+inline void glMultMatrixd(Transformation &matrix) {
 	glMultMatrixd ((const GLdouble *) &matrix);
 }
 
-inline void glPushMatrixd (Transformation &matrix) {
+inline void glPushMatrixd(Transformation &matrix) {
 	glPushMatrix ();
 	glLoadMatrixd (matrix);
 }
 
-inline void glPopMatrixd (GLenum whichMatrix, Transformation &matrix) {
+inline void glPopMatrixd(GLenum whichMatrix, Transformation &matrix) {
 	glGetMatrixd (whichMatrix, matrix);
 	glPopMatrix ();
 }
 
-inline void glPushIdentity () {
+inline void glPushIdentity() {
 	glPushMatrix ();
 	glLoadIdentity ();
 }
 
-inline GLint currentMatrixStack () {
+inline GLint currentMatrixStack() {
 	GLint mode; glGetIntegerv (GL_MATRIX_MODE, &mode);
 	return 
 		mode == GL_MODELVIEW ? GL_MODELVIEW_MATRIX :
@@ -44,24 +40,14 @@ inline GLint currentMatrixStack () {
 		GL_TEXTURE_MATRIX;
 }
 
-inline void glGetMatrixd (Transformation &matrix) {
+inline void glGetMatrixd(Transformation &matrix) {
 	glGetDoublev (currentMatrixStack (), (double *) &matrix);
 }
 
-inline void glPopMatrixd (Transformation &matrix) {
+inline void glPopMatrixd(Transformation &matrix) {
 	glGetMatrixd (matrix);
 	glPopMatrix ();
 }
-
-//And one useful utility for tabbing...
-inline char *indentation (long tabs) {
-	static char *string = "\t\t\t\t\t\t\t\t\t\t"; //Exactly 10 tabs,,,
-	return &string [10 - tabs];
-}
-
-//*****************************************************************************************//
-//                              Transformation Implementation                              //
-//*****************************************************************************************//
 
 class Transformation {
 public:
@@ -158,15 +144,15 @@ public:
 	inline void rotateBy (double degrees, Point &axis) {preRotateBy (degrees, axis);} //rotateBy means pre-rotateBy
 
 	inline void preScaleBy (Point &scale) {//scale * matrix
-		glPushMatrixd (*this);
-			glScaled (scale.x, scale.y, scale.z);
-		glPopMatrixd (GL_MODELVIEW_MATRIX, *this);
+		glPushMatrixd(*this);
+			glScaled(scale.x, scale.y, scale.z);
+		glPopMatrixd(GL_MODELVIEW_MATRIX, *this);
 	}
 	inline void postScaleBy (Point &scale) {//matrix * scale
 		glPushIdentity ();
-			glScaled (scale.x, scale.y, scale.z);
-			glMultMatrixd (*this);
-		glPopMatrixd (GL_MODELVIEW_MATRIX, *this);
+			glScaled(scale.x, scale.y, scale.z);
+			glMultMatrixd(*this);
+		glPopMatrixd(GL_MODELVIEW_MATRIX, *this);
 	}
 	inline void scaleBy (Point &scale) {preScaleBy (scale);} //scaleBy means pre-scaleBy
 
@@ -217,7 +203,7 @@ public:
 		set (r11,r12,r13,r14,r21,r22,r23,r24,r31,r32,r33,r34,r41,r42,r43,r44);
 	}
 	
-	Point position () { return Point (m41, m42, m43); }
+	Point position() { return Point(m41, m42, m43); }
 	
 	void importSingleTransformation(ifstream & input) {
 		char line[256];
@@ -244,10 +230,6 @@ public:
 		input.getline(line, 256, '\n');
 	}
 };
-
-//*****************************************************************************************//
-//                      Dual Transformations (Have Their Own Inverses)                     //
-//*****************************************************************************************//
 
 class DualTransformation : public Transformation {
 public:
@@ -282,7 +264,8 @@ public:
 	}
 
 	inline void setToIdentity () {
-		Transformation::setToIdentity (); inverse.setToIdentity ();
+		Transformation::setToIdentity();
+		inverse.setToIdentity();
 	}
 
 	inline void preTranslateBy (Point &translation) {

@@ -18,11 +18,12 @@ public:
 	
 	static long pack(const long red, const long green, const long blue, const long alpha);
 	
-	void activate(); //Do this before drawing a polygon.
-	void load(bool mipmapping = true, bool forceClamp = false); //Give it to the game card (use defaults).
-	void unload(); //Let the game card lose it.
+	void activate();
 	
 	static Texture * readTexture(char * fileName);
 	static Texture * readBMPTexture(char * fullPathName);
 	static Texture * readTGATexture(char * fullPathName);
+
+private:
+	void load(bool mipmapping = true, bool forceClamp = false); //Give it to the game card (use defaults).
 };

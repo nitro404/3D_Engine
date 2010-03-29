@@ -17,6 +17,7 @@ public:
 	virtual void tick() { }
 	virtual void draw();
 	virtual void draw(Colour & Colour);
+	virtual void draw(Colour & Colour, bool drawBothSides);
 
 	virtual void import(ifstream & input, vector<Texture *> & textures);
 

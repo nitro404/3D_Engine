@@ -19,7 +19,7 @@ Texture::Texture(long width, long height, TextureType type) {
 }
 
 Texture::~Texture() {
-	this->unload();
+//	this->unload();
 	if(bytes != NULL) {
 		delete [] bytes;
 	}
@@ -74,14 +74,18 @@ Texture * Texture::readBMPTexture(char *fullPathName) {
     BYTE * source = (BYTE *) bits; //at the beginning
 
 	//Move the bits from the bitmap handle to the texture.	 
-	long red, green, blue; long alpha = 255; //0=>transparent, 255=>opaque
+	long red, green, blue;
+	long alpha = 255; //0=>transparent, 255=>opaque
 	if(pixelSize == 24) {
 		//Successively read 3 RGB bytes at a time, write RGBA bytes. 
     	for(long j=height;j>0;j--) {
 			//REVERSES: destination -= width; 
-			long * to = destination; BYTE *from = source;
+			long * to = destination;
+			BYTE *from = source;
     		for (int i = 0; i < width; i++) { 
-				blue = *from++;	green = *from++; red = *from++;
+				blue = *from++;
+				green = *from++;
+				red = *from++;
 				*to++ = pack (red, green, blue, alpha);
     		}   
 			destination += width; 											   
@@ -112,7 +116,8 @@ Texture * Texture::readBMPTexture(char *fullPathName) {
 		//Move the bits.
     	for	(long j = height; j > 0; j--) {
 			//REVERSES: destination -= width; 
-			long *to = destination; BYTE *from = source; 
+			long *to = destination;
+			BYTE *from = source; 
 			for (int i = width; i > 0; i--) { 
 				*to++ = packedPaletteEntries [*from++];
 			}
@@ -121,12 +126,18 @@ Texture * Texture::readBMPTexture(char *fullPathName) {
     	} 
 	} else {
 		//We only handle 8 and 24 bits so far...
-		delete texture; DeleteObject (bitmapHandle); return NULL;
+		delete texture;
+		DeleteObject(bitmapHandle);
+		return NULL;
 	}
 
 	texture->textureName = new char [strlen (fullPathName) + 1];
 	strcpy_s (texture->textureName, strlen(fullPathName) + 1, fullPathName);
-    DeleteObject (bitmapHandle); return texture;
+    DeleteObject(bitmapHandle);
+
+	texture->load();
+
+	return texture;
 }
 
 Texture * Texture::readTGATexture(char * fullPathName) {
@@ -139,7 +150,6 @@ Texture * Texture::readTGATexture(char * fullPathName) {
 		return NULL;
 	}
 
-//	#define logError(message) {log (message, fullPathName); fclose (file); return NULL;}
 	struct TGAHeader {
 		byte idLength, colorMapType, imageType, colorMapSpecification [5];
 		short xOrigin, yOrigin, imageWidth, imageHeight;
@@ -147,16 +157,16 @@ Texture * Texture::readTGATexture(char * fullPathName) {
 	};
 
 	TGAHeader header;
-	if (fread (&header, 1, sizeof (header), file) != sizeof (header)) {
+	if(fread(&header, 1, sizeof (header), file) != sizeof (header)) {
 		printf("TGA file \"%s\" appears to be truncated.\n", fullPathName);
 	}
-	if (header.colorMapType != 0) { //1=>has color map, 0=>does not have color map.
+	if(header.colorMapType != 0) { //1=>has color map, 0=>does not have color map.
 		printf("Can't read \"%s\" since it's paletted.\n", fullPathName);
 	}
-	if (header.imageType != 2) { //0..11; 2=>uncompressed true-color
+	if(header.imageType != 2) { //0..11; 2=>uncompressed true-color
 		printf("Can't read \"%s\" since it's compressed or not true color.", fullPathName);
 	}
-	if (header.pixelDepth != 32 && header.pixelDepth != 24) {
+	if(header.pixelDepth != 32 && header.pixelDepth != 24) {
 		printf("File \"%s\" is a %d bit .TGA file, need 24 or 32.\n", fullPathName, header.pixelDepth); 
 		fclose(file);
 		return NULL;
@@ -209,6 +219,9 @@ Texture * Texture::readTGATexture(char * fullPathName) {
 
 	texture->textureName = new char [strlen (fullPathName) + 1];
 	strcpy_s (texture->textureName, strlen(fullPathName) + 1, fullPathName);
+
+	texture->load();
+
     return texture;
 }
 
@@ -259,13 +272,4 @@ void Texture::load(bool mipmapping, bool forceClamp) {
 		delete [] bytes;
 		bytes = NULL;
 	}
-}
-
-void Texture::unload() {
-	if(textureHandle != -1) {
-		glDeleteTextures(1, & textureHandle);
-	}
-
-	textureHandle = -1;
-	textureLoaded = false;
 }

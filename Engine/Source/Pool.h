@@ -15,6 +15,7 @@ public:
 	
 	virtual void tick();
 	virtual void draw();
+	virtual void draw(bool drawInside);
 	
 	virtual void import(ifstream &input, vector<AnimatedTexture *> & animatedTextures);
 	

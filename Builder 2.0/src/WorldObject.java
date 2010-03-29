@@ -118,9 +118,9 @@ public class WorldObject extends Properties {
 		else if(this instanceof Translator)	{ out.println("\t\"type\" => \"translator\""); }
 		else if(this instanceof Sprite)		{ out.println("\t\"type\" => \"sprite\""); }
 		else if(this instanceof Waypoint)	{ out.println("\t\"type\" => \"waypoint\""); }
+		else if(this instanceof Waterfall)	{ out.println("\t\"type\" => \"waterfall\""); }
 		else if(this instanceof Pool)		{ out.println("\t\"type\" => \"pool\""); }
 		else if(this instanceof Terrain)	{ out.println("\t\"type\" => \"terrain\""); }
-		else if(this instanceof Waterfall)	{ out.println("\t\"type\" => \"waterfall\""); }
 		else   								{ System.out.println("WARNING: Ignoring unexpected object of type \"" + this.getPropertyValue("type") + "\"."); }
 		
 		// output the transformations

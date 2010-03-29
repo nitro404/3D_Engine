@@ -27,6 +27,7 @@ public:
 	Texture * picture;
 
 private:
+	GLuint spriteList;
 	char * name;
 	Point center;
 	Point bottomCenter;
@@ -35,7 +36,7 @@ private:
 	Waypoint * lastWaypoint;
 	Waypoint * destination;
 	double movementSpeed;
-	Vector unitVector;
+	Point unitVector;
 	double distanceTravelled;
 	double distanceToTravel;
 	

@@ -5,101 +5,19 @@ void Environment::tick() {
 }
 
 void Environment::draw() {
-	double width = (255.0 / 256.0);
-
-	double rotationX = -(camera->xRotation);
-	double rotationY = -(camera->yRotation);
-
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	
 	glPushIdentity();
-	
-	glRotated(rotationX, 1, 0, 0);
-	glRotated(rotationY, 0, 1, 0);
-	
-	glScaled(100, 100, 100);
-	
-	if(surrounds == 1) {
-		// left side
-		skyboxTextures[0]->activate();
-		glBegin(GL_POLYGON);
-		glTexCoord2d(1 - width, width);
-		glVertex3d(-0.5, 0.5, 0.5);
-		glTexCoord2d(1 - width, 1 - width);
-		glVertex3d(-0.5, -0.5, 0.5);
-		glTexCoord2d(width, 1 - width);
-		glVertex3d(-0.5, -0.5, -0.5);
-		glTexCoord2d(width, width);
-		glVertex3d(-0.5, 0.5, -0.5);
-		glEnd();
+		glRotated(-(camera->xRotation), 1, 0, 0);
+		glRotated(-(camera->yRotation), 0, 1, 0);
 		
-		// right side
-		skyboxTextures[1]->activate();
-		glBegin(GL_POLYGON);
-		glTexCoord2d(1 - width, width);
-		glVertex3d(0.5, 0.5, -0.5);
-		glTexCoord2d(1 - width, 1 - width);
-		glVertex3d(0.5, -0.5, -0.5);
-		glTexCoord2d(width, 1 - width);
-		glVertex3d(0.5, -0.5, 0.5);
-		glTexCoord2d(width, width);
-		glVertex3d(0.5, 0.5, 0.5);
-		glEnd();
+		glScaled(100, 100, 100);
 
-		// front side
-		skyboxTextures[2]->activate();
-		glBegin(GL_POLYGON);
-		glTexCoord2d(1 - width, width);
-		glVertex3d(-0.5, 0.5, -0.5);
-		glTexCoord2d(1 - width, 1 - width);
-		glVertex3d(-0.5, -0.5, -0.5);
-		glTexCoord2d(width, 1 - width);
-		glVertex3d(0.5, -0.5, -0.5);
-		glTexCoord2d(width, width);
-		glVertex3d(0.5, 0.5, -0.5);
-		glEnd();
-
-		// back side
-		skyboxTextures[3]->activate();
-		glBegin(GL_POLYGON);
-		glTexCoord2d(1 - width, width);
-		glVertex3d(0.5, 0.5, 0.5);
-		glTexCoord2d(1 - width, 1 - width);
-		glVertex3d(0.5, -0.5, 0.5);
-		glTexCoord2d(width, 1 - width);
-		glVertex3d(-0.5, -0.5, 0.5);
-		glTexCoord2d(width, width);
-		glVertex3d(-0.5, 0.5, 0.5);
-		glEnd();
-
-		// top side
-		skyboxTextures[4]->activate();
-		glBegin(GL_POLYGON);
-		glTexCoord2d(1 - width, width);
-		glVertex3d(-0.5, 0.5, 0.5);
-		glTexCoord2d(1 - width, 1 - width);
-		glVertex3d(-0.5, 0.5, -0.5);
-		glTexCoord2d(width, 1 - width);
-		glVertex3d(0.5, 0.5, -0.5);
-		glTexCoord2d(width, width);
-		glVertex3d(0.5, 0.5, 0.5);
-		glEnd();
-
-		// bottom side
-		skyboxTextures[5]->activate();
-		glBegin(GL_POLYGON);
-		glTexCoord2d(1 - width, width);
-		glVertex3d(-0.5, -0.5, -0.5);
-		glTexCoord2d(1 - width, 1 - width);
-		glVertex3d(-0.5, -0.5, 0.5);
-		glTexCoord2d(width, 1 - width);
-		glVertex3d(0.5, -0.5, 0.5);
-		glTexCoord2d(width, width);
-		glVertex3d(0.5, -0.5, -0.5);
-		glEnd();
-	}
-	
+		for(int i=0;i<6;i++) {
+			skyboxTextures[i]->activate();
+			glCallList(skyboxList + i);
+		}
 	glPopMatrix();
 	
 	glEnable(GL_DEPTH_TEST);
@@ -188,4 +106,80 @@ void Environment::import(ifstream & input, vector<Texture *> & textures) {
 			delete [] str;
 		}
 	}
+
+	double width = (255.0 / 256.0); // temporarily hardcoded
+
+	skyboxList = glGenLists(6);
+	glNewList(skyboxList, GL_COMPILE);
+		glBegin(GL_POLYGON); // left side
+			glTexCoord2d(1 - width, width);
+			glVertex3d(-0.5, 0.5, 0.5);
+			glTexCoord2d(1 - width, 1 - width);
+			glVertex3d(-0.5, -0.5, 0.5);
+			glTexCoord2d(width, 1 - width);
+			glVertex3d(-0.5, -0.5, -0.5);
+			glTexCoord2d(width, width);
+			glVertex3d(-0.5, 0.5, -0.5);
+		glEnd();
+	glEndList();
+	glNewList(skyboxList + 1, GL_COMPILE);
+		glBegin(GL_POLYGON); // right side
+			glTexCoord2d(1 - width, width);
+			glVertex3d(0.5, 0.5, -0.5);
+			glTexCoord2d(1 - width, 1 - width);
+			glVertex3d(0.5, -0.5, -0.5);
+			glTexCoord2d(width, 1 - width);
+			glVertex3d(0.5, -0.5, 0.5);
+			glTexCoord2d(width, width);
+			glVertex3d(0.5, 0.5, 0.5);
+		glEnd();
+	glEndList();
+	glNewList(skyboxList + 2, GL_COMPILE);
+		glBegin(GL_POLYGON); // front side
+			glTexCoord2d(1 - width, width);
+			glVertex3d(-0.5, 0.5, -0.5);
+			glTexCoord2d(1 - width, 1 - width);
+			glVertex3d(-0.5, -0.5, -0.5);
+			glTexCoord2d(width, 1 - width);
+			glVertex3d(0.5, -0.5, -0.5);
+			glTexCoord2d(width, width);
+			glVertex3d(0.5, 0.5, -0.5);
+		glEnd();
+	glEndList();
+	glNewList(skyboxList + 3, GL_COMPILE);
+		glBegin(GL_POLYGON); // back side
+			glTexCoord2d(1 - width, width);
+			glVertex3d(0.5, 0.5, 0.5);
+			glTexCoord2d(1 - width, 1 - width);
+			glVertex3d(0.5, -0.5, 0.5);
+			glTexCoord2d(width, 1 - width);
+			glVertex3d(-0.5, -0.5, 0.5);
+			glTexCoord2d(width, width);
+			glVertex3d(-0.5, 0.5, 0.5);
+		glEnd();
+	glEndList();
+	glNewList(skyboxList + 4, GL_COMPILE);
+		glBegin(GL_POLYGON); // top side
+			glTexCoord2d(1 - width, width);
+			glVertex3d(-0.5, 0.5, 0.5);
+			glTexCoord2d(1 - width, 1 - width);
+			glVertex3d(-0.5, 0.5, -0.5);
+			glTexCoord2d(width, 1 - width);
+			glVertex3d(0.5, 0.5, -0.5);
+			glTexCoord2d(width, width);
+			glVertex3d(0.5, 0.5, 0.5);
+		glEnd();
+	glEndList();
+	glNewList(skyboxList + 5, GL_COMPILE);
+		glBegin(GL_POLYGON); // bottom side
+			glTexCoord2d(1 - width, width);
+			glVertex3d(-0.5, -0.5, -0.5);
+			glTexCoord2d(1 - width, 1 - width);
+			glVertex3d(-0.5, -0.5, 0.5);
+			glTexCoord2d(width, 1 - width);
+			glVertex3d(0.5, -0.5, 0.5);
+			glTexCoord2d(width, width);
+			glVertex3d(0.5, -0.5, -0.5);
+		glEnd();
+	glEndList();
 }

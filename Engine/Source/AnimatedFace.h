@@ -15,6 +15,7 @@ public:
 	void tick();
 	void draw();
 	void draw(Colour & colour);
+	void draw(Colour & colour, bool drawBothSides);
 	void import(ifstream & input, vector<AnimatedTexture * > & animatedTextures);
 
 public:

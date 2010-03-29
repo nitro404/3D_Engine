@@ -19,10 +19,11 @@ void Camera::beginCamera() {
 	glPushMatrix();
 		glRotated(-xRotation, 1.0, 0.0, 0.0);
 		glTranslated(-offset.x, -offset.y, -offset.z);
-		target->beginCamera();
+		glPushMatrix();
+			glMultMatrixd(player->playerMatrix.inverse);
 }
 
 void Camera::endCamera() {
-		target->endCamera();
+		glPopMatrix();
 	glPopMatrix();
 }

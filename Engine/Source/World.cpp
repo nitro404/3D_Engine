@@ -1,10 +1,31 @@
 #include "World.h"
 
+World::World() : skybox(NULL) {
+	startPosition = Point(0, 0, 0);
+}
+
+World::~World() {
+	if(skybox != NULL) { delete skybox; }
+	delete [] sortedObjects;
+	delete [] sortedWater;
+	delete [] sortedSprites;
+	for(unsigned int i=0;i<objects.size();i++) {
+		delete objects.at(i);
+	}
+	for(unsigned int i=0;i<water.size();i++) {
+		delete water.at(i);
+	}
+	for(unsigned int i=0;i<sprites.size();i++) {
+		delete sprites.at(i);
+	}
+	for(unsigned int i=0;i<waypoints.size();i++) {
+		delete waypoints.at(i);
+	}
+}
+
 void World::tick () {
 	unsigned int i;
 	playerPosition = player->playerMatrix.position();
-	
-	underWater = checkUnderWater();
 	
 	if(skybox != NULL) {
 		skybox->tick();
@@ -21,75 +42,6 @@ void World::tick () {
 }
 
 void World::draw() {
-	unsigned int i, j;
-	sortObjects();
-	sortWater();
-	sortSprites();
-	
-	if(skybox != NULL) {
-		skybox->draw();
-	}
-	for(i=0;i<objects.size();i++) {
-		sortedObjects[i]->draw();
-	}
-	if(water.size() == 0) {
-		for(i=0;i<sprites.size();i++) {
-			sortedSprites[i]->draw();
-		}
-	}
-	else {
-		for(i=0;i<water.size();i++) {
-			if(!underWater) {
-				for(j=0;j<sprites.size();j++) {
-					if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
-						sortedSprites[j]->draw();
-					}
-				}
-			}
-			else {
-				for(j=0;j<sprites.size();j++) {
-					if(!sortedWater[i]->insideOf(sortedSprites[j]->position)) {
-						sortedSprites[j]->draw();
-					}
-				}
-			}
-			sortedWater[i]->draw();
-			if(underWater) {
-				for(j=0;j<sprites.size();j++) {
-					if(sortedWater[i]->insideOf(sortedSprites[j]->position)) {
-						sortedSprites[j]->draw();
-					}
-				}
-			}
-			else {
-				for(j=0;j<sprites.size();j++) {
-					if(!sortedWater[i]->insideOf(sortedSprites[j]->position)) {
-						sortedSprites[j]->draw();
-					}
-				}
-			}
-		}
-	}
-}
-
-bool World::compareDistance(const Object & x, const Object & y) {
-	return x.distanceFrom(playerPosition) < y.distanceFrom(playerPosition);
-}
-
-void World::sortObjects() {
-	Object * temp;
-	for(unsigned int i=0;i<objects.size();i++) {
-		for(unsigned int j=i;j<objects.size();j++) {
-			if(compareDistance(*sortedObjects[i], *sortedObjects[j])) {
-				temp = sortedObjects[i];
-				sortedObjects[i] = sortedObjects[j];
-				sortedObjects[j] = temp;
-			}
-		}
-	}
-}
-
-void World::sortWater() {
 	Pool * temp;
 	for(unsigned int i=0;i<water.size();i++) {
 		for(unsigned int j=i;j<water.size();j++) {
@@ -100,35 +52,75 @@ void World::sortWater() {
 			}
 		}
 	}
-}
 
-void World::sortSprites() {
-	Sprite * temp;
+	Sprite * temp2;
 	for(unsigned int i=0;i<sprites.size();i++) {
 		for(unsigned int j=i;j<sprites.size();j++) {
 			if(compareDistance(*sortedSprites[i], *sortedSprites[j])) {
-				temp = sortedSprites[i];
+				temp2 = sortedSprites[i];
 				sortedSprites[i] = sortedSprites[j];
-				sortedSprites[j] = temp;
+				sortedSprites[j] = temp2;
+			}
+		}
+	}
+
+	underWater = -1;
+	for(unsigned int i=0;i<water.size();i++) {
+		if(sortedWater[i]->insideOf(playerPosition)) {
+			underWater = i;
+			break;
+		}
+	}
+
+	for(unsigned int i=0;i<sprites.size();i++) {
+		spriteWater[i] = -1;
+		for(unsigned int j=0;j<water.size();j++) {
+			if(sortedWater[j]->insideOf(sortedSprites[i]->position)) {
+				spriteWater[i] = j;
+				break;
+			}
+		}
+	}
+
+	for(unsigned int i=0;i<objects.size();i++) {
+		sortedObjects[i]->draw();
+	}
+	for(unsigned int i=0;i<sprites.size();i++) {
+		if(spriteWater[i] == -1) {
+			sortedSprites[i]->draw();
+		}
+	}
+	if(water.size() > 0) {
+		for(unsigned int i=0;i<water.size();i++) {
+			for(unsigned int j=0;j<sprites.size();j++) {
+				if(!(spriteWater[j] == i && underWater == i)) {
+					sortedSprites[j]->draw();
+				}
+			}
+			sortedWater[i]->draw(underWater == i);
+			for(unsigned int j=0;j<sprites.size();j++) {
+				if(spriteWater[j] == i && underWater == i) {
+					sortedSprites[j]->draw();
+				}
 			}
 		}
 	}
 }
 
-bool World::checkUnderWater() {
-	for(unsigned int i=0;i<water.size();i++) {
-		if(water.at(i)->insideOf(playerPosition)) {
-			return true;
-		}
+void World::drawSkybox() {
+	if(skybox != NULL) {
+		skybox->draw();
 	}
-	return false;
+}
+
+bool World::compareDistance(const Object & x, const Object & y) {
+	return x.distanceFrom(playerPosition) < y.distanceFrom(playerPosition);
 }
 
 void World::import(char * fileName, vector<Texture *> & textures, vector<char *> & heightMaps, vector<AnimatedTexture *> & animatedTextures) {
 	char line[256];
 	char key[256];
 	char value[256];
-	unsigned int i, j;
 	
 	ifstream input;
 	input.open(fileName); 
@@ -136,10 +128,10 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<char *>
 		quit("Unable to open world file: \"%s\".", fileName);
 	}
 	
-	//Input the header.
+	// input the header.
 	input.getline(line, 256, '\n');
 
-	//Input the start position
+	// input the start position
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ',');
 	double xStartPos = atof(line);
@@ -150,12 +142,12 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<char *>
 	startPosition = Point(xStartPos, yStartPos, zStartPos);
 	input.getline(line, 256, '\n');
 	
-	//Input the waypoints
+	// input the waypoints
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfWaypoints = atoi(line);
 	for(int waypointIndex=0;waypointIndex<numberOfWaypoints;waypointIndex++) {
-		//Create the corresponding objects
+		// create the corresponding objects
 		Waypoint * waypoint = new Waypoint;
 		waypoint->import(input);
 		waypoints.push_back(waypoint);
@@ -168,11 +160,11 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<char *>
 	char * end;
 	bool valid;
 	bool endOfString;
-	for(i=0;i<waypoints.size();i++) {
+	for(unsigned int i=0;i<waypoints.size();i++) {
 		// parse through the string of neighbour waypoint values
 		head = waypoints.at(i)->neighbourValues;
 		bool hasText = false;
-		for(j=0;j<strlen(head);j++) {
+		for(unsigned int j=0;j<strlen(head);j++) {
 			if(head[j] != ' ' && head[j] != '\t') {
 				hasText = true;
 				break;
@@ -219,24 +211,24 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<char *>
 		}
 	}
 	
-	//Input the objects.
+	// input the objects
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfObjects = atoi(line);
 	input.getline(line, 256, '\n');
 	for(int objectIndex=0;objectIndex<numberOfObjects;objectIndex++) {
-		//Input the header.
+		// input the header
 		input.getline(line, 256, ':');
 		input.getline(line, 256, ';');
 		int currentIndex = atoi(line);
 		input.getline(line, 256, '\n');
 		
-		//Input the object type
+		// input the object type
 		input.getline(line, 256, '\n');
 		value[0] = '\0';
 		sscanf_s(line, " \"%[^\"]\" => \"%[^\"]\"", key, 256, value, 256);
 		
-		//Create the corresponding objects
+		// create the corresponding objects
 		if(_stricmp(value, "static geometry") == 0) {
 			Geometry * geometry = new Geometry;
 			geometry->import(input, textures);
@@ -277,21 +269,30 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<char *>
 			terrain->import(input, textures, heightMaps);
 			objects.push_back(terrain);
 		}
+		else if(_stricmp(value, "waterfall") == 0) {
+			Waterfall * waterfall = new Waterfall;
+			waterfall->import(input, animatedTextures);
+			water.push_back(waterfall);
+		}
 		else {
 			printf("WARNING: Encountered unexpected object when parsing world: \"%s\"", value);
 		}
 	}
 	sortedObjects = new Object*[objects.size()];
-	for(i=0;i<objects.size();i++) {
+	for(unsigned i=0;i<objects.size();i++) {
 		sortedObjects[i] = objects.at(i);
 	}
 	sortedWater = new Pool*[water.size()];
-	for(i=0;i<water.size();i++) {
+	for(unsigned i=0;i<water.size();i++) {
 		sortedWater[i] = water.at(i);
 	}
 	sortedSprites = new Sprite*[sprites.size()];
-	for(i=0;i<sprites.size();i++) {
+	for(unsigned i=0;i<sprites.size();i++) {
 		sortedSprites[i] = sprites.at(i);
+	}
+	spriteWater = new int[sprites.size()];
+	for(unsigned int i=0;i<sprites.size();i++) {
+		spriteWater[i] = -1;
 	}
 	
 	input.close();

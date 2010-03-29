@@ -7,34 +7,33 @@ ENGINE
  + POOL
    - Temporarily added insideOf() for proper draw order
    - Implement ray function for tinting sprite and draw order: http://erich.realtimerendering.com/ptinpoly/
- + SKYBOX
-   - Fix implementation using proper world position
  + CAMERA
    - Re-write: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=Quaternion_Camera_Class
  + TERRAIN
-   - Allow stretched textures
    - Write face groups + frustrum culling
+   - Fix height map loading error
  + SPRITE
    - Change extent in bounding box
+ + ROTATOR
+   - Rotate at specific rate on each axis
+ + WORLD
+   - Fix draw order sorting - partially fixed
 
 
 NEAT IDEAS
- + 3D Skybox
- + Collision detection
- + Fog
- + Sky Clouds
- + Physics
- + Model Loader
- + Bump Mapping
- + Lighting
- + Focus
- + Rain
- + Sun Rays
- + Laser Beams
- + Snow
- + Scrolling Textures
- + Shadows
+ + Shaders
+   - Bump Mapping
+   - Realistic Water
+   - Clouds
+   - Sun Lens Flare
+   - Scrolling Textures
+ + Lighting / Shadows
  + Particle System
+ + Physics System
+ + Model Loader
+ + 3D Skybox
+ + Rain / Snow / Clouds
+ + Laser Beams
 
 
 BUILDER 2.0

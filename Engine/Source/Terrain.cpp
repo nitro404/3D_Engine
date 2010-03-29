@@ -13,15 +13,8 @@ Terrain::~Terrain() {
 }
 
 void Terrain::draw() {
+	glDisable(GL_BLEND);
 	textureMap->activate();
-	
-	if(textureMap->type == RGBAType) {
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_BLEND);
-	}
-	else {
-		glDisable(GL_BLEND);
-	}
 	glPushMatrix();
 		glMultMatrixd(transformation->normal());
 		group->draw();
@@ -106,9 +99,6 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 		}
 	}
 
-	printf("HEIGHT MAP (%d, %d): %s\n", width, height, heightMap);
-	printf("TEXTURE MAP(%d, %d): %s\n", textureMap->width, textureMap->height, textureMap->textureName);
-
 	// input the height map
 	int size = width * height;
 	int * heightMapData = new int[size];
@@ -125,6 +115,9 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 	double terrainSizeY = maxPoint.y - minPoint.y;
 	double terrainSizeZ = maxPoint.z - minPoint.z;
 
+	double tileSizeX = terrainSizeX / (width + 1);
+	double tileSizeZ = terrainSizeY / (width + 1);
+
 	int currentPoint = 0;
 	double x, y, z, tx, ty;
 	points = new GamePoint[(width + 1) * (height  + 1)];
@@ -139,8 +132,8 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 				ty = j;
 			}
 			else {
-				tx = ((float) i / (width + 1.0f));
-				ty = ((float) j / (height + 1.0f));
+				tx = ((float) j / (height + 1.0f));
+				ty = 1.0f - ((float) i / (float) (width + 1));
 			}
 			
 			points[currentPoint].x = x;

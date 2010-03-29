@@ -12,8 +12,8 @@ public class Builder {
 	public static void main(String[] args) {
 		parseParameters(args);
 		// sample program calls:
-		// -d../Maps -imap -ouni -m../Maps -e"../Content/Data/Textures/" -t"../Content/Data/textures.ini" -t../Content/Data/textures.ini -h"../Content/Data/Height Maps/"
 		// -d../Maps -iuni -owrl -m../Maps -t../Content/Data/textures.ini -h"../Content/Data/Height Maps/"
+		// -d../Maps -imap -ouni -m../Maps -e"../Content/Data/Textures/" -t"../Content/Data/textures.ini" -t../Content/Data/textures.ini -h"../Content/Data/Height Maps/"
 	}
 	
 	public static void parseParameters(String[] args) {
