@@ -103,7 +103,7 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 	int size = width * height;
 	int * heightMapData = new int[size];
 	ifstream heightMapFile(heightMap);
-	if(heightMapFile == NULL) {
+	if(heightMapFile.bad()) {
 		quit("Unable to open height map file: \"%s\"", heightMap);
 	}
 	for(int i=0;i<size;i++) {
@@ -115,8 +115,8 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 	double terrainSizeY = maxPoint.y - minPoint.y;
 	double terrainSizeZ = maxPoint.z - minPoint.z;
 
-	double tileSizeX = terrainSizeX / (width + 1);
-	double tileSizeZ = terrainSizeY / (width + 1);
+//	double tileSizeX = terrainSizeX / (width + 1);
+//	double tileSizeZ = terrainSizeY / (width + 1);
 
 	int currentPoint = 0;
 	double x, y, z, tx, ty;

@@ -1025,7 +1025,6 @@
 "ambientlight" "230 230 230"
 "surrounds" "1"
 "skycolor" "0 0 230"
-"skyboxname" "redSky"
 "targetname" "skybox1"
 "skyboxtexture" "redSky"
 "origin" "0 0 64"
@@ -1034,8 +1033,7 @@
 "classname" "Terrain"
 "targetname" "grass"
 "heightMap" "microTerrainHeightMap"
-"textureMap" "wall1"
-"tiled" "1"
+"textureMap" "hugeTerrainColorMap"
 {
 ( -1536 -2560 288 ) ( -1536 -512 288 ) ( 1536 -512 288 ) WALL1 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
 ( -1536 -512 -96 ) ( -1536 -2560 -96 ) ( 1536 -2560 -96 ) WALL1 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
@@ -1049,7 +1047,7 @@
 "classname" "Waypoint"
 "targetname" "e1"
 "neighbours" "e2, e3"
-"origin" "-1344 -768 64"
+"origin" "-1344 -768 0"
 }
 {
 "classname" "Sprite"
@@ -1058,11 +1056,11 @@
 "waypoint" "e1"
 "movementSpeed" "3"
 {
-( -256 1536 128 ) ( -64 1536 128 ) ( -64 1472 128 ) BRICK04_2 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
-( -256 1472 -64 ) ( -64 1472 -64 ) ( -64 1536 -64 ) BRICK04_2 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
-( -256 1536 128 ) ( -256 1472 128 ) ( -256 1472 -64 ) BRICK04_2 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1 
+( -256 1472 128 ) ( -256 1536 128 ) ( -64 1536 128 ) BRICK04_2 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
+( -256 1536 -64 ) ( -256 1472 -64 ) ( -64 1472 -64 ) BRICK04_2 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
+( -256 1472 -64 ) ( -256 1536 -64 ) ( -256 1536 128 ) BRICK04_2 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1 
 ( -64 1536 -64 ) ( -64 1472 -64 ) ( -64 1472 128 ) BRICK04_2 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1 
-( -64 1536 128 ) ( -256 1536 128 ) ( -256 1536 -64 ) BRICK04_2 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1 
+( -256 1536 -64 ) ( -64 1536 -64 ) ( -64 1536 128 ) BRICK04_2 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1 
 ( -64 1472 -64 ) ( -256 1472 -64 ) ( -256 1472 128 ) BRICK04_2 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1 
 }
 }
@@ -1070,35 +1068,35 @@
 "classname" "Waypoint"
 "targetname" "e4"
 "neighbours" "e2, e3, e5, e7"
-"origin" "-256 -1160 56"
+"origin" "-256 -1152 0"
 }
 {
 "classname" "Waypoint"
 "targetname" "e3"
 "neighbours" "e1, e4"
-"origin" "-1216 -1544 56"
+"origin" "-1216 -1536 0"
 }
 {
 "classname" "Waypoint"
 "targetname" "e5"
 "neighbours" "e4, e6"
-"origin" "1152 -776 56"
+"origin" "1152 -768 0"
 }
 {
 "classname" "Waypoint"
 "targetname" "e6"
 "neighbours" "e5, e7"
-"origin" "1152 -2248 56"
+"origin" "1152 -2368 0"
 }
 {
 "classname" "Waypoint"
 "targetname" "e7"
 "neighbours" "e6"
-"origin" "256 -2056 56"
+"origin" "256 -2048 0"
 }
 {
 "classname" "Waypoint"
 "targetname" "e2"
 "neighbours" "e1, e4"
-"origin" "-512 -768 200"
+"origin" "-512 -768 0"
 }

@@ -19,7 +19,6 @@ Texture::Texture(long width, long height, TextureType type) {
 }
 
 Texture::~Texture() {
-//	this->unload();
 	if(bytes != NULL) {
 		delete [] bytes;
 	}

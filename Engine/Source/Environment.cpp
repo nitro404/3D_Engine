@@ -160,25 +160,25 @@ void Environment::import(ifstream & input, vector<Texture *> & textures) {
 	glEndList();
 	glNewList(skyboxList + 4, GL_COMPILE);
 		glBegin(GL_POLYGON); // top side
-			glTexCoord2d(1 - width, width);
-			glVertex3d(-0.5, 0.5, 0.5);
-			glTexCoord2d(1 - width, 1 - width);
-			glVertex3d(-0.5, 0.5, -0.5);
 			glTexCoord2d(width, 1 - width);
-			glVertex3d(0.5, 0.5, -0.5);
+			glVertex3d(-0.5, 0.5, 0.5);
 			glTexCoord2d(width, width);
+			glVertex3d(-0.5, 0.5, -0.5);
+			glTexCoord2d(1 - width, width);
+			glVertex3d(0.5, 0.5, -0.5);
+			glTexCoord2d(1 - width, 1 - width);
 			glVertex3d(0.5, 0.5, 0.5);
 		glEnd();
 	glEndList();
 	glNewList(skyboxList + 5, GL_COMPILE);
 		glBegin(GL_POLYGON); // bottom side
-			glTexCoord2d(1 - width, width);
-			glVertex3d(-0.5, -0.5, -0.5);
-			glTexCoord2d(1 - width, 1 - width);
-			glVertex3d(-0.5, -0.5, 0.5);
 			glTexCoord2d(width, 1 - width);
-			glVertex3d(0.5, -0.5, 0.5);
+			glVertex3d(-0.5, -0.5, -0.5);
 			glTexCoord2d(width, width);
+			glVertex3d(-0.5, -0.5, 0.5);
+			glTexCoord2d(1 - width, width);
+			glVertex3d(0.5, -0.5, 0.5);
+			glTexCoord2d(1 - width, 1 - width);
 			glVertex3d(0.5, -0.5, -0.5);
 		glEnd();
 	glEndList();

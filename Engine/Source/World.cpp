@@ -9,6 +9,7 @@ World::~World() {
 	delete [] sortedObjects;
 	delete [] sortedWater;
 	delete [] sortedSprites;
+	delete [] spriteWater;
 	for(unsigned int i=0;i<objects.size();i++) {
 		delete objects.at(i);
 	}

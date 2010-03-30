@@ -1025,9 +1025,8 @@
 "ambientlight" "230 230 230"
 "surrounds" "1"
 "skycolor" "0 0 230"
-"skyboxname" "redSky"
-"targetname" "skybox1"
-"skyboxtexture" "redSky"
+"targetname" "skybox"
+"skyboxtexture" "mountain"
 "origin" "0 0 64"
 }
 {

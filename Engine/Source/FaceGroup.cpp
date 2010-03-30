@@ -47,6 +47,9 @@ FaceGroup::~FaceGroup() {
 	for (unsigned int i = 0; i < groups.size();i++) {
 		delete groups.at(i);
 	}
+	if(vertices != NULL) {
+		delete [] vertices;
+	}
 }
 
 //updates the buffer on the video card to use new points
@@ -103,7 +106,7 @@ SubGroup::SubGroup(GamePoint *vertices, int verticesWidth, int verticesHeight, i
 SubGroup::~SubGroup(void)
 {
 	if (indices != NULL) {
-		delete[] indices;
+		delete [] indices;
 	}
 }
 
