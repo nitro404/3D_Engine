@@ -15,7 +15,7 @@ public:
 
 	void addMenuItem(char * menuItem); // add a new item to the bottom of the menu
 
-	void select(); // get the current menu position
+	void select();
 	void back();
 	void moveUp(); // move menu selection up
 	void moveDown(); // move menu selection down
