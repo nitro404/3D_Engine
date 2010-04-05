@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{58e29c34-d7c3-437e-a850-2f1d1a103562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Header Files">
+      <UniqueIdentifier>{1d323b6f-b9ae-4a86-9a94-920f57c5a82b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Source Files">
+      <UniqueIdentifier>{5571e7a2-8cba-43ff-87ec-07e6a310bfed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3D Engine">
+      <UniqueIdentifier>{1c7ae05c-54b0-4a8f-b84f-49b214e016d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3D Engine\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="3D Engine\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="OpenGL">
+      <UniqueIdentifier>{e3307a9f-1e43-4b48-beee-46e090868662}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Settings File Parser">
+      <UniqueIdentifier>{169b0b3d-4a36-4354-b829-9268a7aa799f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\AnimatedFace.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AnimatedTexture.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Colour.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Face.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FaceGroup.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Font.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\InputManager.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Macros.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Menu.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sprite.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Text.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Texture.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\World.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Geometry.cpp">
+      <Filter>Objects\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Environment.cpp">
+      <Filter>Objects\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object.cpp">
+      <Filter>Objects\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Pool.cpp">
+      <Filter>Objects\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rotator.cpp">
+      <Filter>Objects\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Terrain.cpp">
+      <Filter>Objects\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Translator.cpp">
+      <Filter>Objects\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vehicle.cpp">
+      <Filter>Objects\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Waterfall.cpp">
+      <Filter>Objects\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Waypoint.cpp">
+      <Filter>Objects\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GLUT\Extensions.cpp">
+      <Filter>OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Variables.cpp">
+      <Filter>Settings File Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Variable.cpp">
+      <Filter>Settings File Parser</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Environment.h">
+      <Filter>Objects\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Waypoint.h">
+      <Filter>Objects\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Geometry.h">
+      <Filter>Objects\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object.h">
+      <Filter>Objects\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Pool.h">
+      <Filter>Objects\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rotator.h">
+      <Filter>Objects\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Terrain.h">
+      <Filter>Objects\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Translator.h">
+      <Filter>Objects\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vehicle.h">
+      <Filter>Objects\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Waterfall.h">
+      <Filter>Objects\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GLUT\glut.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GLUT\GLU.H">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GLUT\GL.H">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GLUT\Extensions.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GLUT\ARBVertexBufferObject.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Variables.h">
+      <Filter>Settings File Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Variable.h">
+      <Filter>Settings File Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AnimatedFace.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AnimatedTexture.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Colour.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Face.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FaceGroup.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Font.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Includes.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\InputManager.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Menu.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Point.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sprite.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Text.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Texture.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Transformation.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\World.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
