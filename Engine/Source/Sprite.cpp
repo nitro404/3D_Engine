@@ -1,5 +1,17 @@
 #include "Sprite.h"
 
+Sprite::Sprite() : picture(NULL),
+				   origin(NULL),
+				   destination(NULL),
+				   lastWaypoint(NULL),
+				   movementSpeed(0),
+				   distanceToTravel(0),
+				   distanceTravelled(0) { }
+
+Sprite::~Sprite() {
+	delete [] name;
+}
+
 double Sprite::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - position.x, 2) + pow(p.y - position.y, 2) + pow(p.z - position.z, 2) );
 }

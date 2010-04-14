@@ -4,8 +4,8 @@
 
 class Waterfall : public Pool {
 public:
-	Waterfall() { }
-	~Waterfall() { }
+	Waterfall();
+	~Waterfall();
 
 	void tick();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Includes.h"
+#include "Variables.h"
 #include "Object.h"
 #include "Environment.h"
 #include "Geometry.h"
@@ -15,7 +16,7 @@
 
 class World {
 public:
-	World();
+	World(Variables * settings);
 	~World();
 	
 	void tick();
@@ -36,10 +37,14 @@ public:
 	vector<Sprite *> sprites;
 	vector<Waypoint *> waypoints;
 
+	Shader * testShader;
+
 private:
 	Object ** sortedObjects;
 	Pool ** sortedWater;
 	Sprite ** sortedSprites;
 	int * spriteWater;
 	int underWater;
+
+	Variables * settings;
 };

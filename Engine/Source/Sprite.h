@@ -6,14 +6,8 @@
 
 class Sprite : public Object {
 public:
-	Sprite() : picture(NULL),
-			   origin(NULL),
-			   destination(NULL),
-			   lastWaypoint(NULL),
-			   movementSpeed(0),
-			   distanceToTravel(0),
-			   distanceTravelled(0) { }
-	~Sprite() { delete [] name; }
+	Sprite();
+	~Sprite();
 
 	double distanceFrom(Point & p) const;
 	

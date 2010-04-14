@@ -1,18 +1,13 @@
 #pragma once
 
 #include "Includes.h"
+#include "Variables.h"
 #include "Object.h"
 
 class Geometry : public Object {
 public:
-	Geometry() : transformation(NULL) { }
-
-	~Geometry() {
-		for(unsigned int i=0;i<faces.size();i++) {
-			delete faces.at(i);
-		}
-		if(transformation != NULL) { delete transformation; }
-	}
+	Geometry(Shader * externalShader);
+	~Geometry();
 
 	double distanceFrom(Point & p) const;
 
@@ -24,4 +19,6 @@ public:
 public:
 	DualTransformation * transformation;
 	vector<Face *> faces;
+
+	Shader * shader;
 };

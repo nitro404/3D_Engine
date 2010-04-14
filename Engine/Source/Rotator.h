@@ -5,15 +5,9 @@
 
 class Rotator : public Object {
 public:
-	Rotator() : transformation(NULL), angleInDegrees(0), rateInDegreesPerSecond(0) { }
+	Rotator();
 	
-	~Rotator() {
-		delete [] name;
-		for(unsigned int i=0;i<faces.size();i++) {
-			delete faces.at(i);
-		}
-		if(transformation != NULL) { delete transformation; }
-	}
+	~Rotator();
 	
 	double distanceFrom(Point & p) const;
 

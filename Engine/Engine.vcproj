@@ -175,27 +175,27 @@
 			Name="OpenGL"
 			>
 			<File
-				RelativePath=".\Source\GLUT\ARBVertexBufferObject.h"
+				RelativePath=".\Source\GL\GL.H"
 				>
 			</File>
 			<File
-				RelativePath=".\Source\GLUT\Extensions.cpp"
+				RelativePath=".\Source\GL\glew.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Source\GLUT\Extensions.h"
+				RelativePath=".\Source\GL\GLU.H"
 				>
 			</File>
 			<File
-				RelativePath=".\Source\GLUT\GL.H"
+				RelativePath=".\Source\GL\glut.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Source\GLUT\GLU.H"
+				RelativePath=".\Source\GL\glxew.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Source\GLUT\glut.h"
+				RelativePath=".\Source\GL\wglew.h"
 				>
 			</File>
 		</Filter>
@@ -388,6 +388,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Shader.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Text.h"
 					>
 				</File>
@@ -459,6 +463,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Player.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Shader.cpp"
 					>
 				</File>
 				<File

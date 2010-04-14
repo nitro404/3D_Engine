@@ -1,10 +1,12 @@
 #include "World.h"
 
-World::World() : skybox(NULL) {
+World::World(Variables * externalSettings) : skybox(NULL), settings(externalSettings) {
 	startPosition = Point(0, 0, 0);
+	testShader = new Shader("test.vtx", "test.frg", settings->getValue("Shader Directory"));
 }
 
 World::~World() {
+	delete testShader;
 	if(skybox != NULL) { delete skybox; }
 	delete [] sortedObjects;
 	delete [] sortedWater;
@@ -25,19 +27,18 @@ World::~World() {
 }
 
 void World::tick () {
-	unsigned int i;
 	playerPosition = player->playerMatrix.position();
 	
 	if(skybox != NULL) {
 		skybox->tick();
 	}
-	for(i=0;i<objects.size();i++) {
+	for(unsigned int i=0;i<objects.size();i++) {
 		objects.at(i)->tick();
 	}
-	for(i=0;i<water.size();i++) {
+	for(unsigned int i=0;i<water.size();i++) {
 		water.at(i)->tick();
 	}
-	for(i=0;i<sprites.size();i++) {
+	for(unsigned int i=0;i<sprites.size();i++) {
 		sprites.at(i)->tick();
 	}
 }
@@ -231,7 +232,7 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<char *>
 		
 		// create the corresponding objects
 		if(_stricmp(value, "static geometry") == 0) {
-			Geometry * geometry = new Geometry;
+			Geometry * geometry = new Geometry(testShader);
 			geometry->import(input, textures);
 			objects.push_back(geometry);
 		}

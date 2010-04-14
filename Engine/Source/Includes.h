@@ -14,7 +14,11 @@
 
 using namespace std;
 
-#include "GLUT/glut.h"
+#include "GL/glew.h"
+#include "GL/glut.h"
+
+#pragma comment(lib, "glut32.lib")
+#pragma comment(lib, "glew32.lib")
 
 bool isTrue(const char * str);
 void prompt(const char *message, ...);

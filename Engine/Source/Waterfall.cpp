@@ -1,5 +1,8 @@
 #include "Waterfall.h"
 
+Waterfall::Waterfall() { }
+Waterfall::~Waterfall() { }
+
 void Waterfall::tick() {
 	Pool::tick();
 

@@ -1,5 +1,12 @@
 #include "Waypoint.h"
 
+Waypoint::Waypoint() { }
+
+Waypoint::~Waypoint() {
+	delete [] name;
+	delete [] neighbourValues;
+}
+
 double Waypoint::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - position.x, 2) + pow(p.y - position.y, 2) + pow(p.z - position.z, 2) );
 }
@@ -27,6 +34,9 @@ Waypoint * Waypoint::getRandomNeighbour() {
 Point & Waypoint::getPosition() {
 	return position;
 }
+
+void Waypoint::tick() { }
+void Waypoint::draw() { }
 
 void Waypoint::import (ifstream &input) {
 	char line[256];

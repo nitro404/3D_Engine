@@ -5,14 +5,8 @@
 
 class Environment : public Object {
 public:
-	Environment() {
-		skyboxTextures = new Texture*[6];
-	}
-
-	~Environment() {
-		delete [] name;
-		delete [] skyboxTextures;
-	}
+	Environment();
+	~Environment();
 
 	double distanceFrom(Point & p) const { return 0; }
 

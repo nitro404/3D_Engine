@@ -5,7 +5,6 @@
 #include "Point.h"
 #include "Transformation.h"
 #include "Camera.h"
-#include "Texture.h"
 #include "Face.h"
 
 extern double DT;

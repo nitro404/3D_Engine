@@ -1,5 +1,14 @@
 #include "Environment.h"
 
+Environment::Environment() {
+	skyboxTextures = new Texture*[6];
+}
+
+Environment::~Environment() {
+	delete [] name;
+	delete [] skyboxTextures;
+}
+
 void Environment::tick() {
 	
 }

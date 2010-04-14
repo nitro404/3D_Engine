@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Point.h"
-#include "GLUT/extensions.h"
 
 #define USE_QUADS							0 // works
 #define USE_STRIPS							1 // works

@@ -10,7 +10,6 @@ FaceGroup::FaceGroup(GamePoint * vertices, int width, int height, int squareSect
 	verticesBuffer = NULL;
 
 	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS) {
-		setupOpenGLExtensions();
 		glGenBuffers (1, &verticesBuffer);
 		glBindBuffer (GL_ARRAY_BUFFER, verticesBuffer);
 		glBufferData (GL_ARRAY_BUFFER, width * height * sizeof (GamePoint), vertices, GL_DYNAMIC_DRAW);

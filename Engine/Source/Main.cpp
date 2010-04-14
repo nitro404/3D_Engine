@@ -396,8 +396,15 @@ int main(int argc, char *argv[]) {
 	}
 	else {
 		glutCreateWindow((settings->getValue("Game Name") == NULL) ? "3D Game Engine" : settings->getValue("Game Name"));
-//		CMenu * menu = GetSystemMenu(false);
-//		menu->ModifyMenu(SC_CLOSE, MF_BYCOMMAND | MF_GRAYED);
+	}
+
+	if(glewInit() != GLEW_OK) {
+		quit("Unable to initialize GLEW.");
+	}
+
+	if(!GLEW_VERSION_2_0) {
+		delete settings;
+		quit("OpenGL 2.0 not supported.");
 	}
 	
     glutIgnoreKeyRepeat(GLUT_KEY_REPEAT_ON);
@@ -416,6 +423,7 @@ int main(int argc, char *argv[]) {
     glutKeyboardUpFunc(normalKeyReleased);
 
 	setupOpenGL();
+
 	game = new Game(initialScreenWidth, initialScreenHeight, settings);
 	player = new Player;
 	camera = new Camera;

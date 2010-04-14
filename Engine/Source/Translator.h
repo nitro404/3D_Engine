@@ -5,15 +5,8 @@
 
 class Translator : public Object {
 public:	
-	Translator() : transformation(NULL), forward(true) { }
-
-	~Translator() {
-		delete [] name;
-		for(unsigned int i=0;i<faces.size();i++) {
-			delete faces.at(i);
-		}
-		delete transformation;
-	}
+	Translator();
+	~Translator();
 
 	double distanceFrom(Point & p) const;
 	

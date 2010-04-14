@@ -15,6 +15,7 @@ Game::Game(int windowWidth,
 			  paused(true) {
 	this->windowWidth = windowWidth;
 	this->windowHeight = windowHeight;
+
 	drawFPS = isTrue(settings->getValue("Show FPS"));
 	fps = new char[12];
 	fps[0] = '\0';
@@ -31,18 +32,17 @@ Game::Game(int windowWidth,
 }
 
 Game::~Game() {
-	unsigned int i;
 	delete [] fps;
 	delete fpsText;
 	delete settings;
 	if(world != NULL) { delete world; }
-	for(i=0;i<animatedTextures.size();i++) {
+	for(unsigned int i=0;i<animatedTextures.size();i++) {
 		delete animatedTextures.at(i);
 	}
-	for(i=0;i<heightMaps.size();i++) {
+	for(unsigned int i=0;i<heightMaps.size();i++) {
 		delete [] heightMaps.at(i);
 	}
-	for(i=0;i<textures.size();i++) {
+	for(unsigned int i=0;i<textures.size();i++) {
 		delete textures.at(i);
 	}
 }
@@ -74,7 +74,7 @@ void Game::togglePause() { paused = !paused; }
 bool Game::isPaused() { return paused; }
 
 void Game::loadMap(char * fileName) {
-	world = new World;
+	world = new World(settings);
 	world->import(fileName, textures, heightMaps, animatedTextures);
 	player->reset(world->startPosition);
 	paused = false;
@@ -113,6 +113,9 @@ void Game::verifySettings() {
 	}
 	if(settings->getValue("Height Map Directory") == NULL) {
 		quit("No height map directory specified in settings file.");
+	}
+	if(settings->getValue("Shader Directory") == NULL) {
+		quit("No shader directory specified in settings file.");
 	}
 }
 

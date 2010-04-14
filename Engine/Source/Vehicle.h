@@ -5,15 +5,8 @@
 
 class Vehicle : public Object {
 public:
-	Vehicle() : transformation(NULL) { }
-
-	~Vehicle() {
-		delete [] name;
-		for(unsigned int i=0;i<faces.size();i++) {
-			delete faces.at(i);
-		}
-		if(transformation != NULL) { delete transformation; }
-	}
+	Vehicle();
+	~Vehicle();
 
 	double distanceFrom(Point & p) const;
 

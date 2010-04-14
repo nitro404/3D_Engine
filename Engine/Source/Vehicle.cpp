@@ -1,5 +1,15 @@
 #include "Vehicle.h"
 
+Vehicle::Vehicle() : transformation(NULL) { }
+
+Vehicle::~Vehicle() {
+	delete [] name;
+	for(unsigned int i=0;i<faces.size();i++) {
+		delete faces.at(i);
+	}
+	if(transformation != NULL) { delete transformation; }
+}
+
 double Vehicle::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation->m41, 2) + pow(p.y - transformation->m42, 2) + pow(p.z - transformation->m43, 2) );
 }

@@ -3,6 +3,7 @@
 #include "Point.h"
 #include "Colour.h"
 #include "Texture.h"
+#include "Shader.h"
 
 class Face {
 public:

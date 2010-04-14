@@ -6,13 +6,6 @@ enum TextureType {RGBAType, RGBType};
 
 class Texture {
 public:
-	TextureType type;
-	long width, height;
-	GLuint textureHandle;
-	bool textureLoaded;
-	char * textureName;
-	long * bytes;
-
 	Texture(long width, long height, TextureType type);
 	~Texture();
 	
@@ -25,5 +18,15 @@ public:
 	static Texture * readTGATexture(char * fullPathName);
 
 private:
-	void load(bool mipmapping = true, bool forceClamp = false); //Give it to the game card (use defaults).
+	void load(bool mipmapping = true, bool forceClamp = false);
+
+public:
+	TextureType type;
+	long width, height;
+
+private:
+	GLuint textureHandle;
+	bool textureLoaded;
+	char * textureName;
+	long * bytes;
 };

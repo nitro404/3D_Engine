@@ -1,5 +1,15 @@
 #include "Rotator.h"
 
+Rotator::Rotator() : transformation(NULL), angleInDegrees(0), rateInDegreesPerSecond(0) { }
+
+Rotator::~Rotator() {
+	delete [] name;
+	for(unsigned int i=0;i<faces.size();i++) {
+		delete faces.at(i);
+	}
+	if(transformation != NULL) { delete transformation; }
+}
+
 double Rotator::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation->m41, 2) + pow(p.y - transformation->m42, 2) + pow(p.z - transformation->m43, 2) );
 }

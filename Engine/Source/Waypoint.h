@@ -5,12 +5,8 @@
 
 class Waypoint : public Object {
 public:
-	Waypoint() { }
-	
-	~Waypoint() {
-		delete [] name;
-		delete [] neighbourValues;
-	}
+	Waypoint();
+	~Waypoint();
 	
 	double distanceFrom(Point & p) const;
 	
@@ -19,8 +15,8 @@ public:
 	Waypoint * getRandomNeighbour();
 	Point & getPosition();
 	
-	void tick() { }
-	void draw() { }
+	void tick();
+	void draw();
 	
 	void import (ifstream &input);
 
