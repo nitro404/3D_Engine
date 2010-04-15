@@ -108,5 +108,5 @@ void Shader::activate() {
 }
 
 void Shader::deactivate() {
-	glUseProgramObjectARB(-1);
+	glUseProgramObjectARB(0);
 }

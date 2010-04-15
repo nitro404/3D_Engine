@@ -20,7 +20,7 @@ void Geometry::tick () {
 }
 
 void Geometry::draw () {
-//	shader->activate();
+	shader->activate();
 	glPushMatrix();
 		Transformation & normal = transformation->normal();
 		glMultMatrixd(normal);
@@ -28,6 +28,7 @@ void Geometry::draw () {
 			faces.at(i)->draw();
 		}
 	glPopMatrix(); 
+	shader->deactivate();
 }
 
 void Geometry::import(ifstream & input, vector<Texture *> & textures) {

@@ -2,7 +2,7 @@
 
 World::World(Variables * externalSettings) : skybox(NULL), settings(externalSettings) {
 	startPosition = Point(0, 0, 0);
-	testShader = new Shader("test.vtx", "test.frg", settings->getValue("Shader Directory"));
+	testShader = new Shader("gradient.vtx", "gradient.frg", settings->getValue("Shader Directory"));
 }
 
 World::~World() {
