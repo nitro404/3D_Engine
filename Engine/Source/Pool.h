@@ -23,6 +23,7 @@ public:
 	DualTransformation * transformation;
 	vector<Face *> faces;
 	Colour waterColour;
+	Shader * shader;
 
 private:
 	double maxX, maxY, maxZ;

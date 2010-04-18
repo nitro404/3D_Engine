@@ -30,19 +30,19 @@ void Translator::tick() {
 
 void Translator::draw() {
 	if(shader != NULL) { shader->activate(); }
+
 	Point p = transformation->position();
 	glPushMatrix();
-	glTranslated(position.x, position.y, position.z);
-	for(unsigned int i=0;i<faces.size();i++) {
-		faces.at(i)->draw();
-	}
+		glTranslated(position.x, position.y, position.z);
+		for(unsigned int i=0;i<faces.size();i++) {
+			faces.at(i)->draw();
+		}
 	glPopMatrix();
+
 	if(shader != NULL) { shader->deactivate(); }
 }
 
 void Translator::import (ifstream & input, vector<Texture *> & textures, vector<Shader *> shaders) {
-	//shader = shaders.at(0);
-
 	char line[256];
 	char key[256];
 	char value[256];
@@ -82,6 +82,11 @@ void Translator::import (ifstream & input, vector<Texture *> & textures, vector<
 		}
 		else if(_stricmp(key, "rateInMetersPerSecond") == 0) {
 			rateInMetersPerSecond = atof(str);
+			delete [] str;
+		}
+		else if(_stricmp(key, "shader") == 0) {
+			int shaderIndex = atoi(str);
+			if(shaderIndex >= 0) { shader = shaders.at(shaderIndex); }
 			delete [] str;
 		}
 		else {

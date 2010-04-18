@@ -13,6 +13,10 @@ public:
 	static Shader * import(ifstream & input, const char * shaderDirectory);
 
 private:
+	bool compileShader(GLenum shader, const char * shaderName);
+	void outputShaderLog(unsigned int shaderID);
+
+private:
 	GLenum programHandle;
 	GLenum vertexShaderHandle;
 	GLenum fragmentShaderHandle;

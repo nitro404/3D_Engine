@@ -14,6 +14,7 @@ public class World implements Map3D {
 	public Vector<String> textureNames;
 	public Vector<String> heightMapNames;
 	public Vector<AnimatedTexture> animatedTextures;
+	public Vector<Shader> shaders;
 	public Vector<HeightMap> heightMaps;
 	public Vector<WorldObject> objects;
 	public Vector<Waypoint> waypoints;
@@ -44,6 +45,7 @@ public class World implements Map3D {
 		this.textureNames = textureNames;
 		this.heightMapNames = heightMapNames;
 		this.animatedTextures = animatedTextures;
+		this.shaders = shaders;
 		this.heightMaps = heightMaps;
 		try {
 			this.convertFrom(map);
@@ -84,35 +86,35 @@ public class World implements Map3D {
 					this.startPosition = object.normal.getPosition();
 				}
 				else if(type.equalsIgnoreCase("static geometry")) {
-					objects.add(new Geometry(object, textureNames));
+					objects.add(new Geometry(object, textureNames, shaders));
 				}
 				else if(type.equalsIgnoreCase("environment")) {
-					objects.add(new Environment(object, textureNames));
+					objects.add(new Environment(object, textureNames, shaders));
 				}
 				else if(type.equalsIgnoreCase("vehicle")) {
-					objects.add(new Vehicle(object, textureNames));
+					objects.add(new Vehicle(object, textureNames, shaders));
 				}
 				else if(type.equalsIgnoreCase("rotator")) {
-					objects.add(new Rotator(object, textureNames));
+					objects.add(new Rotator(object, textureNames, shaders));
 				}
 				else if(type.equalsIgnoreCase("translator")) {
-					objects.add(new Translator(object, textureNames));
+					objects.add(new Translator(object, textureNames, shaders));
 				}
 				else if(type.equalsIgnoreCase("sprite")) {
-					Sprite newSprite = new Sprite(object, textureNames);
+					Sprite newSprite = new Sprite(object, textureNames, shaders);
 					objects.add(newSprite);
 				}
 				else if(type.equalsIgnoreCase("waypoint")) {
 					waypoints.add(new Waypoint(object));
 				}
 				else if(type.equalsIgnoreCase("pool")) {
-					objects.add(new Pool(object, textureNames, animatedTextures));
+					objects.add(new Pool(object, textureNames, animatedTextures, shaders));
 				}
 				else if(type.equalsIgnoreCase("terrain")) {
-					objects.add(new Terrain(object, textureNames, heightMaps));
+					objects.add(new Terrain(object, textureNames, heightMaps, shaders));
 				}
 				else if(type.equalsIgnoreCase("waterfall")) {
-					objects.add(new Waterfall(object, textureNames, animatedTextures));
+					objects.add(new Waterfall(object, textureNames, animatedTextures, shaders));
 				}
 				else {
 					System.out.println("WARNING: Ignoring unexpected object of type \"" + type + "\".");

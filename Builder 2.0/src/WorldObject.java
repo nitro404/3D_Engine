@@ -49,6 +49,23 @@ public class WorldObject extends Properties {
 		return -1;
 	}
 	
+	public int getShaderIndex(String shaderName, Vector<Shader> shaders) {
+		if(shaderName == null || shaders == null) { return -1; }
+		
+		for(int i=0;i<shaders.size();i++) {
+			if(shaderName.equalsIgnoreCase(shaders.elementAt(i).name)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public void setShaderIndex(String shaderName, Vector<Shader> shaders) {
+		int shaderIndex = getShaderIndex(shaderName, shaders);
+		removeProperty("shader");
+		addProperty("shader", Integer.toString(shaderIndex));
+	}
+	
 	public boolean setTextureIndicies(Vector<Face> faces, Vector<String> textureNames) {
 		if(faces == null || textureNames == null) { return false; }
 		

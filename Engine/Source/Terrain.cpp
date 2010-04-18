@@ -14,18 +14,18 @@ Terrain::~Terrain() {
 
 void Terrain::draw() {
 	if(shader != NULL) { shader->activate(); }
+
 	glDisable(GL_BLEND);
 	textureMap->activate();
 	glPushMatrix();
 		glMultMatrixd(transformation->normal());
 		group->draw();
 	glPopMatrix();
+
 	if(shader != NULL) { shader->deactivate(); }
 }
 
 void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char *> & heightMaps, vector<Shader *> shaders) {
-	//shader = shaders.at(1);
-
 	char line[256];
 	char key[256];
 	char value[256];
@@ -95,6 +95,11 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 		}
 		else if (_stricmp(key, "tiled") == 0) {
 			tiled = atoi(str);
+			delete [] str;
+		}
+		else if(_stricmp(key, "shader") == 0) {
+			int shaderIndex = atoi(str);
+			if(shaderIndex >= 0) { shader = shaders.at(shaderIndex); }
 			delete [] str;
 		}
 		else {

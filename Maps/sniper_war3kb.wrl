@@ -20662,12 +20662,13 @@ Object: 429;
 			1.82879886474609, 0.203220282997437, 0.203220400871583, 1.0, 0.0, 0.0, -5.0000125, -0.9999875;
 Object: 430;
 	"type" => "environment"
-	Properties: 11;
+	Properties: 12;
 		"ambientlight" => "230 230 230"
 		"cloudlayers" => "0"
 		"name" => "sky"
 		"skycolor" => "0 0 230"
 		"surrounds" => "1"
+		"shader" => "-1"
 		"skyboxtexture-left" => "78"
 		"skyboxtexture-right" => "79"
 		"skyboxtexture-front" => "77"

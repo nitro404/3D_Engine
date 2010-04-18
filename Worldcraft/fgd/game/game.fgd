@@ -17,6 +17,7 @@
         1 : "Bike"
         2 : "Tank"
     ]
+	shader(string) : "Shader" : ""
 ]
 
 // Environment
@@ -37,6 +38,7 @@
         2 : "Two Cloud Layers"
         3 : "Three Cloud Layers"
     ]
+	shader(string) : "Shader" : ""
 ]
 
 // Rotator
@@ -44,6 +46,7 @@
     targetname(string) : "Name"
     axis(string) : "Axis" : "0 1 0"
     rateInDegreesPersecond(string) : "Rate" : "90"
+	shader(string) : "Shader" : ""
 ]
 
 // Translator
@@ -51,6 +54,7 @@
     targetname(string) : "Name"
     offset(string) : "Offset" : "0.0 1.0 0.0"
     rateInMetersPerSecond(string) : "Rate" : "1"
+	shader(string) : "Shader" : ""
 ]
 
 // Sprite
@@ -59,6 +63,7 @@
     picture(string) : "Picture"
     waypoint(string) : "Waypoint"
     movementSpeed(string) : "Speed" : "0"
+	shader(string) : "Shader" : ""
 ]
 
 // Waypoint
@@ -71,6 +76,7 @@
 @SolidClass = Pool [
     targetname(string) : "Name"
     waterColour(string) : "Water Colour" : "51 51 216 196"
+	shader(string) : "Shader" : ""
 ]
 
 // Terrain
@@ -79,10 +85,12 @@
     heightMap(string) : "Height Map"
     textureMap(string) : "Texture Map"
     tiled(string) : "Tile Texture" : "0"
+	shader(string) : "Shader" : ""
 ]
 
 // Waterfall
 @SolidClass = Waterfall [
     targetname(string) : "Name"
     waterColour(string) : "Water Colour" : "51 51 216 196"
+	shader(string) : "Shader" : ""
 ]

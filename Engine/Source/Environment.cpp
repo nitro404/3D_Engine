@@ -1,6 +1,6 @@
 #include "Environment.h"
 
-Environment::Environment() {
+Environment::Environment() : shader(NULL) {
 	skyboxTextures = new Texture*[6];
 }
 
@@ -14,6 +14,8 @@ void Environment::tick() {
 }
 
 void Environment::draw() {
+	if(shader != NULL) { shader->activate(); }
+
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	
@@ -30,6 +32,8 @@ void Environment::draw() {
 	glPopMatrix();
 	
 	glEnable(GL_DEPTH_TEST);
+
+	if(shader != NULL) { shader->deactivate(); }
 }
 
 void Environment::import(ifstream & input, vector<Texture *> & textures, vector<Shader *> shaders) {
@@ -38,7 +42,7 @@ void Environment::import(ifstream & input, vector<Texture *> & textures, vector<
 	char value[256];
 	char * str;
 	
-	//Input the properties
+	// input the properties
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfProperties = atoi(line);
@@ -50,7 +54,7 @@ void Environment::import(ifstream & input, vector<Texture *> & textures, vector<
 		str = new char[strlen(value) + 1];
 		strcpy_s(str, strlen(value) + 1, value);
 		
-		//Parse properties to local variables
+		// parse properties to local variables
 		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
@@ -109,6 +113,11 @@ void Environment::import(ifstream & input, vector<Texture *> & textures, vector<
 		else if(_stricmp(key, "surrounds") == 0) {
 			 surrounds = atoi(str);
 			 delete [] str;
+		}
+		else if(_stricmp(key, "shader") == 0) {
+			int shaderIndex = atoi(str);
+			if(shaderIndex >= 0) { shader = shaders.at(shaderIndex); }
+			delete [] str;
 		}
 		else {
 			printf("WARNING: Encountered unexpected property when parsing environment object: \"%s\".\n", key);

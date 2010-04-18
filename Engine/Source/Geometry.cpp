@@ -1,6 +1,6 @@
 #include "Geometry.h"
 
-Geometry::Geometry() : transformation(NULL), shader(NULL) {
+Geometry::Geometry() : transformation(NULL) {
 	
 }
 
@@ -20,7 +20,6 @@ void Geometry::tick () {
 }
 
 void Geometry::draw () {
-	if(shader != NULL) { shader->activate(); }
 	glPushMatrix();
 		Transformation & normal = transformation->normal();
 		glMultMatrixd(normal);
@@ -28,16 +27,13 @@ void Geometry::draw () {
 			faces.at(i)->draw();
 		}
 	glPopMatrix(); 
-	if(shader != NULL) { shader->deactivate(); }
 }
 
 void Geometry::import(ifstream & input, vector<Texture *> & textures, vector<Shader *> shaders) {
-	//shader = shaders.at(1);
-
 	char line[256];
 	
 	transformation = DualTransformation::import(input);
-	
+
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfFaces = atoi(line);

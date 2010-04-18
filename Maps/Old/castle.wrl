@@ -1780,12 +1780,13 @@ Object: 36;
 			-0.812799740600585, -2.43864396969971, -0.406440755966797, -1.0, 0.0, 0.0, -0.937496875, 0.12498125;
 Object: 37;
 	"type" => "environment"
-	Properties: 11;
+	Properties: 12;
 		"ambientlight" => "230 230 230"
 		"cloudlayers" => "0"
 		"name" => "skybox"
 		"skycolor" => "0 0 230"
 		"surrounds" => "1"
+		"shader" => "-1"
 		"skyboxtexture-left" => "78"
 		"skyboxtexture-right" => "79"
 		"skyboxtexture-front" => "77"
@@ -1795,20 +1796,22 @@ Object: 37;
 Object: 38;
 	"type" => "sprite"
 	Position: -7.31519985198975, 3.25119996070862, -11.7855997085571;
-	Properties: 4;
+	Properties: 5;
 		"movementspeed" => "0"
 		"name" => "tree1"
 		"picture" => "81"
 		"waypoint" => "-1"
+		"shader" => "-1"
 	Maximum: 3.25152497198975, 3.25152515929138, 0.40644034855713;
 	Minimum: -3.25152526801025, -3.25152508070862, -0.406440931442871;
 Object: 39;
 	"type" => "sprite"
 	Position: 5.68959999084473, 3.25119996070862, -6.90880012512207;
-	Properties: 4;
+	Properties: 5;
 		"movementspeed" => "0"
 		"name" => "tree2"
 		"picture" => "81"
 		"waypoint" => "-1"
+		"shader" => "-1"
 	Maximum: 3.25152512915527, 3.25152515929138, 0.406440765122071;
 	Minimum: -3.25152511084473, -3.25152508070862, -0.40644051487793;

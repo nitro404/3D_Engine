@@ -18,6 +18,7 @@ public:
 public:
 	DualTransformation * transformation;
 	vector<Face *> faces;
+	Shader * shader;
 
 private:
 	char * name;

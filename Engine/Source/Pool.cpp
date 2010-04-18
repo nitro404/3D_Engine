@@ -1,6 +1,6 @@
 #include "Pool.h"
 
-Pool::Pool() : transformation(NULL) { }
+Pool::Pool() : transformation(NULL), shader(NULL) { }
 
 Pool::~Pool() {
 	delete [] name;
@@ -31,13 +31,17 @@ void Pool::draw() {
 }
 
 void Pool::draw(bool drawInside) {
+	if(shader != NULL) { shader->activate(); }
+
 	glPushMatrix();
 		Transformation & normal = transformation->normal();
 		glMultMatrixd(normal);
 		for(unsigned int i=0;i<faces.size();i++) {
 			faces.at(i)->draw(waterColour, drawInside);
 		}
-	glPopMatrix(); 
+	glPopMatrix();
+
+	if(shader != NULL) { shader->deactivate(); }
 }
 
 void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures, vector<Shader *> shaders) {
@@ -79,6 +83,11 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 			waterColour.setBlue(atoi(temp2));
 			temp3 += sizeof(char);
 			waterColour.setAlpha(atoi(temp3));
+			delete [] str;
+		}
+		else if(_stricmp(key, "shader") == 0) {
+			int shaderIndex = atoi(str);
+			if(shaderIndex >= 0) { shader = shaders.at(shaderIndex); }
 			delete [] str;
 		}
 		else {

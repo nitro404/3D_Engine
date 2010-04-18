@@ -1,6 +1,7 @@
 #include "Sprite.h"
 
 Sprite::Sprite() : picture(NULL),
+				   shader(NULL),
 				   origin(NULL),
 				   destination(NULL),
 				   lastWaypoint(NULL),
@@ -41,6 +42,8 @@ void Sprite::tick() {
 }
 
 void Sprite::draw() {
+	if(shader != NULL) { shader->activate(); }
+
 	Transformation cameraMatrix;
 	glGetMatrixd(cameraMatrix);
 	Point newPosition((position.x * cameraMatrix.m11) + (position.y * cameraMatrix.m21) + (position.z * cameraMatrix.m31) + cameraMatrix.m41,
@@ -64,6 +67,8 @@ void Sprite::draw() {
 		glScaled(extent.x, extent.y, extent.z);
 		glCallList(spriteList);
 	glPopMatrix();
+
+	if(shader != NULL) { shader->deactivate(); }
 }
 
 void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypoint *> & waypoints, vector<Shader *> shaders) {
@@ -114,6 +119,11 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 		}
 		else if(_stricmp(key, "movementSpeed") == 0) {
 			movementSpeed = atoi(str);
+			delete [] str;
+		}
+		else if(_stricmp(key, "shader") == 0) {
+			int shaderIndex = atoi(str);
+			if(shaderIndex >= 0) { shader = shaders.at(shaderIndex); }
 			delete [] str;
 		}
 		else {

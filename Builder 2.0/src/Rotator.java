@@ -11,10 +11,11 @@ public class Rotator extends WorldObject {
 	public int textureIndex;
 
 	// create the Rotator subclass
-	public Rotator(UniversalObject object, Vector<String> textureNames) {
+	public Rotator(UniversalObject object, Vector<String> textureNames, Vector<Shader> shaders) {
 		super(object.objectIndex, object.normal, object.inverse, object.properties, object.faces);
 		
 		setTextureIndicies(faces, textureNames);
+		setShaderIndex(getPropertyValue("shader"), shaders);
 	}
 	
 }

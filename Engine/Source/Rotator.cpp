@@ -23,6 +23,7 @@ void Rotator::tick () {
 
 void Rotator::draw () {
 	if(shader != NULL) { shader->activate(); }
+
 	Point p = transformation->position();
 	glPushMatrix(); 
 	glTranslated(p.x, p.y, p.z);
@@ -31,12 +32,11 @@ void Rotator::draw () {
 		faces.at(i)->draw();
 	}
 	glPopMatrix();
+
 	if(shader != NULL) { shader->deactivate(); }
 }
 
 void Rotator::import(ifstream & input, vector<Texture *> & textures, vector<Shader *> shaders) {
-	//shader = shaders.at(0);
-
 	char line[256];
 	char key[256];
 	char value[256];
@@ -76,6 +76,11 @@ void Rotator::import(ifstream & input, vector<Texture *> & textures, vector<Shad
 		}
 		else if(_stricmp(key, "rateInDegreesPersecond") == 0) {
 			rateInDegreesPerSecond = atof(str);
+			delete [] str;
+		}
+		else if(_stricmp(key, "shader") == 0) {
+			int shaderIndex = atoi(str);
+			if(shaderIndex >= 0) { shader = shaders.at(shaderIndex); }
 			delete [] str;
 		}
 		else {

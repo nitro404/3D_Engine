@@ -14,10 +14,11 @@ public class Sprite extends WorldObject {
 	public Point3D min;
 	
 	// create the Sprite subclass (throw away the transformations and faces)
-	public Sprite(UniversalObject object, Vector<String> textureNames) {
+	public Sprite(UniversalObject object, Vector<String> textureNames, Vector<Shader> shaders) {
 		super(object.objectIndex, null, null, object.properties, null);
 		
 		setPropertyValue("picture", Integer.toString(getTextureIndex(getPropertyValue("picture"), textureNames)));
+		setShaderIndex(getPropertyValue("shader"), shaders);
 		
 		// get the position associated with the normal transformation and store that instead
 		this.position = object.normal.getPosition();

@@ -19,6 +19,7 @@ public:
 public:
 	Point position;
 	Texture * picture;
+	Shader * shader;
 
 private:
 	GLuint spriteList;

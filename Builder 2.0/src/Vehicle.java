@@ -11,10 +11,11 @@ public class Vehicle extends WorldObject {
 	public int textureIndex;
 	
 	// create the Vehicle subclass
-	public Vehicle(UniversalObject object, Vector<String> textureNames) {
+	public Vehicle(UniversalObject object, Vector<String> textureNames, Vector<Shader> shaders) {
 		super(object.objectIndex, object.normal, object.inverse, object.properties, object.faces);
 		
 		setTextureIndicies(faces, textureNames);
+		setShaderIndex(getPropertyValue("shader"), shaders);
 	}
 	
 }

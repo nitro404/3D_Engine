@@ -1,6 +1,6 @@
 #include "Vehicle.h"
 
-Vehicle::Vehicle() : transformation(NULL) { }
+Vehicle::Vehicle() : transformation(NULL), shader(NULL) { }
 
 Vehicle::~Vehicle() {
 	delete [] name;
@@ -19,6 +19,8 @@ void Vehicle::tick() {
 }
 
 void Vehicle::draw() {
+	if(shader != NULL) { shader->activate(); }
+
 	if(faces.size() > 0) {
 		glPushMatrix();
 		Transformation & normal = transformation->normal();
@@ -28,6 +30,8 @@ void Vehicle::draw() {
 		}
 		glPopMatrix(); 
 	}
+
+	if(shader != NULL) { shader->deactivate(); }
 }
 
 void Vehicle::import(ifstream & input, vector<Texture *> & textures, vector<Shader *> shaders) {
@@ -56,6 +60,11 @@ void Vehicle::import(ifstream & input, vector<Texture *> & textures, vector<Shad
 		}
 		else if(_stricmp(key, "style") == 0) {
 			style = atoi(str);
+			delete [] str;
+		}
+		else if(_stricmp(key, "shader") == 0) {
+			int shaderIndex = atoi(str);
+			if(shaderIndex >= 0) { shader = shaders.at(shaderIndex); }
 			delete [] str;
 		}
 		else {

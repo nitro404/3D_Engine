@@ -53,10 +53,11 @@ Object: 0;
 Object: 1;
 	"type" => "sprite"
 	Position: 1.62559998035431, -1.62559998035431, 0.812799990177155;
-	Properties: 4;
+	Properties: 5;
 		"movementspeed" => "0"
 		"name" => "test"
 		"picture" => "74"
 		"waypoint" => "-1"
+		"shader" => "-1"
 	Maximum: 3.25152513964569, 3.25152510035431, 0.812881289822845;
 	Minimum: -3.25152510035431, -3.25152513964569, -0.812881270177155;

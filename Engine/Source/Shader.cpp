@@ -69,40 +69,72 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 		quit("Empty fragment shader: \"%s\".", fragmentShaderPath.c_str());
 	}
 
-	programHandle = glCreateProgramObjectARB();
-	if(glGetError() != GL_NO_ERROR) {
-		quit("Unable to acquire shader program handle.");
-	}
+	programHandle = glCreateProgram();
 
-	vertexShaderHandle = glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
+	vertexShaderHandle = glCreateShader(GL_VERTEX_SHADER);
+	fragmentShaderHandle = glCreateShader(GL_FRAGMENT_SHADER);
+
 	const char * vertexShaderTemp = vertexShaderData.c_str();
-	glShaderSourceARB(vertexShaderHandle, 1, (const GLcharARB **) (&vertexShaderTemp), NULL);
-	glCompileShader(vertexShaderHandle);
+	glShaderSource(vertexShaderHandle, 1, (const GLchar **) (&vertexShaderTemp), NULL);
+	compileShader(vertexShaderHandle, vertexShaderFileName);
 	if(glGetError() != GL_NO_ERROR) {
 		quit("Error creating vertex shader.");
 	}
-	glAttachObjectARB(programHandle, vertexShaderHandle);
 	
-	fragmentShaderHandle = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
 	const char * fragmentShaderTemp = fragmentShaderData.c_str();
-	glShaderSourceARB(fragmentShaderHandle, 1, (const GLcharARB **) (&fragmentShaderTemp), NULL);
-	glCompileShader(fragmentShaderHandle);
+	glShaderSource(fragmentShaderHandle, 1, (const GLchar **) (&fragmentShaderTemp), NULL);
+	compileShader(fragmentShaderHandle, fragmentShaderFileName);
 	if(glGetError() != GL_NO_ERROR) {
 		quit("Error creating fragment shader.");
 	}
-	glAttachObjectARB(programHandle, fragmentShaderHandle);
 
-	glLinkProgramARB(programHandle);
+	glAttachShader(programHandle, vertexShaderHandle);
+	glAttachShader(programHandle, fragmentShaderHandle);
+
+	glLinkProgram(programHandle);
 }
 
 Shader::~Shader() { }
 
 void Shader::activate() {
-	glUseProgramObjectARB(programHandle);
+	glUseProgram(programHandle);
 }
 
 void Shader::deactivate() {
-	glUseProgramObjectARB(0);
+	glUseProgram(0);
+}
+
+bool Shader::compileShader(GLenum shader, const char * shaderName) {
+	glCompileShader(shader);
+	GLint result = 0xDEADBEEF;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
+
+	if(!result) {
+		printf("Could not compile shader %d", shader);
+		if(shaderName != NULL) {
+			printf(": \"%s\"", shaderName);
+		}
+		printf("\n");
+		outputShaderLog(shader);
+		return false;
+	}
+
+	return true;
+}
+
+void Shader::outputShaderLog(unsigned int shaderID) {
+	vector<char> infoLog;
+	GLint infoLen;
+	glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &infoLen);
+	infoLog.resize(infoLen);
+
+	cerr << "GLSL Shader: Shader contains errors, please validate this shader!" << std::endl;
+	glGetShaderInfoLog(shaderID, infoLog.size(), &infoLen, &infoLog[0]);
+
+	cerr << string(infoLog.begin(), infoLog.end()) << std::endl;
+#ifdef _WIN32
+//	MessageBox(NULL, string(infoLog.begin(), infoLog.end()).c_str(), "Error", MB_OK);
+#endif
 }
 
 Shader * Shader::import(ifstream & input, const char * shaderDirectory) {

@@ -12,8 +12,10 @@ public class Environment extends WorldObject {
 	public static String[] skyboxTextureExtensionsAlt = {"_west", "_east", "_north", "_south", "_up", "_down"};
 	
 	// create the Environment subclass (throw away the transformations and faces)
-	public Environment(UniversalObject object, Vector<String> textureNames) {
+	public Environment(UniversalObject object, Vector<String> textureNames, Vector<Shader> shaders) {
 		super(object.objectIndex, null, null, object.properties, null);
+		
+		setShaderIndex(getPropertyValue("shader"), shaders);
 		
 		String baseTextureName = getPropertyValue("skyboxtexture");
 		removeProperty("skyboxtexture");

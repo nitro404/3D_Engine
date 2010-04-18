@@ -15,6 +15,9 @@ public:
 
 	void import(ifstream &input, vector<Texture *> & textures, vector<Shader *> shaders);
 
+public:
+	Shader * shader;
+
 private:
 	GLuint skyboxList;
 	char * name;
