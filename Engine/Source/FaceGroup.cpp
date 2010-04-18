@@ -10,9 +10,10 @@ FaceGroup::FaceGroup(GamePoint * vertices, int width, int height, int squareSect
 	verticesBuffer = NULL;
 
 	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS) {
+		glEnableClientState (GL_VERTEX_ARRAY);
 		glGenBuffers (1, &verticesBuffer);
 		glBindBuffer (GL_ARRAY_BUFFER, verticesBuffer);
-		glBufferData (GL_ARRAY_BUFFER, width * height * sizeof (GamePoint), vertices, GL_DYNAMIC_DRAW);
+		glBufferData (GL_ARRAY_BUFFER, width * height * sizeof (GamePoint), &vertices[0], GL_DYNAMIC_DRAW);
 		//updateBuffers();
 	}
 
@@ -64,18 +65,19 @@ void FaceGroup::updateBuffers() {
 void FaceGroup::draw() {
 	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS) {
 		glBindBuffer (GL_ARRAY_BUFFER, verticesBuffer);
-		long stride = sizeof (GamePoint);
-		long doubleSize = sizeof (double);
-
-		glVertexPointer (3, GL_DOUBLE, sizeof(GamePoint), 0);
-		glEnableClientState (GL_VERTEX_ARRAY);
 		
-		//glTexCoordPointer (2, GL_DOUBLE, sizeof(GamePoint), (void *) (3 * sizeof(double)) );
-		//glEnableClientState (GL_TEXTURE_COORD_ARRAY);
+		glEnableClientState (GL_VERTEX_ARRAY);
+		glVertexPointer (3, GL_DOUBLE, sizeof(GamePoint), 0);
+		
+		glEnableClientState (GL_TEXTURE_COORD_ARRAY);
+		glTexCoordPointer (2, GL_DOUBLE, sizeof(GamePoint), (void *) (6 * sizeof(double)) );
 
 	}
 	for (unsigned int i = 0;i < groups.size();i++) {
 		groups.at(i)->draw(verticesBuffer);
+	}
+	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS) {
+		glDisableClientState (GL_VERTEX_ARRAY);
 	}
 }
 
@@ -83,21 +85,48 @@ SubGroup::SubGroup(GamePoint *vertices, int verticesWidth, int verticesHeight, i
 	this->vertices = vertices;
 	width = xEnd - xStart;
 	height = yEnd - yStart;
-	indices = new int[width * height];
+
 	indicesBuffer = 0;
-	
+	indicesSize = 0;
 	int index = 0;
+	
+	if (TERRAIN_IMPLEMENTATION == USE_QUADS) {
+
+	indices = new unsigned int[width * height];
 
 	for (int j = yStart;j < yEnd;j++) {
 		for (int i = xStart;i < xEnd;i++) {
 			indices[index++] = j * verticesWidth + i;
 		}
 	}
+	} else {
+		indices = new unsigned int[2 * (width + 1) * (height - 1)];
+
+		for (int j = yStart; j < yEnd - 1;j++) {
+			//write the first coordinate of the row
+			indices[index++] = j * verticesWidth + xStart;
+			int lastIndex;
+			for (int i = xStart; i < xEnd;i++) {
+
+				//top
+				indices[index++] = j * verticesWidth + i;
+
+				//bottom
+				lastIndex = (j + 1) * verticesWidth + i;
+				indices[index++] = lastIndex;
+			}
+			//repeat the last coordinate of the row
+			indices[index++] = lastIndex;
+		}
+	}
+
+	indicesSize = index;
 
 	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS) {
 		glGenBuffers (1, &indicesBuffer);
-		glBufferData (GL_ELEMENT_ARRAY_BUFFER, width * height * sizeof (GamePoint), NULL, GL_STATIC_DRAW);
-		glBufferSubData(indicesBuffer, 0, width * height * sizeof(int), indices);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
+		glBufferData (GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof (GLuint), &indices[0], GL_STATIC_DRAW);
+		//glBufferSubData(indicesBuffer, 0, width * height * sizeof(int), indices);
 	}
 
 }
@@ -156,7 +185,13 @@ void SubGroup::drawStrips() {
 	GamePoint * point;
 
 	glBegin(GL_TRIANGLE_STRIP);
-	for (int j = 0; j < height - 1;j++) {
+
+	for (unsigned int i = 0;i < indicesSize;i++) {
+		point = &vertices[indices[i]];
+		glTexCoord2d(point->tx, point->ty);
+		glVertex3d(point->x, point->y, point->z);
+	}
+	/*for (int j = 0; j < height - 1;j++) {
 		//write the first coordinate of the row
 		point = &vertices[indices[j * width]];
 		glTexCoord2d(point->tx, point->ty);
@@ -177,7 +212,7 @@ void SubGroup::drawStrips() {
 		//repeat the last coordinate of the row
 		glTexCoord2d(point->tx, point->ty);
 		glVertex3d(point->x, point->y, point->z);
-	}
+	}*/
 	glEnd();
 }
 
@@ -185,9 +220,9 @@ void SubGroup::drawBuffers(GLuint verticesBuffer) {
 	
 	glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
 
-	glDrawElements (GL_TRIANGLES, width * height, GL_UNSIGNED_INT, 0);
+	glDrawElements (GL_TRIANGLE_STRIP, indicesSize, GL_UNSIGNED_INT, 0);
 
-	glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0);
+	//glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0);
 
 }
 

@@ -33,7 +33,8 @@ class SubGroup
 private:
 	GamePoint* vertices;
 
-	int* indices;
+	unsigned int indicesSize;
+	unsigned int* indices;
 	GLuint indicesBuffer;
 	
 	int width;
