@@ -1,6 +1,8 @@
 #include "Shader.h"
 
 Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFileName, const char * shaderDirectory) : vertexShaderHandle(0), fragmentShaderHandle(0) {
+	if(!GLEW_VERSION_2_0) { return; }
+
 	if(vertexShaderFileName == NULL && fragmentShaderFileName == NULL) {
 		quit("Must specify both the vertex and fragment shader.");
 	}
@@ -97,12 +99,52 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 Shader::~Shader() { }
 
 void Shader::activate() {
+	if(!GLEW_VERSION_2_0) { return; }
+
 	glUseProgram(programHandle);
 }
 
 void Shader::deactivate() {
+	if(!GLEW_VERSION_2_0) { return; }
+
 	glUseProgram(0);
 }
+
+/*
+void sendUniform(const char * name, const int id) {
+	GLuint location = getUniformLocation(name);
+	glUniform1i(location, id);
+}
+
+void sendUniform4x4(const char * name, const float * matrix, bool transpose = false) {
+	GLuint location = getUniformLocation(name);
+	glUniformMatrix4fv(location, 1, transpose, matrix);
+}
+
+void sendUniform3x3(const char * name, const Transformation * matrix, bool transpose = false) {
+	GLuint location = getUniformLocation(name);
+	glUniformMatrix3fv(location, 1, transpose, matrix);
+}
+
+void sendUniform(const char * name, const Colour * colour) {
+	GLuint location = getUniformLocation(name);
+	glUniform4f(location, colour->red, colour->green, colour->blue, colour->alpha);
+}
+
+void sendUniform(const char * name, const float x, const float y, const float z) {
+	GLuint location = getUniformLocation(name);
+	glUniform3f(location, x, y, z);
+}
+
+void sendUniform(const char * name, const float scalar) {
+	GLuint location = getUniformLocation(name);
+	glUniform1f(location, scalar);
+}
+
+void bindAttrib(unsigned int index, const char * attribName) {
+	glBindAttribLocation(m_programID, index, attribName);
+}
+*/
 
 bool Shader::compileShader(GLenum shader, const char * shaderName) {
 	glCompileShader(shader);
@@ -138,7 +180,7 @@ void Shader::outputShaderLog(unsigned int shaderID) {
 }
 
 Shader * Shader::import(ifstream & input, const char * shaderDirectory) {
-	if(shaderDirectory == NULL) { return NULL; }
+	if(shaderDirectory == NULL || !GLEW_VERSION_2_0) { return NULL; }
 
 	char line[256];
 	char key[256];

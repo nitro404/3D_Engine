@@ -402,9 +402,12 @@ int main(int argc, char *argv[]) {
 		quit("Unable to initialize GLEW.");
 	}
 
+	if(!GLEW_VERSION_1_5) {
+		printf("WARNING: OpenGL 1.5 not supported, vertex buffers disabled.\n");
+	}
+
 	if(!GLEW_VERSION_2_0) {
-		delete settings;
-		quit("OpenGL 2.0 not supported.");
+		printf("WARNING: OpenGL 2.0 not supported, shaders disabled.\n");
 	}
 	
     glutIgnoreKeyRepeat(GLUT_KEY_REPEAT_ON);

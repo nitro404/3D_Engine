@@ -116,7 +116,7 @@ void Environment::import(ifstream & input, vector<Texture *> & textures, vector<
 		}
 		else if(_stricmp(key, "shader") == 0) {
 			int shaderIndex = atoi(str);
-			if(shaderIndex >= 0) { shader = shaders.at(shaderIndex); }
+			if(shaderIndex >= 0 && shaderIndex < (int) shaders.size()) { shader = shaders.at(shaderIndex); }
 			delete [] str;
 		}
 		else {

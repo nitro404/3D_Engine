@@ -11,6 +11,7 @@ SET MAP_BUILDER_DIR=Builder 2.0
 SET TEXTURE_COMPILER_ARGS=-t"../../Content/Data/Textures/" -m"../../Content/Data/Height Maps/" -a"../animations.ini" -s"../shaders.ini" -h"../heightmaps.ini" -o"../../Content/Data/textures.ini"
 SET MAP_BUILDER_ARGS=-d"../../Maps/" -iuni -owrl -m"../../Maps/" -t"../../Content/Data/textures.ini" -h"../../Content/Data/Height Maps/"
 
+IF NOT EXIST "%TEXTURE_COMPILER_DIR%/bin" MKDIR "Texture Compiler/bin"
 CD "%TEXTURE_COMPILER_DIR%"
 ECHO Compiling Texture Compiler...
 javac src\*.java -d bin
@@ -25,6 +26,7 @@ ECHO.
 ECHO Copying Texture List...
 
 ECHO.
+IF NOT EXIST "%MAP_BUILDER_DIR%/bin" MKDIR "Builder 2.0/bin"
 CD "%MAP_BUILDER_DIR%"
 ECHO Compiling Map Builder...
 javac src\*.java -d bin

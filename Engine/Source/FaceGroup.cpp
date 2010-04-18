@@ -7,7 +7,7 @@ FaceGroup::FaceGroup(GamePoint * vertices, int width, int height, int squareSect
 
 	verticesBuffer = NULL;
 
-	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS) {
+	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS && GLEW_VERSION_1_5) {
 		glEnableClientState (GL_VERTEX_ARRAY);
 		glGenBuffers (1, &verticesBuffer);
 		glBindBuffer (GL_ARRAY_BUFFER, verticesBuffer);
@@ -60,7 +60,7 @@ void FaceGroup::updateBuffers(GamePoint * vertices) {
 }
 
 void FaceGroup::draw() {
-	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS) {
+	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS && GLEW_VERSION_1_5) {
 		glBindBuffer (GL_ARRAY_BUFFER, verticesBuffer);
 		
 		glEnableClientState (GL_VERTEX_ARRAY);
@@ -73,7 +73,7 @@ void FaceGroup::draw() {
 	for (unsigned int i = 0;i < groups.size();i++) {
 		groups.at(i)->draw(verticesBuffer);
 	}
-	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS) {
+	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS && GLEW_VERSION_1_5) {
 		glDisableClientState (GL_VERTEX_ARRAY);
 	}
 }
@@ -121,7 +121,7 @@ SubGroup::SubGroup(GamePoint *vertices, int verticesWidth, int verticesHeight, i
 
 	indicesSize = index;
 
-	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS) {
+	if (TERRAIN_IMPLEMENTATION == USE_BUFFERS && GLEW_VERSION_1_5) {
 		glGenBuffers (1, &indicesBuffer);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
 		glBufferData (GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof (GLuint), &indices[0], GL_STATIC_DRAW);
@@ -146,10 +146,10 @@ void SubGroup::draw(GLuint verticesBuffer) {
 	if (TERRAIN_IMPLEMENTATION == USE_QUADS) {
 		drawQuads();
 	}
-	else if (TERRAIN_IMPLEMENTATION == USE_STRIPS) {
+	else if (TERRAIN_IMPLEMENTATION == USE_STRIPS || !GLEW_VERSION_1_5) {
 		drawStrips();
 	}
-	else if (TERRAIN_IMPLEMENTATION == USE_BUFFERS) {
+	else if (TERRAIN_IMPLEMENTATION == USE_BUFFERS && GLEW_VERSION_1_5) {
 		drawBuffers(verticesBuffer);
 	}
 }

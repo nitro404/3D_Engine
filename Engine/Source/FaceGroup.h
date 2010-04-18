@@ -2,9 +2,9 @@
 
 #include "Point.h"
 
-#define USE_QUADS							0 // works
-#define USE_STRIPS							1 // works
-#define USE_BUFFERS							2 // works
+#define USE_QUADS							0
+#define USE_STRIPS							1
+#define USE_BUFFERS							2
 #define TERRAIN_IMPLEMENTATION USE_BUFFERS
 
 class SubGroup;
