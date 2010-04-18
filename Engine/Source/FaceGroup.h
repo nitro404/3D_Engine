@@ -4,15 +4,14 @@
 
 #define USE_QUADS							0 // works
 #define USE_STRIPS							1 // works
-#define USE_BUFFERS							2 // doesn't work yet
-#define TERRAIN_IMPLEMENTATION USE_STRIPS
+#define USE_BUFFERS							2 // works
+#define TERRAIN_IMPLEMENTATION USE_BUFFERS
 
 class SubGroup;
 
 class FaceGroup
 {
 private:
-	GamePoint* vertices;
 	GLuint	   verticesBuffer;
 
 	vector<SubGroup*> groups;
@@ -23,7 +22,7 @@ public:
 	FaceGroup(GamePoint * vertices, int width, int height, int squareSections);
 	~FaceGroup(void);
 
-	void updateBuffers();
+	void updateBuffers(GamePoint * vertices);
 
 	void draw();
 };

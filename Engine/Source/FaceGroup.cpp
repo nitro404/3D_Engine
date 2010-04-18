@@ -2,8 +2,6 @@
 
 FaceGroup::FaceGroup(GamePoint * vertices, int width, int height, int squareSections)
 {
-
-	this->vertices = new GamePoint[width * height];
 	this->width = width;
 	this->height = height;
 
@@ -14,7 +12,6 @@ FaceGroup::FaceGroup(GamePoint * vertices, int width, int height, int squareSect
 		glGenBuffers (1, &verticesBuffer);
 		glBindBuffer (GL_ARRAY_BUFFER, verticesBuffer);
 		glBufferData (GL_ARRAY_BUFFER, width * height * sizeof (GamePoint), &vertices[0], GL_DYNAMIC_DRAW);
-		//updateBuffers();
 	}
 
 	groups = vector<SubGroup*>();
@@ -47,8 +44,8 @@ FaceGroup::~FaceGroup() {
 	for (unsigned int i = 0; i < groups.size();i++) {
 		delete groups.at(i);
 	}
-	if(vertices != NULL) {
-		delete [] vertices;
+	if (verticesBuffer != NULL) {
+		glDeleteBuffers(1, &verticesBuffer);
 	}
 }
 
@@ -56,7 +53,7 @@ FaceGroup::~FaceGroup() {
 //that are located in the same vertex array used to create
 //this object.  The dimensions of the array had better not have
 //changed.  This is a complete refesh, so it may take a LONG time
-void FaceGroup::updateBuffers() {
+void FaceGroup::updateBuffers(GamePoint * vertices) {
 	if (verticesBuffer != NULL) {
 		glBufferSubData(verticesBuffer, 0, width * height * sizeof(GamePoint), vertices);
 	}
@@ -86,19 +83,21 @@ SubGroup::SubGroup(GamePoint *vertices, int verticesWidth, int verticesHeight, i
 	width = xEnd - xStart;
 	height = yEnd - yStart;
 
-	indicesBuffer = 0;
+	indices = NULL;
+
+	indicesBuffer = NULL;
 	indicesSize = 0;
 	int index = 0;
 	
 	if (TERRAIN_IMPLEMENTATION == USE_QUADS) {
 
-	indices = new unsigned int[width * height];
+		indices = new unsigned int[width * height];
 
-	for (int j = yStart;j < yEnd;j++) {
-		for (int i = xStart;i < xEnd;i++) {
-			indices[index++] = j * verticesWidth + i;
+		for (int j = yStart;j < yEnd;j++) {
+			for (int i = xStart;i < xEnd;i++) {
+				indices[index++] = j * verticesWidth + i;
+			}
 		}
-	}
 	} else {
 		indices = new unsigned int[2 * (width + 1) * (height - 1)];
 
@@ -135,6 +134,9 @@ SubGroup::~SubGroup(void)
 {
 	if (indices != NULL) {
 		delete [] indices;
+	}
+	if (indicesBuffer != NULL) {
+		glDeleteBuffers(1, &indicesBuffer);
 	}
 }
 
