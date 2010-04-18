@@ -10,6 +10,8 @@ public:
 	void activate();
 	static void deactivate();
 
+	static Shader * import(ifstream & input, const char * shaderDirectory);
+
 private:
 	GLenum programHandle;
 	GLenum vertexShaderHandle;

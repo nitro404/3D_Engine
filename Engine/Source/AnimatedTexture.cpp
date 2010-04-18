@@ -1,7 +1,7 @@
 #include "AnimatedTexture.h"
 
 void AnimatedTexture::import (ifstream & input, vector<Texture *> & worldTextures) {
-char line[256];
+	char line[256];
 	char key[256];
 	char value[256];
 	char * str;

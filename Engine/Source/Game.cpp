@@ -24,7 +24,7 @@ Game::Game(int windowWidth,
 	
 	verifySettings();
 	
-	loadTextures(settings->getValue("Texture Data File"), settings->getValue("Texture Directory"), settings->getValue("Height Map Directory"));
+	loadTextures(settings->getValue("Texture Data File"), settings->getValue("Texture Directory"), settings->getValue("Shader Directory"), settings->getValue("Height Map Directory"));
 
 #ifdef _DEBUG
 	drawFPS = true;
@@ -38,6 +38,9 @@ Game::~Game() {
 	if(world != NULL) { delete world; }
 	for(unsigned int i=0;i<animatedTextures.size();i++) {
 		delete animatedTextures.at(i);
+	}
+	for(unsigned int i=0;i<shaders.size();i++) {
+		delete shaders.at(i);
 	}
 	for(unsigned int i=0;i<heightMaps.size();i++) {
 		delete [] heightMaps.at(i);
@@ -74,8 +77,8 @@ void Game::togglePause() { paused = !paused; }
 bool Game::isPaused() { return paused; }
 
 void Game::loadMap(char * fileName) {
-	world = new World(settings);
-	world->import(fileName, textures, heightMaps, animatedTextures);
+	world = new World();
+	world->import(fileName, textures, heightMaps, animatedTextures, shaders);
 	player->reset(world->startPosition);
 	paused = false;
 }
@@ -119,7 +122,7 @@ void Game::verifySettings() {
 	}
 }
 
-void Game::loadTextures(char * fileName, char * textureDirectory, char * heightMapDirectory) {
+void Game::loadTextures(const char * fileName, const char * textureDirectory, const char * shaderDirectory, const char * heightMapDirectory) {
 	char line[256];
 	unsigned int i, j;
 	int startIndex;
@@ -127,7 +130,7 @@ void Game::loadTextures(char * fileName, char * textureDirectory, char * heightM
 
 	ifstream input;
 	input.open(fileName); 
-	if(input.bad()) {
+	if(!input.is_open()) {
 		quit("Unable to open texture data file: \"%s\".", fileName);
 	}
 	
@@ -221,6 +224,18 @@ void Game::loadTextures(char * fileName, char * textureDirectory, char * heightM
 		AnimatedTexture * animatedTexture = new AnimatedTexture;
 		animatedTexture->import(input, textures);
 		animatedTextures.push_back(animatedTexture);
+	}
+
+	// input the shaders
+	input.getline(line, 256, ':');
+	input.getline(line, 256, ';');
+	int numberOfShaders = atoi(line);
+	input.getline(line, 256, '\n');
+	for(int shaderIndex = 0; shaderIndex < numberOfShaders; shaderIndex++) {
+		Shader * shader = Shader::import(input, shaderDirectory);
+		if(shader != NULL) {
+			shaders.push_back(shader);
+		}
 	}
 	
 	input.close();

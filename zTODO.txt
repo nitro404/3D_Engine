@@ -1,23 +1,23 @@
 ENGINE
  + MAIN
    - Add fullscreen option (main.cpp)
-     - if (fullscreen) /*glutEnterGameMode ()*/; else {glutCreateWindow ("game engine"); createMenus ();}
    - Implement Console
    - Add keybinding ability
  + POOL
    - Temporarily added insideOf() for proper draw order
    - Implement ray function for tinting sprite and draw order: http://erich.realtimerendering.com/ptinpoly/
+   - Transparent sprites block out water behind them
  + CAMERA
    - Re-write: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=Quaternion_Camera_Class
  + TERRAIN
-   - Write face groups + frustrum culling
+   - Write frustrum culling
    - Find better way of extracting bytes from raw file
  + SPRITE
    - Change extent in bounding box
  + ROTATOR
    - Rotate at specific rate on each axis
- + WORLD
-   - Fix draw order sorting - partially fixed
+ + MISC
+   - Replace #pragma once with #ifndef #define #endif
 
 
 NEAT IDEAS

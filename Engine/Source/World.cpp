@@ -1,14 +1,11 @@
 #include "World.h"
 
-World::World(Variables * externalSettings) : skybox(NULL), settings(externalSettings) {
+World::World() : skybox(NULL) {
 	startPosition = Point(0, 0, 0);
-	testShader = new Shader("gradient.vtx", "gradient.frg", settings->getValue("Shader Directory"));
 }
 
 World::~World() {
-	delete testShader;
 	if(skybox != NULL) { delete skybox; }
-	delete [] sortedObjects;
 	delete [] sortedWater;
 	delete [] sortedSprites;
 	delete [] spriteWater;
@@ -84,18 +81,28 @@ void World::draw() {
 		}
 	}
 
+
 	for(unsigned int i=0;i<objects.size();i++) {
-		sortedObjects[i]->draw();
+		objects.at(i)->draw();
 	}
-	for(unsigned int i=0;i<sprites.size();i++) {
-		if(spriteWater[i] == -1) {
+	if(water.size() == 0) {
+		for(unsigned int i=0;i<sprites.size();i++) {
 			sortedSprites[i]->draw();
 		}
 	}
-	if(water.size() > 0) {
+	else {
+		for(unsigned int j=0;j<sprites.size();j++) {
+			if(underWater == -1) {
+				sortedSprites[j]->draw();
+			}
+			if(spriteWater[j] != underWater && underWater != -1) {
+				sortedSprites[j]->draw();
+			}
+		}
+
 		for(unsigned int i=0;i<water.size();i++) {
 			for(unsigned int j=0;j<sprites.size();j++) {
-				if(!(spriteWater[j] == i && underWater == i)) {
+				if(!(spriteWater[j] == i) && underWater == i) {
 					sortedSprites[j]->draw();
 				}
 			}
@@ -119,14 +126,14 @@ bool World::compareDistance(const Object & x, const Object & y) {
 	return x.distanceFrom(playerPosition) < y.distanceFrom(playerPosition);
 }
 
-void World::import(char * fileName, vector<Texture *> & textures, vector<char *> & heightMaps, vector<AnimatedTexture *> & animatedTextures) {
+void World::import(const char * fileName, vector<Texture *> & textures, vector<char *> & heightMaps, vector<AnimatedTexture *> & animatedTextures, vector<Shader *> shaders) {
 	char line[256];
 	char key[256];
 	char value[256];
 	
 	ifstream input;
 	input.open(fileName); 
-	if(input.bad()) {
+	if(!input.is_open()) {
 		quit("Unable to open world file: \"%s\".", fileName);
 	}
 	
@@ -232,57 +239,53 @@ void World::import(char * fileName, vector<Texture *> & textures, vector<char *>
 		
 		// create the corresponding objects
 		if(_stricmp(value, "static geometry") == 0) {
-			Geometry * geometry = new Geometry(testShader);
-			geometry->import(input, textures);
+			Geometry * geometry = new Geometry();
+			geometry->import(input, textures, shaders);
 			objects.push_back(geometry);
 		}
 		else if(_stricmp(value, "environment") == 0) {
 			if(skybox != NULL) { delete skybox; }
 			skybox = new Environment;
-			skybox->import(input, textures);
+			skybox->import(input, textures, shaders);
 		}
 		else if(_stricmp(value, "vehicle") == 0) {
 			Vehicle * vehicle = new Vehicle;
-			vehicle->import(input, textures);
+			vehicle->import(input, textures, shaders);
 			objects.push_back (vehicle);
 		}
 		else if(_stricmp(value, "rotator") == 0) {
 			Rotator * rotator = new Rotator;
-			rotator->import(input, textures);
+			rotator->import(input, textures, shaders);
 			objects.push_back(rotator);
 		}
 		else if(_stricmp(value, "translator") == 0) {
 			Translator * translator = new Translator;
-			translator->import(input, textures);
+			translator->import(input, textures, shaders);
 			objects.push_back(translator);
 		}
 		else if(_stricmp(value, "sprite") == 0) {
 			Sprite * sprite = new Sprite;
-			sprite->import(input, textures, waypoints);
+			sprite->import(input, textures, waypoints, shaders);
 			sprites.push_back(sprite);
 		}
 		else if(_stricmp(value, "pool") == 0) {
 			Pool * pool = new Pool;
-			pool->import(input, animatedTextures);
+			pool->import(input, animatedTextures, shaders);
 			water.push_back(pool);
 		}
 		else if (_stricmp(value, "terrain") == 0) {
 			Terrain * terrain = new Terrain;
-			terrain->import(input, textures, heightMaps);
+			terrain->import(input, textures, heightMaps, shaders);
 			objects.push_back(terrain);
 		}
 		else if(_stricmp(value, "waterfall") == 0) {
 			Waterfall * waterfall = new Waterfall;
-			waterfall->import(input, animatedTextures);
+			waterfall->import(input, animatedTextures, shaders);
 			water.push_back(waterfall);
 		}
 		else {
 			printf("WARNING: Encountered unexpected object when parsing world: \"%s\"", value);
 		}
-	}
-	sortedObjects = new Object*[objects.size()];
-	for(unsigned i=0;i<objects.size();i++) {
-		sortedObjects[i] = objects.at(i);
 	}
 	sortedWater = new Pool*[water.size()];
 	for(unsigned i=0;i<water.size();i++) {

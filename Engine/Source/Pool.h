@@ -17,7 +17,7 @@ public:
 	virtual void draw();
 	virtual void draw(bool drawInside);
 	
-	virtual void import(ifstream &input, vector<AnimatedTexture *> & animatedTextures);
+	virtual void import(ifstream &input, vector<AnimatedTexture *> & animatedTextures, vector<Shader *> shaders);
 	
 public:
 	DualTransformation * transformation;

@@ -66,7 +66,7 @@ void Sprite::draw() {
 	glPopMatrix();
 }
 
-void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypoint *> & waypoints) {
+void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypoint *> & waypoints, vector<Shader *> shaders) {
 	char line[256];
 	char key[256];
 	char value[256];

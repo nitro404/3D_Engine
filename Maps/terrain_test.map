@@ -1,0 +1,20 @@
+{
+"classname" "worldspawn"
+"mapversion" "220"
+"wad" "\settings\nitro glycerine\desktop\3d engine\wally\game.wad"
+}
+{
+"classname" "Terrain"
+"targetname" "terrain"
+"heightMap" "heightmap"
+"textureMap" "dirt"
+"tiled" "1"
+{
+( -512 512 64 ) ( 512 512 64 ) ( 512 -512 64 ) DIRT [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
+( -512 -512 -256 ) ( 512 -512 -256 ) ( 512 512 -256 ) DIRT [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
+( -512 512 64 ) ( -512 -512 64 ) ( -512 -512 -256 ) DIRT [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1 
+( 512 512 -256 ) ( 512 -512 -256 ) ( 512 -512 64 ) DIRT [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1 
+( 512 512 64 ) ( -512 512 64 ) ( -512 512 -256 ) DIRT [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1 
+( 512 -512 -256 ) ( -512 -512 -256 ) ( -512 -512 64 ) DIRT [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1 
+}
+}

@@ -1,6 +1,6 @@
 #include "Terrain.h"
 
-Terrain::Terrain() : transformation(NULL), name(NULL), textureMap(NULL), width(0), height(0), points(NULL) {
+Terrain::Terrain() : transformation(NULL), shader(NULL), name(NULL), textureMap(NULL), width(0), height(0), points(NULL) {
 	minPoint = Point(0,0,0);
 	maxPoint = Point(0,0,0);
 }
@@ -13,15 +13,19 @@ Terrain::~Terrain() {
 }
 
 void Terrain::draw() {
+	if(shader != NULL) { shader->activate(); }
 	glDisable(GL_BLEND);
 	textureMap->activate();
 	glPushMatrix();
 		glMultMatrixd(transformation->normal());
 		group->draw();
 	glPopMatrix();
+	if(shader != NULL) { shader->deactivate(); }
 }
 
-void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char *> & heightMaps) {
+void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char *> & heightMaps, vector<Shader *> shaders) {
+	//shader = shaders.at(1);
+
 	char line[256];
 	char key[256];
 	char value[256];
@@ -102,8 +106,8 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 	// input the height map
 	int size = width * height;
 	int * heightMapData = new int[size];
-	ifstream heightMapFile(heightMap);
-	if(heightMapFile.bad()) {
+	ifstream heightMapFile(heightMap, ios::binary);
+	if(!heightMapFile.is_open()) {
 		quit("Unable to open height map file: \"%s\"", heightMap);
 	}
 	for(int i=0;i<size;i++) {
@@ -128,12 +132,12 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 			z = ((j / (double) height) * terrainSizeZ) + minPoint.z;
 
 			if(tiled == 1) {
-				tx = i;
-				ty = j;
+				tx = i * 0.1;
+				ty = j * 0.1;
 			}
 			else {
-				tx = ((float) j / (height + 1.0f));
-				ty = 1.0f - ((float) i / (float) (width + 1));
+				tx = ((double) j / (height + 1.0f));
+				ty = 1.0f - ((double) i / (double) (width + 1));
 			}
 			
 			points[currentPoint].x = x;

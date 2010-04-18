@@ -10,7 +10,7 @@ SET HEIGHTMAP_DIR=Height Maps
 SET TEXTURE_COMPILER_DIR=Texture Compiler
 SET MAP_BUILDER_DIR=Builder 2.0
 
-SET TEXTURE_COMPILER_ARGS=-t"../../Content/Data/Textures/" -m"../../Content/Data/Height Maps/" -a"../animations.ini" -h"../heightmaps.ini" -o"../../Content/Data/textures.ini"
+SET TEXTURE_COMPILER_ARGS=-t"../../Content/Data/Textures/" -m"../../Content/Data/Height Maps/" -a"../animations.ini" -s"../shaders.ini" -h"../heightmaps.ini" -o"../../Content/Data/textures.ini"
 SET MAP_BUILDER_ARGS=-d"../../Maps/" -iuni -owrl -m"../../Maps/" -t"../../Content/Data/textures.ini" -h"../../Content/Data/Height Maps/"
 
 SET ENGINE_RELEASE_DIR=Engine\Release

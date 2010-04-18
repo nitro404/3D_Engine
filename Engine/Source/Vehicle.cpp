@@ -30,7 +30,7 @@ void Vehicle::draw() {
 	}
 }
 
-void Vehicle::import(ifstream & input, vector<Texture *> & textures) {
+void Vehicle::import(ifstream & input, vector<Texture *> & textures, vector<Shader *> shaders) {
 	char line[256];
 	char key[256];
 	char value[256];

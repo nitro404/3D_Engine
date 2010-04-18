@@ -79,16 +79,18 @@ public class Converter {
 		Vector<String> textureNames = null;
 		Vector<String> heightMapNames = null;
 		Vector<AnimatedTexture> animatedTextures = null;
+		Vector<Shader> shaders = null;
 		Vector<HeightMap> heightMaps = null;
 		Vector<Texture> textures = null;
 		if(textureDataFile != null) {
 			textureNames = new Vector<String>();
 			heightMapNames = new Vector<String>();
 			animatedTextures = new Vector<AnimatedTexture>();
+			shaders = new Vector<Shader>();
 			heightMaps = new Vector<HeightMap>();
 			try {
 				BufferedReader in = new BufferedReader(new FileReader(textureDataFile));
-				readTextureData(in, textureNames, heightMapNames, animatedTextures, heightMaps);
+				readTextureData(in, textureNames, heightMapNames, animatedTextures, shaders, heightMaps);
 			}
 			catch(Exception e) {
 				System.out.println("ERROR: Error reading texture data file " + textureDataFile.getName() + ".");
@@ -111,7 +113,7 @@ public class Converter {
 				convertedMap = new World(originalMap);
 			}
 			else {
-				convertedMap = new World(originalMap, textureNames, heightMapNames, animatedTextures, heightMaps);
+				convertedMap = new World(originalMap, textureNames, heightMapNames, animatedTextures, shaders, heightMaps);
 			}
 		}
 		
@@ -127,7 +129,7 @@ public class Converter {
 		}
 	}
 	
-	private static void readTextureData(BufferedReader in, Vector<String> textureNames, Vector<String> heightMapNames, Vector<AnimatedTexture> animatedTextures, Vector<HeightMap> heightMaps) throws Exception {
+	private static void readTextureData(BufferedReader in, Vector<String> textureNames, Vector<String> heightMapNames, Vector<AnimatedTexture> animatedTextures, Vector<Shader> shaders, Vector<HeightMap> heightMaps) throws Exception {
 		String input;
 		
 		// input the texture file names header
@@ -188,6 +190,26 @@ public class Converter {
 		// input the list of animated textures
 		for(int i=0;i<numberOfAnimatedTextures;i++) {
 			animatedTextures.add(new AnimatedTexture(in));
+		}
+		
+		// input the shaders header
+		input = in.readLine().trim();
+		String shadersHeader = input.substring(0, input.lastIndexOf(':')).trim();
+		if(!shadersHeader.equalsIgnoreCase("Shaders")) {
+			System.out.println("ERROR: Invalid texture data file format. Expected header \"Shaders\", found \"" + shadersHeader + "\".");
+			System.exit(1);
+		}
+		
+		// input the number of shaders
+		int numberOfShaders = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+		if(numberOfShaders < 0) {
+			System.out.println("ERROR: Shader count is negative in texture data file.");
+			System.exit(1);
+		}
+		
+		// input the list of shaders
+		for(int i=0;i<numberOfShaders;i++) {
+			shaders.add(new Shader(in));
 		}
 		
 		// input the height maps header

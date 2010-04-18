@@ -32,7 +32,7 @@ private:
 	void drawFrameRate();
 
 	void verifySettings();
-	void loadTextures(char * fileName, char * textureDirectory, char * heightMapDirectory);
+	void loadTextures(const char * fileName, const char * textureDirectory, const char * shaderDirectory, const char * heightMapDirectory);
 	
 public:
 	World * world;
@@ -40,6 +40,7 @@ public:
 	vector<Texture *> textures;
 	vector<char *> heightMaps;
 	vector<AnimatedTexture *> animatedTextures;
+	vector<Shader *> shaders;
 
 private:
 	Variables * settings;

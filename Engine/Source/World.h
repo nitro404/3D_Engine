@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Includes.h"
-#include "Variables.h"
 #include "Object.h"
 #include "Environment.h"
 #include "Geometry.h"
@@ -16,14 +15,14 @@
 
 class World {
 public:
-	World(Variables * settings);
+	World();
 	~World();
 	
 	void tick();
 	void draw();
 	void drawSkybox();
 	
-	void import(char * fileName, vector<Texture *> & textures, vector<char *> & heightMaps, vector<AnimatedTexture *> & animatedTextures);
+	void import(const char * fileName, vector<Texture *> & textures, vector<char *> & heightMaps, vector<AnimatedTexture *> & animatedTextures, vector<Shader *> shaders);
 
 private:
 	bool compareDistance(const Object & x, const Object & y);
@@ -37,14 +36,9 @@ public:
 	vector<Sprite *> sprites;
 	vector<Waypoint *> waypoints;
 
-	Shader * testShader;
-
 private:
-	Object ** sortedObjects;
 	Pool ** sortedWater;
 	Sprite ** sortedSprites;
 	int * spriteWater;
 	int underWater;
-
-	Variables * settings;
 };

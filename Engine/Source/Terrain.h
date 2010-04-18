@@ -9,10 +9,11 @@ public:
 	~Terrain();
 
 	virtual void draw();
-	virtual void import(ifstream & input, vector<Texture *> & textures, vector<char *> & heightMaps);
+	virtual void import(ifstream & input, vector<Texture *> & textures, vector<char *> & heightMaps, vector<Shader *> shaders);
 
 public:
 	DualTransformation * transformation;
+	Shader * shader;
 
 private:
 	double scaleHeight(int x, int y, int * heightMapData);

@@ -135,7 +135,7 @@ bool Variables::parseFrom(const char * _fileName, bool _append) {
 	bool duplicate;
 	
 	ifstream fpt(_fileName);
-	if(fpt == NULL) {
+	if(!fpt.is_open()) {
 		return false;
 	}
 	

@@ -40,7 +40,7 @@ public class World implements Map3D {
 		}
 	}
 	
-	public World(Map3D map, Vector<String> textureNames, Vector<String> heightMapNames, Vector<AnimatedTexture> animatedTextures, Vector<HeightMap> heightMaps) {
+	public World(Map3D map, Vector<String> textureNames, Vector<String> heightMapNames, Vector<AnimatedTexture> animatedTextures, Vector<Shader> shaders, Vector<HeightMap> heightMaps) {
 		this.textureNames = textureNames;
 		this.heightMapNames = heightMapNames;
 		this.animatedTextures = animatedTextures;

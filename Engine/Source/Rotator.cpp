@@ -1,6 +1,6 @@
 #include "Rotator.h"
 
-Rotator::Rotator() : transformation(NULL), angleInDegrees(0), rateInDegreesPerSecond(0) { }
+Rotator::Rotator() : transformation(NULL), shader(NULL), angleInDegrees(0), rateInDegreesPerSecond(0) { }
 
 Rotator::~Rotator() {
 	delete [] name;
@@ -22,6 +22,7 @@ void Rotator::tick () {
 }
 
 void Rotator::draw () {
+	if(shader != NULL) { shader->activate(); }
 	Point p = transformation->position();
 	glPushMatrix(); 
 	glTranslated(p.x, p.y, p.z);
@@ -29,10 +30,13 @@ void Rotator::draw () {
 	for(unsigned int i=0;i<faces.size();i++) {
 		faces.at(i)->draw();
 	}
-	glPopMatrix ();
+	glPopMatrix();
+	if(shader != NULL) { shader->deactivate(); }
 }
 
-void Rotator::import (ifstream & input, vector<Texture *> & textures) {
+void Rotator::import(ifstream & input, vector<Texture *> & textures, vector<Shader *> shaders) {
+	//shader = shaders.at(0);
+
 	char line[256];
 	char key[256];
 	char value[256];
@@ -40,7 +44,7 @@ void Rotator::import (ifstream & input, vector<Texture *> & textures) {
 
 	transformation = DualTransformation::import(input);
 	
-	//Input the properties
+	// input the properties
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfProperties = atoi(line);
@@ -52,7 +56,7 @@ void Rotator::import (ifstream & input, vector<Texture *> & textures) {
 		str = new char[strlen(value) + 1];
 		strcpy_s(str, strlen(value) + 1, value);
 		
-		//Parse properties to local variables
+		// parse properties to local variables
 		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
@@ -80,7 +84,7 @@ void Rotator::import (ifstream & input, vector<Texture *> & textures) {
 		}
 	}
 	
-	//Input the faces.
+	// input the faces
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfFaces = atoi(line);

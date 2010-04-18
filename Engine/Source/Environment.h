@@ -13,7 +13,7 @@ public:
 	void tick();
 	void draw();
 
-	void import(ifstream &input, vector<Texture *> & textures);
+	void import(ifstream &input, vector<Texture *> & textures, vector<Shader *> shaders);
 
 private:
 	GLuint skyboxList;

@@ -14,7 +14,7 @@ public:
 	void tick();
 	void draw();
 	
-	void import (ifstream &input, vector<Texture *> & textures, vector<Waypoint *> & waypoints);
+	void import (ifstream &input, vector<Texture *> & textures, vector<Waypoint *> & waypoints, vector<Shader *> shaders);
 	
 public:
 	Point position;

@@ -9,7 +9,7 @@ public:
 
 	void tick();
 
-	void import(ifstream & input, vector<AnimatedTexture *> & textures);
+	void import(ifstream & input, vector<AnimatedTexture *> & textures, vector<Shader *> shaders);
 
 private:
 

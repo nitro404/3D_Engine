@@ -52,7 +52,7 @@ public class HeightMap {
 		input = in.readLine().trim();
 		String propertyHeader = input.substring(0, input.lastIndexOf(':')).trim();
 		if(!propertyHeader.equalsIgnoreCase("Properties")) {
-			System.out.println("ERROR: Invalid Universal Map format. Expected header \"Properties\", found \"" + propertyHeader + "\".");
+			System.out.println("ERROR: Invalid HeightMap format. Expected header \"Properties\", found \"" + propertyHeader + "\".");
 			System.exit(1);
 		}
 		

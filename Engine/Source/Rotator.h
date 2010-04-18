@@ -14,11 +14,12 @@ public:
 	void tick();
 	void draw();
 
-	void import(ifstream & input, vector<Texture *> & textures);
+	void import(ifstream & input, vector<Texture *> & textures, vector<Shader *> shaders);
 
 public:
 	DualTransformation * transformation;
 	vector<Face *> faces;
+	Shader * shader;
 	
 private:
 	char * name;

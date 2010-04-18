@@ -6,7 +6,7 @@
 
 class Geometry : public Object {
 public:
-	Geometry(Shader * externalShader);
+	Geometry();
 	~Geometry();
 
 	double distanceFrom(Point & p) const;
@@ -14,7 +14,7 @@ public:
 	void tick();
 	void draw();
 
-	void import (ifstream &input, vector<Texture *> & textures);
+	void import (ifstream &input, vector<Texture *> & textures, vector<Shader *> shaders);
 
 public:
 	DualTransformation * transformation;

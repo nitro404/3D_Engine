@@ -1,6 +1,6 @@
 #include "Translator.h"
 
-Translator::Translator() : transformation(NULL), forward(true) { }
+Translator::Translator() : transformation(NULL), shader(NULL), forward(true) { }
 
 Translator::~Translator() {
 	delete [] name;
@@ -29,7 +29,7 @@ void Translator::tick() {
 }
 
 void Translator::draw() {
-	//Draw the faces in this object.
+	if(shader != NULL) { shader->activate(); }
 	Point p = transformation->position();
 	glPushMatrix();
 	glTranslated(position.x, position.y, position.z);
@@ -37,9 +37,12 @@ void Translator::draw() {
 		faces.at(i)->draw();
 	}
 	glPopMatrix();
+	if(shader != NULL) { shader->deactivate(); }
 }
 
-void Translator::import (ifstream & input, vector<Texture *> & textures) {
+void Translator::import (ifstream & input, vector<Texture *> & textures, vector<Shader *> shaders) {
+	//shader = shaders.at(0);
+
 	char line[256];
 	char key[256];
 	char value[256];
@@ -47,7 +50,7 @@ void Translator::import (ifstream & input, vector<Texture *> & textures) {
 	
 	transformation = DualTransformation::import(input);
 	
-	//Input the properties
+	// input the properties
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfProperties = atoi(line);
@@ -59,7 +62,7 @@ void Translator::import (ifstream & input, vector<Texture *> & textures) {
 		str = new char[strlen(value) + 1];
 		strcpy_s(str, strlen(value) + 1, value);
 		
-		//Parse properties to local variables
+		// parse properties to local variables
 		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
@@ -87,7 +90,7 @@ void Translator::import (ifstream & input, vector<Texture *> & textures) {
 		}
 	}
 	
-	//Input the faces.
+	// input the faces
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfFaces = atoi(line);

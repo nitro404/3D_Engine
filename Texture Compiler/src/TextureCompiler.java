@@ -6,7 +6,7 @@ public class TextureCompiler {
 	public static void main(String args[]) {
 		parseParameters(args);
 		// sample program call:
-		// -t"../Textures/" -m"../Textures/Height Maps/" -a"animations.ini" -h"heightmaps.ini" -o"../Data/textures.ini"
+		// -t"../Textures/" -m"../Textures/Height Maps/" -a"animations.ini" -s"shaders.ini" -h"heightmaps.ini" -o"../Data/textures.ini"
 	}
 
 	public static void parseParameters(String[] args) {
@@ -14,12 +14,13 @@ public class TextureCompiler {
 			// print instructions on how to use program parameters
 			System.out.println("Compiles a list of textures and animations for a 3D Engine.");
 			System.out.println("");
-			System.out.println("usage: java TextureCompiler -t\"..\\textures\" [-m\"..\\heightmaps\"] [-a\"animations.ini\"] [-h\"heightmaps.ini\"] -o\"textures.ini\" [-r]");
+			System.out.println("usage: java TextureCompiler -t\"..\\textures\" [-m\"..\\heightmaps\"] [-a\"animations.ini\"] [-s\"shaders.ini\"] [-h\"heightmaps.ini\"] -o\"textures.ini\" [-r]");
 			System.out.println("");
 			System.out.println(" -t :: directory containing a set of textures; e.g., -d\"..\\Textures\\\"");
 			System.out.println(" -m :: directory containing a set of height maps; e.g., -d\"..\\Textures\\Height Maps\\\"");
 			System.out.println(" -a :: input animation data file; e.g., -a\"animations.ini\"");
-			System.out.println(" -h :: height map data file (e.g., -h \"heightmaps.ini\"");
+			System.out.println(" -h :: height map data file (e.g., -h\"heightmaps.ini\"");
+			System.out.println(" -s :: shader data file (e.g., -s\"shaders.ini\"");
 			System.out.println(" -o :: output texture data file (with animation data); e.g., -o\"textures.ini\"");
 			System.out.println(" -r :: remove texture file name extensions (only if present)");
 		}
@@ -27,6 +28,7 @@ public class TextureCompiler {
 			String textureDirectoryName = null;
 			String heightMapDirectoryName = null;
 			String animationFileName = null;
+			String shaderFileName = null;
 			String textureFileName = null;
 			String heightMapFileName = null;
 			boolean removeExtensions = false;
@@ -34,6 +36,7 @@ public class TextureCompiler {
 			File textureDirectory = null;
 			File heightMapDirectory = null;
 			File animationFile = null;
+			File shaderFile = null;
 			File textureFile = null;
 			File heightMapFile = null;
 			
@@ -48,6 +51,9 @@ public class TextureCompiler {
 					}
 					else if(args[i].substring(0, 2).equalsIgnoreCase("-a")) {
 						animationFileName = args[i].substring(2, args[i].length());
+					}
+					else if(args[i].substring(0, 2).equalsIgnoreCase("-s")) {
+						shaderFileName = args[i].substring(2, args[i].length());
 					}
 					else if(args[i].substring(0, 2).equalsIgnoreCase("-h")) {
 						heightMapFileName = args[i].substring(2, args[i].length());
@@ -95,6 +101,17 @@ public class TextureCompiler {
 					System.exit(1);
 				}
 			}
+			if(shaderFileName != null) {
+				shaderFile = new File(shaderFileName);
+				if(!shaderFile.exists()) {
+					System.out.println("ERROR: Specified shader data file does not exist.");
+					System.exit(1);
+				}
+				if(!shaderFile.isFile()) {
+					System.out.println("ERROR: Invalid shader data file.");
+					System.exit(1);
+				}
+			}
 			if(heightMapFileName != null) {
 				heightMapFile = new File(heightMapFileName);
 				if(!heightMapFile.exists()) {
@@ -120,13 +137,14 @@ public class TextureCompiler {
 				System.exit(1);
 			}
 			
-			generateTextureData(textureDirectory, heightMapDirectory, animationFile, heightMapFile, textureFile, removeExtensions);
+			generateTextureData(textureDirectory, heightMapDirectory, animationFile, shaderFile, heightMapFile, textureFile, removeExtensions);
 		}
 	}
 
-	private static void generateTextureData(File textureDirectory, File heightMapDirectory, File animationFile, File heightMapFile, File textureFile, boolean removeExtensions) {
+	private static void generateTextureData(File textureDirectory, File heightMapDirectory, File animationFile, File shaderFile, File heightMapFile, File textureFile, boolean removeExtensions) {
 		Vector<String> textureFileNames = new Vector<String>();
 		Vector<AnimatedTexture> animatedTextures = new Vector<AnimatedTexture>();
+		Vector<Shader> shaders = new Vector<Shader>();
 		Vector<String> heightMapFileNames = new Vector<String>();
 		Vector<HeightMap> heightMaps = new Vector<HeightMap>();
 		
@@ -140,9 +158,11 @@ public class TextureCompiler {
 		
 		readAmimationData(animationFile, animatedTextures, textureFileNames);
 		
+		readShaderData(shaderFile, shaders);
+		
 		readHeightMapData(heightMapFile, heightMapFileNames, heightMaps);
 		
-		writeTextureData(textureFile, textureFileNames, heightMapFileNames, animatedTextures, heightMaps);
+		writeTextureData(textureFile, textureFileNames, heightMapFileNames, animatedTextures, shaders, heightMaps);
 	}
 	
 	public static void readAmimationData(File animationFile, Vector<AnimatedTexture> animatedTextures, Vector<String> textureFileNames) {
@@ -214,6 +234,67 @@ public class TextureCompiler {
 		}
 		catch(Exception e) {
 			System.out.println("ERROR: Error reading from animation data file: " + e.getMessage());
+			System.exit(1);
+		}
+	}
+
+	public static void readShaderData(File shaderFile, Vector<Shader> shaders) {
+		if(shaderFile == null || !shaderFile.exists()) {
+			return;
+		}
+		
+		String input;
+		BufferedReader in;
+		Shader newShader;
+		try {
+			in = new BufferedReader(new FileReader(shaderFile));
+			while((input = in.readLine()) != null) {
+				newShader = new Shader();
+				
+				// input the shader header
+				String shaderHeader = input.substring(0, input.lastIndexOf(':')).trim();
+				if(!shaderHeader.equalsIgnoreCase("Shader")) {
+					System.out.println("ERROR: Invalid shader data file format. Expected header \"Shader\", found \"" + shaderHeader + "\".");
+					System.exit(1);
+				}
+				
+				// parse the shader index
+				int shaderIndex = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+				if(shaderIndex < 0) {
+					System.out.println("ERROR: Invalid shader index parsed: " + shaderIndex + "\".");
+					System.exit(1);
+				}
+				newShader.index = shaderIndex;
+				
+				// input the properties header
+				input = in.readLine().trim();
+				String propertyHeader = input.substring(0, input.lastIndexOf(':')).trim();
+				if(!propertyHeader.equalsIgnoreCase("Properties")) {
+					System.out.println("ERROR: Invalid shader data file format. Expected header \"Properties\", found \"" + propertyHeader + "\".");
+					System.exit(1);
+				}
+				
+				// input the properties
+				int numberOfProperties = Integer.valueOf(input.substring(input.indexOf(':') + 1, input.lastIndexOf(';')).trim());
+				Property newProperty;
+				for(int i=0;i<numberOfProperties;i++) {
+					newProperty = new Property(in);
+					if(newProperty.key.equalsIgnoreCase("name")) {
+						newShader.name = newProperty.value;
+					}
+					else if(newProperty.key.equalsIgnoreCase("vertex_shader")) {
+						newShader.vertexShader = newProperty.value;
+					}
+					else if(newProperty.key.equalsIgnoreCase("fragment_shader")) {
+						newShader.fragmentShader = newProperty.value;
+					}
+				}
+				
+				shaders.add(newShader);
+			}
+		}
+		catch(Exception e) {
+			System.out.println("ERROR: Error reading from shader data file: " + e.getMessage());
 			System.exit(1);
 		}
 	}
@@ -291,7 +372,7 @@ public class TextureCompiler {
 		}
 	}
 
-	private static void writeTextureData(File textureFile, Vector<String> textureFileNames, Vector<String> heightMapFileNames, Vector<AnimatedTexture> animatedTextures, Vector<HeightMap> heightMaps) {
+	private static void writeTextureData(File textureFile, Vector<String> textureFileNames, Vector<String> heightMapFileNames, Vector<AnimatedTexture> animatedTextures, Vector<Shader> shaders, Vector<HeightMap> heightMaps) {
 		PrintWriter out = null;
 		
 		try {
@@ -313,6 +394,12 @@ public class TextureCompiler {
 			
 			for(AnimatedTexture t : animatedTextures) {
 				t.writeTo(out);
+			}
+			
+			out.println("Shaders: " + shaders.size() + ";");
+			
+			for(Shader s : shaders) {
+				s.writeTo(out);
 			}
 			
 			out.println("HeightMaps: " + heightMaps.size() + ";");

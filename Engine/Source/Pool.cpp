@@ -40,7 +40,7 @@ void Pool::draw(bool drawInside) {
 	glPopMatrix(); 
 }
 
-void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures) {
+void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures, vector<Shader *> shaders) {
 	unsigned int i, j;
 	char line[256];
 	char key[256];

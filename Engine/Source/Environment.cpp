@@ -32,7 +32,7 @@ void Environment::draw() {
 	glEnable(GL_DEPTH_TEST);
 }
 
-void Environment::import(ifstream & input, vector<Texture *> & textures) {
+void Environment::import(ifstream & input, vector<Texture *> & textures, vector<Shader *> shaders) {
 	char line[256];
 	char key[256];
 	char value[256];
