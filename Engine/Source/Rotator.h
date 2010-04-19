@@ -21,7 +21,7 @@ public:
 	Shader * shader;
 	
 private:
-	BoundingBox* origPointer;
+	BoundingBox * origPointer;
 	BoundingBox curBox;
 	char * name;
 	Point axis;

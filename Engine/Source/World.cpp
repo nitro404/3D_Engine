@@ -1,6 +1,6 @@
 #include "World.h"
 
-World::World() : skybox(NULL) {
+World::World() : cullingEnabled(false), skybox(NULL) {
 	startPosition = Point(0, 0, 0);
 }
 
@@ -83,7 +83,12 @@ void World::draw() {
 
 
 	for(unsigned int i=0;i<objects.size();i++) {
-		objects.at(i)->drawWithCull();
+		if(cullingEnabled) {
+			objects.at(i)->drawWithCull();
+		}
+		else {
+			objects.at(i)->draw();
+		}
 	}
 	if(water.size() == 0) {
 		for(unsigned int i=0;i<sprites.size();i++) {

@@ -37,7 +37,6 @@ BoundingBox::~BoundingBox()
 }
 
 void BoundingBox::init() {
-
 	center = (min + max) / 2;
 
 	bottomCenter = center;
@@ -132,6 +131,7 @@ BoundingBox * BoundingBox::import(ifstream & input) {
 	input.getline(line, 256, ';');
 	maxZ = atof(line);
 	input.getline(line, 256, '\n');
+	
 	// input the minimum
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ',');

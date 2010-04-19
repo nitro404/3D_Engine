@@ -36,6 +36,8 @@ public:
 	vector<Sprite *> sprites;
 	vector<Waypoint *> waypoints;
 
+	bool cullingEnabled;
+
 private:
 	Pool ** sortedWater;
 	Sprite ** sortedSprites;
