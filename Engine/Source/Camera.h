@@ -3,6 +3,7 @@
 #include "Includes.h"
 #include "Point.h"
 #include "Player.h"
+#include "CullingManager.h"
 
 class Camera {
 public:
@@ -28,6 +29,7 @@ public:
 public:
 	double xRotation;
 	double yRotation;
+	CullingManager manager;
 
 private:
 	Player * target;

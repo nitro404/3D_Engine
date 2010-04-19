@@ -344,11 +344,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\BoundingBox.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Camera.h"
 					>
 				</File>
 				<File
 					RelativePath=".\Source\Colour.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\CullingManager.h"
 					>
 				</File>
 				<File
@@ -426,11 +434,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\BoundingBox.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Camera.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Source\Colour.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\CullingManager.cpp"
 					>
 				</File>
 				<File

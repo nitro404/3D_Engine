@@ -83,7 +83,7 @@ void World::draw() {
 
 
 	for(unsigned int i=0;i<objects.size();i++) {
-		objects.at(i)->draw();
+		objects.at(i)->drawWithCull();
 	}
 	if(water.size() == 0) {
 		for(unsigned int i=0;i<sprites.size();i++) {

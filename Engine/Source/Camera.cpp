@@ -21,6 +21,7 @@ void Camera::beginCamera() {
 		glTranslated(-offset.x, -offset.y, -offset.z);
 		glPushMatrix();
 			glMultMatrixd(player->playerMatrix.inverse);
+		manager.prepareForDraw();
 }
 
 void Camera::endCamera() {
