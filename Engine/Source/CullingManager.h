@@ -14,6 +14,7 @@ public:
 
 private:
 	Plane* cameraPlanes;
-	int* closestCorner;
+	int* maxCorners;
+	int* minCorners;
 	BoundingBox unitBox;
 };

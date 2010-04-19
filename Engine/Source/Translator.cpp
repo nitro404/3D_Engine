@@ -25,6 +25,7 @@ void Translator::tick() {
 	if(distanceTravelled >= distanceToTravel) {
 		forward = !forward;
 	}
+	box->setCenter(position);
 }
 
 void Translator::draw() {

@@ -25,7 +25,9 @@ public:
 
 	virtual void drawWithCull() {
 		if(box != NULL) {
-			if(camera->manager.shouldCull(*box)) {
+			BoundingBox copy = *box;
+			copy.offsetBy(transformation->position());
+			if(camera->manager.shouldCull(copy)) {
 				return;
 			}
 		}

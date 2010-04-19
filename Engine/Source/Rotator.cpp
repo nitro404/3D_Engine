@@ -7,6 +7,7 @@ Rotator::~Rotator() {
 	for(unsigned int i=0;i<faces.size();i++) {
 		delete faces.at(i);
 	}
+	box = origPointer;
 }
 
 double Rotator::distanceFrom(Point & p) const {
@@ -18,6 +19,9 @@ void Rotator::tick () {
 	if(angleInDegrees >= 360 || angleInDegrees <= -360) {
 		angleInDegrees = 0;
 	}
+
+	curBox = *origPointer;
+	curBox.rotateBy(angleInDegrees, axis);
 }
 
 void Rotator::draw () {
@@ -100,4 +104,8 @@ void Rotator::import(ifstream & input, vector<Texture *> & textures, vector<Shad
 		face->import(input, textures);
 		faces.push_back (face);
 	}
+
+	origPointer = box;
+	box = &curBox;
+
 }

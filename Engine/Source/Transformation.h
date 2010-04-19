@@ -202,6 +202,31 @@ public:
 		double r44 = m41 * a.m14 + m42 * a.m24 + m43 * a.m34 + m44 * a.m44;
 		set (r11,r12,r13,r14,r21,r22,r23,r24,r31,r32,r33,r34,r41,r42,r43,r44);
 	}
+
+	Transformation scaleFreeInverse() {
+		Transformation ret;
+		Point transform = Point(m41, m42, m43);
+		ret.m41 = -Point(m11,m12,m13).dot(transform);
+		ret.m42 = -Point(m21,m22,m23).dot(transform);
+		ret.m43 = -Point(m31,m32,m33).dot(transform);
+
+		ret.m11 = m11;
+		ret.m12 = m21;
+		ret.m13 = m31;
+		ret.m21 = m12;
+		ret.m22 = m22;
+		ret.m23 = m32;
+		ret.m31 = m13;
+		ret.m32 = m23;
+		ret.m33 = m33;
+
+		ret.m14 = 0;
+		ret.m24 = 0;
+		ret.m34 = 0;
+		ret.m44 = 1;
+
+		return ret;
+	}
 	
 	Point position() { return Point(m41, m42, m43); }
 	

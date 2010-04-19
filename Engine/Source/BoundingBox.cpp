@@ -1,5 +1,7 @@
 #include "BoundingBox.h"
+#include <math.h>
 
+double pi = 3.14159265;
 const int BoundingBox::BOTTOM_LEFT_BACK = 0;
 const int BoundingBox::BOTTOM_LEFT_FRONT = 1;
 const int BoundingBox::BOTTOM_RIGHT_BACK = 2;
@@ -35,6 +37,17 @@ BoundingBox::~BoundingBox()
 }
 
 void BoundingBox::init() {
+
+	Point min2 = min;
+	Point max2 = max;
+
+	min.x = min(min2.x, max2.x);
+	max.x = max(min2.x, max2.x);
+	min.y = min(min2.y, max2.y);
+	max.y = max(min2.y, max2.y);
+	min.z = min(min2.z, max2.z);
+	max.z = max(min2.z, max2.z);
+
 	center = (min + max) / 2;
 
 	bottomCenter = center;
@@ -96,8 +109,16 @@ void BoundingBox::setCenter(Point center) {
 	offsetBy(offset);
 }
 
-void BoundingBox::rotateBy(double degrees) {
-	//need to make this expand the box
+void BoundingBox::rotateBy(double degrees, Point axis) {
+	int iDeg = (int) degrees;
+	double afterd = degrees - iDeg;
+	double radians = (iDeg % 90 + afterd) / 180 * pi + pi / 4.0;
+	double ratio = sin(radians) - sin(pi / 4.0);
+	axis /= axis.length();
+	Point distance = (max - min) / 2;
+	Point offset = axis * distance.length() * ratio;
+	max += offset;
+	min -= offset;
 }
 
 BoundingBox * BoundingBox::import(ifstream & input) {
@@ -114,7 +135,6 @@ BoundingBox * BoundingBox::import(ifstream & input) {
 	input.getline(line, 256, ';');
 	maxZ = atof(line);
 	input.getline(line, 256, '\n');
-	
 	// input the minimum
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ',');
