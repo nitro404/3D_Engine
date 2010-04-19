@@ -22,10 +22,16 @@ void Translator::tick() {
 		position -= unitVector * (rateInMetersPerSecond * DT);
 		distanceTravelled = sqrt(pow(destination.x - position.x, 2) + pow(destination.y - position.y, 2) + pow(destination.z - position.z, 2));
 	}
+
+	if (forward) {
+		box->setCenter(unitVector * distanceTravelled);
+	} else {
+		box->setCenter(unitVector * (distanceToTravel - distanceTravelled));
+	}
+
 	if(distanceTravelled >= distanceToTravel) {
 		forward = !forward;
 	}
-	box->setCenter(position);
 }
 
 void Translator::draw() {

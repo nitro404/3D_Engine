@@ -21,7 +21,8 @@ void Rotator::tick () {
 	}
 
 	curBox = *origPointer;
-	curBox.rotateBy(angleInDegrees, axis);
+	curBox.expandForRotation();
+	//curBox.rotateBy(angleInDegrees, axis);
 }
 
 void Rotator::draw () {

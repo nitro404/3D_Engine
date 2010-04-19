@@ -38,16 +38,6 @@ BoundingBox::~BoundingBox()
 
 void BoundingBox::init() {
 
-	Point min2 = min;
-	Point max2 = max;
-
-	min.x = min(min2.x, max2.x);
-	max.x = max(min2.x, max2.x);
-	min.y = min(min2.y, max2.y);
-	max.y = max(min2.y, max2.y);
-	min.z = min(min2.z, max2.z);
-	max.z = max(min2.z, max2.z);
-
 	center = (min + max) / 2;
 
 	bottomCenter = center;
@@ -105,20 +95,27 @@ void BoundingBox::offsetBy(Point offset) {
 }
 
 void BoundingBox::setCenter(Point center) {
-	Point offset = center - getCenter();
-	offsetBy(offset);
+	max = center + extent / 2;
+	min = center - extent / 2;
+	init();
 }
 
-void BoundingBox::rotateBy(double degrees, Point axis) {
-	int iDeg = (int) degrees;
-	double afterd = degrees - iDeg;
-	double radians = (iDeg % 90 + afterd) / 180 * pi + pi / 4.0;
-	double ratio = sin(radians) - sin(pi / 4.0);
-	axis /= axis.length();
-	Point distance = (max - min) / 2;
-	Point offset = axis * distance.length() * ratio;
-	max += offset;
-	min -= offset;
+void BoundingBox::expandForRotation() {
+	max *= 1.65;
+	min *= 1.65;
+
+	//now make into cube
+
+	double diff = max(max.x - min.x, max.y - min.y);
+	diff = max(diff, max.z - min.z);
+	diff /= 2;
+
+	min = center;
+	min -= diff;
+	max = center;
+	max += diff;
+	init();
+
 }
 
 BoundingBox * BoundingBox::import(ifstream & input) {

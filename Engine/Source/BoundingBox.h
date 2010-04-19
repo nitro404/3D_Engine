@@ -18,7 +18,7 @@ public:
 	
 	void offsetBy(Point offset);
 	void setCenter(Point center);
-	void rotateBy(double degrees, Point axis);
+	void expandForRotation();
 
 	static BoundingBox * import(ifstream & input);
 

@@ -4,16 +4,15 @@ CullingManager::CullingManager()
 {
 	cameraPlanes = new Plane[4];
 	maxCorners = new int[4];
-	minCorners = new int[4];
+	//minCorners = new int[4];
 }
 
 CullingManager::~CullingManager()
 {
 	delete [] cameraPlanes;
 	delete [] maxCorners;
-	delete [] minCorners;
+	//delete [] minCorners;
 }
-
 
 void CullingManager::prepareForDraw() {
 	Transformation cameraInverse;
@@ -52,22 +51,22 @@ void CullingManager::prepareForDraw() {
 	//calculate the closest corner for each plane
 	for (int i = 0;i < 4;i++) {
 		int maxcorner = 0;
-		int mincorner = 0;
+		//int mincorner = 0;
 		int maxdistance = cameraPlanes[i].distanceToPoint(unitBox.getCorner(0));
-		int mindistance = maxdistance;
+		//int mindistance = maxdistance;
 		for (int j = 1; j < 8;j++) {
 			int d = cameraPlanes[i].distanceToPoint(unitBox.getCorner(j));
 			if (d > maxdistance) {
 				maxdistance = d;
 				maxcorner = j;
 			}
-			if (d < mindistance) {
-				mindistance = d;
-				mincorner = j;
-			}
+			//if (d < mindistance) {
+			//	mindistance = d;
+			//	mincorner = j;
+			//}
 		}
 		maxCorners[i] = maxcorner;
-		minCorners[i] = mincorner;
+		//minCorners[i] = mincorner;
 	}
 
 }
@@ -75,7 +74,7 @@ void CullingManager::prepareForDraw() {
 bool CullingManager::shouldCull(BoundingBox box) {
 	for (int i = 0; i < 4;i++) {
 		Point max = box.getCorner(maxCorners[i]);
-		Point min = box.getCorner(minCorners[i]);
+		//Point min = box.getCorner(7 - maxCorners[i]);
 		//int sign = cameraPlanes[i].whereIsLine(max, min);
 		//if (sign == backSign) {
 		//	return true;
@@ -83,6 +82,7 @@ bool CullingManager::shouldCull(BoundingBox box) {
 		if (cameraPlanes[i].whereIsPoint(max) == negativeSign) {
 			return true;
 		}
+
 	}
 	return false;
 }
