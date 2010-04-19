@@ -12,7 +12,7 @@ public class Geometry extends WorldObject {
 	
 	// create the Static Geometry subclass (throw away the properties)
 	public Geometry(UniversalObject object, Vector<String> textureNames, Vector<Shader> shaders) {
-		super(object.objectIndex, object.normal, object.inverse, null, object.faces);
+		super(object.objectIndex, object.normal, object.inverse, null, object.faces, new BoundingBox(object.faces));
 		
 		setTextureIndicies(faces, textureNames);
 	}

@@ -26,6 +26,13 @@ Game::Game(int windowWidth,
 	
 	loadTextures(settings->getValue("Texture Data File"), settings->getValue("Texture Directory"), settings->getValue("Shader Directory"), settings->getValue("Height Map Directory"));
 
+	GLfloat diffuseLight[] = {0, 0, 0};
+	GLfloat ambientLight[] = {1, 1, 1};
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+	GLfloat lightPosition[] = {0, 5, 1, 0};
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
 #ifdef _DEBUG
 	drawFPS = true;
 #endif

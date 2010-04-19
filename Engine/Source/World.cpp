@@ -114,6 +114,15 @@ void World::draw() {
 			}
 		}
 	}
+
+#if _DEBUG
+	for(unsigned int i=0;i<objects.size();i++) {
+		objects.at(i)->drawBoundingBox();
+	}
+	for(unsigned int i=0;i<water.size();i++) {
+		water.at(i)->drawBoundingBox();
+	}
+#endif
 }
 
 void World::drawSkybox() {

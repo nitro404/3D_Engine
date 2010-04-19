@@ -13,18 +13,20 @@ public class WorldObject extends Properties {
 	public Transformation normal;
 	public Transformation inverse;
 	public Vector<Face> faces;
+	public BoundingBox box;
 	
 	public WorldObject() {
 		this.properties = new Vector<Property>();
 		this.faces = new Vector<Face>();
 	}
 	
-	public WorldObject(int objectIndex, Transformation normal, Transformation inverse, Vector<Property> properties, Vector<Face> faces) {
+	public WorldObject(int objectIndex, Transformation normal, Transformation inverse, Vector<Property> properties, Vector<Face> faces, BoundingBox box) {
 		this.objectIndex = objectIndex;
 		this.normal = normal;
 		this.inverse = inverse;
 		this.properties = properties;
 		this.faces = faces;
+		this.box = box;
 	}
 	
 	public int getTextureIndex(String textureName, Vector<String> textureNames) {
@@ -157,6 +159,11 @@ public class WorldObject extends Properties {
 			for(int i=0;i<this.properties.size();i++) {
 				out.println("\t\t\"" + this.properties.elementAt(i).key + "\" => \"" + this.properties.elementAt(i).value + "\"");
 			}
+		}
+		
+		// output the bounding box
+		if(this.box != null) {
+			this.box.writeTo(out);
 		}
 		
 		// output the faces

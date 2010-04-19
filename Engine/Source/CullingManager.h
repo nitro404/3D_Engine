@@ -4,18 +4,16 @@
 #include "BoundingBox.h"
 #include "Transformation.h"
 
-class CullingManager
-{
-private:
-	Plane* cameraPlanes;
-	int* closestCorner;
-	BoundingBox unitBox;
-
+class CullingManager {
 public:
-	CullingManager(void);
-	~CullingManager(void);
+	CullingManager();
+	~CullingManager();
 
 	void prepareForDraw();
 	bool shouldCull(BoundingBox box);
 
+private:
+	Plane* cameraPlanes;
+	int* closestCorner;
+	BoundingBox unitBox;
 };

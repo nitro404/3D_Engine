@@ -62,9 +62,9 @@ void Sprite::draw() {
 	
 	glPushIdentity();
 		if(origin == NULL) { glTranslated(newPosition.x, newPosition.y, newPosition.z); }
-		else { glTranslated(newPosition.x, newPosition.y + (extent.y/2), newPosition.z); }
+		else { glTranslated(newPosition.x, newPosition.y + (box->getExtent().y/2), newPosition.z); }
 
-		glScaled(extent.x, extent.y, extent.z);
+		glScaled(box->getExtent().x, box->getExtent().y, box->getExtent().z);
 		glCallList(spriteList);
 	glPopMatrix();
 
@@ -77,7 +77,7 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 	char value[256];
 	char * str;
 	
-	//Input the position
+	// input the position
 	double x, y, z;
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ',');
@@ -89,7 +89,7 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 	position = Point(x, y, z);
 	input.getline(line, 256, '\n');
 	
-	//Input the properties
+	// input the properties
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfProperties = atoi(line);
@@ -101,7 +101,7 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 		str = new char[strlen(value) + 1];
 		strcpy_s(str, strlen(value) + 1, value);
 
-		//Parse properties to local variables
+		// parse properties to local variables
 		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
@@ -131,46 +131,9 @@ void Sprite::import(ifstream & input, vector<Texture *> & textures, vector<Waypo
 			delete [] str;
 		}
 	}
-	
-	//Input the bounding box
-	Point max, min;
-	
-	// Input the maximum
-	input.getline(line, 256, ':');
-	input.getline(line, 256, ',');
-	x = atof(line);
-	input.getline(line, 256, ',');
-	y = atof(line);
-	input.getline(line, 256, ';');
-	z = atof(line);
-	max = Point(x, y, z);
-	input.getline(line, 256, '\n');
-	
-	// Input the minimum
-	input.getline(line, 256, ':');
-	input.getline(line, 256, ',');
-	x = atof(line);
-	input.getline(line, 256, ',');
-	y = atof(line);
-	input.getline(line, 256, ';');
-	z = atof(line);
-	min = Point(x, y, z);
-	input.getline(line, 256, '\n');
-	
-	// Calculate the center of the sprite
-	center.x = (max.x + min.x) / 2;
-	center.y = (max.y + min.y) / 2;
-	center.z = (max.z + min.z) / 2;
-	
-	// Calculate the bottom center of the sprite
-	bottomCenter.x = (max.x + min.x) / 2;
-	bottomCenter.y = (max.y + min.y) / 2;
-	bottomCenter.z = min.z;
-	
-	// Calculate the size of the sprite
-	extent.x = max.x - min.x;
-	extent.y = max.y - min.y;
-	extent.z = max.z - min.z;
+
+	// input the bounding box
+	box = BoundingBox::import(input);
 	
 	if(origin != NULL) {
 		lastWaypoint = origin;

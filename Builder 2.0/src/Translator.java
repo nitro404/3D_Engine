@@ -12,7 +12,7 @@ public class Translator extends WorldObject {
 
 	// create the Translator subclass
 	public Translator(UniversalObject object, Vector<String> textureNames, Vector<Shader> shaders) {
-		super(object.objectIndex, object.normal, object.inverse, object.properties, object.faces);
+		super(object.objectIndex, object.normal, object.inverse, object.properties, object.faces, new BoundingBox(object.faces));
 		
 		setTextureIndicies(faces, textureNames);
 		setShaderIndex(getPropertyValue("shader"), shaders);

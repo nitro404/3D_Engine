@@ -12,7 +12,7 @@ public class Waypoint extends WorldObject {
 	
 	// create the Waypoint subclass (throw away the faces)
 	public Waypoint(UniversalObject object) {
-		super(object.objectIndex, null, null, object.properties, null);
+		super(object.objectIndex, null, null, object.properties, null, null);
 		
 		this.position = object.normal.getPosition();
 	}

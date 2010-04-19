@@ -1,15 +1,15 @@
 #include "CullingManager.h"
 
-CullingManager::CullingManager(void)
+CullingManager::CullingManager()
 {
 	cameraPlanes = new Plane[4];
 	closestCorner = new int[4];
 }
 
-CullingManager::~CullingManager(void)
+CullingManager::~CullingManager()
 {
-	delete[] cameraPlanes;
-	delete[] closestCorner;
+	delete [] cameraPlanes;
+	delete [] closestCorner;
 }
 
 

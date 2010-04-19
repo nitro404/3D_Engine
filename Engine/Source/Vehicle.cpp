@@ -1,13 +1,12 @@
 #include "Vehicle.h"
 
-Vehicle::Vehicle() : transformation(NULL), shader(NULL) { }
+Vehicle::Vehicle() : shader(NULL) { }
 
 Vehicle::~Vehicle() {
 	delete [] name;
 	for(unsigned int i=0;i<faces.size();i++) {
 		delete faces.at(i);
 	}
-	if(transformation != NULL) { delete transformation; }
 }
 
 double Vehicle::distanceFrom(Point & p) const {
@@ -42,7 +41,7 @@ void Vehicle::import(ifstream & input, vector<Texture *> & textures, vector<Shad
 	
 	transformation = DualTransformation::import(input);
 	
-	//Input the properties
+	// input the properties
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfProperties = atoi(line);
@@ -54,7 +53,7 @@ void Vehicle::import(ifstream & input, vector<Texture *> & textures, vector<Shad
 		str = new char[strlen(value) + 1];
 		strcpy_s(str, strlen(value) + 1, value);
 
-		//Parse properties to local variables
+		// parse properties to local variables
 		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}
@@ -72,8 +71,11 @@ void Vehicle::import(ifstream & input, vector<Texture *> & textures, vector<Shad
 			delete [] str;
 		}
 	}
+
+	// input the bounding box
+	box = BoundingBox::import(input);
 	
-	//Input the faces.
+	// input the faces
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfFaces = atoi(line);

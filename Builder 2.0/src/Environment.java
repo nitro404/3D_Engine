@@ -13,7 +13,7 @@ public class Environment extends WorldObject {
 	
 	// create the Environment subclass (throw away the transformations and faces)
 	public Environment(UniversalObject object, Vector<String> textureNames, Vector<Shader> shaders) {
-		super(object.objectIndex, null, null, object.properties, null);
+		super(object.objectIndex, null, null, object.properties, null, null);
 		
 		setShaderIndex(getPropertyValue("shader"), shaders);
 		

@@ -11,7 +11,7 @@ public class Terrain extends WorldObject {
 	public int heightMapIndex;
 	
 	public Terrain(UniversalObject object, Vector<String> textureNames, Vector<HeightMap> heightMaps, Vector<Shader> shaders) {
-		super(object.objectIndex, object.normal, object.inverse, object.properties, null);
+		super(object.objectIndex, object.normal, object.inverse, object.properties, null, new BoundingBox(object.faces));
 		
 		heightMapIndex = -1;
 		HeightMap heightMap = null;
@@ -26,6 +26,7 @@ public class Terrain extends WorldObject {
 			}
 		}
 		
+		/*
 		Point3D p;
 		Point3D maxPoint = null;
 		Point3D minPoint = null;
@@ -48,6 +49,7 @@ public class Terrain extends WorldObject {
 		}
 		addProperty("maxpoint", maxPoint.x + ", " + maxPoint.y + ", " + maxPoint.z);
 		addProperty("minpoint", minPoint.x + ", " + minPoint.y + ", " + minPoint.z);
+		*/
 		
 		setPropertyValue("heightmap", Integer.toString(heightMapIndex));
 		setPropertyValue("texturemap", Integer.toString(getTextureIndex(getPropertyValue("texturemap"), textureNames)));

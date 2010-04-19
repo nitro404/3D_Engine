@@ -10,37 +10,16 @@ import java.util.Vector;
 public class Sprite extends WorldObject {
 	
 	public Point3D position;
-	public Point3D max;
-	public Point3D min;
 	
 	// create the Sprite subclass (throw away the transformations and faces)
 	public Sprite(UniversalObject object, Vector<String> textureNames, Vector<Shader> shaders) {
-		super(object.objectIndex, null, null, object.properties, null);
+		super(object.objectIndex, null, null, object.properties, null, new BoundingBox(object.faces));
 		
 		setPropertyValue("picture", Integer.toString(getTextureIndex(getPropertyValue("picture"), textureNames)));
 		setShaderIndex(getPropertyValue("shader"), shaders);
 		
 		// get the position associated with the normal transformation and store that instead
 		this.position = object.normal.getPosition();
-		
-		// calculate the max and min x, y, z values of the faces and store them instead (bounding box)
-		for(int i=0;i<object.faces.size();i++) {
-			for(int j=0;j<object.faces.elementAt(i).points.size();j++) {
-				Point3D p = object.faces.elementAt(i).points.elementAt(j);
-				if(i==0 && j==0) {
-					this.max = new Point3D(p.x, p.y, p.z);
-					this.min = new Point3D(p.x, p.y, p.z);
-				}
-				else {
-					if(p.x > this.max.x) { this.max.x = p.x; }
-					if(p.y > this.max.y) { this.max.y = p.y; }
-					if(p.z > this.max.z) { this.max.z = p.z; }
-					if(p.x < this.min.x) { this.min.x = p.x; }
-					if(p.y < this.min.y) { this.min.y = p.y; }
-					if(p.z < this.min.z) { this.min.z = p.z; }
-				}
-			}
-		}
 	}
 	
 	public void writeTo(PrintWriter out) throws Exception {
@@ -59,8 +38,7 @@ public class Sprite extends WorldObject {
 		}
 		
 		// output the bounding box
-		out.println("\tMaximum: " + this.max.x + ", " + this.max.y + ", " + this.max.z + ";");
-		out.println("\tMinimum: " + this.min.x + ", " + this.min.y + ", " + this.min.z + ";");
+		this.box.writeTo(out);
 	}
 	
 }

@@ -12,7 +12,6 @@ public:
 	virtual void import(ifstream & input, vector<Texture *> & textures, vector<char *> & heightMaps, vector<Shader *> shaders);
 
 public:
-	DualTransformation * transformation;
 	Shader * shader;
 
 private:
@@ -25,8 +24,6 @@ private:
 	int width;
 	int height;
 	int tiled;
-	Point minPoint;
-	Point maxPoint;
 	GamePoint * points;
 	FaceGroup * group;
 };

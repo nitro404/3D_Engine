@@ -14,13 +14,11 @@ public:
 	bool insideOf(Point & p) const;
 	
 	virtual void tick();
-	virtual void draw();
-	virtual void draw(bool drawInside);
+	virtual void draw(bool drawInside = false);
 	
 	virtual void import(ifstream &input, vector<AnimatedTexture *> & animatedTextures, vector<Shader *> shaders);
 	
 public:
-	DualTransformation * transformation;
 	vector<Face *> faces;
 	Colour waterColour;
 	Shader * shader;

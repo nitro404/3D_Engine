@@ -1,13 +1,12 @@
 #include "Pool.h"
 
-Pool::Pool() : transformation(NULL), shader(NULL) { }
+Pool::Pool() : shader(NULL) { }
 
 Pool::~Pool() {
 	delete [] name;
 	for(unsigned int i=0;i<faces.size();i++) {
 		delete faces.at(i);
 	}
-	if(transformation != NULL) { delete transformation; }
 }
 
 double Pool::distanceFrom(Point & p) const {
@@ -24,10 +23,6 @@ void Pool::tick() {
 	for(unsigned int i=0;i<faces.size();i++) {
 		faces.at(i)->tick();
 	}
-}
-
-void Pool::draw() {
-	draw(false);
 }
 
 void Pool::draw(bool drawInside) {
@@ -95,6 +90,9 @@ void Pool::import(ifstream & input, vector<AnimatedTexture *> & animatedTextures
 			delete [] str;
 		}
 	}
+
+	// input the bounding box
+	box = BoundingBox::import(input);
 	
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');

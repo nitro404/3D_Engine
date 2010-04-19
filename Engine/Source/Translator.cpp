@@ -1,13 +1,12 @@
 #include "Translator.h"
 
-Translator::Translator() : transformation(NULL), shader(NULL), forward(true) { }
+Translator::Translator() : shader(NULL), forward(true) { }
 
 Translator::~Translator() {
 	delete [] name;
 	for(unsigned int i=0;i<faces.size();i++) {
 		delete faces.at(i);
 	}
-	delete transformation;
 }
 
 double Translator::distanceFrom(Point & p) const {
@@ -94,6 +93,9 @@ void Translator::import (ifstream & input, vector<Texture *> & textures, vector<
 			delete [] str;
 		}
 	}
+
+	// input the bounding box
+	box = BoundingBox::import(input);
 	
 	// input the faces
 	input.getline(line, 256, ':');

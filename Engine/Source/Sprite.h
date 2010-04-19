@@ -24,9 +24,6 @@ public:
 private:
 	GLuint spriteList;
 	char * name;
-	Point center;
-	Point bottomCenter;
-	Point extent;
 	Waypoint * origin;
 	Waypoint * lastWaypoint;
 	Waypoint * destination;

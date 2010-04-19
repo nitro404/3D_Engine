@@ -1,6 +1,6 @@
 #include "Geometry.h"
 
-Geometry::Geometry() : transformation(NULL) {
+Geometry::Geometry() {
 	
 }
 
@@ -8,7 +8,6 @@ Geometry::~Geometry() {
 	for(unsigned int i=0;i<faces.size();i++) {
 		delete faces.at(i);
 	}
-	if(transformation != NULL) { delete transformation; }
 }
 
 double Geometry::distanceFrom(Point & p) const {
@@ -33,6 +32,9 @@ void Geometry::import(ifstream & input, vector<Texture *> & textures, vector<Sha
 	char line[256];
 	
 	transformation = DualTransformation::import(input);
+
+	// input the bounding box
+	box = BoundingBox::import(input);
 
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');

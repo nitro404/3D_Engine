@@ -12,7 +12,7 @@ public class Pool extends WorldObject {
 	
 	// create the Pool subclass
 	public Pool(UniversalObject object, Vector<String> textureNames, Vector<AnimatedTexture> animatedTextures, Vector<Shader> shaders) {
-		super(object.objectIndex, object.normal, object.inverse, object.properties, object.faces);
+		super(object.objectIndex, object.normal, object.inverse, object.properties, object.faces, new BoundingBox(object.faces));
 		
 		setAnimatedTextureIndicies(faces, textureNames, animatedTextures);
 		setShaderIndex(getPropertyValue("shader"), shaders);

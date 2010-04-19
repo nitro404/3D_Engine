@@ -1,14 +1,10 @@
 #include "Terrain.h"
 
-Terrain::Terrain() : transformation(NULL), shader(NULL), name(NULL), textureMap(NULL), width(0), height(0), points(NULL) {
-	minPoint = Point(0,0,0);
-	maxPoint = Point(0,0,0);
-}
+Terrain::Terrain() : shader(NULL), name(NULL), textureMap(NULL), width(0), height(0), points(NULL) { }
 
 Terrain::~Terrain() {
 	if(name != NULL) { delete [] name; }
 	if(points != NULL) { delete [] points; }
-	if(transformation != NULL) { delete transformation; }
 	delete group;
 }
 
@@ -65,34 +61,6 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 			height = atoi(value);
 			delete [] str;
 		}
-		else if (_stricmp(key, "maxpoint") == 0) {
-			double xPos, yPos, zPos;
-			char * temp = strchr(str + sizeof(char), ' ');
-			*temp = '\0';
-			xPos = atof(str);
-			temp += sizeof(char);
-			char * temp2 = strchr(temp, ' ');
-			*temp2 = '\0';
-			yPos = atof(temp);
-			temp2 += sizeof(char);
-			zPos = atof(temp2);
-			maxPoint = Point(xPos, yPos, zPos);
-			delete [] str;
-		}
-		else if (_stricmp(key, "minpoint") == 0) {
-			double xPos, yPos, zPos;
-			char * temp = strchr(str + sizeof(char), ' ');
-			*temp = '\0';
-			xPos = atof(str);
-			temp += sizeof(char);
-			char * temp2 = strchr(temp, ' ');
-			*temp2 = '\0';
-			yPos = atof(temp);
-			temp2 += sizeof(char);
-			zPos = atof(temp2);
-			minPoint = Point(xPos, yPos, zPos);
-			delete [] str;
-		}
 		else if (_stricmp(key, "tiled") == 0) {
 			tiled = atoi(str);
 			delete [] str;
@@ -108,6 +76,9 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 		}
 	}
 
+	// input the bounding box
+	box = BoundingBox::import(input);
+
 	// input the height map
 	int size = width * height;
 	int * heightMapData = new int[size];
@@ -119,10 +90,8 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 		heightMapData[i] = heightMapFile.get();
 	}
 	heightMapFile.close();
-	
-	double terrainSizeX = maxPoint.x - minPoint.x;
-	double terrainSizeY = maxPoint.y - minPoint.y;
-	double terrainSizeZ = maxPoint.z - minPoint.z;
+
+	Point terrainSize = box->getExtent();
 
 //	double tileSizeX = terrainSizeX / (width + 1);
 //	double tileSizeZ = terrainSizeY / (width + 1);
@@ -132,9 +101,9 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 	points = new GamePoint[(width + 1) * (height  + 1)];
 	for(int i=0;i<width+1;i++) {
 		for(int j=0;j<height+1;j++) {
-			x = ((i / (double) width) * terrainSizeX) + minPoint.x;
-			y = ((scaleHeight(i, j, heightMapData) / 255.0) * terrainSizeY) + minPoint.y;
-			z = ((j / (double) height) * terrainSizeZ) + minPoint.z;
+			x = ((i / (double) width) * terrainSize.x) + box->getMin().x;
+			y = ((scaleHeight(i, j, heightMapData) / 255.0) * terrainSize.y) + box->getMin().y;
+			z = ((j / (double) height) * terrainSize.z) + box->getMin().z;
 
 			if(tiled == 1) {
 				tx = i * 0.1;

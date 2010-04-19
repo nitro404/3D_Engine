@@ -1,13 +1,12 @@
 #include "Rotator.h"
 
-Rotator::Rotator() : transformation(NULL), shader(NULL), angleInDegrees(0), rateInDegreesPerSecond(0) { }
+Rotator::Rotator() : shader(NULL), angleInDegrees(0), rateInDegreesPerSecond(0) { }
 
 Rotator::~Rotator() {
 	delete [] name;
 	for(unsigned int i=0;i<faces.size();i++) {
 		delete faces.at(i);
 	}
-	if(transformation != NULL) { delete transformation; }
 }
 
 double Rotator::distanceFrom(Point & p) const {
@@ -26,11 +25,11 @@ void Rotator::draw () {
 
 	Point p = transformation->position();
 	glPushMatrix(); 
-	glTranslated(p.x, p.y, p.z);
-	glRotated(angleInDegrees, axis.x, axis.y, axis.z);
-	for(unsigned int i=0;i<faces.size();i++) {
-		faces.at(i)->draw();
-	}
+		glTranslated(p.x, p.y, p.z);
+		glRotated(angleInDegrees, axis.x, axis.y, axis.z);
+		for(unsigned int i=0;i<faces.size();i++) {
+			faces.at(i)->draw();
+		}
 	glPopMatrix();
 
 	if(shader != NULL) { shader->deactivate(); }
@@ -88,6 +87,9 @@ void Rotator::import(ifstream & input, vector<Texture *> & textures, vector<Shad
 			delete [] str;
 		}
 	}
+
+	// input the bounding box
+	box = BoundingBox::import(input);
 	
 	// input the faces
 	input.getline(line, 256, ':');
