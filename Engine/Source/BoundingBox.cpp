@@ -37,6 +37,7 @@ BoundingBox::~BoundingBox()
 }
 
 void BoundingBox::init() {
+	// initialize relevant point data from current min and max
 	center = (min + max) / 2;
 
 	bottomCenter = center;
@@ -54,6 +55,7 @@ Point BoundingBox::getMin() const {
 }
 
 Point BoundingBox::getCorner(int index) const {
+	// get a point on the box
 	switch (index) {
 		case BOTTOM_LEFT_BACK:
 			return min;

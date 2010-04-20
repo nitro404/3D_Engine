@@ -42,6 +42,8 @@ public:
 	vector<AnimatedTexture *> animatedTextures;
 	vector<Shader *> shaders;
 
+	bool cullingEnabled;
+
 private:
 	Variables * settings;
 

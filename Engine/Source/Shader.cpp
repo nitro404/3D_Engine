@@ -12,6 +12,7 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 	string vertexShaderPath;
 	string fragmentShaderPath;
 
+	// generate the vertex shader path
 	if(shaderDirectory != NULL) {
 		vertexShaderPath.append(shaderDirectory);
 		if(_stricmp(vertexShaderPath.substr(vertexShaderPath.length() - 1, vertexShaderPath.length()).c_str(), ("\\")) != 0 &&
@@ -22,6 +23,7 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 
 	vertexShaderPath.append(vertexShaderFileName);
 
+	// generate the fragment shader path
 	if(shaderDirectory != NULL) {
 		fragmentShaderPath.append(shaderDirectory);
 		if(_stricmp(fragmentShaderPath.substr(fragmentShaderPath.length() - 1, fragmentShaderPath.length()).c_str(), ("\\")) != 0 &&
@@ -35,6 +37,7 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 	string vertexShaderData;
 	string fragmentShaderData;
 
+	// read the vertex shader file
 	ifstream vin(vertexShaderPath.c_str());
 	if(!vin.is_open()) {
 		quit("Unable to read vertex shader: \"%s\"", vertexShaderPath.c_str());
@@ -53,6 +56,7 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 		quit("Empty vertex shader: \"%s\".", vertexShaderPath.c_str());
 	}
 
+	// read the fragment shader file
 	ifstream fin(fragmentShaderPath.c_str());
 	if(!fin.is_open()) {
 		quit("Unable to read fragment shader: \"%s\"", fragmentShaderPath.c_str());
@@ -71,11 +75,14 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 		quit("Empty fragment shader: \"%s\".", fragmentShaderPath.c_str());
 	}
 
+	// create the shader program
 	programHandle = glCreateProgram();
 
+	// create the shaders
 	vertexShaderHandle = glCreateShader(GL_VERTEX_SHADER);
 	fragmentShaderHandle = glCreateShader(GL_FRAGMENT_SHADER);
 
+	// compile the vertex shader
 	const char * vertexShaderTemp = vertexShaderData.c_str();
 	glShaderSource(vertexShaderHandle, 1, (const GLchar **) (&vertexShaderTemp), NULL);
 	compileShader(vertexShaderHandle, vertexShaderFileName);
@@ -83,6 +90,7 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 		quit("Error creating vertex shader.");
 	}
 	
+	// compile the fragment shader
 	const char * fragmentShaderTemp = fragmentShaderData.c_str();
 	glShaderSource(fragmentShaderHandle, 1, (const GLchar **) (&fragmentShaderTemp), NULL);
 	compileShader(fragmentShaderHandle, fragmentShaderFileName);
@@ -90,9 +98,11 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 		quit("Error creating fragment shader.");
 	}
 
+	// attach the shaders to the program
 	glAttachShader(programHandle, vertexShaderHandle);
 	glAttachShader(programHandle, fragmentShaderHandle);
 
+	// link the program
 	glLinkProgram(programHandle);
 }
 
@@ -151,6 +161,7 @@ bool Shader::compileShader(GLenum shader, const char * shaderName) {
 	GLint result = 0xDEADBEEF;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
 
+	// get shader debugging information
 	if(!result) {
 		printf("Could not compile shader %d", shader);
 		if(shaderName != NULL) {

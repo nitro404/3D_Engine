@@ -20,10 +20,13 @@ Font::Font(int windowWidth,
 			  underline(fontUnderline),
 			  strikeout(fontStrikeout),
 			  angle((fontAngle < 0 || fontAngle > 360) ? 0 : fontAngle) {
+
+	// no face was specified, set a default font
 	if(fontFace == NULL) {
 		this->face = new char[6];
 		strcpy_s(this->face, 6, "Arial");
 	}
+	// otherwise copy the face to a local variable
 	else {
 		face = new char[strlen(fontFace) + 1];
 		strcpy_s(this->face, strlen(fontFace) + 1, fontFace);

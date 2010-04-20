@@ -114,14 +114,23 @@
     <ClCompile Include="Source\Waypoint.cpp">
       <Filter>Objects\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GLUT\Extensions.cpp">
-      <Filter>OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Variables.cpp">
       <Filter>Settings File Parser</Filter>
     </ClCompile>
     <ClCompile Include="Source\Variable.cpp">
       <Filter>Settings File Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BoundingBox.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CullingManager.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Plane.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shader.cpp">
+      <Filter>3D Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,12 +171,6 @@
       <Filter>OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="Source\GLUT\GL.H">
-      <Filter>OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GLUT\Extensions.h">
-      <Filter>OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GLUT\ARBVertexBufferObject.h">
       <Filter>OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="Source\Variables.h">
@@ -228,6 +231,27 @@
       <Filter>3D Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\World.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GL\glew.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GL\glxew.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GL\wglew.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BoundingBox.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CullingManager.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Plane.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shader.h">
       <Filter>3D Engine\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

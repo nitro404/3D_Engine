@@ -12,10 +12,12 @@ Game::Game(int windowWidth,
 			: fps(NULL),
 			  settings(gameSettings),
 			  world(NULL),
+			  cullingEnabled(false),
 			  paused(true) {
 	this->windowWidth = windowWidth;
 	this->windowHeight = windowHeight;
 
+	// initialize the fps font
 	drawFPS = isTrue(settings->getValue("Show FPS"));
 	fps = new char[12];
 	fps[0] = '\0';
@@ -24,8 +26,10 @@ Game::Game(int windowWidth,
 	
 	verifySettings();
 	
+	// load the textures, animations, shaders and height map data
 	loadTextures(settings->getValue("Texture Data File"), settings->getValue("Texture Directory"), settings->getValue("Shader Directory"), settings->getValue("Height Map Directory"));
 
+	// set lighting values (not currently used)
 	GLfloat diffuseLight[] = {0, 0, 0};
 	GLfloat ambientLight[] = {1, 1, 1};
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
@@ -112,6 +116,7 @@ void Game::drawFrameRate() {
 }
 
 void Game::verifySettings() {
+	// verify settings file is not missing data
 	if(settings->getValue("Map Directory") == NULL) {
 		quit("No map directory specified in settings file.");
 	}

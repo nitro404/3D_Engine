@@ -1,6 +1,7 @@
 #include "AnimatedFace.h"
 
 void AnimatedFace::tick() {
+	// choose the current texture based on the animation sequence
 	texture = animatedTexture->textures.at((int) textureIndex);
 	textureIndex += animationSpeed * DT;
 	if(textureIndex >= animatedTexture->frames) {
@@ -34,6 +35,8 @@ void AnimatedFace::draw(Colour & colour) {
 
 void AnimatedFace::draw(Colour & colour, bool drawBothSides) {
 	texture->activate();
+
+	// draw the inside of the pool if you are inside of it, so you can see it
 	if(drawBothSides) { glDisable(GL_CULL_FACE); }
 	glColor4d(colour.red, colour.green, colour.blue, colour.alpha);
 	glEnable(GL_BLEND);
@@ -57,7 +60,7 @@ void AnimatedFace::import(ifstream & input, vector<AnimatedTexture * > & animate
 	char key[256];
 	char value[256];
 	
-	//Input the header.
+	// input the header
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int currentIndex = atoi(line);
@@ -67,13 +70,13 @@ void AnimatedFace::import(ifstream & input, vector<AnimatedTexture * > & animate
 	value[0] = '\0';
 	sscanf_s(line, " \"%[^\"]\" => \"%[^\"]\"", key, 256, value, 256);
 	
-	//Get the animated texture
+	// get the animated texture
 	animatedTexture = animatedTextures.at(atoi(value));
 	if(animationSpeed < 0) {
 		animationSpeed = animatedTexture->speed;
 	}
 
-	//Input the points.
+	// input the points
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfPoints = atoi(line);

@@ -33,15 +33,23 @@ private:
 	void pauseGame();
 	void resumeGame();
 
+public:
+	const static int MENU_MAIN;
+	const static int MENU_NEWGAME;
+	const static int MENU_HELP;
+	const static int MENU_OPTIONS;
+
 private:
 	// menu data
 	Font * titleFont;
 	Font * itemFont;
 	Text * mainMenuTitle;
 	Text * mapMenuTitle;
+	Text * optionsMenuTitle;
 	Text * helpMenuTitle;
 	vector<Text *> mainMenuItems;
 	vector<Text *> mapMenuItems;
+	vector<Text *> optionsMenuItems;
 	vector<Text *> helpMenuItems;
 
 	Game * game;
@@ -49,7 +57,9 @@ private:
 
 	vector<string> mapList;
 
-	int index;
+	int mainMenuIndex;
+	int mapMenuIndex;
+	int optionsMenuIndex;
 	int menuType;
 	bool active;
 

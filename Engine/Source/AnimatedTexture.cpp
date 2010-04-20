@@ -6,13 +6,13 @@ void AnimatedTexture::import (ifstream & input, vector<Texture *> & worldTexture
 	char value[256];
 	char * str;
 	
-	//Input the header.
+	// input the header
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int currentIndex = atoi(line);
 	input.getline(line, 256, '\n');
 
-	//Input the properties
+	// input the properties
 	int firstTexture;
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
@@ -25,7 +25,7 @@ void AnimatedTexture::import (ifstream & input, vector<Texture *> & worldTexture
 		str = new char[strlen(value) + 1];
 		strcpy_s(str, strlen(value) + 1, value);
 		
-		//Parse properties to local variables
+		// parse properties to local variables
 		if(_stricmp(key, "name") == 0) {
 			name = str;
 		}

@@ -3,6 +3,7 @@
 void Face::draw() {
 	texture->activate();
 	
+	// enable/disable blending
 	if(texture->type == RGBAType) {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
@@ -11,6 +12,7 @@ void Face::draw() {
 		glDisable(GL_BLEND);
 	}
 	
+	// render the faces
 	glBegin(GL_POLYGON);
 		for(unsigned int pointIndex=0;pointIndex<points.size();pointIndex++) {
 			GamePoint & point = *points.at(pointIndex);
@@ -25,12 +27,16 @@ void Face::draw(Colour & colour) {
 }
 
 void Face::draw(Colour & colour, bool drawBothSides) {
+
 	texture->activate();
+
+	// render the inside of the box if you are inside it
 	if(drawBothSides) { glDisable(GL_CULL_FACE); }
 	glColor4d(colour.red, colour.green, colour.blue, colour.alpha);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
 
+	// render the faces
 	glBegin(GL_POLYGON);
 		for(unsigned int pointIndex=0;pointIndex<points.size();pointIndex++) {
 			GamePoint & point = *points.at(pointIndex);
@@ -49,7 +55,7 @@ char line[256];
 	char key[256];
 	char value[256];
 
-	//Input the header.
+	// input the header
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int currentIndex = atoi(line);
@@ -60,7 +66,7 @@ char line[256];
 	sscanf_s(line, " \"%[^\"]\" => \"%[^\"]\"", key, 256, value, 256);
 	texture = textures.at(atoi(value));
 	
-	//Input the points.
+	// input the points
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfPoints = atoi(line);
