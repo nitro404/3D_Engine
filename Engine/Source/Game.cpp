@@ -3,6 +3,7 @@
 Game * Game::instance = NULL;
 SettingsManager * Game::settings = NULL;
 Menu * Game::menu = NULL;
+Camera * Game::camera = NULL;
 World * Game::world = NULL;
 
 Game::Game() : fps(NULL), cullingEnabled(false), paused(true) {
@@ -12,6 +13,8 @@ Game::Game() : fps(NULL), cullingEnabled(false), paused(true) {
 	if(!settings->load()) {
 		settings->save();
 	}
+
+	camera = new Camera();
 }
 
 Game::~Game() {
@@ -19,6 +22,7 @@ Game::~Game() {
 	delete fpsText;
 	delete settings;
 	delete menu;
+	delete camera;
 	if(world != NULL) { delete world; }
 	for(unsigned int i=0;i<animatedTextures.size();i++) {
 		delete animatedTextures.at(i);
@@ -87,7 +91,8 @@ void Game::update() {
 
 	if(paused) { return; }
 
-	inputManager->update(timeElapsed);
+	camera->update(timeElapsed);
+
 	if(world != NULL) {
 		world->update(timeElapsed);
 	}
@@ -116,7 +121,7 @@ void Game::loadMap(char * fileName) {
 	world = new World();
 	world->import(fileName, textures, heightMaps, animatedTextures, shaders);
 	world->cullingEnabled = cullingEnabled;
-	player->reset(world->startPosition);
+	camera->reset(world->startPosition);
 	paused = false;
 }
 

@@ -1,3 +1,4 @@
+#include "Game.h"
 #include "World.h"
 
 World::World() : cullingEnabled(false), skybox(NULL) {
@@ -24,7 +25,7 @@ World::~World() {
 }
 
 void World::update(double timeElapsed) {
-	playerPosition = player->playerMatrix.position();
+	playerPosition = Game::camera->cameraMatrix.position();
 	
 	if(skybox != NULL) {
 		skybox->update(timeElapsed);

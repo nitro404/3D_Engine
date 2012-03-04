@@ -1,3 +1,4 @@
+#include "Game.h"
 #include "Environment.h"
 
 Environment::Environment() : shader(NULL) {
@@ -20,8 +21,8 @@ void Environment::draw() {
 	glDisable(GL_BLEND);
 	
 	glPushIdentity();
-		glRotated(-(camera->xRotation), 1, 0, 0);
-		glRotated(-(camera->yRotation), 0, 1, 0);
+		glRotated(-(Game::camera->xRotation), 1, 0, 0);
+		glRotated(-(Game::camera->yRotation), 0, 1, 0);
 		
 		glScaled(100, 100, 100);
 

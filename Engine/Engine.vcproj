@@ -392,19 +392,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\InputManager.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\Menu.h"
 					>
 				</File>
 				<File
 					RelativePath=".\Source\Plane.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Player.h"
 					>
 				</File>
 				<File
@@ -482,10 +474,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\InputManager.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\Macros.cpp"
 					>
 				</File>
@@ -499,10 +487,6 @@
 				</File>
 				<File
 					RelativePath=".\Source\Plane.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Player.cpp"
 					>
 				</File>
 				<File

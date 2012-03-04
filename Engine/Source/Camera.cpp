@@ -1,31 +1,66 @@
 #include "Camera.h"
 
-Camera * camera = NULL;
+Camera::Camera() : xRotation(0), yRotation(0) {
+	translateLeft = false;
+	translateRight = false;
+	translateAhead = false;
+	translateBack = false;
+	translateUp = false;
+	translateDown = false;
+	
+	rotateLeft = false;
+	rotateRight = false;
+	rotateUp = false;
+	rotateDown = false;
+}
+
+Camera::~Camera() {
+
+}
 
 void Camera::beginCamera() {
-	//If R is the camera's rotation, T is the camera's translation, and W is the player's 
-	//transformation, then moving the camera LOCALLY is a pre-transformation. So the movement
-	//result needed is RTW... However, we are being asked to push the transformation
-	//needed to play the role of a camera... This means we need to push (RTW)-1  (where -1 means
-	//inverse) which by the theorem dealing with inverses becomes W-1T-1R-1... Since the operations 
-	//on the stack are done right to left, we need to deal with R-1, then T-1, and then W-1.
-
-	//rotate by R-1 which pre-multiplies whatever is on the stack already, and finally
-	//translate by T-1...
-	//on the stack are done right to left, we let the target set up the camera and then we
-	//rotate by R-1 which pre-multiplies whatever is on the stack already, and finally
-	//translate by T-1...
-
 	glPushMatrix();
 		glRotated(-xRotation, 1.0, 0.0, 0.0);
-		glTranslated(-offset.x, -offset.y, -offset.z);
 		
 		glPushMatrix();
-			glMultMatrixd(player->playerMatrix.inverse);
+			glMultMatrixd(cameraMatrix.inverse);
 			manager.prepareForDraw();
 }
 
 void Camera::endCamera() {
 		glPopMatrix();
 	glPopMatrix();
+}
+
+void Camera::moveBy(Point & translation) {
+	cameraMatrix.translateBy(translation);
+}
+
+void Camera::rotateBy(Point & rotation) {
+	xRotation += rotation.x;
+	yRotation += rotation.y;
+	cameraMatrix.rotateBy(Point(0.0, rotation.y, 0.0));
+}
+
+void Camera::reset(Point & position) {
+	cameraMatrix.setToIdentity();
+	cameraMatrix.preTranslateBy(position);
+}
+
+void Camera::update(double timeElapsed) {
+	static double translationSpeed = 10.0;
+	static double rotationSpeed = 30.0;
+
+	Point translation (
+		(translateLeft ? -translationSpeed : 0.0) + (translateRight ? translationSpeed : 0.0),
+		(translateDown ? -translationSpeed : 0.0) + (translateUp ? translationSpeed : 0.0),
+		(translateAhead ? -translationSpeed : 0.0) + (translateBack ? translationSpeed : 0.0));
+
+	Point rotation (
+		(rotateDown ? -rotationSpeed : 0.0) + (rotateUp ? rotationSpeed : 0.0),
+		(rotateRight ? -rotationSpeed : 0.0) + (rotateLeft ? rotationSpeed : 0.0),
+		0.0);
+
+	rotateBy(rotation * timeElapsed);
+	moveBy(translation * timeElapsed);
 }

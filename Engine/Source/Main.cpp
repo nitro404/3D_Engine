@@ -83,7 +83,7 @@ void normalKeyPressed(unsigned char character, int x, int y) {
 		case 'w':
 		case 'W':
 			if(!game->isPaused()) {
-				inputManager->translateAhead = true;
+				Game::camera->translateAhead = true;
 			}
 			Game::menu->moveUp();
 			break;
@@ -91,7 +91,7 @@ void normalKeyPressed(unsigned char character, int x, int y) {
 		case 's':
 		case 'S':
 			if(!game->isPaused()) {
-				inputManager->translateBack = true;
+				Game::camera->translateBack = true;
 			}
 			Game::menu->moveDown();
 			break;
@@ -99,20 +99,20 @@ void normalKeyPressed(unsigned char character, int x, int y) {
 		case 'a':
 		case 'A':
 			if(!game->isPaused()) {
-				inputManager->translateLeft = true;
+				Game::camera->translateLeft = true;
 			}
 			break;
 			
 		case 'd':
 		case 'D':
 			if(!game->isPaused()) {
-				inputManager->translateRight = true;
+				Game::camera->translateRight = true;
 			}
 			break;
 			
 		case ' ':
 			if(!game->isPaused()) {
-				inputManager->translateUp = true;
+				Game::camera->translateUp = true;
 			}
 			Game::menu->select();
 			break;
@@ -120,7 +120,7 @@ void normalKeyPressed(unsigned char character, int x, int y) {
 		case 'z':
 		case 'Z':
 			if(!game->isPaused()) {
-				inputManager->translateDown = true;
+				Game::camera->translateDown = true;
 			}
 			break;
 			
@@ -145,46 +145,46 @@ void normalKeyPressed(unsigned char character, int x, int y) {
 	glutPostRedisplay();
 }
 
-void normalKeyReleased (unsigned char character, int x, int y) {
+void normalKeyReleased(unsigned char character, int x, int y) {
 	switch (character) {
 		case 'w':
 		case 'W':
 			if(!game->isPaused()) {
-				inputManager->translateAhead = false;
+				Game::camera->translateAhead = false;
 			}
 			break;
 			
 		case 's':
 		case 'S':
 			if(!game->isPaused()) {
-				inputManager->translateBack = false;
+				Game::camera->translateBack = false;
 			}
 			break;
 			
 		case 'a':
 		case 'A':
 			if(!game->isPaused()) {
-				inputManager->translateLeft = false;
+				Game::camera->translateLeft = false;
 			}
 			break;
 			
 		case 'd':
 		case 'D':
 			if(!game->isPaused()) {
-				inputManager->translateRight = false;
+				Game::camera->translateRight = false;
 			}
 			break;
 
 		case ' ':
 			if(!game->isPaused()) {
-				inputManager->translateUp = false;
+				Game::camera->translateUp = false;
 			}
 			break;
 
 		case 'z':
 		case 'Z':
 			if(!game->isPaused()) {
-				inputManager->translateDown = false;
+				Game::camera->translateDown = false;
 			}
 			break;
 	}
@@ -230,7 +230,7 @@ void mouseMoved(int x, int y) {
 	Point difference = (point - center) * (Game::settings->mouseSensitivity / 10.0);
 	Point rotation(-difference.y, -difference.x, 0.0);
 
-	inputManager->rotateBy(rotation);
+	Game::camera->rotateBy(rotation);
 }
 
 void setupOpenGL() {
@@ -345,9 +345,6 @@ int main(int argc, char *argv[]) {
 	setupOpenGL();
 
 	game->init();
-	player = new Player;
-	camera = new Camera;
-	inputManager = new InputManager;
 	
 	atexit(exitGame);
 	
@@ -375,9 +372,6 @@ void exitGame() {
 	Game::settings->save();
 
 	if(game != NULL) { delete game; }
-	if(player != NULL) { delete player; }
-	if(camera != NULL) { delete camera; }
-	if(inputManager != NULL) { delete inputManager; }
 
 	#if _DEBUG
 		_CrtDumpMemoryLeaks();

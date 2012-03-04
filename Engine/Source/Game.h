@@ -6,9 +6,7 @@
 #include "Menu.h"
 #include "Text.h"
 #include "World.h"
-#include "Player.h"
 #include "Camera.h"
-#include "InputManager.h"
 
 class Game {
 public:
@@ -37,6 +35,7 @@ public:
 	static Game * instance;
 	static SettingsManager * settings;
 	static Menu * menu;
+	static Camera * camera;
 	static World * world;
 
 	vector<Texture *> textures;
