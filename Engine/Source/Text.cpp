@@ -1,8 +1,7 @@
+#include "Game.h"
 #include "Text.h"
 
-Text::Text(int windowWidth,
-		   int windowHeight,
-		   int xPos,
+Text::Text(int xPos,
 		   int yPos,
 		   Colour fontColour,
 		   Font * font,
@@ -13,9 +12,6 @@ Text::Text(int windowWidth,
 			  font((isExternalFont) ? font : NULL),
 			  colour(fontColour),
 			  externalFont(isExternalFont) {
-	this->windowWidth = windowWidth;
-	this->windowHeight = windowHeight;
-
 	if(text == NULL) {
 		this->text = new char[1];
 		this->text[0] = '\0';
@@ -32,7 +28,7 @@ Text::Text(int windowWidth,
 	}
 
 	if(font == NULL) {
-		this->font = new Font(windowWidth, windowHeight, "Arial", 24, Font::REGULAR, false, false, false, 0);
+		this->font = new Font("Arial", 24, Font::REGULAR, false, false, false, 0);
 		externalFont = false;
 	}
 	if(this->font == NULL) {
@@ -83,7 +79,7 @@ void Text::draw(const char * text) {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 		glLoadIdentity ();
-		glOrtho(0.0,(GLfloat) windowWidth, 0.0, (GLfloat) windowHeight, -100.0f, 100.0f);
+		glOrtho(0.0,(GLfloat) Game::settings->windowWidth, 0.0, (GLfloat) Game::settings->windowHeight, -100.0f, 100.0f);
 		glMatrixMode (GL_MODELVIEW);
 		glPushMatrix();
 			glLoadIdentity ();

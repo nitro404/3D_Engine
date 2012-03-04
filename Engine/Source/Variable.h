@@ -1,35 +1,46 @@
-//Created: September 18, 2008
-//Revised: February 14, 2010
+#ifndef _VARIABLE_H
+#define _VARIABLE_H
 
-#pragma once
-
-#include "Includes.h"
+#include <iostream>
+#include "Utilities.h"
 
 using namespace std;
 
 class Variable {
 public:
-	Variable(const char * _id = "", const char * _value = "");
-	Variable(const Variable & x);
-	Variable & operator = (const Variable & x);
-	~Variable(void);
-	
-	void id(const char * _id);
-	void value(const char * _value);
-	
-	char * id() const;
-	char * value() const;
+	Variable(const char * id = "", const char * value = "", int category = NO_CATEGORY);
+	Variable(const Variable & v);
+	Variable & operator = (const Variable & v);
+	~Variable();
 
-	bool parseFrom(const char * _data);
-	
-	bool operator == (const Variable & x) const;
-	bool operator != (const Variable & x) const;
-	
+	char * getID() const;
+	char * getValue() const;
+	int getCategory() const;
+
+	void setID(const char * id);
+	void setValue(const char * value);
+	void setCategory(int category);
+
+	void removeCategory();
+
+	static Variable * parseFrom(const char * data);
+
+	bool operator == (const Variable & v) const;
+	bool operator != (const Variable & v) const;
+
 	void printOn(ostream & o) const;
-	
+
 private:
-	char * _id;
-	char * _value;
+	char * m_id;
+	char * m_value;
+	int m_category;
+
+public:
+	static const int NO_CATEGORY;
+	static char SEPARATORS[];
+	static const unsigned int NUMBER_OF_SEPARATORS;
 };
 
-ostream & operator << (ostream & o, const Variable & x);
+ostream & operator << (ostream & o, const Variable & v);
+
+#endif // _VARIABLE_H

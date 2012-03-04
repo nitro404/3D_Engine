@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WORLD_H
+#define WORLD_H
 
 #include "Includes.h"
 #include "Object.h"
@@ -44,3 +45,5 @@ private:
 	int * spriteWater;
 	int underWater;
 };
+
+#endif // WORLD_H

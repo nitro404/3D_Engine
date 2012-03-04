@@ -1,4 +1,5 @@
-#pragma once
+#ifndef POINT_H
+#define POINT_H
 
 #include "Includes.h"
 
@@ -40,3 +41,5 @@ public:
 public:
 	double x, y, z;
 };
+
+#endif // POINT_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INPUT_MANAGER_H
+#define INPUT_MANAGER_H
 
 #include "Includes.h"
 #include "Point.h"
@@ -37,3 +38,5 @@ public:
 };
 
 extern InputManager * inputManager;
+
+#endif // INPUT_MANAGER_H

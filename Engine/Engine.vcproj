@@ -60,7 +60,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="glut32.lib glew32s.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="./Lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -132,7 +134,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="glut32.lib glew32s.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="./Lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -300,17 +304,21 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Settings File Parser"
+			Name="Settings Manager"
 			>
 			<Filter
 				Name="Source Files"
 				>
 				<File
+					RelativePath=".\Source\SettingsManager.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Variable.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Variables.cpp"
+					RelativePath=".\Source\VariableSystem.cpp"
 					>
 				</File>
 			</Filter>
@@ -318,11 +326,15 @@
 				Name="Header Files"
 				>
 				<File
+					RelativePath=".\Source\SettingsManager.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Variable.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Variables.h"
+					RelativePath=".\Source\VariableSystem.h"
 					>
 				</File>
 			</Filter>
@@ -416,6 +428,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Utilities.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\World.h"
 					>
 				</File>
@@ -499,6 +515,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Texture.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Utilities.cpp"
 					>
 				</File>
 				<File

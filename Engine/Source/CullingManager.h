@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CULLING_MANAGER_H
+#define CULLING_MANAGER_H
 
 #include "Plane.h"
 #include "BoundingBox.h"
@@ -18,3 +19,5 @@ private:
 	//int* minCorners;
 	BoundingBox unitBox;
 };
+
+#endif // CULLING_MANAGER_H

@@ -1,21 +1,14 @@
 #include "Game.h"
-#include "Menu.h"
 
-int mouseSensitivity = 4;
+Game * game = NULL;
 
 void exitGame();
-
-bool wireframe = false;
-int screenWidth;
-int screenHeight;
-
-Menu * menu = NULL;
 
 void resizeWindow(int width, int height) {
 	//Setup a new viewport.
 	glViewport(0, 0, width, height);
-	screenWidth = width;
-	screenHeight = height;
+	Game::settings->windowWidth = width;
+	Game::settings->windowHeight = height;
 
 	//Setup a new perspective matrix.
 	GLdouble verticalFieldOfViewInDegrees = 40;
@@ -61,7 +54,6 @@ inline void computeDT() {
 void displayWindow() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	game->draw();
-	menu->draw();
 	glutSwapBuffers();
 }
 
@@ -69,7 +61,7 @@ void idle() {
 	computeDT();
 	game->tick();
 	if(GetFocus()) {
-		SetCursorPos(screenWidth >> 1, screenHeight >> 1); //Re-center the mouse...
+		SetCursorPos(Game::settings->windowWidth >> 1, Game::settings->windowHeight >> 1); //Re-center the mouse...
 	}
 	glutPostRedisplay();
 }
@@ -85,10 +77,10 @@ void specialKeyPressed (int character, int x, int y) {
 		case GLUT_KEY_F2:
 			break;
 		case GLUT_KEY_UP:
-			menu->moveUp();
+			Game::menu->moveUp();
 			break;
 		case GLUT_KEY_DOWN:
-			menu->moveDown();
+			Game::menu->moveDown();
 			break;
 		case GLUT_KEY_RIGHT:
 			break;
@@ -107,13 +99,13 @@ void specialKeyReleased(int character, int x, int y) {
 		case GLUT_KEY_F1:
 			break;
 	}
-	glutPostRedisplay ();
+	glutPostRedisplay();
 }
 
 void normalKeyPressed(unsigned char character, int x, int y) {
 	switch(character) {
 		case 27: // escape
-			menu->back();
+			Game::menu->back();
 			break;
 		
 		case 'w':
@@ -121,7 +113,7 @@ void normalKeyPressed(unsigned char character, int x, int y) {
 			if(!game->isPaused()) {
 				inputManager->translateAhead = true;
 			}
-			menu->moveUp();
+			Game::menu->moveUp();
 			break;
 			
 		case 's':
@@ -129,7 +121,7 @@ void normalKeyPressed(unsigned char character, int x, int y) {
 			if(!game->isPaused()) {
 				inputManager->translateBack = true;
 			}
-			menu->moveDown();
+			Game::menu->moveDown();
 			break;
 			
 		case 'a':
@@ -150,7 +142,7 @@ void normalKeyPressed(unsigned char character, int x, int y) {
 			if(!game->isPaused()) {
 				inputManager->translateUp = true;
 			}
-			menu->select();
+			Game::menu->select();
 			break;
 			
 		case 'z':
@@ -159,18 +151,12 @@ void normalKeyPressed(unsigned char character, int x, int y) {
 				inputManager->translateDown = true;
 			}
 			break;
-
-		case 't':
-		case 'T':
-//			wireframe = !wireframe;
-//			glPolygonMode (GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
-			break;
 			
 		case '?':
 			break;
 			
 		case 13: // enter
-			menu->select();
+			Game::menu->select();
 //			if(keyIsDown (VK_MENU)) { // alt
 //			if((GetAsyncKeyState(VK_MENU) & 0x8000) != 0) { // alt
 //				fullscreen = !fullscreen;
@@ -264,33 +250,15 @@ void mousePressed(int button, int state, int x, int y) {
 void mouseMoved(int x, int y) {
 	if(!GetFocus() || game->isPaused()) { return; }
 
-	//Note: Because we are re-centering the mouse on each tick (see function "idle ()"), here
-	//we are determining how far the mouse was moved from the center point and we use this
-	//to determine both (1) x-rotation amounts (using the vertical displacement) which we store
-	//in rotation.x and (2) y-rotation amounts (using the horizontal displacement) which we store
-	//in rotation.y. 
-	
-	//Keep in mind that in windows, x increases going right and y increases going down... 
-	
-	//So to rotate so as to look up by moving the mouse up, we get a negative change in y but a 
-	//rotation to look up requires that the y-axis rotate toward the z-axis (a positive rotation). 
-	//So we store the negative of this amount in rotation.x.
-
-	//Similarly, to rotate so as to look right by moving the mouse right, we get a positive change
-	//in x. But rotating the z-axis toward the x-axis is a positive rotation and this causes
-	//more of the left to be seen, so we actually want to rotate by the negative of this amount
-	//which we store in rotation.y.
-	
-	//::log ("\nMoved mouse to %d@%d.", x, y);
 	POINT screenPoint;
 	GetCursorPos (& screenPoint); 
 	Point point(screenPoint.x, screenPoint.y, 0.0);
-	Point center(screenWidth >> 1, screenHeight >> 1, 0.0);
+	Point center(Game::settings->windowWidth >> 1, Game::settings->windowHeight >> 1, 0.0);
 
-	Point difference = (point - center) * (mouseSensitivity / 10.0);
+	Point difference = (point - center) * (Game::settings->mouseSensitivity / 10.0);
 	Point rotation(-difference.y, -difference.x, 0.0);
 
-	inputManager->rotateBy(rotation * (InputManager::rotationSpeed * DT)); //degrees = degrees per second * second
+	inputManager->rotateBy(rotation * (InputManager::rotationSpeed * DT));
 }
 
 void setupOpenGL() {
@@ -301,21 +269,21 @@ void setupOpenGL() {
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(40.0, 1.0, 1.0, 100.0); //See resizeWindow for parameter explanation.
+	gluPerspective(40.0, 1.0, 1.0, 100.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	GLfloat lightColor [] = {1.0f, 1.0f, 1.0f, 1.0f}; //white
+	GLfloat lightColor [] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
 	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1f);
 	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05f);
 	glEnable(GL_LIGHT0); glEnable (GL_LIGHTING);
-	glDisable(GL_LIGHTING); //We can deal with our own lighting.
-	glEnable(GL_COLOR_MATERIAL); //Track color.
+	glDisable(GL_LIGHTING);
+	glEnable(GL_COLOR_MATERIAL);
 
-	glClearColor(0.0, 0.0, 0.0, 1.0); //black
-	glClearDepth(1.0); //Far
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glDrawBuffer(GL_BACK);
@@ -333,7 +301,6 @@ void setupOpenGL() {
 	glDisable(GL_ALPHA_TEST);
 	glPolygonOffset(0.0, -3.0);
 
-	//Setup materials.
 	GLfloat	frontMaterialDiffuse [4] = {0.2f, 0.2f, 0.2f, 1.0f};
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, frontMaterialDiffuse);
 	GLfloat	frontMaterialAmbient [4] = {0.8f, 0.8f, 0.8f, 1.0f};
@@ -358,44 +325,23 @@ void setupOpenGL() {
 
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
-	//Use a global default texture environment mode.
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
 int main(int argc, char *argv[]) {
-	bool fullscreen = false;
-	int initialScreenWidth = 640;
-	int initialScreenHeight = 480;
-
 	srand((unsigned int) time(NULL));
 
-	//Read the settings file and pass ownership over to the game itself
-	Variables * settings = new Variables();
-	if (!settings->parseFrom("settings.ini")) {
-		delete settings;
-		quit("Could not find the settings file.");
-	}
+	game = new Game();
 	
-	//Initialize game settings
-	int temp;
-	temp = atoi(settings->getValue("Mouse Sensitivity"));
-	if(temp > 0) { mouseSensitivity = temp; }
-	temp = atoi(settings->getValue("Screen Width"));
-	if(temp > 0) { initialScreenWidth = temp; }
-	temp = atoi(settings->getValue("Screen Height"));
-	if(temp > 0) { initialScreenHeight = temp; }
-	fullscreen = isTrue(settings->getValue("Fullscreen"));
-	
-	//Setup general facilities.
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_STENCIL | GLUT_MULTISAMPLE);
-	glutInitWindowSize(initialScreenWidth, initialScreenHeight);
+	glutInitWindowSize(Game::settings->windowWidth, Game::settings->windowHeight);
 	glutInit(&argc, argv);
 
-	if(fullscreen) {
+	if(Game::settings->fullScreen) {
 		glutEnterGameMode();
 	}
 	else {
-		glutCreateWindow((settings->getValue("Game Name") == NULL) ? "3D Game Engine" : settings->getValue("Game Name"));
+		glutCreateWindow(Game::settings->gameName);
 	}
 
 	if(glewInit() != GLEW_OK) {
@@ -413,13 +359,12 @@ int main(int argc, char *argv[]) {
     glutIgnoreKeyRepeat(GLUT_KEY_REPEAT_ON);
 	glutSetCursor(GLUT_CURSOR_NONE);
 
-	//Specify function handlers.
 	glutDisplayFunc(displayWindow);
 	glutReshapeFunc(resizeWindow);
-	glutKeyboardFunc (normalKeyPressed);
+	glutKeyboardFunc(normalKeyPressed);
 	glutSpecialFunc(specialKeyPressed);
 	glutMouseFunc(mousePressed);
-	glutMotionFunc (mouseMoved);
+	glutMotionFunc(mouseMoved);
 	glutVisibilityFunc(visibilityChanged);
     glutPassiveMotionFunc(mouseMoved); 
     glutSpecialUpFunc(specialKeyReleased);
@@ -427,12 +372,10 @@ int main(int argc, char *argv[]) {
 
 	setupOpenGL();
 
-	game = new Game(initialScreenWidth, initialScreenHeight, settings);
+	game->init();
 	player = new Player;
 	camera = new Camera;
 	inputManager = new InputManager;
-
-	menu = new Menu(initialScreenWidth, initialScreenHeight, game, settings);
 	
 	atexit(exitGame);
 	
@@ -457,7 +400,8 @@ void exitGame() {
     glutSpecialUpFunc(NULL);
     glutKeyboardUpFunc(NULL);
 
-	if(menu != NULL) { delete menu; }
+	Game::settings->save();
+
 	if(game != NULL) { delete game; }
 	if(player != NULL) { delete player; }
 	if(camera != NULL) { delete camera; }

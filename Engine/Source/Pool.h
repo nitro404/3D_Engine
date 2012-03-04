@@ -1,4 +1,5 @@
-#pragma once
+#ifndef POOL_H
+#define POOL_H
 
 #include "Includes.h"
 #include "Object.h"
@@ -28,3 +29,5 @@ private:
 	double minX, minY, minZ;
 	char * name;
 };
+
+#endif // POOL_H

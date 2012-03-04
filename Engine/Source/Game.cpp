@@ -1,51 +1,29 @@
 #include "Game.h"
 
-extern int screenWidth, screenHeight;
-
-Game * game = NULL;
-
 double DT;
 
-Game::Game(int windowWidth,
-		   int windowHeight,
-		   Variables * gameSettings)
+Game * Game::instance = NULL;
+SettingsManager * Game::settings = NULL;
+Menu * Game::menu = NULL;
+World * Game::world = NULL;
+
+Game::Game()
 			: fps(NULL),
-			  settings(gameSettings),
-			  world(NULL),
 			  cullingEnabled(false),
 			  paused(true) {
-	this->windowWidth = windowWidth;
-	this->windowHeight = windowHeight;
+	instance = this;
 
-	// initialize the fps font
-	drawFPS = isTrue(settings->getValue("Show FPS"));
-	fps = new char[12];
-	fps[0] = '\0';
-	Font fpsFont(windowWidth, windowHeight, "Arial", 24, Font::BOLD, false, false, false, 0);
-	fpsText = new Text(windowWidth, windowHeight, windowWidth - 101, windowHeight - 20, Colour(255, 0, 0, 255), &fpsFont, false, "FPS");
-	
-	verifySettings();
-	
-	// load the textures, animations, shaders and height map data
-	loadTextures(settings->getValue("Texture Data File"), settings->getValue("Texture Directory"), settings->getValue("Shader Directory"), settings->getValue("Height Map Directory"));
-
-	// set lighting values (not currently used)
-	GLfloat diffuseLight[] = {0, 0, 0};
-	GLfloat ambientLight[] = {1, 1, 1};
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
-	GLfloat lightPosition[] = {0, 5, 1, 0};
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-
-#ifdef _DEBUG
-	drawFPS = true;
-#endif
+	settings = new SettingsManager();
+	if(!settings->load()) {
+		settings->save();
+	}
 }
 
 Game::~Game() {
 	delete [] fps;
 	delete fpsText;
 	delete settings;
+	delete menu;
 	if(world != NULL) { delete world; }
 	for(unsigned int i=0;i<animatedTextures.size();i++) {
 		delete animatedTextures.at(i);
@@ -59,6 +37,29 @@ Game::~Game() {
 	for(unsigned int i=0;i<textures.size();i++) {
 		delete textures.at(i);
 	}
+}
+
+bool Game::init() {
+	menu = new Menu();
+
+	// initialize the fps font
+	fps = new char[12];
+	fps[0] = '\0';
+	Font fpsFont("Arial", 24, Font::BOLD, false, false, false, 0);
+	fpsText = new Text(settings->windowWidth - 101, settings->windowHeight - 20, Colour(255, 0, 0, 255), &fpsFont, false, "FPS");
+	
+	// load the textures, animations, shaders and height map data
+	loadTextures();
+
+	// set lighting values (not currently used)
+	GLfloat diffuseLight[] = {0, 0, 0};
+	GLfloat ambientLight[] = {1, 1, 1};
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+	GLfloat lightPosition[] = {0, 5, 1, 0};
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
+	return true;
 }
 
 void Game::tick() {
@@ -76,9 +77,11 @@ void Game::draw() {
 	if(world != NULL) { world->draw(); }
 	camera->endCamera();
 	
-	if(drawFPS) {
+	if(settings->showFPS) {
 		drawFrameRate();
 	}
+
+	menu->draw();
 }
 
 void Game::resume() { if(world != NULL) { paused = false; } }
@@ -90,6 +93,7 @@ bool Game::isPaused() { return paused; }
 void Game::loadMap(char * fileName) {
 	world = new World();
 	world->import(fileName, textures, heightMaps, animatedTextures, shaders);
+	world->cullingEnabled = cullingEnabled;
 	player->reset(world->startPosition);
 	paused = false;
 }
@@ -111,39 +115,28 @@ void Game::drawFrameRate() {
 		stableRate = frameRate;
 	}
 	sprintf_s(fps, 12, "%3.1f FPS", stableRate);
-	fpsText->setPosition(screenWidth - 101 - ((stableRate > 99) ? 13 : 0), screenHeight - 20);
+	fpsText->setPosition(settings->windowWidth - 101 - ((stableRate > 99) ? 13 : 0), settings->windowHeight - 20);
 	fpsText->draw(fps);
 }
 
-void Game::verifySettings() {
-	// verify settings file is not missing data
-	if(settings->getValue("Map Directory") == NULL) {
-		quit("No map directory specified in settings file.");
-	}
-	if(settings->getValue("Texture Directory") == NULL) {
-		quit("No texture directory specified in settings file.");
-	}
-	if(settings->getValue("Texture Data File") == NULL) {
-		quit("No texture data file specified in settings file.");
-	}
-	if(settings->getValue("Height Map Directory") == NULL) {
-		quit("No height map directory specified in settings file.");
-	}
-	if(settings->getValue("Shader Directory") == NULL) {
-		quit("No shader directory specified in settings file.");
-	}
-}
-
-void Game::loadTextures(const char * fileName, const char * textureDirectory, const char * shaderDirectory, const char * heightMapDirectory) {
+void Game::loadTextures() {
 	char line[256];
 	unsigned int i, j;
 	int startIndex;
 	int length;
 
+	string textureDataFilePath;
+	textureDataFilePath.append(settings->dataDirectoryName);
+	length = strlen(settings->dataDirectoryName);
+	if(settings->dataDirectoryName[length-1] != '\\' && settings->dataDirectoryName[length-1] != '/') {
+		textureDataFilePath.append("/");
+	}
+	textureDataFilePath.append(settings->textureDataFileName);
+
 	ifstream input;
-	input.open(fileName); 
+	input.open(textureDataFilePath.c_str()); 
 	if(!input.is_open()) {
-		quit("Unable to open texture data file: \"%s\".", fileName);
+		quit("Unable to open texture data file: \"%s\".", textureDataFilePath.c_str());
 	}
 	
 	// input the texture names and load the corresponding texture
@@ -171,9 +164,14 @@ void Game::loadTextures(const char * fileName, const char * textureDirectory, co
 		textureName[strlen(line) - startIndex] = '\0';
 
 		// load the texture
-		texturePath.append(textureDirectory);
-		length = strlen(textureDirectory);
-		if(textureDirectory[length-1] != '\\' && textureDirectory[length-1] != '/') {
+		texturePath.append(settings->dataDirectoryName);
+		length = strlen(settings->dataDirectoryName);
+		if(settings->dataDirectoryName[length-1] != '\\' && settings->dataDirectoryName[length-1] != '/') {
+			texturePath.append("/");
+		}
+		texturePath.append(settings->textureDirectoryName);
+		length = strlen(settings->textureDirectoryName);
+		if(settings->textureDirectoryName[length-1] != '\\' && settings->textureDirectoryName[length-1] != '/') {
 			texturePath.append("/");
 		}
 		texturePath.append(textureName);
@@ -212,9 +210,14 @@ void Game::loadTextures(const char * fileName, const char * textureDirectory, co
 		heightMapName[strlen(line) - startIndex] = '\0';
 		
 		heightMapPath.clear();
-		heightMapPath.append(heightMapDirectory);
-		length = strlen(heightMapDirectory);
-		if(heightMapDirectory[length-1] != '\\' && heightMapDirectory[length-1] != '/') {
+		heightMapPath.append(settings->dataDirectoryName);
+		length = strlen(settings->dataDirectoryName);
+		if(settings->dataDirectoryName[length-1] != '\\' && settings->dataDirectoryName[length-1] != '/') {
+			heightMapPath.append("/");
+		}
+		heightMapPath.append(settings->heightMapDirectoryName);
+		length = strlen(settings->heightMapDirectoryName);
+		if(settings->heightMapDirectoryName[length-1] != '\\' && settings->heightMapDirectoryName[length-1] != '/') {
 			heightMapPath.append("/");
 		}
 		heightMapPath.append(heightMapName);
@@ -238,13 +241,25 @@ void Game::loadTextures(const char * fileName, const char * textureDirectory, co
 		animatedTextures.push_back(animatedTexture);
 	}
 
+	string shaderPath;
+	shaderPath.append(settings->dataDirectoryName);
+	length = strlen(settings->dataDirectoryName);
+	if(settings->dataDirectoryName[length-1] != '\\' && settings->dataDirectoryName[length-1] != '/') {
+		shaderPath.append("/");
+	}
+	shaderPath.append(settings->shaderDirectoryName);
+	length = strlen(settings->shaderDirectoryName);
+	if(settings->shaderDirectoryName[length-1] != '\\' && settings->shaderDirectoryName[length-1] != '/') {
+		shaderPath.append("/");
+	}
+
 	// input the shaders
 	input.getline(line, 256, ':');
 	input.getline(line, 256, ';');
 	int numberOfShaders = atoi(line);
 	input.getline(line, 256, '\n');
 	for(int shaderIndex = 0; shaderIndex < numberOfShaders; shaderIndex++) {
-		Shader * shader = Shader::import(input, shaderDirectory);
+		Shader * shader = Shader::import(input, shaderPath.c_str());
 		if(shader != NULL) {
 			shaders.push_back(shader);
 		}

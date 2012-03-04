@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHADER_H
+#define SHADER_H
 
 #include "Includes.h"
 
@@ -21,3 +22,5 @@ private:
 	GLenum vertexShaderHandle;
 	GLenum fragmentShaderHandle;
 };
+
+#endif // SHADER_H

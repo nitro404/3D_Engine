@@ -4,9 +4,7 @@ const int Font::NORMAL = FW_NORMAL;
 const int Font::REGULAR = FW_REGULAR;
 const int Font::BOLD = FW_BOLD;
 
-Font::Font(int windowWidth,
-		   int windowHeight,
-		   const char * fontFace,
+Font::Font(const char * fontFace,
 		   int fontSize,
 		   int fontWeight,
 		   bool fontItalic,

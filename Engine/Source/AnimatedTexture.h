@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANIMATED_TEXTURE_H
+#define ANIMATED_TEXTURE_H
 
 #include "Includes.h"
 #include "Texture.h"
@@ -21,3 +22,5 @@ public:
 private:
 	char * name;
 };
+
+#endif // ANIMATED_TEXTURE_H

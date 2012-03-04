@@ -1,10 +1,11 @@
-#pragma once
+#ifndef FONT_H
+#define FONT_H
 
 #include "Includes.h"
 
 class Font {
 public:
-	Font(int windowWidth, int windowHeight, const char * fontFace, int fontSize, int fontWeight, bool italic, bool underline, bool strikeout, float angle);
+	Font(const char * fontFace, int fontSize, int fontWeight, bool italic, bool underline, bool strikeout, float angle);
 	Font(const Font & x);
 	Font & operator = (const Font & x);	
 	~Font();
@@ -31,7 +32,6 @@ private:
 	bool underline;
 	bool strikeout;
 	float angle;
-
-	int windowWidth;
-	int windowHeight;
 };
+
+#endif // FONT_H

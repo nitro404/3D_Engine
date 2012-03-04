@@ -1,9 +1,10 @@
-#pragma once
+#ifndef GAME_H
+#define GAME_H
 
 #include "Includes.h"
+#include "SettingsManager.h"
+#include "Menu.h"
 #include "Text.h"
-#include "Variable.h"
-#include "Variables.h"
 #include "World.h"
 #include "Player.h"
 #include "Camera.h"
@@ -13,9 +14,10 @@ extern double DT;
 
 class Game {
 public:
-	Game(int windowWidth, int windowHeight, Variables * settings);
+	Game();
 	~Game();
 	
+	bool init();
 	void tick();
 	void draw();
 
@@ -30,12 +32,13 @@ public:
 	
 private:
 	void drawFrameRate();
-
-	void verifySettings();
-	void loadTextures(const char * fileName, const char * textureDirectory, const char * shaderDirectory, const char * heightMapDirectory);
+	void loadTextures();
 	
 public:
-	World * world;
+	static Game * instance;
+	static SettingsManager * settings;
+	static Menu * menu;
+	static World * world;
 
 	vector<Texture *> textures;
 	vector<char *> heightMaps;
@@ -45,16 +48,10 @@ public:
 	bool cullingEnabled;
 
 private:
-	Variables * settings;
-
-	bool drawFPS;
 	char * fps;
 	Text * fpsText;
 
 	bool paused;
-
-	int windowWidth;
-	int windowHeight;
 };
 
-extern Game * game;
+#endif // GAME_H

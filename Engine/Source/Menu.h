@@ -1,16 +1,16 @@
-#pragma once
+#ifndef MENU_H
+#define MENU_H
 
 #include "Includes.h"
 #include "Colour.h"
 #include "Text.h"
-#include "Variables.h"
 
 class Game;
 
 // simple menu abstraction (only used for storing, rendering and interaction - function calls done by game engine)
 class Menu {
 public:
-	Menu(int windowWidth, int windowHeight, Game * externalGame, Variables * externalSettings);
+	Menu();
 	~Menu();
 
 	void addMenuItem(char * menuItem); // add a new item to the bottom of the menu
@@ -28,7 +28,7 @@ public:
 	void draw(); // draw the menu
 
 private:
-	void loadMapList(char * mapDirectory);
+	void loadMapList();
 	void setMenu(int type);
 	void pauseGame();
 	void resumeGame();
@@ -52,9 +52,6 @@ private:
 	vector<Text *> optionsMenuItems;
 	vector<Text *> helpMenuItems;
 
-	Game * game;
-	Variables * settings;
-
 	vector<string> mapList;
 
 	int mainMenuIndex;
@@ -71,8 +68,6 @@ private:
 	// menu draw position information
 	int menuItemOffset;
 	int menuItemIncrement;
-
-	// window dimensions
-	int windowWidth;
-	int windowHeight;
 };
+
+#endif // MENU_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef OBJECT_H
+#define OBJECT_H
 
 #include "Includes.h"
 #include "Colour.h"
@@ -108,3 +109,5 @@ public:
 protected:
 	BoundingBox * box;
 };
+
+#endif // OBJECT_H

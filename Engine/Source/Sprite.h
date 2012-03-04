@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SPRITE_H
+#define SPRITE_H
 
 #include "Includes.h"
 #include "Object.h"
@@ -34,3 +35,5 @@ private:
 	
 	void switchDestinations();
 };
+
+#endif // SPRITE_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FACE_GROUP_H
+#define FACE_GROUP_H
 
 #include "Point.h"
 
@@ -51,3 +52,5 @@ public:
 	void drawBuffers(GLuint verticesBuffer);
 
 };
+
+#endif // FACE_GROUP_H

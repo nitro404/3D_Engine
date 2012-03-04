@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ENVIRONMENT_H
+#define ENVIRONMENT_H
 
 #include "Includes.h"
 #include "Object.h"
@@ -27,3 +28,5 @@ private:
 	Colour skyColour;
 	int surrounds;
 };
+
+#endif // ENVIRONMENT_H

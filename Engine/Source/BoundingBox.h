@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BOUNDING_BOX_H
+#define BOUNDING_BOX_H
 
 #include "Point.h"
 
@@ -42,3 +43,5 @@ private:
 	Point bottomCenter;
 	Point extent;
 };
+
+#endif // BOUNDING_BOX_H

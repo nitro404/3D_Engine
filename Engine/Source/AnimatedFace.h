@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANIMATED_FACE_H
+#define ANIMATED_FACE_H
 
 #include "Includes.h"
 #include "AnimatedTexture.h"
@@ -25,3 +26,5 @@ public:
 private:
 	double textureIndex;
 };
+
+#endif // ANIMATED_FACE_H

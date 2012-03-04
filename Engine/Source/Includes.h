@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INCLUDES_H
+#define INCLUDES_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,12 +15,13 @@
 
 using namespace std;
 
+#define GLEW_STATIC
+
 #include "GL/glew.h"
 #include "GL/glut.h"
-
-#pragma comment(lib, "glut32.lib")
-#pragma comment(lib, "glew32.lib")
 
 bool isTrue(const char * str);
 void prompt(const char *message, ...);
 void quit(const char *message, ...);
+
+#endif // INCLUDES_H

@@ -1,69 +1,67 @@
-#include "Menu.h"
 #include "Game.h"
+#include "Menu.h"
 
 const int Menu::MENU_MAIN = 0;
 const int Menu::MENU_NEWGAME = 1;
 const int Menu::MENU_OPTIONS = 2;
 const int Menu::MENU_HELP = 3;
 
-Menu::Menu(int windowWidth,
-		   int windowHeight,
-		   Game * externalGame,
-		   Variables * externalSettings)
-			: titleColour(255, 0, 0, 255),
-			  inactiveColour(0, 0, 128, 255),
-			  activeColour(0, 0, 255, 255),
-			  game(externalGame),
-			  settings(externalSettings),
-			  mainMenuIndex(0),
-			  mapMenuIndex(0),
-			  optionsMenuIndex(0),
-			  menuItemOffset(250),
-			  menuItemIncrement(55),
-			  menuType(MENU_MAIN),
-			  active(true) {
-	this->windowWidth = windowWidth;
-	this->windowHeight = windowHeight;
-
-	loadMapList(settings->getValue("Map Directory"));
+Menu::Menu() : titleColour(255, 0, 0, 255),
+			   inactiveColour(0, 0, 128, 255),
+			   activeColour(0, 0, 255, 255),
+			   mainMenuIndex(0),
+			   mapMenuIndex(0),
+			   optionsMenuIndex(0),
+			   menuItemOffset(250),
+			   menuItemIncrement(55),
+			   menuType(MENU_MAIN),
+			   active(true) {
+	loadMapList();
 
 	// initialize menu fonts
-	int _x, _y, _s = 200, _yi = 50, _ti = _yi * 2;
-	titleFont = new Font(windowWidth, windowHeight, "System", 96, Font::BOLD, false, false, false, 0);
-	itemFont = new Font(windowWidth, windowHeight, "System", 24, Font::BOLD, false, false, false, 0);
-	char * titleText = (settings->getValue("Game Name") == NULL) ? "3D Game Engine" : settings->getValue("Game Name");
+	int x, y, s = 200, yi = 50, ti = yi * 2;
+	titleFont = new Font("System", 96, Font::BOLD, false, false, false, 0);
+	itemFont = new Font("System", 24, Font::BOLD, false, false, false, 0);
+	char * titleText = Game::settings->gameName;
 
 	// create the main menu
-	_x = _s, _y = windowHeight - _s;
-	mainMenuTitle = new Text(windowWidth, windowHeight, _x, _y, titleColour, titleFont, true, titleText);
-	mainMenuItems.push_back(new Text(windowWidth, windowHeight, _x, _y -= _ti, activeColour, itemFont, true, "Load World"));
-	mainMenuItems.push_back(new Text(windowWidth, windowHeight, _x, _y -= _yi, inactiveColour, itemFont, true, "Resume Game"));
-	mainMenuItems.push_back(new Text(windowWidth, windowHeight, _x, _y -= _yi, inactiveColour, itemFont, true, "Options"));
-	mainMenuItems.push_back(new Text(windowWidth, windowHeight, _x, _y -= _yi, inactiveColour, itemFont, true, "Help"));
-	mainMenuItems.push_back(new Text(windowWidth, windowHeight, _x, _y -= _yi, inactiveColour, itemFont, true, "Quit"));
+	x = s, y = Game::settings->windowHeight - s;
+	mainMenuTitle = new Text(x, y, titleColour, titleFont, true, titleText);
+	mainMenuItems.push_back(new Text(x, y -= ti, activeColour, itemFont, true, "Load World"));
+	mainMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Resume Game"));
+	mainMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Options"));
+	mainMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Help"));
+	mainMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Quit"));
 
 	// create the map loading menu
-	_x = _s, _y = windowHeight - _s;
-	mapMenuTitle = new Text(windowWidth, windowHeight, _x, _y, titleColour, titleFont, true, "Load World");
-	_y -= _ti;
-	char * mapName;
+	x = s, y = Game::settings->windowHeight - s;
+	mapMenuTitle = new Text(x, y, titleColour, titleFont, true, "Load World");
+	y -= ti;
+	int lastSlash;
 	for(unsigned int i=0;i<mapList.size();i++) {
-		mapName = strchr((char *) mapList.at(i).c_str(), '\\') + sizeof(char);
-		mapMenuItems.push_back(new Text(windowWidth, windowHeight, _x, ((i == 0) ? _y : _y -= _yi), ((i == 0) ? activeColour : inactiveColour), itemFont, true, mapName));
+		lastSlash = -1;
+		for(unsigned int j=0;j<mapList[i].size();j++) {
+			if(mapList[i][j] == '\\' || mapList[i][j] == '/') {
+				lastSlash = j;
+			}
+		}
+		string mapName = mapList[i].substr(lastSlash + 1, mapList[i].size() - 1);
+//strchr(mapList.at(i).c_str(), '\\') + sizeof(char);
+		mapMenuItems.push_back(new Text(x, ((i == 0) ? y : y -= yi), ((i == 0) ? activeColour : inactiveColour), itemFont, true, mapName.c_str()));
 	}
 	
 	// create the options menu
-	_x = _s, _y = windowHeight - _s;
-	optionsMenuTitle = new Text(windowWidth, windowHeight, _x, _y, titleColour, titleFont, true, "Options");
-	optionsMenuItems.push_back(new Text(windowWidth, windowHeight, _x, _y -= _ti, activeColour, itemFont, true, "Enable Culling"));
+	x = s, y = Game::settings->windowHeight - s;
+	optionsMenuTitle = new Text(x, y, titleColour, titleFont, true, "Options");
+	optionsMenuItems.push_back(new Text(x, y -= ti, activeColour, itemFont, true, "Enable Culling"));
 	
 	// create the help menu
-	_x = _s, _y = windowHeight - _s;
-	helpMenuTitle = new Text(windowWidth, windowHeight, _x, _y, titleColour, titleFont, true, "Help");
-	helpMenuItems.push_back(new Text(windowWidth, windowHeight, _x, _y -= _ti, inactiveColour, itemFont, true, "WSAD to move around."));
-	helpMenuItems.push_back(new Text(windowWidth, windowHeight, _x, _y -= _yi, inactiveColour, itemFont, true, "Space to move up."));
-	helpMenuItems.push_back(new Text(windowWidth, windowHeight, _x, _y -= _yi, inactiveColour, itemFont, true, "Z to move down."));
-	helpMenuItems.push_back(new Text(windowWidth, windowHeight, _x, _y -= _yi, inactiveColour, itemFont, true, "Escape to exit / go back."));
+	x = s, y = Game::settings->windowHeight - s;
+	helpMenuTitle = new Text(x, y, titleColour, titleFont, true, "Help");
+	helpMenuItems.push_back(new Text(x, y -= ti, inactiveColour, itemFont, true, "WSAD to move around."));
+	helpMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Space to move up."));
+	helpMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Z to move down."));
+	helpMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Escape to exit / go back."));
 }
 
 Menu::~Menu() {
@@ -112,16 +110,18 @@ void Menu::select() {
 	}
 	// load map menu selecting
 	else if(menuType == MENU_NEWGAME) {
-		game->closeMap();
-		game->loadMap((char *) mapList.at(mapMenuIndex).c_str());
-		game->world->cullingEnabled = game->cullingEnabled;
+		if(mapList.size() == 0) { return; }
+
+		Game::instance->closeMap();
+		Game::instance->loadMap((char *) mapList.at(mapMenuIndex).c_str());
+
 		resumeGame();
 	}
 	// options menu selecting
 	else if(menuType == MENU_OPTIONS) {
 		if(optionsMenuIndex == 0) {
-			game->cullingEnabled = !game->cullingEnabled;
-			game->world->cullingEnabled = game->cullingEnabled;
+			Game::instance->cullingEnabled = !Game::instance->cullingEnabled;
+			Game::instance->world->cullingEnabled = Game::instance->cullingEnabled;
 		}
 	}
 	// help menu selecting
@@ -254,7 +254,7 @@ void Menu::draw() {
 		optionsMenuTitle->draw();
 		for(unsigned int i=0;i<optionsMenuItems.size();i++) {
 			if(i == 0) {
-				if(game->cullingEnabled) {
+				if(Game::instance->cullingEnabled) {
 					optionsMenuItems.at(i)->draw("Disable Culling");
 				}
 				else {
@@ -273,15 +273,26 @@ void Menu::draw() {
 	}
 }
 
-void Menu::loadMapList(char * mapDirectory) {
-	string rootDirectory = mapDirectory;
+void Menu::loadMapList() {
+	string mapDirectory;
 	string filePath;
 	string strPattern;
 	string strFileName;
 	HANDLE hFile;
 	WIN32_FIND_DATA fileInformation;
 
-	strPattern = rootDirectory + "\\*.wrl";
+	mapDirectory.append(Game::settings->dataDirectoryName);
+	int length = strlen(Game::settings->dataDirectoryName);
+	if(Game::settings->dataDirectoryName[length-1] != '\\' && Game::settings->dataDirectoryName[length-1] != '/') {
+		mapDirectory.append("/");
+	}
+	mapDirectory.append(Game::settings->mapDirectoryName);
+	length = strlen(Game::settings->mapDirectoryName);
+	if(Game::settings->mapDirectoryName[length-1] != '\\' && Game::settings->mapDirectoryName[length-1] != '/') {
+		mapDirectory.append("/");
+	}
+
+	strPattern = mapDirectory + "*.wrl";
 
 	// find and collect all .wrl files in the specified directory
 	hFile = ::FindFirstFile(strPattern.c_str(), & fileInformation);
@@ -289,7 +300,7 @@ void Menu::loadMapList(char * mapDirectory) {
 		do {
 			if(fileInformation.cFileName[0] != '.') {
 				filePath.erase();
-				filePath = rootDirectory + "\\" + fileInformation.cFileName;
+				filePath = mapDirectory + fileInformation.cFileName;
 
 				if(!(fileInformation.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 					strFileName = fileInformation.cFileName;
@@ -307,13 +318,13 @@ void Menu::setMenu(int type) {
 }
 
 void Menu::pauseGame() {
-	game->pause();
+	Game::instance->pause();
 	active = true;
 }
 
 void Menu::resumeGame() {
-	game->resume();
-	if(!game->isPaused()) {
+	Game::instance->resume();
+	if(!Game::instance->isPaused()) {
 		active = false;
 	}
 }

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
 #include "Includes.h"
 
@@ -30,3 +31,5 @@ private:
 	char * textureName;
 	long * bytes;
 };
+
+#endif // TEXTURE_H

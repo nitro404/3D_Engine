@@ -13,8 +13,9 @@ SET MAP_BUILDER_DIR=Builder 2.0
 SET TEXTURE_COMPILER_ARGS=-t"../../Content/Data/Textures/" -m"../../Content/Data/Height Maps/" -a"../animations.ini" -s"../shaders.ini" -h"../heightmaps.ini" -o"../../Content/Data/textures.ini"
 SET MAP_BUILDER_ARGS=-d"../../Maps/" -iuni -owrl -m"../../Maps/" -t"../../Content/Data/textures.ini" -h"../../Content/Data/Height Maps/"
 
-SET ENGINE_RELEASE_DIR=Engine\Release
-SET ENGINE_DEBUG_DIR=Engine\Debug
+SET ENGINE_DIR=Engine
+SET ENGINE_RELEASE_DIR=%ENGINE_DIR%\Release
+SET ENGINE_DEBUG_DIR=%ENGINE_DIR%\Debug
 SET ENGINE_EXE_COMPILED=Engine.exe
 SET GAME_EXE=Game.exe
 SET GAME_EXE_DEBUG=Debug.exe
@@ -97,6 +98,11 @@ ECHO Copying Game Executable...
 IF EXIST "%GAME_RELEASE_DIR%\%GAME_EXE%" DEL "%GAME_RELEASE_DIR%\%GAME_EXE%"
 XCOPY "%ENGINE_RELEASE_DIR%\%ENGINE_EXE_COMPILED%" "%GAME_RELEASE_DIR%" /I /Y
 REN "%GAME_RELEASE_DIR%\%ENGINE_EXE_COMPILED%" "%GAME_EXE%"
+
+ECHO.
+ECHO Copying DLL Files...
+IF EXIST "%GAME_RELEASE_DIR%\*.dll" DEL "%GAME_RELEASE_DIR%\*.dll"
+XCOPY "%ENGINE_DIR%\*.dll" "%GAME_RELEASE_DIR%" /I /Y
 
 ECHO.
 ECHO Done!

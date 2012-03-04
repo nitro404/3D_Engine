@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ROTATOR_H
+#define ROTATOR_H
 
 #include "Includes.h"
 #include "Object.h"
@@ -28,3 +29,5 @@ private:
 	double rateInDegreesPerSecond;
 	double angleInDegrees;
 };
+
+#endif // ROTATOR_H

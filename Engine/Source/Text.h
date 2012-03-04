@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TEXT_H
+#define TEXT_H
 
 #include "Includes.h"
 #include "Colour.h"
@@ -6,7 +7,7 @@
 
 class Text {
 public:
-	Text(int windowWidth, int windowHeight, int xPos, int yPos, Colour fontColour, Font * font, bool externalFont, const char * text, ...);
+	Text(int xPos, int yPos, Colour fontColour, Font * font, bool externalFont, const char * text, ...);
 	~Text();
 
 	void setColour(Colour newColour);
@@ -23,10 +24,11 @@ private:
 	char * text;
 
 	int x, y;
-	int windowWidth, windowHeight;
 
 	bool externalFont;
 
 	Font * font;
 	Colour colour;
 };
+
+#endif // TEXT_H

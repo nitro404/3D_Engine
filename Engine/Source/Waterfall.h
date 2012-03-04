@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WATERFALL_H
+#define WATERFALL_H
 
 #include "Pool.h"
 
@@ -14,3 +15,5 @@ public:
 private:
 
 };
+
+#endif // WATERFALL_H

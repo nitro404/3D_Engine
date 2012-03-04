@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLANE_H
+#define PLANE_H
 
 #include "Includes.h"
 #include "Point.h"
@@ -68,3 +69,5 @@ public:
 		return fabs(normal.dot(unitDirection)) - 1.0 < 1.0e-5;
 	}
 };
+
+#endif // PLANE_H

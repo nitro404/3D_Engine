@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FACE_H
+#define FACE_H
 
 #include "Point.h"
 #include "Colour.h"
@@ -28,3 +29,5 @@ public:
 	double translationLocation;
 	double translationSpeed;
 };
+
+#endif // FACE_H

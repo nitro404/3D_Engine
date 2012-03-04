@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TERRAIN_H
+#define TERRAIN_H
 
 #include "Object.h"
 #include "FaceGroup.h"
@@ -27,3 +28,5 @@ private:
 	GamePoint * points;
 	FaceGroup * group;
 };
+
+#endif // TERRAIN_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "Includes.h"
 #include "Transformation.h"
@@ -17,3 +18,5 @@ public:
 };
 
 extern Player * player;
+
+#endif // PLAYER_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TRANSLATOR_H
+#define TRANSLATOR_H
 
 #include "Includes.h"
 #include "Object.h"
@@ -31,3 +32,5 @@ private:
 	double distanceTravelled;
 	double distanceToTravel;
 };
+
+#endif // TRANSLATOR_H

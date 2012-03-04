@@ -1,7 +1,7 @@
-#pragma once
+#ifndef GEOMETRY_H
+#define GEOMETRY_H
 
 #include "Includes.h"
-#include "Variables.h"
 #include "Object.h"
 
 class Geometry : public Object {
@@ -21,3 +21,5 @@ public:
 
 	Shader * shader;
 };
+
+#endif // GEOMETRY_H
