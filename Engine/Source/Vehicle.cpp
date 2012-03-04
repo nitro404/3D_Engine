@@ -13,7 +13,7 @@ double Vehicle::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation->m41, 2) + pow(p.y - transformation->m42, 2) + pow(p.z - transformation->m43, 2) );
 }
 
-void Vehicle::tick() {
+void Vehicle::update(double timeElapsed) {
 	
 }
 

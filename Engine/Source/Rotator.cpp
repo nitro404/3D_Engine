@@ -14,8 +14,8 @@ double Rotator::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation->m41, 2) + pow(p.y - transformation->m42, 2) + pow(p.z - transformation->m43, 2) );
 }
 
-void Rotator::tick () {
-	angleInDegrees += rateInDegreesPerSecond * DT;
+void Rotator::update(double timeElapsed) {
+	angleInDegrees += rateInDegreesPerSecond * timeElapsed;
 	if(angleInDegrees >= 360 || angleInDegrees <= -360) {
 		angleInDegrees = 0;
 	}
@@ -25,7 +25,7 @@ void Rotator::tick () {
 	//curBox.rotateBy(angleInDegrees, axis);
 }
 
-void Rotator::draw () {
+void Rotator::draw() {
 	if(shader != NULL) { shader->activate(); }
 
 	Point p = transformation->position();

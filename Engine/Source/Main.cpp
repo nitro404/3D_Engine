@@ -24,33 +24,6 @@ void resizeWindow(int width, int height) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-inline void computeDT() {
-	//Returns how much time has elapsed since the first call of this function... Accurate to a microsecond...
-	static INT64 countsPerSecond;
-	static INT64 oldTime;
-	static bool firstTime = true;
-	if(firstTime) {
-		firstTime = false;
-		QueryPerformanceCounter((LARGE_INTEGER *) & oldTime);
-		QueryPerformanceFrequency((LARGE_INTEGER *) & countsPerSecond);
-	}
-	
-	INT64 newTime;
-	QueryPerformanceCounter((LARGE_INTEGER *) & newTime);
-	INT64 elapsedCounts = newTime - oldTime; 
-	
-	double seconds = (double) elapsedCounts / (double) countsPerSecond; //count / (counts / second) = seconds
-	
-	//Compute elapsed time needed for controlling frame rate independent effects.
-	//If running slower than 5 frames per second, pretend it's 5 frames/sec.
-	//Note: 30 frames per second means 1/30 seconds per frame = 0.03333... seconds per frame.
-	static double lastTimeInSeconds = seconds; //Pretend we are running 30 frames per second on the first tick.
-	double timeInSeconds = seconds;
-	DT = timeInSeconds - lastTimeInSeconds;
-	if(DT > 0.2) DT = 0.2; //5 frames/sec means 1 frame in 1/5 (= 0.2) seconds.
-	lastTimeInSeconds = timeInSeconds;
-}
-
 void displayWindow() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	game->draw();
@@ -58,8 +31,7 @@ void displayWindow() {
 }
 
 void idle() {
-	computeDT();
-	game->tick();
+	game->update();
 	if(GetFocus()) {
 		SetCursorPos(Game::settings->windowWidth >> 1, Game::settings->windowHeight >> 1); //Re-center the mouse...
 	}
@@ -258,7 +230,7 @@ void mouseMoved(int x, int y) {
 	Point difference = (point - center) * (Game::settings->mouseSensitivity / 10.0);
 	Point rotation(-difference.y, -difference.x, 0.0);
 
-	inputManager->rotateBy(rotation * (InputManager::rotationSpeed * DT));
+	inputManager->rotateBy(rotation);
 }
 
 void setupOpenGL() {

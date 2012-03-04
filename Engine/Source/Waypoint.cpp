@@ -35,7 +35,8 @@ Point & Waypoint::getPosition() {
 	return position;
 }
 
-void Waypoint::tick() { }
+void Waypoint::update(double timeElapsed) { }
+
 void Waypoint::draw() { }
 
 void Waypoint::import (ifstream &input) {

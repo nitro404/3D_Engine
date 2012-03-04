@@ -14,11 +14,11 @@ double Geometry::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation->m41, 2) + pow(p.y - transformation->m42, 2) + pow(p.z - transformation->m43, 2) );
 }
 
-void Geometry::tick () {
+void Geometry::update(double timeElapsed) {
 	
 }
 
-void Geometry::draw () {
+void Geometry::draw() {
 	glPushMatrix();
 		Transformation & normal = transformation->normal();
 		glMultMatrixd(normal);

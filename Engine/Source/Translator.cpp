@@ -13,13 +13,13 @@ double Translator::distanceFrom(Point & p) const {
 	return sqrt( pow(p.x - transformation->m41, 2) + pow(p.y - transformation->m42, 2) + pow(p.z - transformation->m43, 2) );
 }
 
-void Translator::tick() {
+void Translator::update(double timeElapsed) {
 	if(forward) {
-		position += unitVector * (rateInMetersPerSecond * DT);
+		position += unitVector * (rateInMetersPerSecond * timeElapsed);
 		distanceTravelled = sqrt(pow(position.x - origin.x, 2) + pow(position.y - origin.y, 2) + pow(position.z - origin.z, 2));
 	}
 	else {
-		position -= unitVector * (rateInMetersPerSecond * DT);
+		position -= unitVector * (rateInMetersPerSecond * timeElapsed);
 		distanceTravelled = sqrt(pow(destination.x - position.x, 2) + pow(destination.y - position.y, 2) + pow(destination.z - position.z, 2));
 	}
 

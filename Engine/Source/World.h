@@ -19,7 +19,7 @@ public:
 	World();
 	~World();
 	
-	void tick();
+	void update(double timeElapsed);
 	void draw();
 	void drawSkybox();
 	

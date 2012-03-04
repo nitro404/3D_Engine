@@ -1,9 +1,9 @@
 #include "AnimatedFace.h"
 
-void AnimatedFace::tick() {
+void AnimatedFace::update(double timeElapsed) {
 	// choose the current texture based on the animation sequence
 	texture = animatedTexture->textures.at((int) textureIndex);
-	textureIndex += animationSpeed * DT;
+	textureIndex += animationSpeed * timeElapsed;
 	if(textureIndex >= animatedTexture->frames) {
 		textureIndex = 0;
 	}

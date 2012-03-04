@@ -23,20 +23,20 @@ World::~World() {
 	}
 }
 
-void World::tick () {
+void World::update(double timeElapsed) {
 	playerPosition = player->playerMatrix.position();
 	
 	if(skybox != NULL) {
-		skybox->tick();
+		skybox->update(timeElapsed);
 	}
 	for(unsigned int i=0;i<objects.size();i++) {
-		objects.at(i)->tick();
+		objects.at(i)->update(timeElapsed);
 	}
 	for(unsigned int i=0;i<water.size();i++) {
-		water.at(i)->tick();
+		water.at(i)->update(timeElapsed);
 	}
 	for(unsigned int i=0;i<sprites.size();i++) {
-		sprites.at(i)->tick();
+		sprites.at(i)->update(timeElapsed);
 	}
 }
 

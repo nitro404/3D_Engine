@@ -16,7 +16,7 @@ public:
 		}
 	}
 
-	virtual void tick() { }
+	virtual void update(double timeElapsed) { }
 	virtual void draw();
 	virtual void draw(Colour & Colour);
 	virtual void draw(Colour & Colour, bool drawBothSides);

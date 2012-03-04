@@ -19,9 +19,9 @@ bool Pool::insideOf(Point & p) const {
 		   p.z >= minZ && p.z <= maxZ;
 }
 
-void Pool::tick() {
+void Pool::update(double timeElapsed) {
 	for(unsigned int i=0;i<faces.size();i++) {
-		faces.at(i)->tick();
+		faces.at(i)->update(timeElapsed);
 	}
 }
 

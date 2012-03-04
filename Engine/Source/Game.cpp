@@ -1,16 +1,11 @@
 #include "Game.h"
 
-double DT;
-
 Game * Game::instance = NULL;
 SettingsManager * Game::settings = NULL;
 Menu * Game::menu = NULL;
 World * Game::world = NULL;
 
-Game::Game()
-			: fps(NULL),
-			  cullingEnabled(false),
-			  paused(true) {
+Game::Game() : fps(NULL), cullingEnabled(false), paused(true) {
 	instance = this;
 
 	settings = new SettingsManager();
@@ -43,6 +38,7 @@ bool Game::init() {
 	menu = new Menu();
 
 	// initialize the fps font
+	currentFPS = 0;
 	fps = new char[12];
 	fps[0] = '\0';
 	Font fpsFont("Arial", 24, Font::BOLD, false, false, false, 0);
@@ -62,12 +58,38 @@ bool Game::init() {
 	return true;
 }
 
-void Game::tick() {
+void Game::update() {
+	static INT64 countsPerSecond;
+	static INT64 oldTime;
+	static bool firstTime = true;
+	if(firstTime) {
+		firstTime = false;
+		QueryPerformanceCounter((LARGE_INTEGER *) & oldTime);
+		QueryPerformanceFrequency((LARGE_INTEGER *) & countsPerSecond);
+	}
+	
+	INT64 newTime;
+	QueryPerformanceCounter((LARGE_INTEGER *) & newTime);
+	INT64 elapsedCounts = newTime - oldTime; 
+	
+	double seconds = (double) elapsedCounts / (double) countsPerSecond; //count / (counts / second) = seconds
+	
+	//Compute elapsed time needed for controlling frame rate independent effects.
+	//If running slower than 5 frames per second, pretend it's 5 frames/sec.
+	//Note: 30 frames per second means 1/30 seconds per frame = 0.03333... seconds per frame.
+	static double lastTimeInSeconds = seconds; //Pretend we are running 30 frames per second on the first tick.
+	double timeInSeconds = seconds;
+	double timeElapsed = timeInSeconds - lastTimeInSeconds;
+	if(timeElapsed > 0.2) { timeElapsed = 0.2; } //5 frames/sec means 1 frame in 1/5 (= 0.2) seconds.
+	lastTimeInSeconds = timeInSeconds;
+
+	updateFPS(timeElapsed);
+
 	if(paused) { return; }
 
-	inputManager->tick();
+	inputManager->update(timeElapsed);
 	if(world != NULL) {
-		world->tick ();
+		world->update(timeElapsed);
 	}
 }
 
@@ -78,7 +100,7 @@ void Game::draw() {
 	camera->endCamera();
 	
 	if(settings->showFPS) {
-		drawFrameRate();
+		drawFPS();
 	}
 
 	menu->draw();
@@ -105,17 +127,19 @@ void Game::closeMap() {
 	}
 }
 
-void Game::drawFrameRate() {
+void Game::updateFPS(double timeElapsed) {
 	// draw the frame rate avoiding extreme fluctuations (since all you see is flickering).
-	double frameRate = 1.0 / DT; // frames/sec = 1/(seconds per frame).
-	static double stableRate = frameRate; // this initializes only the first time...
+	double frameRate = timeElapsed == 0 ? 0 : 1.0 / timeElapsed; // frames/sec = 1/(seconds per frame).
 	static double oldFrameRate = frameRate;
 	// if it changed by more than 2 per cent of the stable value, use the new value; otherwise use the stable one...
-	if(fabs(frameRate - stableRate) > 2.0) {
-		stableRate = frameRate;
+	if(fabs(frameRate - currentFPS) > 2.0) {
+		currentFPS = frameRate;
 	}
-	sprintf_s(fps, 12, "%3.1f FPS", stableRate);
-	fpsText->setPosition(settings->windowWidth - 101 - ((stableRate > 99) ? 13 : 0), settings->windowHeight - 20);
+}
+
+void Game::drawFPS() {
+	sprintf_s(fps, 12, "%.2f FPS", currentFPS);
+	fpsText->setPosition(settings->windowWidth - 101 - ((currentFPS > 99) ? 40 : 0), settings->windowHeight - 20);
 	fpsText->draw(fps);
 }
 

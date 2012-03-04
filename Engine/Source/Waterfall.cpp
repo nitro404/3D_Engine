@@ -4,11 +4,11 @@ Waterfall::Waterfall() { }
 
 Waterfall::~Waterfall() { }
 
-void Waterfall::tick() {
-	Pool::tick();
+void Waterfall::update(double timeElapsed) {
+	Pool::update(timeElapsed);
 
 	for(unsigned int i=0;i<faces.size();i++) {
-		faces.at(i)->tick();
+		faces.at(i)->update(timeElapsed);
 	}
 }
 

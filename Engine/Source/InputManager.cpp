@@ -5,8 +5,7 @@ const double InputManager::rotationSpeed = 30.0; //degrees per second
 
 InputManager * inputManager = NULL;
 
-void InputManager::tick () {
-	//Deal with control keys... 
+void InputManager::update(double timeElapsed) {
 	Point translation (
 		(translateLeft ? -translationSpeed : 0.0) + (translateRight ? translationSpeed : 0.0),
 		(translateDown ? -translationSpeed : 0.0) + (translateUp ? translationSpeed : 0.0),
@@ -17,6 +16,6 @@ void InputManager::tick () {
 		(rotateRight ? -rotationSpeed : 0.0) + (rotateLeft ? rotationSpeed : 0.0),
 		0.0);
 
-	rotateBy (rotation * DT); //degrees = degrees per second * second
-	moveBy (translation * DT); //meters = meters per second * meters
+	rotateBy(rotation * timeElapsed); //degrees = degrees per second * second
+	moveBy(translation * timeElapsed); //meters = meters per second * meters
 }

@@ -14,7 +14,7 @@ public:
 	double distanceFrom(Point & p) const;
 	bool insideOf(Point & p) const;
 	
-	virtual void tick();
+	virtual void update(double timeElapsed);
 	virtual void draw(bool drawInside = false);
 	
 	virtual void import(ifstream &input, vector<AnimatedTexture *> & animatedTextures, vector<Shader *> shaders);

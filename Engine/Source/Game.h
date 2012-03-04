@@ -10,15 +10,13 @@
 #include "Camera.h"
 #include "InputManager.h"
 
-extern double DT;
-
 class Game {
 public:
 	Game();
 	~Game();
 	
 	bool init();
-	void tick();
+	void update();
 	void draw();
 
 	void resume();
@@ -31,7 +29,8 @@ public:
 	void closeMap();
 	
 private:
-	void drawFrameRate();
+	void updateFPS(double timeElapsed);
+	void drawFPS();
 	void loadTextures();
 	
 public:
@@ -48,6 +47,7 @@ public:
 	bool cullingEnabled;
 
 private:
+	double currentFPS;
 	char * fps;
 	Text * fpsText;
 

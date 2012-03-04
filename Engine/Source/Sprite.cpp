@@ -31,9 +31,9 @@ void Sprite::switchDestinations() {
 	distanceTravelled = 0;
 }
 
-void Sprite::tick() {
+void Sprite::update(double timeElapsed) {
 	if(origin != NULL && origin->hasNeighbours()) {
-		position += unitVector * (movementSpeed * DT);
+		position += unitVector * (movementSpeed * timeElapsed);
 		distanceTravelled = sqrt(pow(position.x - lastWaypoint->getPosition().x, 2) + pow(position.y - lastWaypoint->getPosition().y, 2) + pow(position.z - lastWaypoint->getPosition().z, 2));
 		if(distanceTravelled >= distanceToTravel) {
 			switchDestinations();

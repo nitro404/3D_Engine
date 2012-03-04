@@ -5,15 +5,13 @@
 #include "AnimatedTexture.h"
 #include "Face.h"
 
-extern double DT;
-
 class AnimatedFace : public Face {
 public:
 	AnimatedFace() : textureIndex(0), animatedTexture(NULL), animationSpeed(-1) { }
 
 	~AnimatedFace() { }
 
-	void tick();
+	void update(double timeElapsed);
 	void draw();
 	void draw(Colour & colour);
 	void draw(Colour & colour, bool drawBothSides);

@@ -8,7 +8,7 @@ public:
 	Waterfall();
 	~Waterfall();
 
-	void tick();
+	void update(double timeElapsed);
 
 	void import(ifstream & input, vector<AnimatedTexture *> & textures, vector<Shader *> shaders);
 

@@ -9,7 +9,7 @@ Environment::~Environment() {
 	delete [] skyboxTextures;
 }
 
-void Environment::tick() {
+void Environment::update(double timeElapsed) {
 	
 }
 

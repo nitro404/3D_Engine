@@ -11,7 +11,7 @@ public:
 
 	double distanceFrom(Point & p) const;
 	
-	void tick();
+	void update(double timeElapsed);
 	void draw();
 
 	void import(ifstream & input, vector<Texture *> & textures, vector<Shader *> shaders);

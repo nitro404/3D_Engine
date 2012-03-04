@@ -16,7 +16,7 @@ public:
 	Waypoint * getRandomNeighbour();
 	Point & getPosition();
 	
-	void tick();
+	void update(double timeElapsed);
 	void draw();
 	
 	void import (ifstream &input);

@@ -9,8 +9,6 @@
 #include "Face.h"
 #include "BoundingBox.h"
 
-extern double DT;
-
 class Object {
 public:
 	Object() : transformation(NULL), box(NULL) { } 
@@ -21,7 +19,7 @@ public:
 	
 	virtual double distanceFrom(Point & p) const { return 0; }
 	
-	virtual void tick() { }
+	virtual void update(double timeElapsed) { }
 	virtual void draw() { }
 
 	virtual void drawWithCull() {

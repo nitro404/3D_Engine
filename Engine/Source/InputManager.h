@@ -5,8 +5,6 @@
 #include "Point.h"
 #include "Camera.h"
 
-extern double DT;
-
 class InputManager {
 public:
 	InputManager () {
@@ -30,9 +28,8 @@ public:
 	bool translateLeft, translateRight, translateAhead, translateBack, translateUp, translateDown;
 	bool rotateLeft, rotateRight, rotateUp, rotateDown;
 
-	void tick(); //But there is no draw... If you did, what would it look like?
+	void update(double timeElapsed);
 	
-	//Movement functions that pass the buck to the camera...
 	void moveBy(Point & translation) { camera->moveBy(translation); }
 	void rotateBy(Point & rotation) { camera->rotateBy(rotation); }
 };
