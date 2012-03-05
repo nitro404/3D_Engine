@@ -1,5 +1,10 @@
 #include "Game.h"
 
+#if _DEBUG
+#include <crtdbg.h>
+#include <vld.h>
+#endif
+
 Game * game = NULL;
 
 void exitGame();
@@ -109,14 +114,18 @@ void normalKeyPressed(unsigned char character, int x, int y) {
 				Game::camera->translateRight = true;
 			}
 			break;
-			
+		
+		case 'q':
+		case 'Q':
 		case ' ':
 			if(!game->isPaused()) {
 				Game::camera->translateUp = true;
 			}
 			Game::menu->select();
 			break;
-			
+		
+		case 'e':
+		case 'E':
 		case 'z':
 		case 'Z':
 			if(!game->isPaused()) {
@@ -175,12 +184,16 @@ void normalKeyReleased(unsigned char character, int x, int y) {
 			}
 			break;
 
+		case 'q':
+		case 'Q':
 		case ' ':
 			if(!game->isPaused()) {
 				Game::camera->translateUp = false;
 			}
 			break;
 
+		case 'e':
+		case 'E':
 		case 'z':
 		case 'Z':
 			if(!game->isPaused()) {
@@ -193,12 +206,17 @@ void normalKeyReleased(unsigned char character, int x, int y) {
 }
 
 void mousePressed(int button, int state, int x, int y) {
+	static bool leftButtonDown = false;
+
 	if(button == GLUT_LEFT_BUTTON) {
 		if(state == GLUT_DOWN) {
-			
+			if(!leftButtonDown) {
+				game->throwGrassBlock();
+			}
+			leftButtonDown = true;
 		}
 		else {
-			
+			leftButtonDown = false;
 		}
 	}
 	else if(button == GLUT_RIGHT_BUTTON) {
@@ -344,7 +362,11 @@ int main(int argc, char *argv[]) {
 
 	setupOpenGL();
 
-	game->init();
+	if(!game->init()) {
+		delete game;
+		prompt("Failed to initialize game!");
+		return 1;
+	}
 	
 	atexit(exitGame);
 	
@@ -352,11 +374,6 @@ int main(int argc, char *argv[]) {
 	
 	return 0;
 }
-
-#if _DEBUG
-	#include <crtdbg.h>
-	#include <vld.h>
-#endif
 
 void exitGame() {
 	glutReshapeFunc(NULL);
@@ -369,11 +386,12 @@ void exitGame() {
     glutSpecialUpFunc(NULL);
     glutKeyboardUpFunc(NULL);
 
-	Game::settings->save();
+	if(game != NULL) {
+		Game::settings->save();
+		delete game;
+	}
 
-	if(game != NULL) { delete game; }
-
-	#if _DEBUG
-		_CrtDumpMemoryLeaks();
-	#endif
+#if _DEBUG
+	_CrtDumpMemoryLeaks();
+#endif
 }

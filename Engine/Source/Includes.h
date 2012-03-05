@@ -17,8 +17,8 @@ using namespace std;
 
 #define GLEW_STATIC
 
-#include "GL/glew.h"
-#include "GL/glut.h"
+#include <glew.h>
+#include <glut.h>
 
 bool isTrue(const char * str);
 void prompt(const char *message, ...);

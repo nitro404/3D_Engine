@@ -12,6 +12,8 @@ public:
 	
 	void beginCamera();
 	void endCamera();
+
+	Point forwardVector() const;
 	
 	void moveBy(Point & translation);
 	void rotateBy(Point & rotation);

@@ -32,6 +32,10 @@ void Camera::endCamera() {
 	glPopMatrix();
 }
 
+Point Camera::forwardVector() const {
+	return (Point(0.0, 0.0, -1.0).transformBy(cameraMatrix)).normalized();
+}
+
 void Camera::moveBy(Point & translation) {
 	cameraMatrix.translateBy(translation);
 }

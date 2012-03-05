@@ -4,9 +4,10 @@ Game * Game::instance = NULL;
 SettingsManager * Game::settings = NULL;
 Menu * Game::menu = NULL;
 Camera * Game::camera = NULL;
+PhysicsManager * Game::physics = NULL;
 World * Game::world = NULL;
 
-Game::Game() : fps(NULL), cullingEnabled(false), paused(true) {
+Game::Game() : fps(NULL), fpsText(NULL), cullingEnabled(false), paused(true) {
 	instance = this;
 
 	settings = new SettingsManager();
@@ -15,15 +16,20 @@ Game::Game() : fps(NULL), cullingEnabled(false), paused(true) {
 	}
 
 	camera = new Camera();
+
+	physics = new PhysicsManager();
 }
 
 Game::~Game() {
-	delete [] fps;
-	delete fpsText;
+	if(fps != NULL) { delete [] fps; }
+	if(fpsText != NULL) { delete fpsText; }
 	delete settings;
-	delete menu;
+	if(menu != NULL) { delete menu; }
 	delete camera;
 	if(world != NULL) { delete world; }
+	for(unsigned int i=0;i<cubes.size();i++) {
+		delete cubes.at(i);
+	}
 	for(unsigned int i=0;i<animatedTextures.size();i++) {
 		delete animatedTextures.at(i);
 	}
@@ -36,9 +42,12 @@ Game::~Game() {
 	for(unsigned int i=0;i<textures.size();i++) {
 		delete textures.at(i);
 	}
+	delete physics;
 }
 
 bool Game::init() {
+	if(!physics->init()) { return false; }
+
 	menu = new Menu();
 
 	// initialize the fps font
@@ -91,17 +100,30 @@ void Game::update() {
 
 	if(paused) { return; }
 
+	physics->update(timeElapsed);
+
 	camera->update(timeElapsed);
 
 	if(world != NULL) {
 		world->update(timeElapsed);
 	}
+
+	for(unsigned int i=0;i<cubes.size();i++) {
+		cubes.at(i)->update(timeElapsed);
+	}
 }
 
 void Game::draw() {
 	if(world != NULL) { world->drawSkybox(); }
+
 	camera->beginCamera();
+
 	if(world != NULL) { world->draw(); }
+
+	for(unsigned int i=0;i<cubes.size();i++) {
+		cubes.at(i)->draw();
+	}
+
 	camera->endCamera();
 	
 	if(settings->showFPS) {
@@ -109,6 +131,8 @@ void Game::draw() {
 	}
 
 	menu->draw();
+
+	physics->fetchResults(true);
 }
 
 void Game::resume() { if(world != NULL) { paused = false; } }
@@ -118,6 +142,9 @@ void Game::togglePause() { paused = !paused; }
 bool Game::isPaused() { return paused; }
 
 void Game::loadMap(char * fileName) {
+	clearObjects();
+	physics->reset();
+
 	world = new World();
 	world->import(fileName, textures, heightMaps, animatedTextures, shaders);
 	world->cullingEnabled = cullingEnabled;
@@ -127,9 +154,35 @@ void Game::loadMap(char * fileName) {
 
 void Game::closeMap() {
 	if(world != NULL) {
+		clearObjects();
+		physics->reset();
+
 		delete world;
 		world = NULL;
 	}
+}
+
+void Game::throwGrassBlock() {
+	Texture ** textures = new Texture*[6];
+	textures[0] = this->textures[62];
+	textures[1] = this->textures[62];
+	textures[2] = this->textures[60];
+	textures[3] = this->textures[62];
+	textures[4] = this->textures[61];
+	textures[5] = this->textures[62];
+
+	Cube * c = new Cube(camera->cameraMatrix, 2, camera->forwardVector() * 5, 1, Colour(255, 255, 255, 255), textures);
+	c->load();
+	cubes.push_back(c);
+
+	delete [] textures;
+}
+
+void Game::clearObjects() {
+	for(unsigned int i=0;i<cubes.size();i++) {
+		delete cubes.at(i);
+	}
+	cubes.clear();
 }
 
 void Game::updateFPS(double timeElapsed) {

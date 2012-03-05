@@ -59,8 +59,9 @@ Menu::Menu() : titleColour(255, 0, 0, 255),
 	x = s, y = Game::settings->windowHeight - s;
 	helpMenuTitle = new Text(x, y, titleColour, titleFont, true, "Help");
 	helpMenuItems.push_back(new Text(x, y -= ti, inactiveColour, itemFont, true, "WSAD to move around."));
-	helpMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Space to move up."));
-	helpMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Z to move down."));
+	helpMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Space / Q to move up."));
+	helpMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Z / E to move down."));
+	helpMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Left click to throw cubes."));
 	helpMenuItems.push_back(new Text(x, y -= yi, inactiveColour, itemFont, true, "Escape to exit / go back."));
 }
 

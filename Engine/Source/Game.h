@@ -5,8 +5,10 @@
 #include "SettingsManager.h"
 #include "Menu.h"
 #include "Text.h"
-#include "World.h"
+#include "PhysicsManager.h"
 #include "Camera.h"
+#include "World.h"
+#include "Cube.h"
 
 class Game {
 public:
@@ -25,6 +27,9 @@ public:
 
 	void loadMap(char * fileName);
 	void closeMap();
+
+	void throwGrassBlock();
+	void clearObjects();
 	
 private:
 	void updateFPS(double timeElapsed);
@@ -36,12 +41,14 @@ public:
 	static SettingsManager * settings;
 	static Menu * menu;
 	static Camera * camera;
+	static PhysicsManager * physics;
 	static World * world;
 
 	vector<Texture *> textures;
 	vector<char *> heightMaps;
 	vector<AnimatedTexture *> animatedTextures;
 	vector<Shader *> shaders;
+	vector<Cube *> cubes;
 
 	bool cullingEnabled;
 

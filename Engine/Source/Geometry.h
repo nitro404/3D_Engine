@@ -14,7 +14,7 @@ public:
 	void update(double timeElapsed);
 	void draw();
 
-	void import (ifstream &input, vector<Texture *> & textures, vector<Shader *> shaders);
+	void import(ifstream &input, vector<Texture *> & textures, vector<Shader *> shaders);
 
 public:
 	vector<Face *> faces;

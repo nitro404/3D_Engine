@@ -6,35 +6,57 @@
 
 class Transformation;
 
+inline void glGetMatrixf(GLenum whichMatrix, Transformation &matrix) {
+	glGetFloatv(whichMatrix, (GLfloat *) &matrix);
+}
+
+inline void glLoadMatrixf(Transformation &matrix) {
+	glLoadMatrixf((const GLfloat *) &matrix);
+}
+
+inline void glMultMatrixf(Transformation &matrix) {
+	glMultMatrixf((const GLfloat *) &matrix);
+}
+
+inline void glPushMatrixf(Transformation &matrix) {
+	glPushMatrix();
+	glLoadMatrixf(matrix);
+}
+
+inline void glPopMatrixf (GLenum whichMatrix, Transformation &matrix) {
+	glGetMatrixf(whichMatrix, matrix);
+	glPopMatrix();
+}
+
 inline void glGetMatrixd(GLenum whichMatrix, Transformation &matrix) {
-	glGetDoublev (whichMatrix, (GLdouble *) &matrix);
+	glGetDoublev(whichMatrix, (GLdouble *) &matrix);
 }
 
 inline void glLoadMatrixd(Transformation &matrix) {
-	glLoadMatrixd ((const GLdouble *) &matrix);
+	glLoadMatrixd((const GLdouble *) &matrix);
 }
 
 inline void glMultMatrixd(Transformation &matrix) {
-	glMultMatrixd ((const GLdouble *) &matrix);
+	glMultMatrixd((const GLdouble *) &matrix);
 }
 
 inline void glPushMatrixd(Transformation &matrix) {
-	glPushMatrix ();
-	glLoadMatrixd (matrix);
+	glPushMatrix();
+	glLoadMatrixd(matrix);
 }
 
 inline void glPopMatrixd(GLenum whichMatrix, Transformation &matrix) {
-	glGetMatrixd (whichMatrix, matrix);
-	glPopMatrix ();
+	glGetMatrixd(whichMatrix, matrix);
+	glPopMatrix();
 }
 
 inline void glPushIdentity() {
-	glPushMatrix ();
-	glLoadIdentity ();
+	glPushMatrix();
+	glLoadIdentity();
 }
 
 inline GLint currentMatrixStack() {
-	GLint mode; glGetIntegerv (GL_MATRIX_MODE, &mode);
+	GLint mode; glGetIntegerv(GL_MATRIX_MODE, &mode);
 	return 
 		mode == GL_MODELVIEW ? GL_MODELVIEW_MATRIX :
 		mode == GL_PROJECTION ? GL_PROJECTION_MATRIX :
@@ -42,12 +64,12 @@ inline GLint currentMatrixStack() {
 }
 
 inline void glGetMatrixd(Transformation &matrix) {
-	glGetDoublev (currentMatrixStack (), (double *) &matrix);
+	glGetDoublev(currentMatrixStack (), (double *) &matrix);
 }
 
 inline void glPopMatrixd(Transformation &matrix) {
-	glGetMatrixd (matrix);
-	glPopMatrix ();
+	glGetMatrixd(matrix);
+	glPopMatrix();
 }
 
 class Transformation {
@@ -67,6 +89,8 @@ public:
 		m31 = a31; m32 = a32; m33 = a33; m34 = a34;
 		m41 = a41; m42 = a42; m43 = a43; m44 = a44;
 	}
+	Transformation(const Transformation & t) : m11(t.m11), m12(t.m12), m13(t.m13), m14(t.m14), m21(t.m21), m22(t.m22), m23(t.m23), m24(t.m24), m31(t.m31), m32(t.m32), m33(t.m33), m34(t.m34), m41(t.m41), m42(t.m42), m43(t.m43), m44(t.m44) { }
+	Transformation & Transformation::operator = (const Transformation & t) { m11 = t.m11; m12 = t.m12; m13 = t.m13; m14 = t.m14; m21 = t.m21; m22 = t.m22; m23 = t.m23; m24 = t.m24; m31 = t.m31; m32 = t.m32; m33 = t.m33; m34 = t.m34; m41 = t.m41; m42 = t.m42; m43 = t.m43; m44 = t.m44; return *this; }
 	inline ~Transformation() { }
 
 	inline void set(double a11, double a12, double a13, double a14, double a21, double a22, double a23, double a24, 
@@ -84,7 +108,7 @@ public:
 		m41 = 0.0; m42 = 0.0; m43 = 0.0; m44 = 1.0;
 	}
 	
-	inline void rotateToAxes (Point &xAxis, Point &yAxis, Point &zAxis) {
+	inline void rotateToAxes(Point &xAxis, Point &yAxis, Point &zAxis) {
 		set (xAxis.x, xAxis.y, xAxis.z, 0.0,
 			yAxis.x, yAxis.y, yAxis.z, 0.0,
 			zAxis.x, zAxis.y, zAxis.z, 0.0,
@@ -95,69 +119,69 @@ public:
 	//	pre-multiply M if we compute T * M
 	//  post-multiply M if we compute M * T
 
-	inline void preTranslateBy (Point &translation) {//Translation * matrix;
-		glPushMatrixd (*this);
-			glTranslated (translation.x, translation.y, translation.z);
-		glPopMatrixd (GL_MODELVIEW_MATRIX, *this);
+	inline void preTranslateBy(Point &translation) {//Translation * matrix;
+		glPushMatrixd(*this);
+			glTranslated(translation.x, translation.y, translation.z);
+		glPopMatrixd(GL_MODELVIEW_MATRIX, *this);
 	}
-	inline void postTranslateBy (Point &translation) {//matrix * Translation.
-		glPushIdentity ();
-			glTranslated (translation.x, translation.y, translation.z);
-			glMultMatrixd (*this);
-		glPopMatrixd (GL_MODELVIEW_MATRIX, *this);
+	inline void postTranslateBy(Point &translation) {//matrix * Translation.
+		glPushIdentity();
+			glTranslated(translation.x, translation.y, translation.z);
+			glMultMatrixd(*this);
+		glPopMatrixd(GL_MODELVIEW_MATRIX, *this);
 	}
-	inline void translateBy (Point &translation) {preTranslateBy (translation);} //translate means pre-translate
+	inline void translateBy(Point &translation) {preTranslateBy (translation);} //translate means pre-translate
 
-	inline void preRotateBy (Point &rotation) {//rotation * matrix;
+	inline void preRotateBy(Point &rotation) {//rotation * matrix;
 		//This rotation denotes [degreesAroundXAxis, degreesAroundYAxis, degreesAroundZAxis].
 		//Actually, Rx*Ry*Rz * matrix.
-		glPushMatrixd (*this);
-			if (rotation.z != 0.0) glRotated (rotation.z, 0.0, 0.0, 1.0);
-			if (rotation.y != 0.0) glRotated (rotation.y, 0.0, 1.0, 0.0);
-			if (rotation.x != 0.0) glRotated (rotation.x, 1.0, 0.0, 0.0);
+		glPushMatrixd(*this);
+			if(rotation.z != 0.0) glRotated (rotation.z, 0.0, 0.0, 1.0);
+			if(rotation.y != 0.0) glRotated (rotation.y, 0.0, 1.0, 0.0);
+			if(rotation.x != 0.0) glRotated (rotation.x, 1.0, 0.0, 0.0);
 
-		glPopMatrixd (GL_MODELVIEW_MATRIX, *this);
+		glPopMatrixd(GL_MODELVIEW_MATRIX, *this);
 	}
 	inline void postRotateBy (Point &rotation) {//matrix * rotation
 		//This rotation denotes [degreesAroundXAxis, degreesAroundYAxis, degreesAroundZAxis].
 		//Actually (Rx*Ry*Rz * matrix)-1 = matrix-1 * Rz-1 * Ry-1 * Rx-1
-		glPushIdentity ();
-			if (rotation.x != 0.0) glRotated (rotation.x, 1.0, 0.0, 0.0); 
-			if (rotation.y != 0.0) glRotated (rotation.y, 0.0, 1.0, 0.0); 
-			if (rotation.z != 0.0) glRotated (rotation.z, 0.0, 0.0, 1.0);
+		glPushIdentity();
+			if(rotation.x != 0.0) glRotated (rotation.x, 1.0, 0.0, 0.0); 
+			if(rotation.y != 0.0) glRotated (rotation.y, 0.0, 1.0, 0.0); 
+			if(rotation.z != 0.0) glRotated (rotation.z, 0.0, 0.0, 1.0);
 
 			glMultMatrixd (*this);
-		glPopMatrixd (GL_MODELVIEW_MATRIX, *this);
+		glPopMatrixd(GL_MODELVIEW_MATRIX, *this);
 	}
-	inline void rotateBy (Point &rotation) {preRotateBy (rotation);} //rotateBy means pre-rotateBy
+	inline void rotateBy(Point &rotation) {preRotateBy(rotation);} //rotateBy means pre-rotateBy
 
-	inline void preRotateBy (double degrees, Point &axis) {//rotation * matrix
-		glPushMatrixd (*this);
-			glRotated (degrees, axis.x, axis.y, axis.z);
-		glPopMatrixd (GL_MODELVIEW_MATRIX, *this);
+	inline void preRotateBy(double degrees, Point &axis) {//rotation * matrix
+		glPushMatrixd(*this);
+			glRotated(degrees, axis.x, axis.y, axis.z);
+		glPopMatrixd(GL_MODELVIEW_MATRIX, *this);
 	}
 	inline void postRotateBy (double degrees, Point &axis) {//matrix * rotation
-		glPushIdentity ();
-			glRotated (degrees, axis.x, axis.y, axis.z);
-			glMultMatrixd (*this);
-		glPopMatrixd (GL_MODELVIEW_MATRIX, *this);
+		glPushIdentity();
+			glRotated(degrees, axis.x, axis.y, axis.z);
+			glMultMatrixd(*this);
+		glPopMatrixd(GL_MODELVIEW_MATRIX, *this);
 	}
-	inline void rotateBy (double degrees, Point &axis) {preRotateBy (degrees, axis);} //rotateBy means pre-rotateBy
+	inline void rotateBy(double degrees, Point &axis) {preRotateBy(degrees, axis);} //rotateBy means pre-rotateBy
 
-	inline void preScaleBy (Point &scale) {//scale * matrix
+	inline void preScaleBy(Point &scale) {//scale * matrix
 		glPushMatrixd(*this);
 			glScaled(scale.x, scale.y, scale.z);
 		glPopMatrixd(GL_MODELVIEW_MATRIX, *this);
 	}
-	inline void postScaleBy (Point &scale) {//matrix * scale
-		glPushIdentity ();
+	inline void postScaleBy(Point &scale) {//matrix * scale
+		glPushIdentity();
 			glScaled(scale.x, scale.y, scale.z);
 			glMultMatrixd(*this);
 		glPopMatrixd(GL_MODELVIEW_MATRIX, *this);
 	}
-	inline void scaleBy (Point &scale) {preScaleBy (scale);} //scaleBy means pre-scaleBy
+	inline void scaleBy(Point &scale) {preScaleBy(scale);} //scaleBy means pre-scaleBy
 
-	void multiply (Transformation &a, Transformation &b) {
+	void multiply(Transformation &a, Transformation &b) {
 		//this = a * b
 		m11 = a.m11 * b.m11 + a.m12 * b.m21 + a.m13 * b.m31 + a.m14 * b.m41;
 		m12 = a.m11 * b.m12 + a.m12 * b.m22 + a.m13 * b.m32 + a.m14 * b.m42;
@@ -180,7 +204,7 @@ public:
 		m44 = a.m41 * b.m14 + a.m42 * b.m24 + a.m43 * b.m34 + a.m44 * b.m44;
 	}
 
-	void multiply (Transformation &a) {
+	void multiply(Transformation &a) {
 		//this = this * a
 		double r11 = m11 * a.m11 + m12 * a.m21 + m13 * a.m31 + m14 * a.m41;
 		double r12 = m11 * a.m12 + m12 * a.m22 + m13 * a.m32 + m14 * a.m42;
@@ -201,7 +225,7 @@ public:
 		double r42 = m41 * a.m12 + m42 * a.m22 + m43 * a.m32 + m44 * a.m42;
 		double r43 = m41 * a.m13 + m42 * a.m23 + m43 * a.m33 + m44 * a.m43;
 		double r44 = m41 * a.m14 + m42 * a.m24 + m43 * a.m34 + m44 * a.m44;
-		set (r11,r12,r13,r14,r21,r22,r23,r24,r31,r32,r33,r34,r41,r42,r43,r44);
+		set(r11,r12,r13,r14,r21,r22,r23,r24,r31,r32,r33,r34,r41,r42,r43,r44);
 	}
 
 	Transformation scaleFreeInverse() {
@@ -275,73 +299,82 @@ public:
 	//Important fact: when we premultiply M by T, we must post-multiply the inverse by T-1.
 	//Proof: (T*M)-1 = M-1*T-1; i.e., the inverse must be post-multiplied by the inverse of T.
 	
-	inline DualTransformation () {setToIdentity ();}
-	inline DualTransformation (double a11, double a12, double a13, double a14, 
+	inline DualTransformation() {setToIdentity ();}
+	inline DualTransformation(double a11, double a12, double a13, double a14, 
 		double a21, double a22, double a23, double a24, 
 		double a31, double a32, double a33, double a34, 
 		double a41, double a42, double a43, double a44) {
 		quit("Illegal since inverse elements too expensive to compute.");
 	}
-	inline ~DualTransformation () {};
+	DualTransformation(const DualTransformation & t) {
+		inverse = Transformation(t.inverse);
+		Transformation::set(t.m11, t.m12, t.m13, t.m14, t.m21, t.m22, t.m23, t.m24, t.m31, t.m32, t.m33, t.m34, t.m41, t.m42, t.m43, t.m44);
+	}
+	DualTransformation & DualTransformation::operator = (const DualTransformation & t) {
+		inverse = Transformation(t.inverse);
+		Transformation::set(t.m11, t.m12, t.m13, t.m14, t.m21, t.m22, t.m23, t.m24, t.m31, t.m32, t.m33, t.m34, t.m41, t.m42, t.m43, t.m44);
+		return *this;
+	}
+	inline ~DualTransformation() {};
 
-	inline void set (double a11, double a12, double a13, double a14, double a21, double a22, double a23, double a24, 
+	inline void set(double a11, double a12, double a13, double a14, double a21, double a22, double a23, double a24, 
 		double a31, double a32, double a33, double a34, double a41, double a42, double a43, double a44) {
 		quit("Illegal since inverse elements too expensive to compute.");
 	}
 
-	inline void setToIdentity () {
+	inline void setToIdentity() {
 		Transformation::setToIdentity();
 		inverse.setToIdentity();
 	}
 
-	inline void preTranslateBy (Point &translation) {
-		Transformation::preTranslateBy (translation);
-		inverse.postTranslateBy (-translation);
+	inline void preTranslateBy(Point &translation) {
+		Transformation::preTranslateBy(translation);
+		inverse.postTranslateBy(-translation);
 	}
-	inline void postTranslateBy (Point &translation) {
-		Transformation::postTranslateBy (translation);
-		inverse.preTranslateBy (-translation);
+	inline void postTranslateBy(Point &translation) {
+		Transformation::postTranslateBy(translation);
+		inverse.preTranslateBy(-translation);
 	}
-	inline void translateBy (Point &translation) {preTranslateBy (translation);}
+	inline void translateBy(Point &translation) {preTranslateBy(translation);}
 
 
-	inline void preRotateBy (Point &rotation) {
-		Transformation::preRotateBy (rotation);
-		inverse.postRotateBy (-rotation);
+	inline void preRotateBy(Point &rotation) {
+		Transformation::preRotateBy(rotation);
+		inverse.postRotateBy(-rotation);
 	}
-	inline void postRotateBy (Point &rotation) {
-		Transformation::postRotateBy (rotation);
-		inverse.preRotateBy (-rotation);
+	inline void postRotateBy(Point &rotation) {
+		Transformation::postRotateBy(rotation);
+		inverse.preRotateBy(-rotation);
 	}
-	inline void rotateBy (Point &rotation) {preRotateBy (rotation);}
+	inline void rotateBy(Point &rotation) {preRotateBy(rotation);}
 
 
-	inline void preRotateBy (double degrees, Point &axis) {
-		Transformation::preRotateBy (degrees, axis);
-		inverse.postRotateBy (-degrees, axis);
+	inline void preRotateBy(double degrees, Point &axis) {
+		Transformation::preRotateBy(degrees, axis);
+		inverse.postRotateBy(-degrees, axis);
 	}
-	inline void postRotateBy (double degrees, Point &axis) {
-		Transformation::postRotateBy (degrees, axis);
-		inverse.preRotateBy (-degrees, axis);
+	inline void postRotateBy(double degrees, Point &axis) {
+		Transformation::postRotateBy(degrees, axis);
+		inverse.preRotateBy(-degrees, axis);
 	}
-	inline void rotateBy (double degrees, Point &axis) {preRotateBy (degrees, axis);}
+	inline void rotateBy(double degrees, Point &axis) {preRotateBy(degrees, axis);}
 
-	void multiply (Transformation &a, Transformation &b) {
+	void multiply(Transformation &a, Transformation &b) {
 		quit("Illegal since inverse elements too expensive to compute.");
 	}
 
-	inline void multiply (DualTransformation &a, DualTransformation &b) {
-		this->Transformation::multiply (a.normal (), b.normal ());
-		this->inverse.Transformation::multiply (a.inverse, b.inverse);
+	inline void multiply(DualTransformation &a, DualTransformation &b) {
+		this->Transformation::multiply(a.normal(), b.normal());
+		this->inverse.Transformation::multiply(a.inverse, b.inverse);
 	}
 
-	void multiply (Transformation &a) {
+	void multiply(Transformation &a) {
 		quit("Illegal since inverse elements too expensive to compute.");
 	}
 
-	inline void multiply (DualTransformation &a) {
-		this->Transformation::multiply (a.normal ());
-		this->inverse.Transformation::multiply (a.inverse);
+	inline void multiply(DualTransformation &a) {
+		this->Transformation::multiply(a.normal());
+		this->inverse.Transformation::multiply(a.inverse);
 	}
 	
 	Point position() {
