@@ -124,12 +124,12 @@ Object: 3;
 		"skycolor" => "0 0 230"
 		"surrounds" => "1"
 		"shader" => "-1"
-		"skyboxtexture-left" => "68"
-		"skyboxtexture-right" => "64"
-		"skyboxtexture-front" => "65"
-		"skyboxtexture-back" => "66"
-		"skyboxtexture-up" => "67"
-		"skyboxtexture-down" => "63"
+		"skyboxtexture-left" => "71"
+		"skyboxtexture-right" => "67"
+		"skyboxtexture-front" => "68"
+		"skyboxtexture-back" => "69"
+		"skyboxtexture-up" => "70"
+		"skyboxtexture-down" => "66"
 Object: 4;
 	"type" => "rotator"
 	Transformation:
@@ -275,7 +275,7 @@ Object: 5;
 	Properties: 5;
 		"movementspeed" => "4"
 		"name" => "Penguin"
-		"picture" => "74"
+		"picture" => "77"
 		"waypoint" => "6"
 		"shader" => "-1"
 	Maximum: 3.25152512, 3.25152513964569, 0.812881029755859;
@@ -286,7 +286,7 @@ Object: 6;
 	Properties: 5;
 		"movementspeed" => "0"
 		"name" => "Tree"
-		"picture" => "81"
+		"picture" => "84"
 		"waypoint" => "-1"
 		"shader" => "-1"
 	Maximum: 4.06440668686523, 4.06440640982285, 0.812880993134765;
