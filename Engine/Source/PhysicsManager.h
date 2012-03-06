@@ -7,10 +7,14 @@
 #include <PxScene.h>
 #include <PxDefaultAllocator.h>
 #include <PxDefaultErrorCallback.h>
+#include <PxRigidStatic.h>
 #include <PxRigidDynamic.h>
+#include <PxTkStream.h>
+#include "World.h"
 #include "Point.h"
 
 using namespace physx;
+using namespace PxToolkit;
 
 class GameErrorCallback : public PxErrorCallback {
 public:
@@ -30,7 +34,8 @@ public:
 	bool isInitialized() const;
 	void reset();
 
-	PxRigidDynamic * createPhysicsBox(const Point & position, const Point & velocity, float width, float height, float depth, float mass);
+	PxRigidDynamic * createBoxMesh(const Point & position, const Point & velocity, float width, float height, float depth, float mass);
+	PxRigidStatic * createWorldMesh(const World & world);
 
 	void update(double timeElapsed);
 	void fetchResults(bool block = false);

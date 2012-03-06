@@ -1,6 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include <PxRigidStatic.h>
 #include "Includes.h"
 #include "Object.h"
 #include "Environment.h"
@@ -13,6 +14,8 @@
 #include "Waypoint.h"
 #include "Terrain.h"
 #include "Waterfall.h"
+
+using namespace physx;
 
 class World {
 public:
@@ -40,6 +43,7 @@ public:
 	bool cullingEnabled;
 
 private:
+	PxRigidStatic * worldCollisionMesh;
 	Pool ** sortedWater;
 	Sprite ** sortedSprites;
 	int * spriteWater;

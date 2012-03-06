@@ -28,7 +28,7 @@
     <Filter Include="OpenGL">
       <UniqueIdentifier>{e3307a9f-1e43-4b48-beee-46e090868662}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Settings File Parser">
+    <Filter Include="Settings Manager">
       <UniqueIdentifier>{169b0b3d-4a36-4354-b829-9268a7aa799f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -57,9 +57,6 @@
     <ClCompile Include="Source\Game.cpp">
       <Filter>3D Engine\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\InputManager.cpp">
-      <Filter>3D Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Macros.cpp">
       <Filter>3D Engine\Source Files</Filter>
     </ClCompile>
@@ -67,9 +64,6 @@
       <Filter>3D Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Menu.cpp">
-      <Filter>3D Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Player.cpp">
       <Filter>3D Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Sprite.cpp">
@@ -114,12 +108,6 @@
     <ClCompile Include="Source\Waypoint.cpp">
       <Filter>Objects\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Variables.cpp">
-      <Filter>Settings File Parser</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Variable.cpp">
-      <Filter>Settings File Parser</Filter>
-    </ClCompile>
     <ClCompile Include="Source\BoundingBox.cpp">
       <Filter>3D Engine\Source Files</Filter>
     </ClCompile>
@@ -131,6 +119,27 @@
     </ClCompile>
     <ClCompile Include="Source\Shader.cpp">
       <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SettingsManager.cpp">
+      <Filter>Settings Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Variable.cpp">
+      <Filter>Settings Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VariableSystem.cpp">
+      <Filter>Settings Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Point.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PhysicsManager.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utilities.cpp">
+      <Filter>3D Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Cube.cpp">
+      <Filter>Objects\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,12 +182,6 @@
     <ClInclude Include="Source\GLUT\GL.H">
       <Filter>OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Variables.h">
-      <Filter>Settings File Parser</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Variable.h">
-      <Filter>Settings File Parser</Filter>
-    </ClInclude>
     <ClInclude Include="Source\AnimatedFace.h">
       <Filter>3D Engine\Header Files</Filter>
     </ClInclude>
@@ -213,9 +216,6 @@
       <Filter>3D Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Point.h">
-      <Filter>3D Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Player.h">
       <Filter>3D Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Sprite.h">
@@ -253,6 +253,27 @@
     </ClInclude>
     <ClInclude Include="Source\Shader.h">
       <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SettingsManager.h">
+      <Filter>Settings Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Variable.h">
+      <Filter>Settings Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VariableSystem.h">
+      <Filter>Settings Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PhysicsManager.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Resource.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utilities.h">
+      <Filter>3D Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Cube.h">
+      <Filter>Objects\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

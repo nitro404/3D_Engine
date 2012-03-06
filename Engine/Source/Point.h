@@ -21,6 +21,7 @@ public:
 	
 	void zero() { x = y = z = 0.0; }
 	Point operator * (const double & d) const { return Point (x * d, y * d, z * d); }
+	Point operator * (const Transformation & t) const;
     void operator *= (const double & d) { x *= d; y *= d; z *= d; }
 	Point operator / (const double & d) const { double inverse = 1.0/d; return Point(x * inverse, y * inverse, z * inverse); }
     void operator /= (const double & d) {x /= d; y /= d; z /= d; }

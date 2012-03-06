@@ -1,7 +1,7 @@
 #include "Game.h"
 #include "World.h"
 
-World::World() : cullingEnabled(false), skybox(NULL) {
+World::World() : cullingEnabled(false), skybox(NULL), worldCollisionMesh(NULL) {
 	startPosition = Point(0, 0, 0);
 }
 
@@ -22,6 +22,7 @@ World::~World() {
 	for(unsigned int i=0;i<waypoints.size();i++) {
 		delete waypoints.at(i);
 	}
+	if(worldCollisionMesh != NULL) { worldCollisionMesh->release(); }
 }
 
 void World::update(double timeElapsed) {
@@ -290,7 +291,7 @@ void World::import(const char * fileName, vector<Texture *> & textures, vector<c
 			pool->import(input, animatedTextures, shaders);
 			water.push_back(pool);
 		}
-		else if (_stricmp(value, "terrain") == 0) {
+		else if(_stricmp(value, "terrain") == 0) {
 			Terrain * terrain = new Terrain;
 			terrain->import(input, textures, heightMaps, shaders);
 			objects.push_back(terrain);
@@ -318,4 +319,6 @@ void World::import(const char * fileName, vector<Texture *> & textures, vector<c
 	}
 	
 	input.close();
+
+//	worldCollisionMesh = Game::physics->createWorldMesh(*this);
 }

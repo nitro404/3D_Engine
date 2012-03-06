@@ -52,10 +52,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./Source/GL/;..\..\PhysX SDK\PxTask\include\;..\..\PhysX SDK\PxToolkit\include\;..\..\PhysX SDK\PxFoundation\internal\shared\;..\..\PhysX SDK\PxFoundation\;..\..\PhysX SDK\PxFoundation\internal\include\;..\..\PhysX SDK\PhysXProfileSDK\sdk\include\;..\..\PhysX SDK\PhysXVisualDebuggerSDK\PVDCommLayer\Public\;..\..\PhysX SDK\PhysXAPI\;..\..\PhysX SDK\PhysXAPI\common\;..\..\PhysX SDK\PhysXAPI\extensions\;..\..\PhysX SDK\PhysXAPI\geometry\;..\..\PhysX SDK\PhysXCommon\src\;..\..\PhysX SDK\GeomUtils\src\;..\..\PhysX SDK\GeomUtils\headers\;..\..\PhysX SDK\GeomUtils\include\;..\..\PhysX SDK\RepX\include\;..\..\PhysX SDK\RepXUpgrader\include\;..\..\PhysX SDK\PhysXAPI\characterkinematic\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>./Lib;..\..\PhysX SDK\lib\win32\;..\..\PhysX SDK\PxToolkit\lib\win32\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glut32.lib;glew32s.lib;Foundation.lib;PhysX3_x86.lib;PhysX3Cooking_x86.lib;PhysX3CharacterKinematic.lib;PhysX3Extensions.lib;PhysX3Vehicle.lib;GeomUtils.lib;RepX3.lib;RepXUpgrader3.lib;PhysXProfileSDK.lib;PxTask.lib;PxToolkit.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -67,12 +70,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./Source/GL/;..\..\PhysX SDK\PxTask\include\;..\..\PhysX SDK\PxToolkit\include\;..\..\PhysX SDK\PxFoundation\internal\shared\;..\..\PhysX SDK\PxFoundation\;..\..\PhysX SDK\PxFoundation\internal\include\;..\..\PhysX SDK\PhysXProfileSDK\sdk\include\;..\..\PhysX SDK\PhysXVisualDebuggerSDK\PVDCommLayer\Public\;..\..\PhysX SDK\PhysXAPI\;..\..\PhysX SDK\PhysXAPI\common\;..\..\PhysX SDK\PhysXAPI\extensions\;..\..\PhysX SDK\PhysXAPI\geometry\;..\..\PhysX SDK\PhysXCommon\src\;..\..\PhysX SDK\GeomUtils\src\;..\..\PhysX SDK\GeomUtils\headers\;..\..\PhysX SDK\GeomUtils\include\;..\..\PhysX SDK\RepX\include\;..\..\PhysX SDK\RepXUpgrader\include\;..\..\PhysX SDK\PhysXAPI\characterkinematic\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>./Lib;..\..\PhysX SDK\lib\win32\;..\..\PhysX SDK\PxToolkit\lib\win32\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glut32.lib;glew32s.lib;Foundation.lib;PhysX3_x86.lib;PhysX3Cooking_x86.lib;PhysX3CharacterKinematic.lib;PhysX3Extensions.lib;PhysX3Vehicle.lib;GeomUtils.lib;RepX3.lib;RepXUpgrader3.lib;PhysXProfileSDK.lib;PxTask.lib;PxToolkit.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -81,6 +87,7 @@
     <ClCompile Include="Source\BoundingBox.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Colour.cpp" />
+    <ClCompile Include="Source\Cube.cpp" />
     <ClCompile Include="Source\CullingManager.cpp" />
     <ClCompile Include="Source\Environment.cpp" />
     <ClCompile Include="Source\Face.cpp" />
@@ -88,23 +95,25 @@
     <ClCompile Include="Source\Font.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\Geometry.cpp" />
-    <ClCompile Include="Source\InputManager.cpp" />
     <ClCompile Include="Source\Macros.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Menu.cpp" />
     <ClCompile Include="Source\Object.cpp" />
+    <ClCompile Include="Source\PhysicsManager.cpp" />
     <ClCompile Include="Source\Plane.cpp" />
-    <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\Point.cpp" />
     <ClCompile Include="Source\Pool.cpp" />
     <ClCompile Include="Source\Rotator.cpp" />
+    <ClCompile Include="Source\SettingsManager.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
     <ClCompile Include="Source\Sprite.cpp" />
     <ClCompile Include="Source\Terrain.cpp" />
     <ClCompile Include="Source\Text.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
     <ClCompile Include="Source\Translator.cpp" />
+    <ClCompile Include="Source\Utilities.cpp" />
     <ClCompile Include="Source\Variable.cpp" />
-    <ClCompile Include="Source\Variables.cpp" />
+    <ClCompile Include="Source\VariableSystem.cpp" />
     <ClCompile Include="Source\Vehicle.cpp" />
     <ClCompile Include="Source\Waterfall.cpp" />
     <ClCompile Include="Source\Waypoint.cpp" />
@@ -116,6 +125,7 @@
     <ClInclude Include="Source\BoundingBox.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Colour.h" />
+    <ClInclude Include="Source\Cube.h" />
     <ClInclude Include="Source\CullingManager.h" />
     <ClInclude Include="Source\Environment.h" />
     <ClInclude Include="Source\Face.h" />
@@ -133,11 +143,13 @@
     <ClInclude Include="Source\InputManager.h" />
     <ClInclude Include="Source\Menu.h" />
     <ClInclude Include="Source\Object.h" />
+    <ClInclude Include="Source\PhysicsManager.h" />
     <ClInclude Include="Source\Plane.h" />
-    <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Point.h" />
     <ClInclude Include="Source\Pool.h" />
+    <ClInclude Include="Source\Resource.h" />
     <ClInclude Include="Source\Rotator.h" />
+    <ClInclude Include="Source\SettingsManager.h" />
     <ClInclude Include="Source\Shader.h" />
     <ClInclude Include="Source\Sprite.h" />
     <ClInclude Include="Source\Terrain.h" />
@@ -145,8 +157,9 @@
     <ClInclude Include="Source\Texture.h" />
     <ClInclude Include="Source\Transformation.h" />
     <ClInclude Include="Source\Translator.h" />
+    <ClInclude Include="Source\Utilities.h" />
     <ClInclude Include="Source\Variable.h" />
-    <ClInclude Include="Source\Variables.h" />
+    <ClInclude Include="Source\VariableSystem.h" />
     <ClInclude Include="Source\Vehicle.h" />
     <ClInclude Include="Source\Waterfall.h" />
     <ClInclude Include="Source\Waypoint.h" />

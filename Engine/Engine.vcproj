@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glut32.lib glew32s.lib FoundationCHECKED.lib PhysX3CHECKED_x86.lib PhysX3CookingCHECKED_x86.lib PhysX3CharacterKinematicCHECKED.lib PhysX3ExtensionsCHECKED.lib PhysX3VehicleCHECKED.lib GeomUtilsCHECKED.lib RepX3CHECKED.lib RepXUpgrader3CHECKED.lib PhysXProfileSDKCHECKED.lib PxTaskCHECKED.lib PxToolkitDEBUG.lib"
+				AdditionalDependencies="glut32.lib glew32s.lib Foundation.lib PhysX3_x86.lib PhysX3Cooking_x86.lib PhysX3CharacterKinematic.lib PhysX3Extensions.lib PhysX3Vehicle.lib GeomUtils.lib RepX3.lib RepXUpgrader3.lib PhysXProfileSDK.lib PxTask.lib PxToolkit.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="./Lib;&quot;C:\Users\Kevin Scroggins\Desktop\PhysX SDK\lib\win32\&quot;;&quot;C:\Users\Kevin Scroggins\Desktop\PhysX SDK\PxToolkit\lib\win32\&quot;"
+				AdditionalLibraryDirectories="./Lib;..\..\PhysX SDK\lib\win32\;..\..\PhysX SDK\PxToolkit\lib\win32\"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -136,9 +136,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glut32.lib glew32s.lib FoundationCHECKED.lib PhysX3CHECKED_x86.lib PhysX3CookingCHECKED_x86.lib PhysX3CharacterKinematicCHECKED.lib PhysX3ExtensionsCHECKED.lib PhysX3VehicleCHECKED.lib GeomUtilsCHECKED.lib RepX3CHECKED.lib RepXUpgrader3CHECKED.lib PhysXProfileSDKCHECKED.lib PxTaskCHECKED.lib PxToolkitDEBUG.lib"
+				AdditionalDependencies="glut32.lib glew32s.lib Foundation.lib PhysX3_x86.lib PhysX3Cooking_x86.lib PhysX3CharacterKinematic.lib PhysX3Extensions.lib PhysX3Vehicle.lib GeomUtils.lib RepX3.lib RepXUpgrader3.lib PhysXProfileSDK.lib PxTask.lib PxToolkit.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="./Lib;&quot;C:\Users\Kevin Scroggins\Desktop\PhysX SDK\lib\win32\&quot;;&quot;C:\Users\Kevin Scroggins\Desktop\PhysX SDK\PxToolkit\lib\win32\&quot;"
+				AdditionalLibraryDirectories="./Lib;..\..\PhysX SDK\lib\win32\;..\..\PhysX SDK\PxToolkit\lib\win32\"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
