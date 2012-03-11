@@ -33,7 +33,7 @@ public:
     void operator -= (const double & d) { x -= d; y -=d ; z -= d; }
 	Point operator - () const { return Point(-x, -y, -z); }
 	bool operator == (const Point & p) { return x == p.x && y == p.y && z == p.z; }
-	bool operator != (const Point & p) { return *this != p; }
+	bool operator != (const Point & p) { return !(*this == p); }
 	double squaredLength() { return x * x + y * y + z * z; }
 	double length() const { return sqrt((x * x) + (y * y) + (z * z)); }
 	void normalize() { double l = length(); if(l == 0) { x = y = z = 0.0; } else { x /= l; y /= l; z /= l; } }

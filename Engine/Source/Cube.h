@@ -23,7 +23,7 @@ private:
 	int size;
 	int mass;
 	Point velocity;
-	PxRigidDynamic * cubeCollisionMesh;
+	PxRigidDynamic * collisionMesh;
 	GLuint cubeList;
 	Colour colour;
 	Texture ** textures;

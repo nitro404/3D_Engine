@@ -48,6 +48,8 @@ Game::~Game() {
 bool Game::init() {
 	if(!physics->init()) { return false; }
 
+	if(!camera->init()) { return false; }
+
 	menu = new Menu();
 
 	// initialize the fps font
@@ -100,8 +102,6 @@ void Game::update() {
 
 	if(paused) { return; }
 
-	physics->update(timeElapsed);
-
 	camera->update(timeElapsed);
 
 	if(world != NULL) {
@@ -111,6 +111,10 @@ void Game::update() {
 	for(unsigned int i=0;i<cubes.size();i++) {
 		cubes.at(i)->update(timeElapsed);
 	}
+	
+	physics->update(timeElapsed);
+
+	camera->handleCollisions(timeElapsed);
 }
 
 void Game::draw() {
@@ -129,6 +133,8 @@ void Game::draw() {
 	if(settings->showFPS) {
 		drawFPS();
 	}
+
+	drawFly();
 
 	menu->draw();
 
@@ -162,6 +168,10 @@ void Game::closeMap() {
 	}
 }
 
+void Game::toggleFly() {
+	camera->toggleFly();
+}
+
 void Game::throwGrassBlock() {
 	Texture ** textures = new Texture*[6];
 	textures[0] = this->textures[62];
@@ -171,7 +181,7 @@ void Game::throwGrassBlock() {
 	textures[4] = this->textures[61];
 	textures[5] = this->textures[62];
 
-	Cube * c = new Cube(camera->cameraMatrix, 2, camera->forwardVector() * 5, 1, Colour(255, 255, 255, 255), textures);
+	Cube * c = new Cube(camera->cameraMatrix, 2, camera->forwardVector() * 10, 1, Colour(255, 255, 255, 255), textures);
 	c->load();
 	cubes.push_back(c);
 
@@ -199,6 +209,11 @@ void Game::drawFPS() {
 	sprintf_s(fps, 12, "%.2f FPS", currentFPS);
 	fpsText->setPosition(settings->windowWidth - 101 - ((currentFPS > 99) ? 40 : 0), settings->windowHeight - 20);
 	fpsText->draw(fps);
+}
+
+void Game::drawFly() {
+	fpsText->setPosition(0, settings->windowHeight - 20);
+	fpsText->draw(camera->fly ? "FLYING ENABLED" : "FLYING DISABLED");
 }
 
 void Game::loadTextures() {

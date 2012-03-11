@@ -12,6 +12,7 @@
 #include <PxTkStream.h>
 #include "World.h"
 #include "Point.h"
+#include "Terrain.h"
 
 using namespace physx;
 using namespace PxToolkit;
@@ -35,7 +36,10 @@ public:
 	void reset();
 
 	PxRigidDynamic * createBoxMesh(const Point & position, const Point & velocity, float width, float height, float depth, float mass);
+	PxRigidDynamic * createSphereMesh(const Point & position, const Point & velocity, float radius, float mass);
 	PxRigidStatic * createWorldMesh(const World & world);
+
+	bool sweepSphereHits(PxRigidDynamic & sphere, const Point & from, const Point & to, Point & intersection) const;
 
 	void update(double timeElapsed);
 	void fetchResults(bool block = false);

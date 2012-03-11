@@ -59,21 +59,33 @@ void PhysicsManager::reset() {
 }
 
 PxRigidDynamic * PhysicsManager::createBoxMesh(const Point & position, const Point & velocity, float width, float height, float depth, float mass) {
-	PxRigidDynamic * boxActor = m_system->createRigidDynamic (PxTransform (PxVec3 (position.x, position.y, position.z))); 
+	PxRigidDynamic * actor = m_system->createRigidDynamic(PxTransform(PxVec3(position.x, position.y, position.z))); 
+	actor->setLinearVelocity(PxVec3(velocity.x, velocity.y, velocity.z));
+	actor->setMass(mass);
 
-	PxMaterial * boxMaterial = m_system->createMaterial(0.5f, 0.5f, 0.1f);
-	PxShape * boxShape = boxActor->createShape(PxBoxGeometry(width * 0.5, height * 0.5, depth * 0.5), *boxMaterial); 
+	PxMaterial * material = m_system->createMaterial(0.5, 0.5, 0.1);
+	PxShape * shape = actor->createShape(PxBoxGeometry(width * 0.5, height * 0.5, depth * 0.5), *material); 
+	PxRigidBodyExt::updateMassAndInertia(*actor, 1.0); 
 
-	PxReal boxDensity = 1.0;
-	boxActor->setMass(mass);
-	PxRigidBodyExt::updateMassAndInertia(*boxActor, boxDensity); 
-	boxActor->setLinearVelocity(PxVec3(velocity.x, velocity.y, velocity.z));
+	material->release();
 
-	boxMaterial->release();
+	m_scene->addActor(*actor);
 
-	m_scene->addActor(*boxActor);
+	return actor;
+}
 
-	return boxActor;
+PxRigidDynamic * PhysicsManager::createSphereMesh(const Point & position, const Point & velocity, float radius, float mass) {
+	PxRigidDynamic * actor = m_system->createRigidDynamic(PxTransform(PxVec3(position.x, position.y, position.z)));
+	actor->setLinearVelocity(PxVec3(velocity.x, velocity.y, velocity.z));
+	actor->setMass(mass);
+
+	PxMaterial * material = m_system->createMaterial(0.5, 0.5, 0.1);
+	PxShape * shape = actor->createShape(PxSphereGeometry(radius), *material);
+	PxRigidBodyExt::updateMassAndInertia(*actor, 1.0);
+
+	material->release();
+
+	return actor;
 }
 
 PxRigidStatic * PhysicsManager::createWorldMesh(const World & world) {
@@ -102,34 +114,91 @@ PxRigidStatic * PhysicsManager::createWorldMesh(const World & world) {
 			}
 		}
 		else if(typeid(*world.objects[i]) == typeid(Terrain)) {
-			// TODO: add collision mesh for terrain
+			Terrain * t = dynamic_cast<Terrain *>(world.objects[i]);
+
+			PxHeightFieldSample * points = new PxHeightFieldSample[(t->getWidth() + 1) * (t->getHeight() + 1)];
+
+			for(int i=0;i<t->getWidth();i++) {
+				for(int j=0;j<t->getHeight();j++) {
+					PxHeightFieldSample & point = points[(t->getHeight() - j) + (i * (t->getHeight() + 1))]; // ???
+					point.height = (PxI16) t->getPoint(i, j)->y; // ???
+					point.clearTessFlag();
+					point.materialIndex0 = 0;
+					point.materialIndex1 = 0;
+				}
+			}
+
+			PxHeightFieldDesc d;
+			d.format = PxHeightFieldFormat::eS16_TM;
+			d.nbColumns = t->getHeight();
+			d.nbRows = t->getWidth();
+			d.samples.data = points;
+			d.samples.stride = sizeof(PxHeightFieldSample);
+
+			PxHeightField * heightField = m_system->createHeightField(d);
+			const Point & p = t->transformation->position();
+			PxTransform transform = PxTransform(PxVec3(p.x, p.y, p.z)); // ???
+			PxRigidStatic * terrainActor = m_system->createRigidStatic(transform);
+
+			PxMaterial * material = m_system->createMaterial(0.5f, 0.5f, 0.1f);
+			PxMaterial * materials[] = { material };
+			PxShape * terrainShape = terrainActor->createShape(PxHeightFieldGeometry(heightField, PxMeshGeometryFlags(), 1.0, t->getTileSizeX(), t->getTileSizeZ()), materials, 1);
+
+			material->release();
+			delete [] points;
+			heightField->release();
+
+			t->setCollisionMesh(terrainActor);
 		}
 	}
 
-	PxTriangleMeshDesc d;
-	d.points.count = vertices.size();
-	d.triangles.count = indices.size() / 3;
-	d.points.stride = sizeof(PxVec3);
-	d.triangles.stride = sizeof(PxU32) * 3;
-	d.points.data = &vertices[0];
-	d.triangles.data = &indices[0];
+	if(vertices.size() > 0 && indices.size() > 0) {
+		PxTriangleMeshDesc d;
+		d.points.count = vertices.size();
+		d.triangles.count = indices.size() / 3;
+		d.points.stride = sizeof(PxVec3);
+		d.triangles.stride = sizeof(PxU32) * 3;
+		d.points.data = &vertices[0];
+		d.triangles.data = &indices[0];
 
-	// TODO: fix cooking
-	PxCooking * cooker = PxCreateCooking(PX_PHYSICS_VERSION, &m_system->getFoundation(), PxCookingParams());
-	MemoryWriteBuffer buffer;
-	cooker->cookTriangleMesh(d, buffer);
-	PxTriangleMesh * triangleMesh = m_system->createTriangleMesh(MemoryReadBuffer(buffer.data));
-	Transformation t = Transformation();
-	PxRigidStatic * triangleMeshActor = m_system->createRigidStatic(PxTransform(*((PxMat44 *) &t)));
-	PxMaterial * worldMaterial = m_system->createMaterial(0.5f, 0.5f, 0.1f);
-	PxShape * triangleMeshShape = triangleMeshActor->createShape(PxTriangleMeshGeometry(triangleMesh), *worldMaterial);
+		PxCooking * cooker = PxCreateCooking(PX_PHYSICS_VERSION, &m_system->getFoundation(), PxCookingParams());
+		MemoryWriteBuffer buffer;
+		cooker->cookTriangleMesh(d, buffer);
+		PxTriangleMesh * triangleMesh = m_system->createTriangleMesh(MemoryReadBuffer(buffer.data));
+		PxRigidStatic * triangleMeshActor = m_system->createRigidStatic(PxTransform::createIdentity());
+		PxMaterial * worldMaterial = m_system->createMaterial(0.5f, 0.5f, 0.1f);
+		PxShape * triangleMeshShape = triangleMeshActor->createShape(PxTriangleMeshGeometry(triangleMesh), *worldMaterial);
 
-	cooker->release();
-	worldMaterial->release();
+		cooker->release();
+		worldMaterial->release();
 
-	m_scene->addActor(*triangleMeshActor);
+		m_scene->addActor(*triangleMeshActor);
 
-	return triangleMeshActor;
+		return triangleMeshActor;
+	}
+
+	return NULL;
+}
+
+bool PhysicsManager::sweepSphereHits(PxRigidDynamic & sphere, const Point & from, const Point & to, Point & intersection) const {
+	if(sphere.getNbShapes() != 1) { return false; }
+
+	PxShape * shapes[1];
+	sphere.getShapes(shapes, 1);
+	PxSphereGeometry geometry;
+	shapes[0]->getSphereGeometry(geometry);
+
+	Point temp = (to - from);
+	Point direction = temp.normalized();
+	double distance = temp.length();
+	PxSweepHit hit;
+
+	if(m_scene->sweepSingle(geometry, PxTransform(PxVec3(from.x, from.y, from.z)), PxVec3(direction.x, direction.y, direction.z), distance, PxSceneQueryFlag::eBLOCKING_HIT, hit)) {
+		intersection = from + (direction * (hit.distance / distance));
+
+		return true;
+	}
+	return false;
 }
 
 void PhysicsManager::update(double timeElapsed) {

@@ -1,6 +1,7 @@
+#include "Game.h"
 #include "Camera.h"
 
-Camera::Camera() : xRotation(0), yRotation(0) {
+Camera::Camera() : xRotation(0), yRotation(0), fly(true), collisionMesh(NULL), initialized(false) {
 	translateLeft = false;
 	translateRight = false;
 	translateAhead = false;
@@ -15,7 +16,21 @@ Camera::Camera() : xRotation(0), yRotation(0) {
 }
 
 Camera::~Camera() {
+	if(collisionMesh != NULL) { collisionMesh->release(); }
+}
 
+bool Camera::init() {
+	if(initialized || !Game::physics->isInitialized()) { return false; }
+
+	collisionMesh = Game::physics->createSphereMesh(Game::camera->cameraMatrix.position(), Point(0.0, 0.0, 0.0), 0.5f, 0.1f), 
+
+	initialized = true;
+	
+	return true;
+}
+
+void Camera::toggleFly() {
+	fly = !fly;
 }
 
 void Camera::beginCamera() {
@@ -49,11 +64,15 @@ void Camera::rotateBy(Point & rotation) {
 void Camera::reset(Point & position) {
 	cameraMatrix.setToIdentity();
 	cameraMatrix.preTranslateBy(position);
+
+	lastCameraMatrix = cameraMatrix;
 }
 
 void Camera::update(double timeElapsed) {
-	static double translationSpeed = 10.0;
+	static double translationSpeed = 16.0;
 	static double rotationSpeed = 30.0;
+
+	lastCameraMatrix = cameraMatrix;
 
 	Point translation (
 		(translateLeft ? -translationSpeed : 0.0) + (translateRight ? translationSpeed : 0.0),
@@ -67,4 +86,29 @@ void Camera::update(double timeElapsed) {
 
 	rotateBy(rotation * timeElapsed);
 	moveBy(translation * timeElapsed);
+}
+
+void Camera::handleCollisions(double timeElapsed) {
+	if(!initialized) { return; }
+
+	Point intersection;
+	Point from = lastCameraMatrix.position();
+	Point to = cameraMatrix.position();
+
+	if(!fly) {
+		if(from != to && Game::physics->sweepSphereHits(*collisionMesh, from, to, intersection)) {
+			cameraMatrix = lastCameraMatrix;
+//			cameraMatrix.translateTo(intersection);
+		}
+
+		to = cameraMatrix.position() + Point(0, -9.81 * timeElapsed, 0);
+
+		if(Game::physics->sweepSphereHits(*collisionMesh, from, to, intersection)) {
+//			cameraMatrix.translateTo(intersection);
+			cameraMatrix.m42 = lastCameraMatrix.m42;
+		}
+		else {
+			cameraMatrix.translateBy(Point(0, -9.81 * timeElapsed, 0));
+		}
+	}
 }

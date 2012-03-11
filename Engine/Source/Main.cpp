@@ -132,6 +132,13 @@ void normalKeyPressed(unsigned char character, int x, int y) {
 				Game::camera->translateDown = true;
 			}
 			break;
+
+		case 'f':
+		case 'F':
+			if(!game->isPaused()) {
+				Game::instance->toggleFly();
+			}
+			break;
 			
 		case '?':
 			break;

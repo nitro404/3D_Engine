@@ -1,13 +1,24 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
+#include <PxRigidStatic.h>
 #include "Object.h"
 #include "FaceGroup.h"
+
+using namespace physx;
 
 class Terrain : public Object {
 public:
 	Terrain();
 	~Terrain();
+
+	int getWidth() const;
+	int getHeight() const;
+	double getTileSizeX() const;
+	double getTileSizeZ() const;
+	const GamePoint * getPoint(int x, int y) const;
+
+	void setCollisionMesh(PxRigidStatic * mesh);
 
 	virtual void draw();
 	virtual void import(ifstream & input, vector<Texture *> & textures, vector<char *> & heightMaps, vector<Shader *> shaders);
@@ -17,7 +28,6 @@ public:
 
 private:
 	double scaleHeight(int x, int y, int * heightMapData);
-	double getHeightAt(int x, int y, int * heightMapData);
 
 	char * name;
 	Texture * textureMap;
@@ -25,8 +35,11 @@ private:
 	int width;
 	int height;
 	int tiled;
+	double tileSizeX;
+	double tileSizeZ;
 	GamePoint * points;
 	FaceGroup * group;
+	PxRigidStatic * collisionMesh;
 };
 
 #endif // TERRAIN_H

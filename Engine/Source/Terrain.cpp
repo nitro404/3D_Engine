@@ -1,11 +1,38 @@
 #include "Terrain.h"
 
-Terrain::Terrain() : shader(NULL), name(NULL), textureMap(NULL), width(0), height(0), points(NULL) { }
+Terrain::Terrain() : shader(NULL), name(NULL), textureMap(NULL), width(0), height(0), points(NULL), collisionMesh(NULL) { }
 
 Terrain::~Terrain() {
 	if(name != NULL) { delete [] name; }
 	if(points != NULL) { delete [] points; }
 	delete group;
+	if(collisionMesh != NULL) { collisionMesh->release(); }
+}
+
+int Terrain::getWidth() const {
+	return width;
+}
+
+int Terrain::getHeight() const {
+	return height;
+}
+
+double Terrain::getTileSizeX() const {
+	return tileSizeX;
+}
+
+double Terrain::getTileSizeZ() const {
+	return tileSizeZ;
+}
+
+const GamePoint * Terrain::getPoint(int x, int y) const {
+	if(points == NULL || x < 0 || y < 0 || x >= width + 1 || y >= height + 1) { return NULL; }
+
+	return &points[(y * width) + x];
+}
+
+void Terrain::setCollisionMesh(PxRigidStatic * mesh) {
+	collisionMesh = mesh;
 }
 
 void Terrain::draw() {
@@ -93,8 +120,8 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 
 	Point terrainSize = box->getExtent();
 
-//	double tileSizeX = terrainSizeX / (width + 1);
-//	double tileSizeZ = terrainSizeY / (width + 1);
+	tileSizeX = terrainSize.x / (width + 1);
+	tileSizeZ = terrainSize.z / (height + 1);
 
 	int currentPoint = 0;
 	double x, y, z, tx, ty;
@@ -110,8 +137,8 @@ void Terrain::import(ifstream & input, vector<Texture *> & textures, vector<char
 				ty = j * 0.1;
 			}
 			else {
-				tx = ((double) j / (height + 1.0f));
-				ty = 1.0f - ((double) i / (double) (width + 1));
+				tx = ((double) j / (height + 1.0));
+				ty = 1.0f - ((double) i / (double) (width + 1.0));
 			}
 			
 			points[currentPoint].x = x;

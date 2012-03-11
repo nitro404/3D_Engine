@@ -130,7 +130,10 @@ public:
 			glMultMatrixd(*this);
 		glPopMatrixd(GL_MODELVIEW_MATRIX, *this);
 	}
-	inline void translateBy(Point &translation) {preTranslateBy (translation);} //translate means pre-translate
+
+	inline void translateBy(Point &translation) { preTranslateBy(translation); } //translate means pre-translate
+
+	inline void translateTo(const Point &position) { postTranslateBy(position - this->position()); }
 
 	inline void preRotateBy(Point &rotation) {//rotation * matrix;
 		//This rotation denotes [degreesAroundXAxis, degreesAroundYAxis, degreesAroundZAxis].

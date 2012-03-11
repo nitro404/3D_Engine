@@ -28,12 +28,15 @@ public:
 	void loadMap(char * fileName);
 	void closeMap();
 
+	void toggleFly();
+
 	void throwGrassBlock();
 	void clearObjects();
 	
 private:
 	void updateFPS(double timeElapsed);
 	void drawFPS();
+	void drawFly();
 	void loadTextures();
 	
 public:

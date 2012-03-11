@@ -1,7 +1,7 @@
 #include "Game.h"
 #include "Cube.h"
 
-Cube::Cube(const DualTransformation & cubeTransformation, int cubeSize, const Point & cubeVelocity, int cubeMass, const Colour & cubeColour, Texture ** cubeTextures) : size(cubeSize), mass(cubeMass), colour(cubeColour), textures(NULL), cubeCollisionMesh(NULL), loaded(false) {
+Cube::Cube(const DualTransformation & cubeTransformation, int cubeSize, const Point & cubeVelocity, int cubeMass, const Colour & cubeColour, Texture ** cubeTextures) : size(cubeSize), mass(cubeMass), colour(cubeColour), textures(NULL), collisionMesh(NULL), loaded(false) {
 	transformation = new DualTransformation(cubeTransformation);
 	velocity = Point(cubeVelocity);
 
@@ -83,7 +83,7 @@ bool Cube::load() {
 		k += 4;
 	}
 
-	cubeCollisionMesh = Game::physics->createBoxMesh(transformation->position(), velocity, size, size, size, mass);
+	collisionMesh = Game::physics->createBoxMesh(transformation->position(), velocity, size, size, size, mass);
 
 	loaded = true;
 
@@ -93,7 +93,7 @@ bool Cube::load() {
 bool Cube::unload() {
 	if(!loaded) { return true; }
 
-	cubeCollisionMesh->release();
+	collisionMesh->release();
 
 	glDeleteLists(cubeList, 6);
 
@@ -117,7 +117,7 @@ void Cube::draw() {
 
 	glColor4f(colour.red, colour.green, colour.blue, colour.alpha);
 
-	Transformation t = *((Transformation *) &PxMat44(cubeCollisionMesh->getGlobalPose()));
+	Transformation t = *((Transformation *) &PxMat44(collisionMesh->getGlobalPose()));
 
 	glPushMatrix();
 //		Transformation & normal = transformation->normal();

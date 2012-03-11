@@ -320,5 +320,5 @@ void World::import(const char * fileName, vector<Texture *> & textures, vector<c
 	
 	input.close();
 
-//	worldCollisionMesh = Game::physics->createWorldMesh(*this);
+	worldCollisionMesh = Game::physics->createWorldMesh(*this);
 }
