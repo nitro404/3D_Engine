@@ -7,7 +7,7 @@ Camera * Game::camera = NULL;
 PhysicsManager * Game::physics = NULL;
 World * Game::world = NULL;
 
-Game::Game() : fps(NULL), fpsText(NULL), cullingEnabled(false), paused(true) {
+Game::Game() : pos(NULL), fps(NULL), fpsText(NULL), cullingEnabled(false), paused(true) {
 	instance = this;
 
 	settings = new SettingsManager();
@@ -21,6 +21,7 @@ Game::Game() : fps(NULL), fpsText(NULL), cullingEnabled(false), paused(true) {
 }
 
 Game::~Game() {
+	if(pos != NULL) { delete [] pos; }
 	if(fps != NULL) { delete [] fps; }
 	if(fpsText != NULL) { delete fpsText; }
 	delete settings;
@@ -53,6 +54,8 @@ bool Game::init() {
 	menu = new Menu();
 
 	// initialize the fps font
+	pos = new char[32];
+	pos[0] = '\0';
 	currentFPS = 0;
 	fps = new char[12];
 	fps[0] = '\0';
@@ -134,6 +137,8 @@ void Game::draw() {
 		drawFPS();
 	}
 
+	drawPosition();
+
 	drawFly();
 
 	menu->draw();
@@ -206,9 +211,16 @@ void Game::updateFPS(double timeElapsed) {
 }
 
 void Game::drawFPS() {
-	sprintf_s(fps, 12, "%.2f FPS", currentFPS);
-	fpsText->setPosition(settings->windowWidth - 101 - ((currentFPS > 99) ? 40 : 0), settings->windowHeight - 20);
+	sprintf_s(fps, 12, "%.0f FPS", currentFPS);
+	fpsText->setPosition(settings->windowWidth - 101 - ((currentFPS > 99) ? 13 : 0), settings->windowHeight - 20);
 	fpsText->draw(fps);
+}
+
+void Game::drawPosition() {
+	Point p = camera->getPosition();
+	sprintf_s(pos, 32, "(%.2f, %.2f, %.2f)", p.x, p.y, p.z);
+	fpsText->setPosition((settings->windowWidth / 2) - 80, settings->windowHeight - 20);
+	fpsText->draw(pos);
 }
 
 void Game::drawFly() {

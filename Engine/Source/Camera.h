@@ -15,6 +15,8 @@ public:
 
 	bool init();
 
+	Point getPosition();
+
 	void toggleFly();
 	
 	void beginCamera();

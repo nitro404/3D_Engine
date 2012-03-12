@@ -31,6 +31,10 @@ const GamePoint * Terrain::getPoint(int x, int y) const {
 	return &points[(y * width) + x];
 }
 
+const BoundingBox * Terrain::getBoundingBox() const {
+	return box;
+}
+
 void Terrain::setCollisionMesh(PxRigidStatic * mesh) {
 	collisionMesh = mesh;
 }

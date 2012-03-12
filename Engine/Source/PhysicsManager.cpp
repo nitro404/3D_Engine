@@ -118,10 +118,11 @@ PxRigidStatic * PhysicsManager::createWorldMesh(const World & world) {
 
 			PxHeightFieldSample * points = new PxHeightFieldSample[(t->getWidth() + 1) * (t->getHeight() + 1)];
 
-			for(int i=0;i<t->getWidth();i++) {
-				for(int j=0;j<t->getHeight();j++) {
-					PxHeightFieldSample & point = points[(t->getHeight() - j) + (i * (t->getHeight() + 1))]; // ???
-					point.height = (PxI16) t->getPoint(i, j)->y; // ???
+			int x = 0;
+			for(int i=0;i<t->getWidth()+1;i++) {
+				for(int j=0;j<t->getHeight()+1;j++) {
+					PxHeightFieldSample & point = points[x++];
+					point.height = (PxI16) t->getPoint(i, j)->y;
 					point.clearTessFlag();
 					point.materialIndex0 = 0;
 					point.materialIndex1 = 0;
@@ -137,7 +138,8 @@ PxRigidStatic * PhysicsManager::createWorldMesh(const World & world) {
 
 			PxHeightField * heightField = m_system->createHeightField(d);
 			const Point & p = t->transformation->position();
-			PxTransform transform = PxTransform(PxVec3(p.x, p.y, p.z)); // ???
+			Point e = t->getBoundingBox()->getExtent() / 2.0;
+			PxTransform transform = PxTransform(PxVec3(p.x - e.x, p.y, p.z - e.z));
 			PxRigidStatic * terrainActor = m_system->createRigidStatic(transform);
 
 			PxMaterial * material = m_system->createMaterial(0.5f, 0.5f, 0.1f);
@@ -149,6 +151,8 @@ PxRigidStatic * PhysicsManager::createWorldMesh(const World & world) {
 			heightField->release();
 
 			t->setCollisionMesh(terrainActor);
+
+			m_scene->addActor(*terrainActor);
 		}
 	}
 

@@ -2,6 +2,11 @@
 #define TERRAIN_H
 
 #include <PxRigidStatic.h>
+#include <PxHeightFieldGeometry.h> 
+#include <PxGeometry.h>
+#include <PxShapeExt.h>
+#include <PxShape.h>
+#include <PxMat33.h> 
 #include "Object.h"
 #include "FaceGroup.h"
 
@@ -17,6 +22,7 @@ public:
 	double getTileSizeX() const;
 	double getTileSizeZ() const;
 	const GamePoint * getPoint(int x, int y) const;
+	const BoundingBox * getBoundingBox() const;
 
 	void setCollisionMesh(PxRigidStatic * mesh);
 

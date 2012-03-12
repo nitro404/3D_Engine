@@ -36,6 +36,7 @@ public:
 private:
 	void updateFPS(double timeElapsed);
 	void drawFPS();
+	void drawPosition();
 	void drawFly();
 	void loadTextures();
 	
@@ -57,6 +58,7 @@ public:
 
 private:
 	double currentFPS;
+	char * pos;
 	char * fps;
 	Text * fpsText;
 

@@ -29,6 +29,10 @@ bool Camera::init() {
 	return true;
 }
 
+Point Camera::getPosition() {
+	return cameraMatrix.position();
+}
+
 void Camera::toggleFly() {
 	fly = !fly;
 }
