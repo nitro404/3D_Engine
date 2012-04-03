@@ -38,7 +38,7 @@ private:
 	void drawFPS();
 	void drawPosition();
 	void drawFly();
-	void loadTextures();
+	void loadResources();
 	
 public:
 	static Game * instance;

@@ -270,12 +270,6 @@ void setupOpenGL() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	GLfloat lightColor [] = {1.0f, 1.0f, 1.0f, 1.0f};
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1f);
-	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05f);
-	glEnable(GL_LIGHT0); glEnable (GL_LIGHTING);
 	glDisable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
 

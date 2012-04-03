@@ -4,7 +4,7 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 	if(!GLEW_VERSION_2_0) { return; }
 
 	if(vertexShaderFileName == NULL && fragmentShaderFileName == NULL) {
-		quit("Must specify both the vertex and fragment shader.");
+		quit("Must specify at least a vertex or fragment shader.");
 	}
 
 	char input[256];
@@ -12,95 +12,112 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 	string vertexShaderPath;
 	string fragmentShaderPath;
 
-	// generate the vertex shader path
-	if(shaderDirectory != NULL) {
-		vertexShaderPath.append(shaderDirectory);
-		if(_stricmp(vertexShaderPath.substr(vertexShaderPath.length() - 1, vertexShaderPath.length()).c_str(), ("\\")) != 0 &&
-		   _stricmp(vertexShaderPath.substr(vertexShaderPath.length() - 1, vertexShaderPath.length()).c_str(), ("/")) != 0) {
-			vertexShaderPath.append("\\");
+	if(vertexShaderFileName != NULL) {
+		// generate the vertex shader path
+		if(shaderDirectory != NULL) {
+			vertexShaderPath.append(shaderDirectory);
+			if(_stricmp(vertexShaderPath.substr(vertexShaderPath.length() - 1, vertexShaderPath.length()).c_str(), ("\\")) != 0 &&
+			   _stricmp(vertexShaderPath.substr(vertexShaderPath.length() - 1, vertexShaderPath.length()).c_str(), ("/")) != 0) {
+				vertexShaderPath.append("\\");
+			}
 		}
+
+		vertexShaderPath.append(vertexShaderFileName);
 	}
 
-	vertexShaderPath.append(vertexShaderFileName);
-
-	// generate the fragment shader path
-	if(shaderDirectory != NULL) {
-		fragmentShaderPath.append(shaderDirectory);
-		if(_stricmp(fragmentShaderPath.substr(fragmentShaderPath.length() - 1, fragmentShaderPath.length()).c_str(), ("\\")) != 0 &&
-		   _stricmp(fragmentShaderPath.substr(fragmentShaderPath.length() - 1, fragmentShaderPath.length()).c_str(), ("/")) != 0) {
-			fragmentShaderPath.append("\\");
+	if(fragmentShaderFileName != NULL) {
+		// generate the fragment shader path
+		if(shaderDirectory != NULL) {
+			fragmentShaderPath.append(shaderDirectory);
+			if(_stricmp(fragmentShaderPath.substr(fragmentShaderPath.length() - 1, fragmentShaderPath.length()).c_str(), ("\\")) != 0 &&
+			   _stricmp(fragmentShaderPath.substr(fragmentShaderPath.length() - 1, fragmentShaderPath.length()).c_str(), ("/")) != 0) {
+				fragmentShaderPath.append("\\");
+			}
 		}
-	}
 
-	fragmentShaderPath.append(fragmentShaderFileName);
+		fragmentShaderPath.append(fragmentShaderFileName);
+	}
 
 	string vertexShaderData;
 	string fragmentShaderData;
 
 	// read the vertex shader file
-	ifstream vin(vertexShaderPath.c_str());
-	if(!vin.is_open()) {
-		quit("Unable to read vertex shader: \"%s\"", vertexShaderPath.c_str());
-	}
-
-	do {
-		vin.getline(input, 256);
-		if(input != NULL) {
-			vertexShaderData.append(input);
+	if(vertexShaderPath.length() != 0) {
+		ifstream vin(vertexShaderPath.c_str());
+		if(!vin.is_open()) {
+			quit("Unable to read vertex shader: \"%s\"", vertexShaderPath.c_str());
 		}
-	} while(!vin.eof());
 
-	if(vin.is_open()) { vin.close(); }
+		do {
+			vin.getline(input, 256);
+			if(input != NULL) {
+				vertexShaderData.append(input);
+				vertexShaderData.append("\n");
+			}
+		} while(!vin.eof());
 
-	if(vertexShaderData.length() == 0) {
-		quit("Empty vertex shader: \"%s\".", vertexShaderPath.c_str());
+		if(vin.is_open()) { vin.close(); }
+
+		if(vertexShaderData.length() == 0) {
+			quit("Empty vertex shader: \"%s\".", vertexShaderPath.c_str());
+		}
 	}
 
 	// read the fragment shader file
-	ifstream fin(fragmentShaderPath.c_str());
-	if(!fin.is_open()) {
-		quit("Unable to read fragment shader: \"%s\"", fragmentShaderPath.c_str());
-	}
-
-	do {
-		fin.getline(input, 256);
-		if(input != NULL) {
-			fragmentShaderData.append(input);
+	if(fragmentShaderPath.length() != 0) {
+		ifstream fin(fragmentShaderPath.c_str());
+		if(!fin.is_open()) {
+			quit("Unable to read fragment shader: \"%s\"", fragmentShaderPath.c_str());
 		}
-	} while(!fin.eof());
 
-	if(fin.is_open()) { fin.close(); }
+		do {
+			fin.getline(input, 256);
+			if(input != NULL) {
+				fragmentShaderData.append(input);
+				fragmentShaderData.append("\n");
+			}
+		} while(!fin.eof());
 
-	if(fragmentShaderData.length() == 0) {
-		quit("Empty fragment shader: \"%s\".", fragmentShaderPath.c_str());
+		if(fin.is_open()) { fin.close(); }
+
+		if(fragmentShaderData.length() == 0) {
+			quit("Empty fragment shader: \"%s\".", fragmentShaderPath.c_str());
+		}
 	}
 
 	// create the shader program
 	programHandle = glCreateProgram();
 
 	// create the shaders
-	vertexShaderHandle = glCreateShader(GL_VERTEX_SHADER);
-	fragmentShaderHandle = glCreateShader(GL_FRAGMENT_SHADER);
+	if(vertexShaderData.length() != 0) {
+		vertexShaderHandle = glCreateShader(GL_VERTEX_SHADER);
 
-	// compile the vertex shader
-	const char * vertexShaderTemp = vertexShaderData.c_str();
-	glShaderSource(vertexShaderHandle, 1, (const GLchar **) (&vertexShaderTemp), NULL);
-	compileShader(vertexShaderHandle, vertexShaderFileName);
-	if(glGetError() != GL_NO_ERROR) {
-		quit("Error creating vertex shader.");
-	}
-	
-	// compile the fragment shader
-	const char * fragmentShaderTemp = fragmentShaderData.c_str();
-	glShaderSource(fragmentShaderHandle, 1, (const GLchar **) (&fragmentShaderTemp), NULL);
-	compileShader(fragmentShaderHandle, fragmentShaderFileName);
-	if(glGetError() != GL_NO_ERROR) {
-		quit("Error creating fragment shader.");
+		// compile the vertex shader
+		const char * vertexShaderTemp = vertexShaderData.c_str();
+		glShaderSource(vertexShaderHandle, 1, (const GLchar **) (&vertexShaderTemp), NULL);
+		compileShader(vertexShaderHandle, vertexShaderFileName);
+		if(glGetError() != GL_NO_ERROR) {
+			quit("Error creating vertex shader.");
+		}
+
+		// attach the shader to the program
+		glAttachShader(programHandle, vertexShaderHandle);
 	}
 
-	// attach the shaders to the program
-	glAttachShader(programHandle, vertexShaderHandle);
-	glAttachShader(programHandle, fragmentShaderHandle);
+	if(fragmentShaderData.length() != 0) {
+		fragmentShaderHandle = glCreateShader(GL_FRAGMENT_SHADER);	
+		
+		// compile the fragment shader
+		const char * fragmentShaderTemp = fragmentShaderData.c_str();
+		glShaderSource(fragmentShaderHandle, 1, (const GLchar **) (&fragmentShaderTemp), NULL);
+		compileShader(fragmentShaderHandle, fragmentShaderFileName);
+		if(glGetError() != GL_NO_ERROR) {
+			quit("Error creating fragment shader.");
+		}
+
+		// attach the shader to the program
+		glAttachShader(programHandle, fragmentShaderHandle);
+	}
 
 	// link the program
 	glLinkProgram(programHandle);
@@ -209,8 +226,8 @@ Shader * Shader::import(ifstream & input, const char * shaderDirectory) {
 	input.getline(line, 256, ';');
 	int numberOfProperties = atoi(line);
 	input.getline(line, 256, '\n');
-	char * vertexShaderFileName;
-	char * fragmentShaderFileName;
+	char * vertexShaderFileName = NULL;
+	char * fragmentShaderFileName = NULL;
 	for(int propertyIndex=0;propertyIndex<numberOfProperties;propertyIndex++) {
 		input.getline(line, 256, '\n');
 		value[0] = '\0';

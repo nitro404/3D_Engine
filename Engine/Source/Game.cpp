@@ -63,15 +63,7 @@ bool Game::init() {
 	fpsText = new Text(settings->windowWidth - 101, settings->windowHeight - 20, Colour(255, 0, 0, 255), &fpsFont, false, "FPS");
 	
 	// load the textures, animations, shaders and height map data
-	loadTextures();
-
-	// set lighting values (not currently used)
-	GLfloat diffuseLight[] = {0, 0, 0};
-	GLfloat ambientLight[] = {1, 1, 1};
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
-	GLfloat lightPosition[] = {0, 5, 1, 0};
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+	loadResources();
 
 	return true;
 }
@@ -228,7 +220,7 @@ void Game::drawFly() {
 	fpsText->draw(camera->fly ? "FLYING ENABLED" : "FLYING DISABLED");
 }
 
-void Game::loadTextures() {
+void Game::loadResources() {
 	char line[256];
 	unsigned int i, j;
 	int startIndex;
