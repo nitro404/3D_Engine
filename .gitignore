@@ -1,0 +1,20 @@
+
+# /
+/Game
+
+# /Builder 2.0/
+/Builder 2.0/bin
+
+# /Engine/
+/Engine/*.suo
+/Engine/*.ncb
+/Engine/*.user
+/Engine/Release
+/Engine/Debug
+/Engine/*.sdf
+/Engine/ipch
+
+# /Engine/Lib/
+
+# /Texture Compiler/
+/Texture Compiler/bin
